@@ -1,0 +1,10 @@
+node_modules
+*.xlsx
+*.xlsx#
+
+deleted.js
+TruckScale-win32-x64
+windows_installer
+ESW_TruckScale-win32-x64
+
+
