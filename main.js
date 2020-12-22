@@ -1,5 +1,7 @@
 const { app, BrowserWindow } = require('electron')
 
+
+
 app.allowRendererProcessReuse = false
 process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true';
 
