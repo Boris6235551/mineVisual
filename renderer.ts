@@ -29,6 +29,8 @@ function test() {
 
     // then create layer
     layer = new Konva.Layer();
+    // add the layer to the stage
+    stage.add(layer);
 
     let main = new Konva.Rect({
         x: 10,
@@ -77,8 +79,8 @@ function test() {
     // add the shape to the layer
     layer.add(circle);
 
-    // add the layer to the stage
-    stage.add(layer);
+    // // add the layer to the stage
+    // stage.add(layer);
 
     // draw the image
     layer.draw();
