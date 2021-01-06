@@ -23,7 +23,6 @@ export class Rectangle {
     p0: Point;
     p1: Point;
     constructor(p0: Point, p1: Point) {
-        // this.p0.x = p0.x; this.p0.y = p0.y; this.p1.x = p1.x; this.p1.y = p1.y;
         this.p0 = new Point(0, 0);
         this.p1 = new Point(0, 0);
         this.p0.copyPoint(p0);
@@ -39,8 +38,6 @@ export class Rectangle {
         let Lx = this.p0.x;
         return new Point(Lx, Ly);
     }
-    // width: number;
-    // height: number;
     getMiddlePoint(): Point {
         let lx = this.p0.x + Math.trunc((this.p1.x - this.p0.x) / 2) + 1;
         let ly = this.p0.y + Math.trunc((this.p1.y - this.p0.y) / 2) + 1;
@@ -108,7 +105,7 @@ export class Scheme {
         });
         this.layer = new Konva.Layer();
         this.stage.add(this.layer);
-        if (this.widgets.length) this.interval = setInterval(this.update, 1000);
+        if (this.widgets.length) this.interval = setInterval(this.update, 100);
     }
     addWidget(widget: BaseMineDraw) {
         this.widgets.push(widget);
@@ -215,9 +212,28 @@ export enum ValveState {
 };
 
 export class Valve extends BaseMineDraw {
-    private main0: Konva.Line;
-    private main1: Konva.Line;
-    // private mainRectangle: Konva.Rect;
+    private triangle0: Konva.Line;
+    private triangle1: Konva.Line;
+    private rectangleCentr: Konva.Rect;
+    private circle: Konva.Circle;
+    private openingSize: Konva.Text;
+    private primitives: any[]; // triangle0, triangle1, rectangleCentr, круг, текст
+    constructor(p0: Point, length: number, disposition: Disposition) {
+        super(p0, length, disposition);
+        this.type = 'Valve';
+        this.state = ValveState.closed;
+        let p00: Point = this.rect.p0;
+        let p01: Point = (disposition == Disposition.Vertical) ? this.rect.rightTop() : this.rect.getMiddlePoint();
+        let p02: Point = (disposition == Disposition.Vertical) ? this.rect.getMiddlePoint() : this.rect.leftButtom();
+        this.triangle0 = this.createTriangle(p00, p01, p02);
+        let p10: Point = this.rect.p1;
+        let p11: Point = (disposition == Disposition.Vertical) ? this.rect.leftButtom() : this.rect.getMiddlePoint();
+        let p12: Point = (disposition == Disposition.Vertical) ? this.rect.getMiddlePoint() : this.rect.rightTop();
+        this.triangle1 = this.createTriangle(p10, p11, p12);
+        this.rectangleCentr = this.createRectangle(length, disposition);
+        this.circle = this.createCircle(length, disposition);
+        this.openingSize = this.createText(length, disposition);
+    }
     setState(newState: ValveState): void {
         this.state = newState;
     }
@@ -230,39 +246,134 @@ export class Valve extends BaseMineDraw {
             closed: true,
         });
     }
-    constructor(p0: Point, length: number, disposition: Disposition) {
-        super(p0, length, disposition);
-        this.type = 'Valve';
-        this.state = ValveState.closed;
-        let p00: Point = this.rect.p0;
-        let p01: Point = (disposition == Disposition.Vertical) ? this.rect.rightTop() : this.rect.getMiddlePoint();
-        let p02: Point = (disposition == Disposition.Vertical) ? this.rect.getMiddlePoint() : this.rect.leftButtom();
-        this.main0 = this.createTriangle(p00, p01, p02);
-        let p10: Point = this.rect.p1;
-        let p11: Point = (disposition == Disposition.Vertical) ? this.rect.leftButtom() : this.rect.getMiddlePoint();
-        let p12: Point = (disposition == Disposition.Vertical) ? this.rect.getMiddlePoint() : this.rect.rightTop();
-        this.main1 = this.createTriangle(p10, p11, p12);
+    private createRectangle(length, disposition): Konva.Rect {
+        let x: number;
+        let y: number;
+        let height: number;
+        let width: number;
+        if (disposition == Disposition.Horizontal) {
+            x = this.rect.getMiddlePoint().x - Math.trunc(length / 19.8);
+            y = this.rect.getMiddlePoint().y - Math.trunc(length / 5.4);
+            height = length / 2.7;
+            width = length / 9.9;
+        } else {
+            x = this.rect.getMiddlePoint().x - Math.trunc(length / 5.4);
+            y = this.rect.getMiddlePoint().y - Math.trunc(length / 19.8);
+            height = length / 9.9;
+            width = length / 2.7;
+        };
+        return new Konva.Rect({
+            x: x,
+            y: y,
+            height: height,
+            width: width,
+            fill: 'rgba(122, 208, 62, 1)',
+        });
     }
+
+    private createCircle(length, disposition): Konva.Circle {
+        let x: number;
+        let y: number;
+        if (disposition == Disposition.Horizontal) {
+            x = this.rect.getMiddlePoint().x;
+            y = this.rect.getMiddlePoint().y - Math.trunc(0.39 * length);
+        } else {
+            x = this.rect.getMiddlePoint().x - Math.trunc(0.39 * length);
+            y = this.rect.getMiddlePoint().y;
+        };
+        return new Konva.Circle({
+            x: x,
+            y: y,
+            radius: Math.trunc(length / 4.79),
+            fill: '#FDFBFB',
+            stroke: '#7AD03E',
+            strokeWidth: 1,
+        });
+    }
+
+    private createText(length, disposition): Konva.Text {
+        let x: number;
+        let y: number;
+        if (disposition == Disposition.Horizontal) {
+            x = this.rect.getMiddlePoint().x - Math.trunc(0.1 * length);
+            y = this.rect.getMiddlePoint().y - Math.trunc(0.43 * length);
+        } else {
+            x = this.rect.getMiddlePoint().x - Math.trunc(0.5 * length);
+            y = this.rect.getMiddlePoint().y - Math.trunc(0.04 * length);
+        };
+        return new Konva.Text({
+            x: x,
+            y: y,
+            text: '100 %',
+            fontSize: 18,
+            fontFamily: 'Roboto',
+            fill: '#000000',
+        });
+    }
+
+    private showFrame(fill0: string, fill1: string, stroke: string, rectFill: string, circleStroke: string): void {
+        this.triangle0.stroke(stroke);
+        this.triangle0.fill(fill0);
+        this.triangle1.stroke(stroke);
+        this.triangle1.fill(fill1);
+        this.rectangleCentr.fill(rectFill);
+        this.circle.stroke(circleStroke);
+    }
+
     nextFrame(): void {
-        if (this.state == ValveState.opening) {
-            if (this.animationFrame == 0) {
-                this.main0.stroke('#F0FF41');
-                this.main0.fill('#A1DC77');
-                this.main1.stroke('#F0FF41');
-                this.main1.fill('#E1F1FB');
-                this.animationFrame +=1;
-            }
-            else {
-                this.main0.stroke('#7AD03E');
-                this.main0.fill('#E1F1FB');
-                this.main1.stroke('#7AD03E');
-                this.main1.fill('#A1DC77');
-                this.animationFrame = 0;
-            }
+        switch (this.state) {
+            case 0:
+                this.showFrame('#FE668B', '#FE668B', '#E3093E', '#E3093E', '#E3093E');
+                break;
+            case 1:
+                if (this.animationFrame == 0) {
+                    this.showFrame('#1D8EEA', '#E1F1FB', '#00C734', '#7AD03E', '#7AD03E');
+                    this.animationFrame = 1;
+                }
+                else if (this.animationFrame == 1) {
+                    this.showFrame('#1D8EEA', '#1D8EEA', '#00C734', '#7AD03E', '#7AD03E');
+                    this.animationFrame = 2;
+                }
+                else {
+                    this.showFrame('#E1F1FB', '#1D8EEA', '#00C734', '#7AD03E', '#7AD03E');
+                    this.animationFrame = 0;
+                }
+                break;
+            case 2:
+                if (this.animationFrame == 0) {
+                    this.showFrame('#A1DC77', '#E1F1FB', '#F0FF41', '#7AD03E', '#7AD03E');
+                    this.animationFrame = 1;
+                }
+                else {
+                    this.showFrame('#E1F1FB', '#A1DC77', '#7AD03E', '#7AD03E', '#7AD03E');
+                    this.animationFrame = 0;
+                }
+                break;
+            case 3:
+                if (this.animationFrame == 0) {
+                    this.showFrame('#FE668B', '#E1F1FB', '#F0FF41', '#E3093E', '#E3093E');
+                    this.animationFrame = 1;
+                }
+                else {
+                    this.showFrame('#E1F1FB', '#FE668B', '#E3093E', '#E3093E', '#E3093E');
+                    this.animationFrame = 0;
+                }
+                break;
+            case 4:
+                if (this.animationFrame == 0) {
+                    this.showFrame('#EF0000', '#EF0000', '#010101', '#EF0000', '#EF0000');
+                    this.animationFrame = 1;
+                }
+                else {
+                    this.showFrame('#010101', '#010101', '#FF0000', '#EF0000', '#EF0000');
+                    this.animationFrame = 0;
+                }
+                break;
         }
     }
+
     draw(layer: Konva.Layer): void {
-        layer.add(this.main0, this.main1);
+        layer.add(this.triangle0, this.triangle1, this.rectangleCentr, this.circle, this.openingSize);
     }
     // calcSize(factor = 1.45): number {
     //     return super.calcSize(factor);

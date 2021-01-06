@@ -9,12 +9,11 @@ import {Scheme, Pump, Valve, Disposition, animateScheme, Point, ValveState} from
 
 let surfaceScheme = new Scheme('container', window.innerWidth, window.innerHeight);
 let pumpM1_1 = new Pump(10, 10, Disposition.Horizontal);
-let valveY1 = new Valve(new Point(100, 100), 200, Disposition.Vertical);
+let valveY1 = new Valve(new Point(200, 200), 200, Disposition.Vertical);
 valveY1.setState(ValveState.opening)
 surfaceScheme.addWidget(pumpM1_1);
 surfaceScheme.addWidget(valveY1);
-animateScheme(surfaceScheme, 100);
-
+animateScheme(surfaceScheme, 500);
 
 let _sock;
 // var server = net.createServer();
