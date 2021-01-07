@@ -10,8 +10,10 @@ import {Scheme, Pump, Disposition, animateScheme} from './mine_drawing';
 let surfaceScheme = new Scheme('container', window.innerWidth, window.innerHeight);
 let pumpM1_1 = new Pump(10, 10, 240, Disposition.Horizontal);
 surfaceScheme.addWidget(pumpM1_1);
-animateScheme(surfaceScheme, 400);
+//animateScheme(surfaceScheme, 400);
 
+
+// https://www.hacksparrow.com/nodejs/tcp-socket-programming-in-node-js.html
 
 let _sock;
 // var server = net.createServer();
@@ -58,5 +60,9 @@ net.createServer(function(sock) {
   console.log('Server listening on ' + HOST +':'+ PORT);
 
 function  testSend(){
-    _sock.write('Hello from type script!!!');
+    let byteNumber = (<HTMLInputElement>document.getElementById("byteNumber")).value;
+    let outputNumber = (<HTMLInputElement>document.getElementById("outputNumber")).value;
+    let check = (<HTMLInputElement>document.getElementById("setOrClear")).checked;
+    console.log(`testSend byteNumber = ${byteNumber}; outputNumber = ${outputNumber}; check = ${check}`);
+    //_sock.write('Hello from type script!!!');
 }
