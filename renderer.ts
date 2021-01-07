@@ -1,17 +1,19 @@
 
 var net = require('net');
 
-var HOST = '192.168.0.99';
+var HOST = '192.168.100.3';
 var PORT = 27069;
 
-import {Scheme, Pump, Disposition, animateScheme} from './mine_drawing';
+import {Scheme, Pump, Valve, Disposition, animateScheme, Point, ValveState} from './mine_drawing';
 
 
 let surfaceScheme = new Scheme('container', window.innerWidth, window.innerHeight);
-let pumpM1_1 = new Pump(10, 10, 240, Disposition.Horizontal);
+let pumpM1_1 = new Pump(10, 10, Disposition.Horizontal);
+let valveY1 = new Valve(new Point(200, 200), 200, Disposition.Vertical);
+valveY1.setState(ValveState.opening)
 surfaceScheme.addWidget(pumpM1_1);
-//animateScheme(surfaceScheme, 400);
-
+surfaceScheme.addWidget(valveY1);
+animateScheme(surfaceScheme, 500);
 
 // https://www.hacksparrow.com/nodejs/tcp-socket-programming-in-node-js.html
 
