@@ -4,15 +4,17 @@ var net = require('net');
 var HOST = '192.168.100.3';
 var PORT = 27069;
 
-import {Scheme, Pump, Valve, Disposition, animateScheme, Point, ValveState} from './mine_drawing';
+import {Scheme, Pump, Valve, Disposition, animateScheme, Point, ValveState, Pool} from './mine_drawing';
 
 
 let surfaceScheme = new Scheme('container', window.innerWidth, window.innerHeight);
 let pumpM1_1 = new Pump(10, 10, Disposition.Horizontal);
-let valveY1 = new Valve(new Point(200, 200), 200, Disposition.Vertical);
-valveY1.setState(ValveState.opening)
+let valveY1 = new Valve(new Point(200, 200), 200, Disposition.Vertical, 20);
+let pool1 = new Pool(new Point(400, 50), 250, 100);
+valveY1.setState(ValveState.opened)
 surfaceScheme.addWidget(pumpM1_1);
 surfaceScheme.addWidget(valveY1);
+surfaceScheme.addWidget(pool1);
 animateScheme(surfaceScheme, 500);
 
 let _sock;
