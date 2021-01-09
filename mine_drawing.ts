@@ -222,7 +222,7 @@ export class Valve extends BaseMineDraw {
     private openingSize: Konva.Text;
     private primitives: any[]; // triangle0, triangle1, rectangleCentr, круг, текст
     constructor(p0: Point, length: number, disposition: Disposition, percentage: number) {
-        super(p0, length, disposition, percentage);
+        super(p0, length, disposition);
         this.type = 'Valve';
         // this.state = ValveState.closed;
         let p00: Point = this.rect.p0;
@@ -433,7 +433,7 @@ export class Pool extends BaseMineDraw {
             fill: '#E1F1FB',
             stroke: '#34E7E7',
             strokeWidth: 5,
-            cornerRadius: 18
+            cornerRadius: 10
         });
     }
 
@@ -446,7 +446,7 @@ export class Pool extends BaseMineDraw {
             fill: waterLevel,
             // stroke: '',
             // strokeWidth: 0,
-            // cornerRadius: 50
+            cornerRadius: [0, 0, 50, 0],
         });
     }
 
