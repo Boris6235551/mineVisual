@@ -12,15 +12,15 @@ import {
 import {Connection, testArray} from './tube';
 
 let surfaceScheme = new Scheme('container', window.innerWidth, window.innerHeight);
-let pumpM1_1 = new Pump(10, 10, Disposition.Horizontal);
-let valveY1 = new Valve(new Point(100, 100), 200, Disposition.Vertical, 20);
+//let pumpM1_1 = new Pump(10, 10, Disposition.Horizontal);
+let valveY1 = new Valve(new Point(100, 100), 100, Disposition.Vertical, 20);
 
 //let pool1 = new Pool(new Point(400, 50), 250, 100);
 valveY1.setState(ValveState.opened)
-surfaceScheme.addWidget(pumpM1_1);
+//surfaceScheme.addWidget(pumpM1_1);
 surfaceScheme.addWidget(valveY1);
 
- let valveY2 = new Valve(new Point(100, 500), 200, Disposition.Vertical, 20);
+ let valveY2 = new Valve(new Point(100, 700), 100, Disposition.Vertical, 20);
  valveY2.setState(ValveState.opened);
  surfaceScheme.addWidget(valveY2);
 // //surfaceScheme.addWidget(pool1);

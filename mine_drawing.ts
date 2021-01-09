@@ -298,7 +298,7 @@ export class Valve extends BaseMineDraw {
     }
 
     private createCircle(length): Konva.Circle {
-        let x: number;
+        let x: number ;
         let y: number;
         if (this.disposition == Disposition.Horizontal) {
             x = this.rect.getMiddlePoint().x;
@@ -307,8 +307,9 @@ export class Valve extends BaseMineDraw {
             x = this.rect.getMiddlePoint().x - Math.trunc(0.39 * length);
             y = this.rect.getMiddlePoint().y;
         };
+        let dxC = (this.disposition == Disposition.Horizontal) ? 0 : Math.trunc(0.39 * length);
         return new Konva.Circle({
-            x: x,
+            x:  this.rect.getMiddlePoint().x - dxC,
             y: y,
             radius: Math.trunc(length / 4.79),
             fill: '',
