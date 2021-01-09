@@ -81,9 +81,6 @@ export class BaseMineDraw {
         }
         this.rect = new Rectangle(p0, new Point(p0.x + dx, p0.y + dy));
     }
-    protected setPercentage(percentage: number) {
-        return percentage + '%'
-    }
     protected getOdd(num: number): number {
         return Math.trunc(num / 2) * 2 + 1;
     }
@@ -164,7 +161,7 @@ export class Pump extends BaseMineDraw {
         super(p0, length, disposition);
         this.rects = [];
         this.type = 'Pump';
-        this.state = ValveState.closed;
+        this.state = 0;
         //this.ind = 0;
         this.main = new Konva.Rect({
             x: 10,
@@ -233,179 +230,7 @@ export class Pump extends BaseMineDraw {
 
 }
 
-export enum ValveState {
-    closed = 0, opened, opening, closing, alarm, stop
-};
-
-export class Valve extends BaseMineDraw {
-    private triangle0: Konva.Line;
-    private triangle1: Konva.Line;
-    private rectangleCentr: Konva.Rect;
-    private circle: Konva.Circle;
-    private openingSize: Konva.Text;
-    //private primitives: any[]; // triangle0, triangle1, rectangleCentr, круг, текст
-    constructor(p0: Point, length: number, disposition: Disposition, percentage: number) {
-        super(p0, length, disposition, percentage);
-        this.type = 'Valve';
-        // this.state = ValveState.closed;
-        let p00: Point = this.rect.p0;
-        let p01: Point = (disposition == Disposition.Vertical) ? this.rect.rightTop() : this.rect.getMiddlePoint();
-        let p02: Point = (disposition == Disposition.Vertical) ? this.rect.getMiddlePoint() : this.rect.leftButtom();
-        this.triangle0 = this.createTriangle(p00, p01, p02);
-        let p10: Point = this.rect.p1;
-        let p11: Point = (disposition == Disposition.Vertical) ? this.rect.leftButtom() : this.rect.getMiddlePoint();
-        let p12: Point = (disposition == Disposition.Vertical) ? this.rect.getMiddlePoint() : this.rect.rightTop();
-        this.triangle1 = this.createTriangle(p10, p11, p12);
-        this.rectangleCentr = this.createRectangle(length, disposition);
-        this.circle = this.createCircle(length);
-        this.openingSize = this.createText(length, disposition, percentage);
-    }
-    setState(newState: ValveState): void {
-        this.state = newState;
-    }
-    private createTriangle(p0: Point, p1: Point, p2: Point): Konva.Line {
-        return new Konva.Line({
-            points: [p0.x, p0.y, p1.x, p1.y, p2.x, p2.y],
-            fill: '',
-            stroke: '',
-            strokeWidth: 5,
-            closed: true,
-        });
-    }
-    private createRectangle(length, disposition): Konva.Rect {
-        let x: number;
-        let y: number;
-        let height: number;
-        let width: number;
-        if (disposition == Disposition.Horizontal) {
-            x = this.rect.getMiddlePoint().x - Math.trunc(length / 19.8);
-            y = this.rect.getMiddlePoint().y - Math.trunc(length / 5.4);
-            height = length / 2.7;
-            width = length / 9.9;
-        } else {
-            x = this.rect.getMiddlePoint().x - Math.trunc(length / 5.4);
-            y = this.rect.getMiddlePoint().y - Math.trunc(length / 19.8);
-            height = length / 9.9;
-            width = length / 2.7;
-        };
-        return new Konva.Rect({
-            x: x,
-            y: y,
-            height: height,
-            width: width,
-            fill: '',
-        });
-    }
-
-    private createCircle(length): Konva.Circle {
-        let x: number ;
-        let y: number;
-        if (this.disposition == Disposition.Horizontal) {
-            x = this.rect.getMiddlePoint().x;
-            y = this.rect.getMiddlePoint().y - Math.trunc(0.39 * length);
-        } else {
-            x = this.rect.getMiddlePoint().x - Math.trunc(0.39 * length);
-            y = this.rect.getMiddlePoint().y;
-        };
-        let dxC = (this.disposition == Disposition.Horizontal) ? 0 : Math.trunc(0.39 * length);
-        return new Konva.Circle({
-            x:  this.rect.getMiddlePoint().x - dxC,
-            y: y,
-            radius: Math.trunc(length / 4.79),
-            fill: '',
-            stroke: '',
-            strokeWidth: 1,
-        });
-    }
-
-    private createText(length, disposition, percentage): Konva.Text {
-        let x: number;
-        let y: number;
-        if (disposition == Disposition.Horizontal) {
-            x = this.rect.getMiddlePoint().x - Math.trunc(0.1 * length);
-            y = this.rect.getMiddlePoint().y - Math.trunc(0.43 * length);
-        } else {
-            x = this.rect.getMiddlePoint().x - Math.trunc(0.5 * length);
-            y = this.rect.getMiddlePoint().y - Math.trunc(0.04 * length);
-        };
-        return new Konva.Text({
-            x: x,
-            y: y,
-            text: this.setPercentage(percentage),
-            fontSize: 18,
-            fontFamily: 'Roboto',
-            fill: '',
-        });
-    }
-
-    private showFrame(fill0: string, fill1: string, stroke: string, rectFill: string, circleStroke: string): void {
-        this.triangle0.stroke(stroke);
-        this.triangle0.fill(fill0);
-        this.triangle1.stroke(stroke);
-        this.triangle1.fill(fill1);
-        this.rectangleCentr.fill(rectFill);
-        this.circle.stroke(circleStroke);
-    }
-
-    nextFrame(): void {
-        switch (this.state) {
-            case ValveState.closed:
-                this.showFrame('#FE668B', '#FE668B', '#E3093E', '#E3093E', '#E3093E');
-                break;
-            case ValveState.opened:
-                if (this.animationFrame == 0) {
-                    this.showFrame('#1D8EEA', '#E1F1FB', '#00C734', '#7AD03E', '#7AD03E');
-                    this.animationFrame = 1;
-                }
-                else if (this.animationFrame == 1) {
-                    this.showFrame('#1D8EEA', '#1D8EEA', '#00C734', '#7AD03E', '#7AD03E');
-                    this.animationFrame = 2;
-                }
-                else {
-                    this.showFrame('#E1F1FB', '#1D8EEA', '#00C734', '#7AD03E', '#7AD03E');
-                    this.animationFrame = 0;
-                }
-                break;
-            case ValveState.opening:
-                if (this.animationFrame == 0) {
-                    this.showFrame('#A1DC77', '#E1F1FB', '#F0FF41', '#7AD03E', '#7AD03E');
-                    this.animationFrame = 1;
-                }
-                else {
-                    this.showFrame('#E1F1FB', '#A1DC77', '#7AD03E', '#7AD03E', '#7AD03E');
-                    this.animationFrame = 0;
-                }
-                break;
-            case ValveState.closing:
-                if (this.animationFrame == 0) {
-                    this.showFrame('#FE668B', '#E1F1FB', '#F0FF41', '#E3093E', '#E3093E');
-                    this.animationFrame = 1;
-                }
-                else {
-                    this.showFrame('#E1F1FB', '#FE668B', '#E3093E', '#E3093E', '#E3093E');
-                    this.animationFrame = 0;
-                }
-                break;
-            case ValveState.alarm:
-                if (this.animationFrame == 0) {
-                    this.showFrame('#EF0000', '#EF0000', '#010101', '#EF0000', '#EF0000');
-                    this.animationFrame = 1;
-                }
-                else {
-                    this.showFrame('#010101', '#010101', '#FF0000', '#EF0000', '#EF0000');
-                    this.animationFrame = 0;
-                }
-                break;
-        }
-    }
-
-    draw(layer: Konva.Layer): void {
-        layer.add(this.triangle0, this.triangle1, this.rectangleCentr, this.circle, this.openingSize);
-        console.log(`Valve.draw add `)
-        super.draw(layer);
-    }
-}
-
+// this.primitives[ValvePrimitive.triangle0], 
 export class Pool extends BaseMineDraw {
     private rectangle1: Konva.Rect;
     private rectangle2: Konva.Rect;
@@ -459,7 +284,7 @@ export class Pool extends BaseMineDraw {
             fill: '#E1F1FB',
             stroke: '#34E7E7',
             strokeWidth: 5,
-            cornerRadius: 18
+            cornerRadius: 10
         });
     }
 
@@ -472,7 +297,7 @@ export class Pool extends BaseMineDraw {
             fill: waterLevel,
             // stroke: '',
             // strokeWidth: 0,
-            // cornerRadius: 50
+            cornerRadius: [0, 0, 50, 0],
         });
     }
 
