@@ -1,21 +1,36 @@
 
 var net = require('net');
 
-var HOST = '192.168.100.3';
+//var HOST = '192.168.100.3';
+var HOST = '192.168.0.99';
 var PORT = 27069;
 
-import {Scheme, Pump, Valve, Disposition, animateScheme, Point, ValveState, Pool} from './mine_drawing';
+import {
+    Scheme, Pump, Valve, Disposition, animateScheme, Point, ValveState, Pool,    
+} from './mine_drawing';
 
+import {Connection, testArray} from './tube';
 
 let surfaceScheme = new Scheme('container', window.innerWidth, window.innerHeight);
 let pumpM1_1 = new Pump(10, 10, Disposition.Horizontal);
-let valveY1 = new Valve(new Point(200, 200), 200, Disposition.Vertical, 20);
-let pool1 = new Pool(new Point(400, 50), 250, 100);
+let valveY1 = new Valve(new Point(100, 100), 200, Disposition.Vertical, 20);
+
+//let pool1 = new Pool(new Point(400, 50), 250, 100);
 valveY1.setState(ValveState.opened)
 surfaceScheme.addWidget(pumpM1_1);
 surfaceScheme.addWidget(valveY1);
-surfaceScheme.addWidget(pool1);
+
+ let valveY2 = new Valve(new Point(100, 500), 200, Disposition.Vertical, 20);
+ valveY2.setState(ValveState.opened);
+ surfaceScheme.addWidget(valveY2);
+// //surfaceScheme.addWidget(pool1);
+let line1 = new Connection(new Point(0,0), 100, Disposition.Vertical);
+line1.connectVertical(valveY1, valveY2);
+surfaceScheme.addWidget(line1);
+
 animateScheme(surfaceScheme, 500);
+
+testArray();
 
 // https://www.hacksparrow.com/nodejs/tcp-socket-programming-in-node-js.html
 

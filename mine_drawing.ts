@@ -43,19 +43,29 @@ export class Rectangle {
         let ly = this.p0.y + Math.trunc((this.p1.y - this.p0.y) / 2) + 1;
         return new Point(lx, ly);
     }
+    getMiddleUpPoint(): Point {
+        return new Point(this.getMiddlePoint().x, this.p0.y);
+    }
+    getMiddleDownPoint(): Point {
+        return new Point(this.getMiddlePoint().x, this.p1.y);
+    }
+    getMiddleRightPoint(): Point {
+        return new Point(this.p0.x, this.getMiddlePoint().y);
+    }
+    getMiddleLeftPoint(): Point {
+        return new Point(this.p1.x, this.getMiddlePoint().y);
+    }
+
 };
 
-class BaseMineDraw {
+export class BaseMineDraw {
     protected type: string;
     readonly rect: Rectangle;
     readonly disposition: Disposition;
     protected state: any;
     protected animationFrame: number = 0;
-    // getCentralPoint(): Point {
-    //     let xCentr = this.rect;
-    //     let yCentr = this.rect;
-    //     return new Point(xCentr, yCentr);
-    // }
+    protected primitives: (Konva.Rect|Konva.Text|Konva.Circle|Konva.Line)[] = [];
+    protected layer: Konva.Layer;
     constructor(p0: Point, length: number, disposition?: Disposition, percentage?: number) {
         this.type = "Base";
         this.disposition = disposition;
@@ -81,10 +91,22 @@ class BaseMineDraw {
         return this.getOdd(length / factor);
     };
 
+    move(delta: {x: number, y: number}){
+        if(this.primitives.length == 0) return;
+        for( let i=0; i < this.primitives.length; i++) this.primitives[i].move(delta);
+        //this.layer.draw();
+    }
     // addToScheme(scheme: Scheme): void{
 
     // };
-    draw(layer: Konva.Layer): void { };
+    draw(layer: Konva.Layer): void { 
+       this.layer = layer; 
+       console.log(`this.primitives.length ${this.primitives.length}`)
+        if(this.primitives.length){
+            for (let i = 0; i < this.primitives.length; i++) layer.add(this.primitives[i]);
+        }
+       this.layer.draw();
+    };
     nextFrame(): void { };
     // get rect(): Rectangle{
     //     return this.rect;
@@ -113,10 +135,11 @@ export class Scheme {
     addWidget(widget: BaseMineDraw) {
         this.widgets.push(widget);
         console.log("Scheme . addWidget ", typeof this.widgets, this.widgets);
+        //for(let i = 0; i < this.widgets.length; i++) this.widgets[i].draw(this.layer);
         this.widgets[this.widgets.length - 1].draw(this.layer);
         this.layer.draw();
         //if(this.interval == undefined) this.interval = setInterval(this.update, 1000 );
-        console.log('this.interval', typeof this.interval, this.interval);
+        //console.log('this.interval', typeof this.interval, this.interval);
 
     }
     update(): void {
@@ -220,7 +243,7 @@ export class Valve extends BaseMineDraw {
     private rectangleCentr: Konva.Rect;
     private circle: Konva.Circle;
     private openingSize: Konva.Text;
-    private primitives: any[]; // triangle0, triangle1, rectangleCentr, круг, текст
+    //private primitives: any[]; // triangle0, triangle1, rectangleCentr, круг, текст
     constructor(p0: Point, length: number, disposition: Disposition, percentage: number) {
         super(p0, length, disposition, percentage);
         this.type = 'Valve';
@@ -377,6 +400,8 @@ export class Valve extends BaseMineDraw {
 
     draw(layer: Konva.Layer): void {
         layer.add(this.triangle0, this.triangle1, this.rectangleCentr, this.circle, this.openingSize);
+        console.log(`Valve.draw add `)
+        super.draw(layer);
     }
 }
 
@@ -387,7 +412,7 @@ export class Pool extends BaseMineDraw {
     private rectangle3: any[] = new Array()
     private circle: Konva.Circle;
     private openingSize: Konva.Text;
-    private primitives: any[]; // triangle0, triangle1, rectangleCentr, круг, текст
+    //private primitives: any[]; // triangle0, triangle1, rectangleCentr, круг, текст
     constructor(p0: Point, length: number, percentage) {
         super(p0, length, percentage);
         this.type = 'Pool';
