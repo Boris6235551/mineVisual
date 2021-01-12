@@ -112,12 +112,13 @@ export class BaseMineDraw {
 };
 
 export class Scheme {
-
+    private stop: boolean;
     widgets: BaseMineDraw[];
     stage: Konva.Stage;
     private layer: Konva.Layer;
     private interval: NodeJS.Timeout;
     constructor(container: string, width: number, height: number) {
+        this.stop = false;
         clearInterval(this.interval);
         this.widgets = [];
         this.stage = new Konva.Stage({
@@ -139,7 +140,12 @@ export class Scheme {
         //console.log('this.interval', typeof this.interval, this.interval);
 
     }
+    startStop(): void{
+        if(this.stop) this.stop = false;
+        else this.stop = true;
+    }
     update(): void {
+        if(this.stop) return;
         //console.log('uppppppdaaaate', typeof this.widgets);
         //if(this.widgets.length == 0) return;
         for (let i = 0; i < this.widgets.length; i++) this.widgets[i].nextFrame();
