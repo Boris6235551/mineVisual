@@ -6,40 +6,44 @@ var HOST = '192.168.0.99';
 var PORT = 27069;
 
 import {
-    Scheme, Pump, Disposition, animateScheme, Point, Pool,    
+    Scheme, Disposition, animateScheme, Point, Pool,    
 } from './mine_drawing';
 
 import {Valve, ValveState} from './valve';
 
 import {Connection, testArray} from './tube';
 
+import {Pump, PumpState} from './Pump';
+
 let surfaceScheme = new Scheme('container', window.innerWidth, window.innerHeight);
 // let pumpM1_1 = new Pump(10, 10, Disposition.Horizontal);
-let valveY1 = new Valve(new Point(100, 100), 100, Disposition.Vertical, 20);
-surfaceScheme.addWidget(valveY1);
+// let valveY1 = new Valve(new Point(100, 100), 100, Disposition.Vertical, 20);
+// surfaceScheme.addWidget(valveY1);
 
-let valveY2 = new Valve(new Point(100, 400), 100, Disposition.Vertical, 80);
-surfaceScheme.addWidget(valveY2);
+// let valveY2 = new Valve(new Point(100, 400), 90, Disposition.Horizontal, 80);
+// surfaceScheme.addWidget(valveY2);
 
-let valveY3 = new Valve(new Point(400, 100), 250, Disposition.Horizontal, 20);
-surfaceScheme.addWidget(valveY3);
+// let valveY3 = new Valve(new Point(400, 100), 250, Disposition.Horizontal, 20);
+// surfaceScheme.addWidget(valveY3);
 
-let valveY4 = new Valve(new Point(400, 400), 250, Disposition.Vertical, 20);
-surfaceScheme.addWidget(valveY4);
+// let valveY4 = new Valve(new Point(400, 400), 250, Disposition.Vertical, 20);
+// surfaceScheme.addWidget(valveY4);
 
-let valveY5 = new Valve(new Point(800, 100), 200, Disposition.Vertical, 20);
-surfaceScheme.addWidget(valveY5);
+// let valveY5 = new Valve(new Point(800, 100), 200, Disposition.Vertical, 20);
+// surfaceScheme.addWidget(valveY5);
 
-let valveY6 = new Valve(new Point(800, 400), 200, Disposition.Horizontal, 20);
-surfaceScheme.addWidget(valveY6);
+// let valveY6 = new Valve(new Point(800, 400), 200, Disposition.Horizontal, 20);
+// surfaceScheme.addWidget(valveY6);
 
-let valveY7 = new Valve(new Point(1100, 100), 50, Disposition.Vertical, 20);
-surfaceScheme.addWidget(valveY7);
+// let valveY7 = new Valve(new Point(1100, 100), 50, Disposition.Vertical, 20);
+// surfaceScheme.addWidget(valveY7);
 
-let valveY8 = new Valve(new Point(1100, 400), 50, Disposition.Horizontal, 20);
-surfaceScheme.addWidget(valveY8);
+// let valveY8 = new Valve(new Point(1100, 400), 50, Disposition.Horizontal, 20);
+// surfaceScheme.addWidget(valveY8);
 
-// valveY1.setState(ValveState.opened)
+let Pump1 = new Pump(new Point(200, 200), 250, Disposition.Vertical);
+surfaceScheme.addWidget(Pump1);
+Pump1.setState(PumpState.open)
 // let pool1 = new Pool(new Point(400, 50), 250, 100);
 
 // valveY2.setState(ValveState.opened)
@@ -57,7 +61,7 @@ surfaceScheme.addWidget(valveY8);
 // line1.connectVertical(valveY1, valveY2);
 // surfaceScheme.addWidget(line1);
 
-// animateScheme(surfaceScheme, 500);
+animateScheme(surfaceScheme, 500);
 
 testArray();
 
