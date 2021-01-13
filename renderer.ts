@@ -13,7 +13,7 @@ import {Valve, ValveState} from './valve';
 
 import {Connection, testArray} from './tube';
 
-import {Pump, PumpState} from './Pump';
+import {Pump, PumpState, Undegraund} from './Pump';
 
 let surfaceScheme = new Scheme('container', window.innerWidth, window.innerHeight);
 // let pumpM1_1 = new Pump(10, 10, Disposition.Horizontal);
@@ -41,9 +41,17 @@ let surfaceScheme = new Scheme('container', window.innerWidth, window.innerHeigh
 // let valveY8 = new Valve(new Point(1100, 400), 50, Disposition.Horizontal, 20);
 // surfaceScheme.addWidget(valveY8);
 
-let Pump1 = new Pump(new Point(200, 200), 250, Disposition.Vertical);
+let Pump1 = new Pump(new Point(200, 100), 250, Disposition.Horizontal);
 surfaceScheme.addWidget(Pump1);
-Pump1.setState(PumpState.open)
+Pump1.setState(PumpState.run)
+
+let Pump2 = new Pump(new Point(500, 100), 250, Disposition.Vertical);
+surfaceScheme.addWidget(Pump2);
+Pump2.setState(PumpState.revers)
+
+let Pump3 = new Undegraund(new Point(200, 400), 250, Disposition.Vertical);
+surfaceScheme.addWidget(Pump3);
+Pump3.setState(PumpState.run)
 // let pool1 = new Pool(new Point(400, 50), 250, 100);
 
 // valveY2.setState(ValveState.opened)

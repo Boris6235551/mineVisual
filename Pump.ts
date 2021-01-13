@@ -2,7 +2,7 @@ import Konva from 'konva';
 import { BaseMineDraw, Disposition, Point } from './mine_drawing';
 
 export enum PumpState {
-    open = 0, revers, stop, alarm
+     run = 0, revers, stop, alarm
 };
 
 enum PumpPrimitive {
@@ -11,64 +11,96 @@ enum PumpPrimitive {
 
 export class Pump extends BaseMineDraw {
     private step: number;
+    private a: number;
     constructor(p0: Point, length: number, disposition: Disposition) {
         super(p0, length, disposition);
         this.type = 'Pump';
         this.state = PumpState;
         let p00: Point = this.rect.p0;
-        let p01: Point = (disposition == Disposition.Vertical) ? this.rect.rightTop() : this.rect.getMiddlePoint();
-        let p02: Point = (disposition == Disposition.Vertical) ? this.rect.getMiddlePoint() : this.rect.leftButtom();
-        console.log(p02);
-        let p10: Point = this.rect.p1;
-        let p11: Point = (disposition == Disposition.Vertical) ? this.rect.leftButtom() : this.rect.getMiddlePoint();
-        let p12: Point = (disposition == Disposition.Vertical) ? this.rect.getMiddlePoint() : this.rect.rightTop();
+        let p01: Point = this.rect.rightTop();
+        let p02: Point = this.rect.getMiddlePoint();
+
         // верхний прямоугольник 0
         let x: number = p02.x - length * 0.05;
         let y: number = p00.y;
         let height: number = length * 0.035;
         let width: number = length * 0.1;
         let fill: string = '#C4C4C4';
-        this.primitives.push(this.createRectangle(x, y, height, width, fill));
+        if (disposition == Disposition.Vertical)
+            this.primitives.push(this.createRectangle(x, y, height, width, fill));
+        else
+            this.primitives.push(this.createRectangle(p00.x, p02.y - length * 0.05, width, height, fill));
+
         // нижний прямоугольник 1
-        y = p11.y - length * 0.046;
-        this.primitives.push(this.createRectangle(x, y, height, width, fill));
+        y = p00.y + length * 0.954;
+        if (disposition == Disposition.Vertical)
+            this.primitives.push(this.createRectangle(x, y, height, width, fill));
+        else
+            this.primitives.push(this.createRectangle(p00.x + length * 0.954, p02.y - length * 0.05, width, height, fill));
+
         // центральный прямоугольик 2
-        x = p00.x, y = p02.y - length * 0.361, height = length * 0.71, width = p01.x - p00.x; fill = '#EFEFEF'
+        x = p00.x, y = p02.y - length * 0.361, height = length * 0.71, width = this.calcSize(length); fill = '#EFEFEF'
         let stroke: string = '#AEB4B4'; let strokeWidth: number = length * 0.0135; let cornerRadius: number = 18;
-        this.primitives.push(this.createRectangle(x, y, height, width, fill, stroke, strokeWidth, cornerRadius));
+        if (disposition == Disposition.Vertical)
+            this.primitives.push(this.createRectangle(x, y, height, width, fill, stroke, strokeWidth, cornerRadius));
+        else
+            this.primitives.push(this.createRectangle(p02.x - length * 0.361, p00.y, width, height, fill, stroke, strokeWidth, cornerRadius));
         // верхняя пирамида верх 3
         x = p02.x - length * 0.035; y = p00.y + length * 0.035; height = length * 0.05;
         width = length * 0.07; fill = '#02A96D'
-        this.primitives.push(this.createRectangle(x, y, height, width, fill));
+        if (disposition == Disposition.Vertical)
+            this.primitives.push(this.createRectangle(x, y, height, width, fill));
+        else
+            this.primitives.push(this.createRectangle(p00.x + length * 0.035, p02.y - length * 0.035, width, height, fill));
         // верхняя пирамида низ 4
         x = p02.x - length * 0.11; y = p00.y + length * 0.085; width = length * 0.22;
-        this.primitives.push(this.createRectangle(x, y, height, width, fill));
+        if (disposition == Disposition.Vertical)
+            this.primitives.push(this.createRectangle(x, y, height, width, fill));
+        else
+            this.primitives.push(this.createRectangle(p00.x + length * 0.085, p02.y - length * 0.11, width, height, fill));
         // нижняя пирамида верх 5
         x = p02.x - length * 0.11; y = p00.y + length * 0.858;
-        this.primitives.push(this.createRectangle(x, y, height, width, fill));
-        // нижняя пирамида низ 6
-        x = p02.x - length * 0.035; y = p00.y + length * 0.857 + length * 0.05; width = length * 0.07;
-        this.primitives.push(this.createRectangle(x, y, height, width, fill));
+        if (disposition == Disposition.Vertical)
+            this.primitives.push(this.createRectangle(x, y, height, width, fill));
+        else
+            this.primitives.push(this.createRectangle(p00.x + length * 0.858, p02.y - length * 0.11, width, height, fill));
 
+        // нижняя пирамида низ 6
+        x = p02.x - length * 0.035; y = p00.y + length * 0.907; width = length * 0.07;
+        if (disposition == Disposition.Vertical)
+            this.primitives.push(this.createRectangle(x, y, height, width, fill));
+        else
+            this.primitives.push(this.createRectangle(p00.x + length * 0.907, p02.y - length * 0.035, width, height, fill));
         // центральный прямоугольник анимации 7
-        x = p00.x, y = p02.y - length * 0.29, height = length * 0.58, width = p01.x - p00.x; fill = '#1D8EEA'
-        stroke = ''; strokeWidth = 0; cornerRadius = 0;
-        this.primitives.push(this.createRectangle(x, y, height, width, fill, stroke, strokeWidth, cornerRadius));
+        x = p00.x + length * 0.00675, y = p02.y - length * 0.29, height = length * 0.58,
+            width = this.calcSize(length) - length * 0.0135; fill = '#1D8EEA'; stroke = ''; strokeWidth = 0; cornerRadius = 0;
+        if (disposition == Disposition.Vertical)
+            this.primitives.push(this.createRectangle(x, y, height, width, fill, stroke, strokeWidth, cornerRadius));
+        else
+            this.primitives.push(this.createRectangle(p02.x - length * 0.29, p00.y + length * 0.00675, width, height, fill, stroke, strokeWidth, cornerRadius));
 
         // белый прямоугольник анимации1 8
-        x = p00.x, y = p02.y - length * 0.29, height = length * 0.084, width = p01.x - p00.x; fill = '#EDF6FC'
-        stroke = ''; strokeWidth = 0; cornerRadius = 0;
-        this.primitives.push(this.createRectangle(x, y, height, width, fill, stroke, strokeWidth, cornerRadius));
+        x = p00.x + length * 0.00675, y = p02.y - length * 0.29, height = length * 0.084, width = this.calcSize(length) - length * 0.0135;
+        fill = '#EDF6FC'; stroke = ''; strokeWidth = 0; cornerRadius = 0;
+        if (disposition == Disposition.Vertical)
+            this.primitives.push(this.createRectangle(x, y, height, width, fill, stroke, strokeWidth, cornerRadius));
+        else
+            this.primitives.push(this.createRectangle(p02.x - length * 0.29, p00.y + length * 0.00675, width, height, fill, stroke, strokeWidth, cornerRadius));
+
 
         // белый прямоугольник анимации2 9
-        x = p00.x, y = p02.y - length * 0.042, height = length * 0.084, width = p01.x - p00.x; fill = '#EDF6FC'
-        stroke = ''; strokeWidth = 0; cornerRadius = 0;
-        this.primitives.push(this.createRectangle(x, y, height, width, fill, stroke, strokeWidth, cornerRadius));
+        y = p02.y - length * 0.042;
+        if (disposition == Disposition.Vertical)
+            this.primitives.push(this.createRectangle(x, y, height, width, fill, stroke, strokeWidth, cornerRadius));
+        else
+            this.primitives.push(this.createRectangle(p02.x - length * 0.042, p00.y + length * 0.00675, width, height, fill, stroke, strokeWidth, cornerRadius));
 
         // белый прямоугольник анимации3 10
-        x = p00.x, y = p02.y + length * 0.206, height = length * 0.084, width = p01.x - p00.x; fill = '#EDF6FC'
-        stroke = ''; strokeWidth = 0; cornerRadius = 0;
-        this.primitives.push(this.createRectangle(x, y, height, width, fill, stroke, strokeWidth, cornerRadius));
+        y = p02.y + length * 0.206;
+        if (disposition == Disposition.Vertical)
+            this.primitives.push(this.createRectangle(x, y, height, width, fill, stroke, strokeWidth, cornerRadius));
+        else
+            this.primitives.push(this.createRectangle(p02.x + length * 0.206, p00.y + length * 0.00675, width, height, fill, stroke, strokeWidth, cornerRadius));
 
         this.step = length * 0.084;
         let R: number = length * 0.14; let r: number = length * 0.06;
@@ -106,6 +138,7 @@ export class Pump extends BaseMineDraw {
     setState(newState: PumpState): void {
         this.state = newState;
     }
+
     private createRectangle(x: number, y: number, height: number, width: number, fill: string, stroke?: string,
         strokeWidth?: number, cornerRadius?: number): Konva.Rect {
         return new Konva.Rect({
@@ -147,106 +180,93 @@ export class Pump extends BaseMineDraw {
         });
     }
 
-    private moveWhite(): void {
+    private showFrame(fill2: string, fill3: string, fill4: string, fill5: string, fill6: string, fill7: string,
+        fill8: string, fill9: string, fill10: string, fill12: string, fill13: string, stroke2: string,
+        stroke7: string, stroke11: string, stroke12: string, stroke13: string, stroke14: string,
+        stroke15: string, stroke16: string, strokeWidth7: number): void {
+        this.primitives[2].fill(fill2);
+        this.primitives[3].fill(fill3);
+        this.primitives[4].fill(fill4);
+        this.primitives[5].fill(fill5);
+        this.primitives[6].fill(fill6);
+        this.primitives[7].fill(fill7);
+        this.primitives[8].fill(fill8);
+        this.primitives[9].fill(fill9);
+        this.primitives[10].fill(fill10);
+        this.primitives[12].fill(fill12);
+        this.primitives[13].fill(fill13);
+        this.primitives[2].stroke(stroke2);
+        this.primitives[7].stroke(stroke7);
+        this.primitives[11].stroke(stroke11);
+        this.primitives[12].stroke(stroke12);
+        this.primitives[13].stroke(stroke13);
+        this.primitives[14].stroke(stroke14);
+        this.primitives[15].stroke(stroke15);
+        this.primitives[16].stroke(stroke16);
+        this.primitives[7].strokeWidth(strokeWidth7);
+    }
+
+    nextFrame(angel: number = 30): void {
         let dy: number = this.step;
         switch (this.state) {
-            case PumpState.open:
-                if (this.animationFrame < 2) { dy = this.step; this.primitives[10].fill('') }
-                else { dy = - (2 * this.step); this.primitives[10].fill('#EDF6FC') }
-                this.primitives[8].move({ x: 0, y: dy });
-                this.primitives[9].move({ x: 0, y: dy });
-                this.primitives[10].move({ x: 0, y: dy });
+            case PumpState.run:
+                this.primitives[14].rotate(angel);
+                this.primitives[15].rotate(angel);
+                this.primitives[16].rotate(angel);
+                if (this.animationFrame < 2) { dy = this.step; this.primitives[10].fill(''); this.animationFrame += 1; }
+                else { dy = - (2 * this.step); this.primitives[10].fill('#EDF6FC'); this.animationFrame = 0; }
+                if (this.disposition == Disposition.Vertical) {
+                    this.primitives[8].move({ x: 0, y: dy });
+                    this.primitives[9].move({ x: 0, y: dy });
+                    this.primitives[10].move({ x: 0, y: dy });
+                }
+                else {
+                    this.primitives[8].move({ x: dy, y: 0 });
+                    this.primitives[9].move({ x: dy, y: 0 });
+                    this.primitives[10].move({ x: dy, y: 0 });
+                }
                 return;
             case PumpState.revers:
-                if (this.animationFrame < 2) { dy = this.step; this.primitives[8].fill('') }
-                else { dy = - (2 * this.step); this.primitives[8].fill('#EDF6FC') }
+                this.primitives[14].rotate(angel);
+                this.primitives[15].rotate(angel);
+                this.primitives[16].rotate(angel);
+                if (this.animationFrame < 2) { dy = this.step; this.primitives[8].fill(''); this.animationFrame += 1; }
+                else { dy = - (2 * this.step); this.primitives[8].fill('#EDF6FC'); this.animationFrame = 0; }
                 this.primitives[8].move({ x: 0, y: -dy });
                 this.primitives[9].move({ x: 0, y: -dy });
                 this.primitives[10].move({ x: 0, y: -dy });
                 return;
             case PumpState.stop:
-
+                this.showFrame('#EFEFEF', '#FE668B', '#AEB4B4', '#AEB4B4', '#FE668B', '#EDF6FC', '', '', '',
+                    '#CFCDCD', '#7E7D7D', '#AEB4B4', '#D99CAB', '#AAA6A6', '#AAA6A6', '#AAA6A6', '#AAA6A6',
+                    '#AAA6A6', '#AAA6A6', 3);
+                return;
             case PumpState.alarm:
+                if (this.animationFrame == 0) {
+                    this.showFrame('#000000', '#DB0000', '#DB0000', '#DB0000', '#DB0000', '#EDF6FC', '', '', '',
+                        '#000000', '#FF0000', '#000000', '#000000', '#444343', '#444343', '#444343', '#444343',
+                        '#444343', '#444343', 3);
+                    this.animationFrame = 1;
+                }
+                else {
+                    this.showFrame('#DB0000', '#000000', '#000000', '#000000', '#000000', '#EDF6FC', '', '', '',
+                        '#000000', '#FF0000', '#000000', '#DB0000', '#000000', '#444343', '#444343', '#444343',
+                        '#444343', '#444343', 3);
+                    this.animationFrame = 0;
+                }
+                return;
         }
     }
+}
 
-    nextFrame(angel: number = 30): void {
-        this.moveWhite();
-        if (this.animationFrame < 2) this.animationFrame += 1;
-        else this.animationFrame = 0;
-        this.primitives[14].rotate(angel);
-        this.primitives[15].rotate(angel);
-        this.primitives[16].rotate(angel);
-
+export class Undegraund extends Pump {
+    constructor(p0: Point, length: number, disposition: Disposition) {
+        super(p0, length, Disposition.Vertical);
+        this.primitives[1].hide();
+        this.primitives[5].hide();
+        this.primitives[6].hide();
     }
-
-    // nextFrame(): void {
-    //     this.moveLine();
-    //     if(this.animationFrame < 3) this.animationFrame +=1;
-    //     else this.animationFrame = 0;
-    // };
-
-    // fill0: string, fill1: string, stroke: string, rectFill: string, circleStroke: string
-    // private showFrame(): void {
-    //     this.primitives[PumpPrimitive.rectangleTop];
-    //     this.primitives[PumpPrimitive.rectangleBottom];
-    //     this.primitives[PumpPrimitive.rectangleMain];
-    // this.primitives[EnginePrimitive.triangle0].fill(fill0);
-    // this.primitives[EnginePrimitive.triangle1].stroke(stroke);
-    // this.primitives[EnginePrimitive.triangle1].fill(fill1);
-    // this.primitives[EnginePrimitive.rectangleCentr].fill(rectFill);
-    // this.primitives[EnginePrimitive.circle].stroke(circleStroke);
-    // }
-
-    // nextFrame(): void {
-    //     switch (this.state) {
-    //         case ValveState.closed:
-    //             this.showFrame('#FE668B', '#FE668B', '#E3093E', '#E3093E', '#E3093E');
-    //             break;
-    //         case ValveState.opened:
-    //             if (this.animationFrame == 0) {
-    //                 this.showFrame('#1D8EEA', '#E1F1FB', '#00C734', '#7AD03E', '#7AD03E');
-    //                 this.animationFrame = 1;
-    //             }
-    //             else if (this.animationFrame == 1) {
-    //                 this.showFrame('#1D8EEA', '#1D8EEA', '#00C734', '#7AD03E', '#7AD03E');
-    //                 this.animationFrame = 2;
-    //             }
-    //             else {
-    //                 this.showFrame('#E1F1FB', '#1D8EEA', '#00C734', '#7AD03E', '#7AD03E');
-    //                 this.animationFrame = 0;
-    //             }
-    //             break;
-    //         case ValveState.opening:
-    //             if (this.animationFrame == 0) {
-    //                 this.showFrame('#A1DC77', '#E1F1FB', '#F0FF41', '#7AD03E', '#7AD03E');
-    //                 this.animationFrame = 1;
-    //             }
-    //             else {
-    //                 this.showFrame('#E1F1FB', '#A1DC77', '#7AD03E', '#7AD03E', '#7AD03E');
-    //                 this.animationFrame = 0;
-    //             }
-    //             break;
-    //         case ValveState.closing:
-    //             if (this.animationFrame == 0) {
-    //                 this.showFrame('#FE668B', '#E1F1FB', '#F0FF41', '#E3093E', '#E3093E');
-    //                 this.animationFrame = 1;
-    //             }
-    //             else {
-    //                 this.showFrame('#E1F1FB', '#FE668B', '#E3093E', '#E3093E', '#E3093E');
-    //                 this.animationFrame = 0;
-    //             }
-    //             break;
-    //         case ValveState.alarm:
-    //             if (this.animationFrame == 0) {
-    //                 this.showFrame('#EF0000', '#EF0000', '#010101', '#EF0000', '#EF0000');
-    //                 this.animationFrame = 1;
-    //             }
-    //             else {
-    //                 this.showFrame('#010101', '#010101', '#FF0000', '#EF0000', '#EF0000');
-    //                 this.animationFrame = 0;
-    //             }
-    //             break;
-    //     }
-    // }
+    setState(newState: PumpState): void {
+        this.state = newState == PumpState.run ? PumpState.revers : newState;
+    }
 }
