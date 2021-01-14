@@ -6,12 +6,14 @@ var HOST = '192.168.0.99';
 var PORT = 27069;
 
 import {
-    Scheme, Pump, Disposition, animateScheme, Point, Pool,    
+    Scheme, Disposition, animateScheme, Point, Pool,    
 } from './mine_drawing';
 
 import {Valve, ValveState} from './valve';
 
 import {Connection, Corner, CornerOrientation,  testArray} from './tube';
+
+import {Pump, PumpState} from './Pump';
 
 let surfaceScheme = new Scheme('container', window.innerWidth, window.innerHeight);
 // let pumpM1_1 = new Pump(10, 10, Disposition.Horizontal);
@@ -46,7 +48,9 @@ surfaceScheme.addWidget(corn);
 // let valveY8 = new Valve(new Point(1100, 400), 50, Disposition.Horizontal, 20);
 // surfaceScheme.addWidget(valveY8);
 
-// valveY1.setState(ValveState.opened)
+let Pump1 = new Pump(new Point(200, 400), 250, Disposition.Vertical);
+surfaceScheme.addWidget(Pump1);
+Pump1.setState(PumpState.open)
 // let pool1 = new Pool(new Point(400, 50), 250, 100);
 
 // valveY2.setState(ValveState.opened)
