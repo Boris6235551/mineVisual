@@ -49,9 +49,9 @@ let Pump2 = new Pump(new Point(500, 100), 250, Disposition.Vertical);
 surfaceScheme.addWidget(Pump2);
 Pump2.setState(PumpState.revers)
 
-let Pump3 = new Undegraund(new Point(200, 400), 250, Disposition.Vertical);
+let Pump3 = new Undegraund(new Point(200, 250), 200, Disposition.Vertical);
 surfaceScheme.addWidget(Pump3);
-Pump3.setState(PumpState.run)
+Pump3.setState(PumpState.revers)
 // let pool1 = new Pool(new Point(400, 50), 250, 100);
 
 // valveY2.setState(ValveState.opened)
