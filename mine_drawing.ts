@@ -55,6 +55,10 @@ export class Rectangle {
     getMiddleLeftPoint(): Point {
         return new Point(this.p1.x, this.getMiddlePoint().y);
     }
+    copyRect(source: Rectangle): void {
+        this.p0.copyPoint(source.p0);
+        this.p1.copyPoint(source.p1);
+    }
 
 };
 
