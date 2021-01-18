@@ -13,7 +13,9 @@ import {Valve, ValveState} from './valve';
 
 import {Connection, testArray} from './tube';
 
-import {Pump, PumpState, Undegraund} from './Pump';
+import {Pump, PumpState, Undegraund} from './pump';
+
+import {Label, LabelDegree} from './label'
 
 let surfaceScheme = new Scheme('container', window.innerWidth, window.innerHeight);
 // let pumpM1_1 = new Pump(10, 10, Disposition.Horizontal);
@@ -35,23 +37,32 @@ let surfaceScheme = new Scheme('container', window.innerWidth, window.innerHeigh
 // let valveY6 = new Valve(new Point(800, 400), 200, Disposition.Horizontal, 20);
 // surfaceScheme.addWidget(valveY6);
 
-// let valveY7 = new Valve(new Point(1100, 100), 50, Disposition.Vertical, 20);
-// surfaceScheme.addWidget(valveY7);
+let valveY7 = new Valve(new Point(300, 100), 100, Disposition.Vertical, 20);
+surfaceScheme.addWidget(valveY7);
+valveY7.setState(ValveState.opened);
 
-// let valveY8 = new Valve(new Point(1100, 400), 50, Disposition.Horizontal, 20);
-// surfaceScheme.addWidget(valveY8);
+let valveY8 = new Valve(new Point(300, 400), 100, Disposition.Horizontal, 20);
+surfaceScheme.addWidget(valveY8);
 
-let Pump1 = new Pump(new Point(200, 100), 250, Disposition.Horizontal);
-surfaceScheme.addWidget(Pump1);
-Pump1.setState(PumpState.run)
+// let Pump1 = new Pump(new Point(200, 100), 250, Disposition.Horizontal);
+// surfaceScheme.addWidget(Pump1);
+// Pump1.setState(PumpState.run)
 
-let Pump2 = new Pump(new Point(500, 100), 250, Disposition.Vertical);
+
+let Pump2 = new Pump(new Point(100, 100), 150, Disposition.Horizontal);
 surfaceScheme.addWidget(Pump2);
 Pump2.setState(PumpState.revers)
 
-let Pump3 = new Undegraund(new Point(200, 250), 200, Disposition.Vertical);
+let Pump3 = new Undegraund(new Point(100, 250), 150, Disposition.Vertical);
 surfaceScheme.addWidget(Pump3);
-Pump3.setState(PumpState.revers)
+Pump3.setState(PumpState.revers);
+
+// let Label1 = new Label(new Point(500, 100), 350, Disposition.Horizontal, 140, true, 'p2');
+let Label1 = new Label(Pump2, true, 'p2');
+surfaceScheme.addWidget(Label1);
+
+let Degree1 = new LabelDegree(Pump2, true, '90');
+surfaceScheme.addWidget(Degree1);
 // let pool1 = new Pool(new Point(400, 50), 250, 100);
 
 // valveY2.setState(ValveState.opened)

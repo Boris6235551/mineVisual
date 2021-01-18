@@ -127,9 +127,11 @@ export class Pump extends BaseMineDraw {
         p1lx = p02.x + R * Math.sin(285); p1ly = p02.y + R * Math.cos(285);
         this.primitives.push(this.createLine(p0lx, p0ly, p1lx, p1ly, stroke, strokeWidth, p02));
     }
+
     protected calcSize(length: number, factor: number = 2.57): number {
         return this.getOdd(length / factor);
     };
+
     setState(newState: PumpState): void {
         this.state = newState;
     }
@@ -227,9 +229,16 @@ export class Pump extends BaseMineDraw {
                 this.primitives[16].rotate(angel);
                 if (this.animationFrame < 2) { dy = this.step; this.primitives[8].fill(''); this.animationFrame += 1; }
                 else { dy = - (2 * this.step); this.primitives[8].fill('#EDF6FC'); this.animationFrame = 0; }
-                this.primitives[8].move({ x: 0, y: -dy });
-                this.primitives[9].move({ x: 0, y: -dy });
-                this.primitives[10].move({ x: 0, y: -dy });
+                if (this.disposition == Disposition.Vertical) {
+                    this.primitives[8].move({ x: 0, y: -dy });
+                    this.primitives[9].move({ x: 0, y: -dy });
+                    this.primitives[10].move({ x: 0, y: -dy });
+                }
+                else {
+                    this.primitives[8].move({ x: -dy, y: 0 });
+                    this.primitives[9].move({ x: -dy, y: 0 });
+                    this.primitives[10].move({ x: -dy, y: 0 });
+                }
                 return;
             case PumpState.stop:
                 this.showFrame('#EFEFEF', '#FE668B', '#AEB4B4', '#AEB4B4', '#FE668B', '#EDF6FC', '', '', '',
