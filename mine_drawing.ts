@@ -88,7 +88,7 @@ export class BaseMineDraw {
     protected getOdd(num: number): number {
         return Math.trunc(num / 2) * 2 + 1;
     }
-    protected calcSize(length: number, factor: number = 1.59): number {
+    protected calcSize(length: number, factor: number = 1): number {
         return this.getOdd(length / factor);
     };
 
@@ -267,6 +267,9 @@ export class Pool extends BaseMineDraw {
         });
     }
 
+    protected calcSize(length: number, factor: number = 1.59): number {
+        return this.getOdd(length / factor);
+    };
 
 
     draw(layer: Konva.Layer): void {

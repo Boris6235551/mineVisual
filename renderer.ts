@@ -22,7 +22,7 @@ let surfaceScheme = new Scheme('container', window.innerWidth, window.innerHeigh
 // let valveY1 = new Valve(new Point(100, 100), 100, Disposition.Vertical, 20);
 // surfaceScheme.addWidget(valveY1);
 
-// let valveY2 = new Valve(new Point(100, 400), 90, Disposition.Horizontal, 80);
+//let valveY2 = new Valve(new Point(100, 400), 90, Disposition.Horizontal, 80);
 // surfaceScheme.addWidget(valveY2);
 
 // let valveY3 = new Valve(new Point(400, 100), 250, Disposition.Horizontal, 20);
@@ -41,15 +41,16 @@ let valveY7 = new Valve(new Point(300, 100), 100, Disposition.Vertical, 20);
 surfaceScheme.addWidget(valveY7);
 valveY7.setState(ValveState.opened);
 
-let valveY8 = new Valve(new Point(300, 400), 100, Disposition.Horizontal, 20);
+let valveY8 = new Valve(new Point(300, 400), 100, Disposition.Vertical, 20);
 surfaceScheme.addWidget(valveY8);
+valveY8.setState(ValveState.opened);
 
 // let Pump1 = new Pump(new Point(200, 100), 250, Disposition.Horizontal);
 // surfaceScheme.addWidget(Pump1);
 // Pump1.setState(PumpState.run)
 
 
-let Pump2 = new Pump(new Point(100, 100), 150, Disposition.Horizontal);
+let Pump2 = new Pump(new Point(10, 10), 300, Disposition.Horizontal);
 surfaceScheme.addWidget(Pump2);
 Pump2.setState(PumpState.revers)
 
@@ -63,7 +64,8 @@ surfaceScheme.addWidget(Label1);
 
 let Degree1 = new LabelDegree(Pump2, true, '90');
 surfaceScheme.addWidget(Degree1);
-// let pool1 = new Pool(new Point(400, 50), 250, 100);
+
+let pool1 = new Pool(new Point(400, 50), 250, 100);
 
 // valveY2.setState(ValveState.opened)
 // surfaceScheme.addWidget(pumpM1_1);
@@ -75,10 +77,10 @@ surfaceScheme.addWidget(Degree1);
 
 //  valveY3.setState(ValveState.opened);
 
-// surfaceScheme.addWidget(pool1);
-// let line1 = new Connection(new Point(0,0), 100, Disposition.Vertical);
-// line1.connectVertical(valveY1, valveY2);
-// surfaceScheme.addWidget(line1);
+ surfaceScheme.addWidget(pool1);
+let line1 = new Connection(new Point(0,0), 100, Disposition.Vertical);
+ line1.connectVertical(valveY7, valveY8);
+ surfaceScheme.addWidget(line1);
 
 animateScheme(surfaceScheme, 500);
 
