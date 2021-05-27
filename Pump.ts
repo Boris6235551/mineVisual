@@ -10,7 +10,7 @@ export class Pump extends BaseMineDraw {
     private a: number;
     constructor(p0: Point, length: number, disposition: Disposition) {
         super(p0, length, disposition);
-        this.type = 'Pump';
+        this.name = 'Pump';
         this.state = PumpState;
         let p00: Point = this.rect.p0;
         let p02: Point = this.rect.getMiddlePoint();

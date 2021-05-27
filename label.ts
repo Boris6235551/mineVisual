@@ -12,7 +12,7 @@ export class Label extends BaseMineDraw {
         length = (disposition == Disposition.Vertical) ? connected.rect.p1.y - p0.y : connected.rect.p1.x - p0.x;
         let objWidth = (disposition == Disposition.Vertical) ? connected.rect.p1.x - p0.x : connected.rect.p1.y - p0.y;
         super(p0, length, disposition);
-        this.type = 'Label';
+        this.name = 'Label';
         this.x = (disposition == Disposition.Vertical) ? p0.x + objWidth : p0.x + length * 0.25;
         this.y = (disposition == Disposition.Vertical) ? p0.y + length * 0.25 : p0.y + objWidth;
         this.height = length * 0.12;

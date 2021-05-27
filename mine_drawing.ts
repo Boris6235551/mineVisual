@@ -62,16 +62,28 @@ export class Rectangle {
 
 };
 
+export class PropParams {
+    bit: boolean;
+    byte: number;
+    word: number;
+    // constructor(bit: boolean, byte: number, word: number) {
+    //     this.bit = bit;
+    //     this.byte = byte;
+    //     this.word = word;
+    // }
+}
+
 export class BaseMineDraw {
-    protected type: string;
+    public name: string;
+    public propBit: boolean = true;
     readonly rect: Rectangle;
     readonly disposition: Disposition;
-    protected state: any;
+    public state: any;
     protected animationFrame: number = 0;
-    protected primitives: (Konva.Rect|Konva.Text|Konva.Circle|Konva.Line)[] = [];
+    protected primitives: (Konva.Rect | Konva.Text | Konva.Circle | Konva.Line)[] = [];
     protected layer: Konva.Layer;
     constructor(p0: Point, length: number, disposition?: Disposition, percentage?: number) {
-        this.type = "Base";
+        this.name = "Base";
         this.disposition = disposition;
         let dx: number;
         let dy: number;
@@ -92,27 +104,30 @@ export class BaseMineDraw {
         return this.getOdd(length / factor);
     };
 
-    move(delta: {x: number, y: number}){
-        if(this.primitives.length == 0) return;
-        for( let i=0; i < this.primitives.length; i++) this.primitives[i].move(delta);
+    move(delta: { x: number, y: number }) {
+        if (this.primitives.length == 0) return;
+        for (let i = 0; i < this.primitives.length; i++) this.primitives[i].move(delta);
         //this.layer.draw();
     }
     // addToScheme(scheme: Scheme): void{
 
     // };
-    draw(layer: Konva.Layer): void { 
-       this.layer = layer; 
-       console.log(`this.primitives.length ${this.primitives.length}`)
-        if(this.primitives.length){
+    draw(layer: Konva.Layer): void {
+        this.layer = layer;
+        console.log(`this.primitives.length ${this.primitives.length}`)
+        if (this.primitives.length) {
             for (let i = 0; i < this.primitives.length; i++) layer.add(this.primitives[i]);
         }
-       this.layer.draw();
+        this.layer.draw();
     };
     nextFrame(): void { };
     // get rect(): Rectangle{
     //     return this.rect;
     // }
-
+    setBaseProperty(baseProp: PropParams): boolean {
+        this.propBit = baseProp.bit
+        return this.propBit
+    }
 };
 
 export class Scheme {
@@ -167,12 +182,12 @@ export class Pool extends BaseMineDraw {
     //private primitives: any[]; // triangle0, triangle1, rectangleCentr, круг, текст
     constructor(p0: Point, length: number, percentage) {
         super(p0, length, percentage);
-        this.type = 'Pool';
+        this.name = 'Pool';
         this.rectangle1 = this.createRectangle1(p0, length);
         this.rectangle2 = this.createRectangle2(p0, length);
         let i: number;
         let waterLevel: string[] = [
-            '#02498B', '#00519C', '#0061BA', '#0071D9', '#0085FF', 
+            '#02498B', '#00519C', '#0061BA', '#0071D9', '#0085FF',
             '#1F94FF', '#359EFF', '#5BB1FF', '#8DC9FF', '', '#02498B'
         ];
         if (percentage == 0) this.rectangle3[0] = this.createRectangle3(p0, length, waterLevel[9])

@@ -12,7 +12,7 @@ enum ValvePrimitive {
 export class Valve extends BaseMineDraw {
     constructor(p0: Point, length: number, disposition: Disposition, percentage: number) {
         super(p0, length, disposition);
-        this.type = 'Valve';
+        this.name = 'Valve';
         this.state = ValveState.closed;
         let p00: Point = this.rect.p0;
         let p01: Point = (disposition == Disposition.Vertical) ? this.rect.rightTop() : this.rect.getMiddlePoint();
