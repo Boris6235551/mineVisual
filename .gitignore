@@ -2,7 +2,7 @@ node_modules
 TruckScale-win32-x64
 windows_installer
 ESW_TruckScale-win32-x64
-
+ESW_tcpip_test-win32-x64
 
 *.xlsx
 *.xlsx#

@@ -184,10 +184,10 @@ export function ConnectHV(upObj: BaseMineDraw, downObj: BaseMineDraw, sourceUp: 
     }
     return null;
 }
-export function testArray(){
-    let arr:(string|number)[] = [];
-    arr.push(1);
-    arr.push(2)
-    arr.push('asdfasd');
-    console.log(arr);
-}
+// export function testArray(){
+//     let arr:(string|number)[] = [];
+//     arr.push(1);
+//     arr.push(2)
+//     arr.push('asdfasd');
+//     console.log(arr);
+// }
