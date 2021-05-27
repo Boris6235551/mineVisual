@@ -112,6 +112,7 @@ export class BaseMineDraw {
 };
 
 export class Scheme {
+    name: string;
     private stop: boolean;
     widgets: BaseMineDraw[];
     stage: Konva.Stage;
