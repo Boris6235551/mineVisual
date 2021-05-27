@@ -36,7 +36,9 @@ function sum(num1: number, num2: number): number {
 
 mySum = sum;
 
-let user: {name: string, age: number, logName: ()=>void, jobs: string[]} = {
+type User = {name: string, age: number, logName: ()=>void, jobs: string[], getJobs?: () => void};
+
+let user: User = {
     name: 'NNNN',
     age: 50,
     jobs: ['a', 'b'],
@@ -44,3 +46,14 @@ let user: {name: string, age: number, logName: ()=>void, jobs: string[]} = {
         console.log(this.name + this.age);
     }
 };
+
+class User2{
+    private isTeacher: boolean;
+    protected age: number;
+    constructor(public name: string, public job: string){
+
+    }
+    getName():string{
+        return this.name;
+    }
+}

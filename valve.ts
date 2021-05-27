@@ -32,7 +32,7 @@ export class Valve extends BaseMineDraw {
     setState(newState: ValveState): void {
         this.state = newState;
     }
-    protected setPercentage(percentage: number) {
+    setPercentage(percentage: number) {
         return percentage + '%'
     }
     private createTriangle(p0: Point, p1: Point, p2: Point, length: number): Konva.Line {
@@ -84,6 +84,9 @@ export class Valve extends BaseMineDraw {
             fill: '',
         });
     }
+    protected calcSize(length: number, factor: number = 1.59): number {
+        return this.getOdd(length / factor);
+    };
 
     private showFrame(fill0: string, fill1: string, stroke: string, rectFill: string, circleStroke: string): void {
         this.primitives[ValvePrimitive.triangle0].stroke(stroke);

@@ -1,25 +1,18 @@
+import { animateScheme } from './mine_drawing'
+import { TechWater } from './_techWater'
+import { DSF } from './_dsf'
 
-// var net = require('net');
+//let surfaceScheme = new Scheme('container', window.innerWidth, window.innerHeight);
+let techWater = new TechWater('container', window.innerWidth, window.innerHeight);
+//this.surfaceScheme = new Scheme('containerDSF', window.innerWidth * 0.25, window.innerHeight);
+let dsf = new DSF('containerDSF', window.innerWidth * 0.25, window.innerHeight);
+// ###############################################################################################
+import { Scheme, Disposition, Point, Pool, PropParams } from './mine_drawing';
 
-// //var HOST = '192.168.100.3';
-// var HOST = '192.168.0.99';
-// var PORT = 27069;
 
-import { Scheme, Disposition, animateScheme, Point, Pool, PropParams } from './mine_drawing';
-
-import { Valve, ValveState } from './valve';
-
-import { Connection, testArray } from './tube';
-
-import { Pump, PumpState, Undegraund } from './pump';
-
-import { Label, LabelDegree } from './label'
-
-import { Conveyor, SeparatorRight, SeparatorLeft, ConeCrusher, Crush, Stone, BatcherLeft, BatcherRight } from './dsf'
-
+// import { Label, LabelDegree } from './label'
 import { CompressorRoom } from './compressorRoom'
 
-import { DSF } from './public_dsf'
 
 import { UndergroundSubstation, UndergroundSubstationCell } from './undergroundSubstation'
 
@@ -141,8 +134,6 @@ surfaceScheme.addWidget(Skip1);
 // line1.connectVertical(valveY1, valveY2);
 // surfaceScheme.addWidget(line1);
 
-let DSF1 = new DSF
-
 let OverheadSubstationTrunk1 = new OverheadSubstationTrunk(new Point(30, 120), 800)
 surfaceScheme2.addWidget(OverheadSubstationTrunk1);
 let OverheadSubstationCells = [];
@@ -157,10 +148,15 @@ OverheadSubstationCells[1].setBaseProperty({ bit: false, byte: 1, word: 4 })
 let CompressorRoom2 = new CompressorRoom(new Point(130, 300), 300);
 surfaceScheme2.addWidget(CompressorRoom2);
 
+
+//animateScheme(surfaceScheme, 500);
+animateScheme(techWater, 500);
+animateScheme(dsf, 500);
+
 animateScheme(surfaceScheme, 2000);
 animateScheme(surfaceScheme2, 2000);
 
-testArray();
+
 
 // https://www.hacksparrow.com/nodejs/tcp-socket-programming-in-node-js.html
 
@@ -215,3 +211,44 @@ testArray();
 //     console.log(`testSend byteNumber = ${byteNumber}; outputNumber = ${outputNumber}; check = ${check}`);
 //     //_sock.write('Hello from type script!!!');
 // }
+
+import {startClient, stopConnection, _reCreate, _testConnect, _testSend, _sendReload, _step} from './tcpipConnector'
+
+startClient();
+
+function  testBreak(){
+    
+    //stopConnection();
+    
+    return;
+
+    let byteNumber = (<HTMLInputElement>document.getElementById("byteNumber")).value;
+    let outputNumber = (<HTMLInputElement>document.getElementById("outputNumber")).value;
+    let check = (<HTMLInputElement>document.getElementById("setOrClear")).checked;
+    console.log(`testSend byteNumber = ${byteNumber}; outputNumber = ${outputNumber}; check = ${check}`);
+    //_sock.write('Hello from type script!!!');
+    //surfaceScheme.startStop();
+    techWater.startStop();
+}
+
+function testConnect(){
+    _testConnect();
+}
+
+function  testSend(){
+    _testSend( (<HTMLInputElement>document.getElementById("setOrClear")).checked );
+}
+
+function sendReload(){
+    _sendReload();
+}
+
+function sendReCreate(){
+    _reCreate();
+}
+
+function testClear(){
+    console.clear();   
+}
+
+function step(){_step();}

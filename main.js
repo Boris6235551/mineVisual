@@ -1,3 +1,5 @@
+// to run: electron-packager . --platform=win32 --arch=x64 --icon="./logoesw.ico" --overwrite ESW_tcpip_test
+
 const { app, BrowserWindow } = require('electron')
 
 
@@ -25,6 +27,9 @@ function createWindow() {
     })
 
     win.loadFile('index.html')
+      // Open the DevTools.
+    win.webContents.openDevTools();
+
 }
 
 app.whenReady().then(createWindow)
