@@ -84,6 +84,9 @@ export class Valve extends BaseMineDraw {
             fill: '',
         });
     }
+    protected calcSize(length: number, factor: number = 1.59): number {
+        return this.getOdd(length / factor);
+    };
 
     private showFrame(fill0: string, fill1: string, stroke: string, rectFill: string, circleStroke: string): void {
         this.primitives[ValvePrimitive.triangle0].stroke(stroke);
