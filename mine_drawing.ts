@@ -124,9 +124,8 @@ export class BaseMineDraw {
     // get rect(): Rectangle{
     //     return this.rect;
     // }
-    setBaseProperty(baseProp: PropParams): boolean {
-        this.propBit = baseProp.bit
-        return this.propBit
+    setBaseProperty(val: any) {
+        this.propBit = val;
     }
 };
 
@@ -149,6 +148,18 @@ export class Scheme {
         this.layer = new Konva.Layer();
         this.stage.add(this.layer);
         if (this.widgets.length) this.interval = setInterval(this.update, 100);
+    }
+    send(mes: any){
+        let props = Object.getOwnPropertyNames(mes);
+        this.widgets.forEach( widget => {
+            let prop = props.find( pr => pr == widget.name );
+            if(prop != undefined) {
+                //console.log(`@@@@@@@@@@@@@ widget.name=${widget.name}; prop=${prop}; mes[prop]=${mes[prop]}`) 
+                widget.setBaseProperty(mes[prop]);
+            }
+            //else console.log(`widget.name ${widget.name} is not finded`)
+        });
+        this.update();
     }
     addWidget(widget: BaseMineDraw) {
         this.widgets.push(widget);
@@ -177,6 +188,25 @@ let interval: NodeJS.Timeout;
 export function animateScheme(scheme: Scheme, timeOut: number) {
     interval = setInterval(() => { scheme.update(); }, timeOut);
 }
+
+
+export class Screen {
+    schemes: Scheme [];
+    constructor(){
+        this.schemes = [];
+    }
+    addScheme(scheme: Scheme){
+        this.schemes.push(scheme);
+    }
+    resendMessage(/*scheme name*/objName: string, mes: any){
+        this.schemes.forEach(function(scheme) {
+            if(scheme.name == objName) {
+                scheme.send(mes);
+            }
+        });
+    }
+}
+
 
 // this.primitives[ValvePrimitive.triangle0], 
 export class Pool extends BaseMineDraw {

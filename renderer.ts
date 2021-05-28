@@ -1,11 +1,28 @@
-import { animateScheme } from './mine_drawing'
+import { Screen, animateScheme } from './mine_drawing'
 import { TechWater } from './_techWater'
 import { DSF } from './_dsf'
 
-//let surfaceScheme = new Scheme('container', window.innerWidth, window.innerHeight);
+let screenMain = new Screen();
 let techWater = new TechWater('container', window.innerWidth, window.innerHeight);
-//this.surfaceScheme = new Scheme('containerDSF', window.innerWidth * 0.25, window.innerHeight);
 let dsf = new DSF('containerDSF', window.innerWidth * 0.25, window.innerHeight);
+
+screenMain.addScheme(techWater);
+screenMain.addScheme(dsf);
+
+import {startClients, stopConnection, _reCreate, _testConnect, _testSend, _sendReload, _step} from './tcpipConnector'
+
+function sendMes(name, mes){
+    screenMain.resendMessage(name, mes);
+}
+
+startClients(sendMes);
+
+
+
+
+
+// ###############################################################################################
+// ###############################################################################################
 // ###############################################################################################
 import { Scheme, Disposition, Point, Pool, PropParams } from './mine_drawing';
 
@@ -27,6 +44,74 @@ import { GroundHorizontalLine, GroundVerticalLine } from './groundLines'
 let surfaceScheme = new Scheme('containerFirst', window.innerWidth * 0.4, window.innerHeight);
 
 let surfaceScheme2 = new Scheme('containerSecond', window.innerWidth * 0.31, window.innerHeight);
+
+
+// точка - начало линии шины компрессоров, втрое значение - длина линии шины компрессоров 
+let CompressorRoom1 = new CompressorRoom(new Point(200, 650), 300);
+surfaceScheme.addWidget(CompressorRoom1);
+
+let UndergroundSubstation1 = new UndergroundSubstation(new Point(30, 440), 1000)
+surfaceScheme.addWidget(UndergroundSubstation1);
+let UndergroundSubstationCells = [];
+for (let n: number = 0; n <= 10; n++) {
+    UndergroundSubstationCells[n] = new UndergroundSubstationCell(new Point(30, 440), 1000, n)
+    surfaceScheme.addWidget(UndergroundSubstationCells[n]);
+}
+//UndergroundSubstationCells[0].setBaseProperty({ bit: true, byte: 1, word: 4 })
+//UndergroundSubstationCells[1].setBaseProperty({ bit: false, byte: 1, word: 4 })
+
+
+
+
+
+
+let GroundHorizontalLine1 = new GroundHorizontalLine(new Point(30, 143), 720)
+surfaceScheme.addWidget(GroundHorizontalLine1);
+
+let GroundVerticalLine1 = new GroundVerticalLine(new Point(750, 143), 750)
+surfaceScheme.addWidget(GroundVerticalLine1);
+
+let Cage1 = new Cage(new Point(190, 50), 300)
+surfaceScheme.addWidget(Cage1);
+Cage1.setState(2)
+
+let Skip1 = new Skip(new Point(450, 50), 300)
+surfaceScheme.addWidget(Skip1);
+// Skip1.setState(0)
+
+//  valveY2.setState(ValveState.opened);
+//  surfaceScheme.addWidget(valveY2);
+
+//  valveY3.setState(ValveState.opened);
+
+// surfaceScheme.addWidget(pool1);
+// let line1 = new Connection(new Point(0,0), 100, Disposition.Vertical);
+// line1.connectVertical(valveY1, valveY2);
+// surfaceScheme.addWidget(line1);
+
+let OverheadSubstationTrunk1 = new OverheadSubstationTrunk(new Point(30, 120), 800)
+surfaceScheme2.addWidget(OverheadSubstationTrunk1);
+let OverheadSubstationCells = [];
+for (let n: number = 0; n <= 10; n++) {
+    OverheadSubstationCells[n] = new OverheadSubstationCell(new Point(30, 120), 800, n)
+    surfaceScheme2.addWidget(OverheadSubstationCells[n]);
+}
+//OverheadSubstationCells[0].setBaseProperty({ bit: false, byte: 1, word: 4 })
+//OverheadSubstationCells[1].setBaseProperty({ bit: false, byte: 1, word: 4 })
+
+// точка - начало линии шины компрессоров, втрое значение - длина линии шины компрессоров 
+let CompressorRoom2 = new CompressorRoom(new Point(130, 300), 300);
+surfaceScheme2.addWidget(CompressorRoom2);
+
+
+//animateScheme(surfaceScheme, 500);
+animateScheme(techWater, 500);
+animateScheme(dsf, 500);
+
+animateScheme(surfaceScheme, 2000);
+animateScheme(surfaceScheme2, 2000);
+
+
 
 // let pumpM1_1 = new Pump(10, 10, Disposition.Horizontal);
 // let valveY1 = new Valve(new Point(100, 100), 100, Disposition.Vertical, 20);
@@ -96,65 +181,16 @@ let surfaceScheme2 = new Scheme('containerSecond', window.innerWidth * 0.31, win
 // let Stone1 = new Stone(new Point(1000, 300), 50);
 // surfaceScheme.addWidget(Stone1);
 
-// точка - начало линии шины компрессоров, втрое значение - длина линии шины компрессоров 
-let CompressorRoom1 = new CompressorRoom(new Point(200, 650), 300);
-surfaceScheme.addWidget(CompressorRoom1);
-
-let UndergroundSubstation1 = new UndergroundSubstation(new Point(30, 440), 1000)
-surfaceScheme.addWidget(UndergroundSubstation1);
-let UndergroundSubstationCells = [];
-for (let n: number = 0; n <= 10; n++) {
-    UndergroundSubstationCells[n] = new UndergroundSubstationCell(new Point(30, 440), 1000, n)
-    surfaceScheme.addWidget(UndergroundSubstationCells[n]);
-}
-UndergroundSubstationCells[0].setBaseProperty({ bit: true, byte: 1, word: 4 })
-UndergroundSubstationCells[1].setBaseProperty({ bit: false, byte: 1, word: 4 })
-
-let GroundHorizontalLine1 = new GroundHorizontalLine(new Point(30, 143), 720)
-surfaceScheme.addWidget(GroundHorizontalLine1);
-
-let GroundVerticalLine1 = new GroundVerticalLine(new Point(750, 143), 750)
-surfaceScheme.addWidget(GroundVerticalLine1);
-
-let Cage1 = new Cage(new Point(190, 50), 300)
-surfaceScheme.addWidget(Cage1);
-Cage1.setState(2)
-
-let Skip1 = new Skip(new Point(450, 50), 300)
-surfaceScheme.addWidget(Skip1);
-// Skip1.setState(0)
-
-//  valveY2.setState(ValveState.opened);
-//  surfaceScheme.addWidget(valveY2);
-
-//  valveY3.setState(ValveState.opened);
-
-// surfaceScheme.addWidget(pool1);
-// let line1 = new Connection(new Point(0,0), 100, Disposition.Vertical);
-// line1.connectVertical(valveY1, valveY2);
-// surfaceScheme.addWidget(line1);
-
-let OverheadSubstationTrunk1 = new OverheadSubstationTrunk(new Point(30, 120), 800)
-surfaceScheme2.addWidget(OverheadSubstationTrunk1);
-let OverheadSubstationCells = [];
-for (let n: number = 0; n <= 10; n++) {
-    OverheadSubstationCells[n] = new OverheadSubstationCell(new Point(30, 120), 800, n)
-    surfaceScheme2.addWidget(OverheadSubstationCells[n]);
-}
-OverheadSubstationCells[0].setBaseProperty({ bit: false, byte: 1, word: 4 })
-OverheadSubstationCells[1].setBaseProperty({ bit: false, byte: 1, word: 4 })
-
-// точка - начало линии шины компрессоров, втрое значение - длина линии шины компрессоров 
-let CompressorRoom2 = new CompressorRoom(new Point(130, 300), 300);
-surfaceScheme2.addWidget(CompressorRoom2);
 
 
-//animateScheme(surfaceScheme, 500);
-animateScheme(techWater, 500);
-animateScheme(dsf, 500);
 
-animateScheme(surfaceScheme, 2000);
-animateScheme(surfaceScheme2, 2000);
+
+
+
+
+
+
+
 
 
 
@@ -212,9 +248,6 @@ animateScheme(surfaceScheme2, 2000);
 //     //_sock.write('Hello from type script!!!');
 // }
 
-import {startClient, stopConnection, _reCreate, _testConnect, _testSend, _sendReload, _step} from './tcpipConnector'
-
-startClient();
 
 function  testBreak(){
     

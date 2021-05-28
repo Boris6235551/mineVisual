@@ -5,7 +5,7 @@ import {
 } from './dsf'
 
 export class DSF extends Scheme {
-    private surfaceScheme: Scheme
+    //private surfaceScheme: Scheme
     public BatcherLeft1: BatcherLeft;
     public BatcherLeft2: BatcherLeft;
     public SeparatorLeft1: SeparatorLeft;
@@ -57,6 +57,7 @@ export class DSF extends Scheme {
     private InformationTable8: InformationTable;
     constructor(container: string, width: number, height: number) {
         super(container, width, height);
+        this.name = 'DSF';
         //this.surfaceScheme = new Scheme('containerDSF', window.innerWidth * 0.25, window.innerHeight);
 
         let ReceivingHopper1 = new ReceivingHopper(new Point(185, 0), 60);
@@ -67,38 +68,31 @@ export class DSF extends Scheme {
         this.BatcherLeft1 = new BatcherLeft(new Point(200, 40), 20);
         this.addWidget(this.BatcherLeft1);
         this.BatcherLeft1.name = 'upFeederA';
-        this.BatcherLeft1.setBaseProperty({ bit: true, byte: 1, word: 4 })
-
 
         // 2. точка - верхний правый угол, длина - правая сторона 
         this.BatcherRight1 = new BatcherRight(new Point(230, 40), 20);
         this.addWidget(this.BatcherRight1);
         this.BatcherRight1.name = 'upFeederB'
-        this.BatcherRight1.setBaseProperty({ bit: true, byte: 1, word: 4 })
 
         // 3. второй параметр задаёт длину динамической строны треугльника
         this.SeparatorLeft1 = new SeparatorLeft(new Point(170, 80), 50);
         this.addWidget(this.SeparatorLeft1);
         this.SeparatorLeft1.name = 'screenA'
-        this.SeparatorLeft1.setBaseProperty({ bit: false, byte: 1, word: 4 })
 
         // 4. второй параметр задаёт длину динамической строны треугльника
         this.SeparatorRight1 = new SeparatorRight(new Point(260, 80), 50);
         this.addWidget(this.SeparatorRight1);
         this.SeparatorRight1.name = 'screenB'
-        this.SeparatorRight1.setBaseProperty({ bit: true, byte: 1, word: 4 })
 
         // 6. точка - верхний правый угол, длина - правая сторона 
         this.BatcherRight2 = new BatcherRight(new Point(130, 140), 20);
         this.addWidget(this.BatcherRight2);
         this.BatcherRight2.name = 'downFeederA'
-        this.BatcherRight2.setBaseProperty({ bit: false, byte: 1, word: 4 })
 
         // 7. точка - верхний правый угол, длина - правая сторона 
         this.BatcherLeft2 = new BatcherLeft(new Point(295, 140), 20);
         this.addWidget(this.BatcherLeft2);
         this.BatcherLeft2.name = 'downFeederB'
-        this.BatcherLeft2.setBaseProperty({ bit: false, byte: 1, word: 4 })
 
         // 8. точка (x,y), длина, высота
         let Conveyor1 = new Conveyor(new Point(117, 180), 50, 10);
@@ -119,13 +113,11 @@ export class DSF extends Scheme {
         this.Crush1 = new Crush(new Point(120, 230), 40);
         this.addWidget(this.Crush1);
         this.Crush1.name = 'jawCrusher1A'
-        this.Crush1.setBaseProperty({ bit: true, byte: 1, word: 4 })
 
         // 11. левый верхний угол трапеции точка (x,y), высота трапеци
         this.Crush2 = new Crush(new Point(255, 230), 40);
         this.addWidget(this.Crush2);
         this.Crush2.name = 'jawCrusher1B'
-        this.Crush2.setBaseProperty({ bit: true, byte: 1, word: 4 })
 
         // 12. точка (x,y), длина, высота
         let Conveyor4 = new Conveyor(new Point(120, 280), 50, 10);
@@ -141,13 +133,11 @@ export class DSF extends Scheme {
         this.ConeCrusher1 = new ConeCrusher(new Point(148, 330), 20);
         this.addWidget(this.ConeCrusher1);
         this.ConeCrusher1.name = 'coneCrusher2A'
-        this.ConeCrusher1.setBaseProperty({ bit: true, byte: 1, word: 4 })
 
         // 15. Point - wtynh треугольника, второй параметр - радиус окружности, в которую вписан треугольник
         this.ConeCrusher2 = new ConeCrusher(new Point(280, 330), 20);
         this.addWidget(this.ConeCrusher2);
         this.ConeCrusher2.name = 'coneCrusher2B'
-        this.ConeCrusher2.setBaseProperty({ bit: true, byte: 1, word: 4 })
 
         // 16. точка (x,y), длина, высота
         let Conveyor6 = new Conveyor(new Point(120, 360), 50, 10);
@@ -163,37 +153,31 @@ export class DSF extends Scheme {
         this.SeparatorLeft2 = new SeparatorLeft(new Point(150, 380), 50);
         this.addWidget(this.SeparatorLeft2);
         this.SeparatorLeft2.name = 'screen1A'
-        this.SeparatorLeft2.setBaseProperty({ bit: true, byte: 1, word: 4 })
 
         // 19. второй параметр задаёт длину динамической строны треугльника
         this.SeparatorRight2 = new SeparatorRight(new Point(273, 380), 50);
         this.addWidget(this.SeparatorRight2);
         this.SeparatorRight2.name = 'screen1B'
-        this.SeparatorRight2.setBaseProperty({ bit: true, byte: 1, word: 4 })
 
         // 20. Point - wtynh треугольника, второй параметр - радиус окружности, в которую вписан треугольник
         this.ConeCrusher3 = new ConeCrusher(new Point(130, 470), 20);
         this.addWidget(this.ConeCrusher3);
         this.ConeCrusher3.name = 'coneCrusher3A'
-        this.ConeCrusher3.setBaseProperty({ bit: true, byte: 1, word: 4 })
 
         // 21. Point - wtynh треугольника, второй параметр - радиус окружности, в которую вписан треугольник
         this.ConeCrusher4 = new ConeCrusher(new Point(293, 470), 20);
         this.addWidget(this.ConeCrusher4);
         this.ConeCrusher4.name = 'coneCrusher3B'
-        this.ConeCrusher4.setBaseProperty({ bit: true, byte: 1, word: 4 })
 
         // 22. второй параметр задаёт длину динамической строны треугльника
         this.SeparatorLeft3 = new SeparatorLeft(new Point(150, 500), 50);
         this.addWidget(this.SeparatorLeft3);
         this.SeparatorLeft3.name = 'screen2A'
-        this.SeparatorLeft3.setBaseProperty({ bit: true, byte: 1, word: 4 })
 
         // 23. второй параметр задаёт длину динамической строны треугльника
         this.SeparatorRight3 = new SeparatorRight(new Point(270, 500), 50);
         this.addWidget(this.SeparatorRight3);
         this.SeparatorRight3.name = 'screen2B'
-        this.SeparatorRight3.setBaseProperty({ bit: true, byte: 1, word: 4 })
 
         // 24. точка (x,y), длина, высота
         let Conveyor8 = new Conveyor(new Point(240, 560), 80, 10);
@@ -204,7 +188,6 @@ export class DSF extends Scheme {
         this.SeparatorLeft4 = new SeparatorLeft(new Point(250, 580), 50);
         this.addWidget(this.SeparatorLeft4);
         this.SeparatorLeft4.name = 'screen3'
-        this.SeparatorLeft4.setBaseProperty({ bit: true, byte: 1, word: 4 })
 
         // 26. точка (x,y), длина, высота
         let Conveyor9 = new Conveyor(new Point(160, 640), 30, 10);
@@ -225,7 +208,6 @@ export class DSF extends Scheme {
         this.SeparatorLeft5 = new SeparatorLeft(new Point(160, 660), 50);
         this.addWidget(this.SeparatorLeft5);
         this.SeparatorLeft5.name = 'screen4'
-        this.SeparatorLeft5.setBaseProperty({ bit: true, byte: 1, word: 4 })
 
         // 30. точка (x,y), длина, высота
         let Conveyor12 = new Conveyor(new Point(70, 720), 30, 10);

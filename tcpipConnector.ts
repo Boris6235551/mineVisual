@@ -209,16 +209,6 @@ function showTest(index){
     state=${clients[index].state}; \n local time: ${t}`);
 }
 
-export function startClient(){
-    return;
-
-    // for(let i = 0; i < allClients.length; i++){
-    //     clients[i] = new ClientSocket(i);
-    //     connectSocket(i);
-    // }
-    // return;
-
-}
 
 export function stopConnection(){
     //client.destroy(); 
@@ -227,7 +217,7 @@ export function stopConnection(){
         clients[i].socket.destroy();
         clients[i].state = socketState.Created;
     }
-    startClient();
+    //startClient();
 }
 
 
@@ -237,6 +227,7 @@ class DriveClients  {
     clientsCount: number = allClients.length;
     timer: any;
     showDif: boolean;
+    callBack: any = null;  // call back function (schemeName, mes{key: val, ...})
     constructor(){
         this.clients = new Array(allClients.length);
         this.current = 0;
@@ -258,6 +249,7 @@ class DriveClients  {
         }
         this.clients[index].obj = newObj;
         if(!this.showDif) console.log(JSON.stringify(newObj, null, 4));
+        if(this.callBack != null) this.callBack(obj.devName, newObj);
         //this.showDif = true; 
     }
     connect(/*plc index*/ index: number){
@@ -348,9 +340,15 @@ class DriveClients  {
     }
 }
 
-let driveClients = new DriveClients();
+let driveClients: DriveClients;
 
 let testIndex = 0;
+
+export function startClients(func: any){
+    driveClients = new DriveClients();
+    driveClients.callBack = func;
+}
+
 
 export function _testConnect(){
     driveClients.connect(testIndex);
