@@ -65,86 +65,6 @@ export class Skip extends BaseMineDraw {
             p0.x + length * 0.02, p0.y - length * 0.05,
             p0.x, p0.y - length * 0.05,
             p0.x + length * 0.27, p0.y + length * 0.31));
-        // приёмный бункер
-        this.primitives.push(this.createLineReceivingHopper(p0.x + length * 0.3, p0.y + length * 0.43,
-            p0.x + length * 0.41, p0.y + length * 0.43,
-            p0.x + length * 0.3781, p0.y + length * 0.4839,
-            p0.x + length * 0.3869, p0.y + length * 0.5037,
-            p0.x + length * 0.3231, p0.y + length * 0.5037,
-            p0.x + length * 0.3319, p0.y + length * 0.4839,
-            '#21686C', '#000000', length * 0.001)
-        );
-        this.primitives.push(this.createLineReceivingHopper(p0.x + length * 0.3231, p0.y + length * 0.515,
-            p0.x + length * 0.3869, p0.y + length * 0.515,
-            p0.x + length * 0.3869, p0.y + length * 0.545,
-            p0.x + length * 0.27, p0.y + length * 0.575,
-            p0.x + length * 0.27, p0.y + length * 0.555,
-            p0.x + length * 0.3231, p0.y + length * 0.515,
-            '#005236', '#000000', length * 0.001)
-        );
-        this.primitives.push(this.createLineReceivingHopper(p0.x + length * 0.22, p0.y + length * 0.585,
-            p0.x + length * 0.3, p0.y + length * 0.585,
-            p0.x + length * 0.3, p0.y + length * 0.625,
-            p0.x + length * 0.25, p0.y + length * 0.625,
-            p0.x + length * 0.25, p0.y + length * 0.595,
-            p0.x + length * 0.22, p0.y + length * 0.595,
-            '#8AC171', '#000000', length * 0.001)
-        );
-        this.primitives.push(this.createLine(p0.x + length * 0.275, p0.y + length * 0.585,
-            p0.x + length * 0.275, p0.y + length * 0.625, length * 0.001));
-
-        this.primitives.push(this.createLineReceivingHopper(
-            p0.x + length * 0.26, p0.y + length * 0.63,
-            p0.x + length * 0.29, p0.y + length * 0.63,
-            p0.x + length * 0.29, p0.y + length * 0.67,
-            p0.x + length * 0.2, p0.y + length * 0.7,
-            p0.x + length * 0.2, p0.y + length * 0.68,
-            p0.x + length * 0.26, p0.y + length * 0.65,
-            '#8AC171', '#000000', length * 0.001)
-        );
-
-        // выдвижной рукав средняя часть, два положения
-
-        const position1 = 0;  // положение 1
-        const position2 = length * 0.04; // положение 2 по x
-        const position3 = length * 0.013; // положение 2 по y
-
-        this.primitives.push(this.createLineReceivingHopper(
-            p0.x + length * 0.2 - position2, p0.y + length * 0.69 + position3,
-            p0.x + length * 0.29 - position2, p0.y + length * 0.65 + position3,
-            p0.x + length * 0.29 - position2, p0.y + length * 0.67 + position3,
-            p0.x + length * 0.2 - position2, p0.y + length * 0.7 + position3,
-            p0.x + length * 0.2 - position2, p0.y + length * 0.7 + position3,
-            p0.x + length * 0.2 - position2, p0.y + length * 0.7 + position3,
-            '#946868', '#000000', length * 0.001)
-        );
-
-        // выдвижной рукав третья часть, два вкл./выкл.
-
-        this.primitives.push(this.createLineReceivingHopper(
-            p0.x + length * 0.1 - length * 0.04, p0.y + length * 0.726 + length * 0.013,
-            p0.x + length * 0.2 - length * 0.04, p0.y + length * 0.692 + length * 0.013,
-            p0.x + length * 0.2 - length * 0.04, p0.y + length * 0.7 + length * 0.013,
-            p0.x + length * 0.1 - length * 0.04, p0.y + length * 0.733 + length * 0.013,
-            p0.x + length * 0.1 - length * 0.04, p0.y + length * 0.733 + length * 0.013,
-            p0.x + length * 0.1 - length * 0.04, p0.y + length * 0.733 + length * 0.013,
-            '#946868', '#000000', length * 0.001)
-        );
-
-        // два блока с текстом в приёмном бункере
-
-        this.primitives.push(this.createRectangle(p0.x + length * 0.358, p0.y + length * 0.434,
-            length * 0.02, length * 0.03, '#F9F9F9', '#FE982A', length * 0.002, length * 0.007));
-
-        let t1 = '10'
-        this.primitives.push(this.createText(p0.x + length * 0.365, p0.y + length * 0.44, t1 + ' t', length * 0.01));
-
-        this.primitives.push(this.createRectangle(p0.x + length * 0.265, p0.y + length * 0.59,
-            length * 0.02, length * 0.03, '#F9F9F9', '#FE982A', length * 0.002, length * 0.007));
-
-        let t2 = 'A'
-        this.primitives.push(this.createText(p0.x + length * 0.276, p0.y + length * 0.595, t2, length * 0.014));
-
     };
     private createRectangle(x: number, y: number, height: number, width: number, fill: string,
         stroke: string, strokeWidth: number, cornerRadius: number): Konva.Rect {
@@ -186,34 +106,12 @@ export class Skip extends BaseMineDraw {
             closed: true,
         });
     }
-    private createLineReceivingHopper(x1: number, y1: number, x2: number, y2: number, x3: number, y3: number,
-        x4: number, y4: number, x5: number, y5: number, x6: number, y6: number,
-        fill: string, stroke: string, strokeWidth: number): Konva.Line {
-        return new Konva.Line({
-            points: [x1, y1, x2, y2, x3, y3, x4, y4, x5, y5, x6, y6],
-            fill: fill,
-            stroke: stroke,
-            strokeWidth: strokeWidth,
-            closed: true,
-        });
-    }
     private createLineHouseRoof(x1: number, y1: number, x2: number, y2: number,
         x3: number, y3: number, x4: number, y4: number): Konva.Line {
         return new Konva.Line({
             points: [x1, y1, x2, y2, x3, y3, x4, y4],
             fill: '#005236',
             closed: true,
-        });
-    }
-    private createText(x: number, y: number, text: string, fontSize: number): Konva.Text {
-        return new Konva.Text({
-            x: x,
-            y: y,
-            text: text,
-            fontSize: fontSize,
-            fontStyle: 'bold',
-            fontFamily: 'Roboto',
-            fill: 'black'
         });
     }
     private createCircle(x: number, y: number, radius: number, fill: string, strokeWidth: number,

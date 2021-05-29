@@ -1,13 +1,19 @@
 import { Screen, animateScheme } from './mine_drawing'
 import { TechWater } from './_techWater'
 import { DSF } from './_dsf'
+import { SKIP } from './_skip'
+import { BATCHER } from './_batcher'
 
 let screenMain = new Screen();
-let techWater = new TechWater('container', window.innerWidth, window.innerHeight);
-let dsf = new DSF('containerDSF', window.innerWidth * 0.25, window.innerHeight);
+// let techWater = new TechWater('container', window.innerWidth, window.innerHeight);
+let dsf = new DSF('containerDSF', window.innerWidth * 0.3, window.innerHeight);
+let skip = new SKIP('containerSkip', window.innerWidth * 0.3, window.innerHeight);
+let batcher = new BATCHER('batcher', window.innerWidth * 0.5, window.innerHeight);
 
-screenMain.addScheme(techWater);
+// screenMain.addScheme(techWater);
 screenMain.addScheme(dsf);
+screenMain.addScheme(skip);
+screenMain.addScheme(batcher);
 
 import {startClients, stopConnection, _reCreate, _testConnect, _testSend, _sendReload, _step} from './tcpipConnector'
 
@@ -33,7 +39,7 @@ import { CompressorRoom } from './compressorRoom'
 
 import { UndergroundSubstation, UndergroundSubstationCell } from './undergroundSubstation'
 
-import { Skip } from './skip'
+// import { Skip } from './skip'
 
 import { Cage } from './cage'
 
@@ -41,22 +47,22 @@ import { OverheadSubstationTrunk, OverheadSubstationCell } from './overheadSubst
 
 import { GroundHorizontalLine, GroundVerticalLine } from './groundLines'
 
-let surfaceScheme = new Scheme('containerFirst', window.innerWidth * 0.4, window.innerHeight);
+// let surfaceScheme = new Scheme('containerFirst', window.innerWidth * 0.4, window.innerHeight);
 
-let surfaceScheme2 = new Scheme('containerSecond', window.innerWidth * 0.31, window.innerHeight);
+// let surfaceScheme2 = new Scheme('containerSecond', window.innerWidth * 0.31, window.innerHeight);
 
 
 // точка - начало линии шины компрессоров, втрое значение - длина линии шины компрессоров 
-let CompressorRoom1 = new CompressorRoom(new Point(200, 650), 300);
-surfaceScheme.addWidget(CompressorRoom1);
+// let CompressorRoom1 = new CompressorRoom(new Point(200, 650), 300);
+// surfaceScheme.addWidget(CompressorRoom1);
 
-let UndergroundSubstation1 = new UndergroundSubstation(new Point(30, 440), 1000)
-surfaceScheme.addWidget(UndergroundSubstation1);
-let UndergroundSubstationCells = [];
-for (let n: number = 0; n <= 10; n++) {
-    UndergroundSubstationCells[n] = new UndergroundSubstationCell(new Point(30, 440), 1000, n)
-    surfaceScheme.addWidget(UndergroundSubstationCells[n]);
-}
+// let UndergroundSubstation1 = new UndergroundSubstation(new Point(30, 440), 1000)
+// surfaceScheme.addWidget(UndergroundSubstation1);
+// let UndergroundSubstationCells = [];
+// for (let n: number = 0; n <= 10; n++) {
+//     UndergroundSubstationCells[n] = new UndergroundSubstationCell(new Point(30, 440), 1000, n)
+//     surfaceScheme.addWidget(UndergroundSubstationCells[n]);
+// }
 //UndergroundSubstationCells[0].setBaseProperty({ bit: true, byte: 1, word: 4 })
 //UndergroundSubstationCells[1].setBaseProperty({ bit: false, byte: 1, word: 4 })
 
@@ -65,18 +71,18 @@ for (let n: number = 0; n <= 10; n++) {
 
 
 
-let GroundHorizontalLine1 = new GroundHorizontalLine(new Point(30, 143), 720)
-surfaceScheme.addWidget(GroundHorizontalLine1);
+// let GroundHorizontalLine1 = new GroundHorizontalLine(new Point(30, 143), 720)
+// surfaceScheme.addWidget(GroundHorizontalLine1);
 
-let GroundVerticalLine1 = new GroundVerticalLine(new Point(750, 143), 750)
-surfaceScheme.addWidget(GroundVerticalLine1);
+// let GroundVerticalLine1 = new GroundVerticalLine(new Point(750, 143), 750)
+// surfaceScheme.addWidget(GroundVerticalLine1);
 
-let Cage1 = new Cage(new Point(190, 50), 300)
-surfaceScheme.addWidget(Cage1);
-Cage1.setState(2)
+// let Cage1 = new Cage(new Point(190, 50), 300)
+// surfaceScheme.addWidget(Cage1);
+// Cage1.setState(2)
 
-let Skip1 = new Skip(new Point(450, 50), 300)
-surfaceScheme.addWidget(Skip1);
+// let Skip1 = new Skip(new Point(450, 50), 700)
+// surfaceScheme.addWidget(Skip1);
 // Skip1.setState(0)
 
 //  valveY2.setState(ValveState.opened);
@@ -89,27 +95,27 @@ surfaceScheme.addWidget(Skip1);
 // line1.connectVertical(valveY1, valveY2);
 // surfaceScheme.addWidget(line1);
 
-let OverheadSubstationTrunk1 = new OverheadSubstationTrunk(new Point(30, 120), 800)
-surfaceScheme2.addWidget(OverheadSubstationTrunk1);
-let OverheadSubstationCells = [];
-for (let n: number = 0; n <= 10; n++) {
-    OverheadSubstationCells[n] = new OverheadSubstationCell(new Point(30, 120), 800, n)
-    surfaceScheme2.addWidget(OverheadSubstationCells[n]);
-}
+// let OverheadSubstationTrunk1 = new OverheadSubstationTrunk(new Point(30, 120), 800)
+// surfaceScheme2.addWidget(OverheadSubstationTrunk1);
+// let OverheadSubstationCells = [];
+// for (let n: number = 0; n <= 10; n++) {
+//     OverheadSubstationCells[n] = new OverheadSubstationCell(new Point(30, 120), 800, n)
+//     surfaceScheme2.addWidget(OverheadSubstationCells[n]);
+// }
 //OverheadSubstationCells[0].setBaseProperty({ bit: false, byte: 1, word: 4 })
 //OverheadSubstationCells[1].setBaseProperty({ bit: false, byte: 1, word: 4 })
 
 // точка - начало линии шины компрессоров, втрое значение - длина линии шины компрессоров 
-let CompressorRoom2 = new CompressorRoom(new Point(130, 300), 300);
-surfaceScheme2.addWidget(CompressorRoom2);
+// let CompressorRoom2 = new CompressorRoom(new Point(130, 300), 300);
+// surfaceScheme2.addWidget(CompressorRoom2);
 
 
-//animateScheme(surfaceScheme, 500);
-animateScheme(techWater, 500);
-animateScheme(dsf, 500);
+// animateScheme(surfaceScheme, 500);
+// animateScheme(techWater, 500);
+// animateScheme(dsf, 500);
 
-animateScheme(surfaceScheme, 2000);
-animateScheme(surfaceScheme2, 2000);
+// animateScheme(surfaceScheme, 2000);
+// animateScheme(surfaceScheme2, 2000);
 
 
 
@@ -249,20 +255,20 @@ animateScheme(surfaceScheme2, 2000);
 // }
 
 
-function  testBreak(){
+// function  testBreak(){
     
-    //stopConnection();
+//     //stopConnection();
     
-    return;
+//     return;
 
-    let byteNumber = (<HTMLInputElement>document.getElementById("byteNumber")).value;
-    let outputNumber = (<HTMLInputElement>document.getElementById("outputNumber")).value;
-    let check = (<HTMLInputElement>document.getElementById("setOrClear")).checked;
-    console.log(`testSend byteNumber = ${byteNumber}; outputNumber = ${outputNumber}; check = ${check}`);
-    //_sock.write('Hello from type script!!!');
-    //surfaceScheme.startStop();
-    techWater.startStop();
-}
+//     let byteNumber = (<HTMLInputElement>document.getElementById("byteNumber")).value;
+//     let outputNumber = (<HTMLInputElement>document.getElementById("outputNumber")).value;
+//     let check = (<HTMLInputElement>document.getElementById("setOrClear")).checked;
+//     console.log(`testSend byteNumber = ${byteNumber}; outputNumber = ${outputNumber}; check = ${check}`);
+//     //_sock.write('Hello from type script!!!');
+//     //surfaceScheme.startStop();
+//     techWater.startStop();
+// }
 
 function testConnect(){
     _testConnect();
