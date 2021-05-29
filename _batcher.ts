@@ -2,14 +2,19 @@ import { Scheme, Disposition, animateScheme, Point, Pool, PropParams } from './m
 import { Bunker, FeederLeft, FeederRight, ChuteLeft, ChuteRight, BatcherLeft, BatcherRight, GateLeft, GateRight, TangueLeft, TangueRight } from './batcher'
 
 export class BATCHER extends Scheme {
+    public BunkerLeft: Bunker;
+    public GateLeft1: GateLeft;
+    public GateRight1: GateRight;
+    public TangueLeft1: TangueLeft;
+    public TangueRight1: TangueRight;
     constructor(container: string, width: number, height: number) {
         super(container, width, height);
         this.name = 'Batcher';
         this.addBatcher();
     }
     addBatcher() {
-        let BunkerLeft = new Bunker(new Point(-75, 233), 2)
-        this.addWidget(BunkerLeft);
+        this.BunkerLeft = new Bunker(new Point(-75, 233), 2)
+        this.addWidget(this.BunkerLeft);
 
         let BunkerRight = new Bunker(new Point(282, 233), 2)
         this.addWidget(BunkerRight);
@@ -32,16 +37,16 @@ export class BATCHER extends Scheme {
         let BatcherRight1 = new BatcherRight(new Point(280, 400), 2)
         this.addWidget(BatcherRight1);
 
-        let GateLeft1 = new GateLeft(new Point(-60, 400), 2)
-        this.addWidget(GateLeft1);
+        this.GateLeft1 = new GateLeft(new Point(-60, 400), 2)
+        this.addWidget(this.GateLeft1);
 
-        let GateRight1 = new GateRight(new Point(280, 400), 2)
-        this.addWidget(GateRight1);
+        this.GateRight1 = new GateRight(new Point(280, 400), 2)
+        this.addWidget(this.GateRight1);
 
-        let TangueLeft1 = new TangueLeft(new Point(-60, 400), 2)
-        this.addWidget(TangueLeft1);
+        this.TangueLeft1 = new TangueLeft(new Point(-60, 400), 2)
+        this.addWidget(this.TangueLeft1);
 
-        let TangueRight1 = new TangueRight(new Point(280, 400), 2)
-        this.addWidget(TangueRight1);
+        this.TangueRight1 = new TangueRight(new Point(280, 400), 2)
+        this.addWidget(this.TangueRight1);
     }
 }

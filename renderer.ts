@@ -23,8 +23,23 @@ function sendMes(name, mes){
 
 startClients(sendMes);
 
+animateScheme(dsf, 500);
+animateScheme(batcher, 500);
+
+/*
+batcher.BunkerLeft.propBit = true
+batcher.FeederLeft.propBit - on/off
+batcher.FeederLeft.enable
+batcher.FeederRight.propBit - on/off
+batcher.FeederRight.enable
+batcher.ChuteLeft.propBit
+batcher.ChuteRight.propBit
+batcher.GateRight1.opened
+batcher.GateRight1.closed
 
 
+
+*/
 
 
 // ###############################################################################################
