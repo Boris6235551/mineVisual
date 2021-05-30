@@ -3,12 +3,14 @@ import { TechWater } from './_techWater'
 import { DSF } from './_dsf'
 import { SKIP } from './_skip'
 import { BATCHER } from './_batcher'
+import { SUBSTATION } from './_substation'
 
 let screenMain = new Screen();
 // let techWater = new TechWater('container', window.innerWidth, window.innerHeight);
 let dsf = new DSF('containerDSF', window.innerWidth * 0.3, window.innerHeight);
 let skip = new SKIP('containerSkip', window.innerWidth * 0.3, window.innerHeight);
 let batcher = new BATCHER('batcher', window.innerWidth * 0.5, window.innerHeight);
+let substation = new SUBSTATION('substation', window.innerWidth * 0.5, window.innerHeight);
 
 // screenMain.addScheme(techWater);
 screenMain.addScheme(dsf);

@@ -1,139 +1,6 @@
 import Konva from 'konva';
 import { BaseMineDraw, Point } from './mine_drawing';
 
-export class Batcher extends BaseMineDraw {
-    private level0: number;
-    private level1: number;
-    private level2: number;
-    private level3: number;
-    constructor(p0: Point, length: number) {
-        super(p0, length);
-        this.name = 'Batcher';
-        // приёмный бункер
-        // this.primitives.push(this.createLineReceivingHopper(p0.x + length * 0.3, p0.y + length * 0.43,
-        //     p0.x + length * 0.41, p0.y + length * 0.43,
-        //     p0.x + length * 0.3781, p0.y + length * 0.4839,
-        //     p0.x + length * 0.3869, p0.y + length * 0.5037,
-        //     p0.x + length * 0.3231, p0.y + length * 0.5037,
-        //     p0.x + length * 0.3319, p0.y + length * 0.4839,
-        //     '#21686C', '#000000', length * 0.001)
-        // );
-        // this.primitives.push(this.createLineReceivingHopper(p0.x + length * 0.3231, p0.y + length * 0.515,
-        //     p0.x + length * 0.3869, p0.y + length * 0.515,
-        //     p0.x + length * 0.3869, p0.y + length * 0.545,
-        //     p0.x + length * 0.27, p0.y + length * 0.575,
-        //     p0.x + length * 0.27, p0.y + length * 0.555,
-        //     p0.x + length * 0.3231, p0.y + length * 0.515,
-        //     '#005236', '#000000', length * 0.001)
-        // );
-        // this.primitives.push(this.createLineReceivingHopper(p0.x + length * 0.22, p0.y + length * 0.585,
-        //     p0.x + length * 0.3, p0.y + length * 0.585,
-        //     p0.x + length * 0.3, p0.y + length * 0.625,
-        //     p0.x + length * 0.25, p0.y + length * 0.625,
-        //     p0.x + length * 0.25, p0.y + length * 0.595,
-        //     p0.x + length * 0.22, p0.y + length * 0.595,
-        //     '#8AC171', '#000000', length * 0.001)
-        // );
-        // this.primitives.push(this.createLine(p0.x + length * 0.275, p0.y + length * 0.585,
-        //     p0.x + length * 0.275, p0.y + length * 0.625, length * 0.001));
-
-        // this.primitives.push(this.createLineReceivingHopper(
-        //     p0.x + length * 0.26, p0.y + length * 0.63,
-        //     p0.x + length * 0.29, p0.y + length * 0.63,
-        //     p0.x + length * 0.29, p0.y + length * 0.67,
-        //     p0.x + length * 0.2, p0.y + length * 0.7,
-        //     p0.x + length * 0.2, p0.y + length * 0.68,
-        //     p0.x + length * 0.26, p0.y + length * 0.65,
-        //     '#8AC171', '#000000', length * 0.001)
-        // );
-
-        // выдвижной рукав средняя часть, два положения
-
-        // const position1 = 0;  // положение 1
-        // const position2 = length * 0.04; // положение 2 по x
-        // const position3 = length * 0.013; // положение 2 по y
-
-        // this.primitives.push(this.createLineReceivingHopper(
-        //     p0.x + length * 0.2 - position2, p0.y + length * 0.69 + position3,
-        //     p0.x + length * 0.29 - position2, p0.y + length * 0.65 + position3,
-        //     p0.x + length * 0.29 - position2, p0.y + length * 0.67 + position3,
-        //     p0.x + length * 0.2 - position2, p0.y + length * 0.7 + position3,
-        //     p0.x + length * 0.2 - position2, p0.y + length * 0.7 + position3,
-        //     p0.x + length * 0.2 - position2, p0.y + length * 0.7 + position3,
-        //     '#946868', '#000000', length * 0.001)
-        // );
-
-        // два блока с текстом в приёмном бункере
-
-        // this.primitives.push(this.createRectangle(p0.x + length * 0.358, p0.y + length * 0.434,
-        //     length * 0.02, length * 0.03, '#F9F9F9', '#FE982A', length * 0.002, length * 0.007));
-
-        // let t1 = '10'
-        // this.primitives.push(this.createText(p0.x + length * 0.365, p0.y + length * 0.44, t1 + ' t', length * 0.01));
-
-        // this.primitives.push(this.createRectangle(p0.x + length * 0.265, p0.y + length * 0.59,
-        //     length * 0.02, length * 0.03, '#F9F9F9', '#FE982A', length * 0.002, length * 0.007));
-
-        // let t2 = 'A'
-        // this.primitives.push(this.createText(p0.x + length * 0.276, p0.y + length * 0.595, t2, length * 0.014));
-
-    };
-    private createRectangle(x: number, y: number, height: number, width: number, fill: string,
-        stroke: string, strokeWidth: number, cornerRadius: number): Konva.Rect {
-        return new Konva.Rect({
-            x: x,
-            y: y,
-            height: height,
-            width: width,
-            fill: fill,
-            stroke: stroke,
-            strokeWidth: strokeWidth,
-            cornerRadius: cornerRadius,
-        });
-    }
-    private createLineReceivingHopper(x1: number, y1: number, x2: number, y2: number, x3: number, y3: number,
-        x4: number, y4: number, x5: number, y5: number, x6: number, y6: number,
-        fill: string, stroke: string, strokeWidth: number): Konva.Line {
-        return new Konva.Line({
-            points: [x1, y1, x2, y2, x3, y3, x4, y4, x5, y5, x6, y6],
-            fill: fill,
-            stroke: stroke,
-            strokeWidth: strokeWidth,
-            closed: true,
-        });
-    }
-    private createText(x: number, y: number, text: string, fontSize: number): Konva.Text {
-        return new Konva.Text({
-            x: x,
-            y: y,
-            text: text,
-            fontSize: fontSize,
-            fontStyle: 'bold',
-            fontFamily: 'Roboto',
-            fill: 'black'
-        });
-    }
-    nextFrame(): void {
-        switch (this.state) {
-            case 0:
-                this.primitives[16].attrs.points[3] = this.level0;
-                this.primitives[17].y(this.level0);
-                return;
-            case 1:
-                this.primitives[16].attrs.points[3] = this.level1;
-                this.primitives[17].y(this.level1);
-                return;
-            case 2:
-                this.primitives[16].attrs.points[3] = this.level2;
-                this.primitives[17].y(this.level2);
-            case 3:
-                this.primitives[16].attrs.points[3] = this.level3;
-                this.primitives[17].y(this.level3);
-                return;
-        }
-    }
-};
-
 export class Bunker extends BaseMineDraw {
     constructor(p0: Point, length: number) {
         super(p0, length);
@@ -195,7 +62,7 @@ export class Bunker extends BaseMineDraw {
                 this.primitives[0].fill('#045658');
                 break;
             case false:
-                this.primitives[0].fill('#835757');
+                this.primitives[0].fill('#A6C3C4');
                 break;
         }
     }
@@ -236,7 +103,7 @@ export class FeederLeft extends BaseMineDraw {
                     break;
             }
         }
-        else this.primitives[0].fill('grey');
+        else this.primitives[0].fill('#99BAAF');
     }
 }
 
@@ -274,7 +141,7 @@ export class FeederRight extends BaseMineDraw {
                     break;
             }
         }
-        else this.primitives[0].fill('grey');
+        else this.primitives[0].fill('#99BAAF');
     }
 }
 
@@ -317,7 +184,7 @@ export class ChuteLeft extends BaseMineDraw {
                 this.primitives[0].fill('#045658');
                 break;
             case false:
-                this.primitives[0].fill('#835757');
+                this.primitives[0].fill('#D0E6C6');
                 break;
         }
     }
@@ -362,7 +229,7 @@ export class ChuteRight extends BaseMineDraw {
                 this.primitives[0].fill('#045658');
                 break;
             case false:
-                this.primitives[0].fill('#835757');
+                this.primitives[0].fill('#D0E6C6');
                 break;
         }
     }
@@ -574,11 +441,11 @@ export class GateRight extends BaseMineDraw {
     }
 }
 
-const tangueOpen = 0;
-const tangueClose = 1;
-const tangueErr = 2;
+const tongueOpen = 0;
+const tongueClose = 1;
+const tongueErr = 2;
 
-export class TangueLeft extends BaseMineDraw {
+export class TongueLeft extends BaseMineDraw {
     // private closey: number;
     // private closex: number;
     // private openx: number;
@@ -591,10 +458,10 @@ export class TangueLeft extends BaseMineDraw {
 
     constructor(p0: Point, length: number) {
         super(p0, length);
-        this.name = 'TangueLeft';
+        this.name = 'TongueLeft';
         this.dx = (127 - 84) * length * 0.6;
         this.dy = (87 - 68) * length * 0.6;
-        this.prevState = tangueClose;
+        this.prevState = tongueClose;
         this.opened = false;
         this.closed = true;
         this.primitives.push(this.createLineReceivingHopper(
@@ -617,30 +484,30 @@ export class TangueLeft extends BaseMineDraw {
     }
     nextFrame(): void {
         if (this.opened) {  // open
-            if(this.prevState == tangueOpen) return;
-            else if(this.prevState == tangueClose) this.move( {x: this.dx, y: this.dy});
+            if(this.prevState == tongueOpen) return;
+            else if(this.prevState == tongueClose) this.move( {x: this.dx, y: this.dy});
             else this.move({x: 0.5 * this.dx, y: 0.5 * this.dy})
-            this.prevState = tangueOpen;
+            this.prevState = tongueOpen;
             this.primitives[0].fill('#21686C');
         }
         else if (this.closed) { //close
-            if(this.prevState == tangueClose) return;
-            else if(this.prevState == tangueOpen) this.move( {x: -this.dx, y: -this.dy});
+            if(this.prevState == tongueClose) return;
+            else if(this.prevState == tongueOpen) this.move( {x: -this.dx, y: -this.dy});
             else this.move({x: -0.5 * this.dx, y: -0.5 * this.dy})
-            this.prevState = tangueClose;
+            this.prevState = tongueClose;
             this.primitives[0].fill('#21686C');
         }
         else {  // error
-            if(this.prevState == tangueErr) return;
-            else if(this.prevState == tangueOpen) this.move({x: -0.5 * this.dx, y: -0.5 * this.dy});
+            if(this.prevState == tongueErr) return;
+            else if(this.prevState == tongueOpen) this.move({x: -0.5 * this.dx, y: -0.5 * this.dy});
             else this.move({x: 0.5 * this.dx, y: 0.5 * this.dy});
-            this.prevState = tangueErr;
+            this.prevState = tongueErr;
             this.primitives[0].fill('red');
         }
     }
 }
 
-export class TangueRight extends BaseMineDraw {
+export class TongueRight extends BaseMineDraw {
     public opened: boolean;
     public closed: boolean;
     public dx: number;
@@ -648,10 +515,10 @@ export class TangueRight extends BaseMineDraw {
     private prevState: number;
     constructor(p0: Point, length: number) {
         super(p0, length);
-        this.name = 'TangueRight';
+        this.name = 'TongueRight';
         this.dx = (127 - 84) * length * 0.6;
         this.dy = (87 - 68) * length * 0.6;
-        this.prevState = tangueClose;
+        this.prevState = tongueClose;
         this.opened = false;
         this.closed = true;
         this.primitives.push(this.createLineReceivingHopper(
@@ -674,24 +541,24 @@ export class TangueRight extends BaseMineDraw {
     }
     nextFrame(): void {
         if (this.opened) {  // open
-            if(this.prevState == tangueOpen) return;
-            else if(this.prevState == tangueClose) this.move( {x: this.dx, y: this.dy});
+            if(this.prevState == tongueOpen) return;
+            else if(this.prevState == tongueClose) this.move( {x: this.dx, y: this.dy});
             else this.move({x: -0.5 * this.dx, y: 0.5 * this.dy})
-            this.prevState = tangueOpen;
+            this.prevState = tongueOpen;
             this.primitives[0].fill('#21686C');
         }
         else if (this.closed) { //close
-            if(this.prevState == tangueClose) return;
-            else if(this.prevState == tangueOpen) this.move( {x: -this.dx, y: -this.dy});
+            if(this.prevState == tongueClose) return;
+            else if(this.prevState == tongueOpen) this.move( {x: -this.dx, y: -this.dy});
             else this.move({x: 0.5 * this.dx, y: -0.5 * this.dy})
-            this.prevState = tangueClose;
+            this.prevState = tongueClose;
             this.primitives[0].fill('#21686C');
         }
         else {  // error
-            if(this.prevState == tangueErr) return;
-            else if(this.prevState == tangueOpen) this.move({x: 0.5 * this.dx, y: -0.5 * this.dy});
+            if(this.prevState == tongueErr) return;
+            else if(this.prevState == tongueOpen) this.move({x: 0.5 * this.dx, y: -0.5 * this.dy});
             else this.move({x: -0.5 * this.dx, y: 0.5 * this.dy});
-            this.prevState = tangueErr;
+            this.prevState = tongueErr;
             this.primitives[0].fill('red');
         }
     }
