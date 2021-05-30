@@ -72,7 +72,7 @@ export class SubstationCell extends BaseMineDraw {
             p0.x + length * 0.0502 + n * length * 0.0588, p0.y + length * 0.0676,
             c, d,
             '#055659', length * 0.003));
-            // вертикальная линия соединения ячейки с шиной
+        // вертикальная линия соединения ячейки с шиной
         this.primitives.push(this.createLine(p0.x + n * length * 0.0588 + length * 0.0294, p0.y + length * 0.007,
             p0.x + n * length * 0.0588 + length * 0.0294, p0.y + length * 0.0476, '#055659', length * 0.003));
         this.primitives.push(this.createText(p0.x + n * length * 0.0585 + length * 0.009, p0.y + length * 0.087,
@@ -175,4 +175,59 @@ export class SubstationCell extends BaseMineDraw {
             // }
         }
     };
+}
+
+export class Generator extends BaseMineDraw {
+    constructor(p0: Point, length: number) { //p0 - центр прямоугольника, length - большая сторона прямоугольника
+        super(p0, length);
+        this.name = 'Generator';
+        this.primitives.push(this.createLine(p0.x - length, p0.y, p0.x + length, p0.y, '#005236', length * 0.04));
+        this.primitives.push(this.createRectangle(p0.x - length * 0.5, p0.y - length * 0.195, length * 0.39, length));
+        this.primitives.push(this.createCircle(p0.x, p0.y, length * 0.4, '#F2A5A5', length * 0.015, '#331A38'));
+        this.primitives.push(this.createCircle(p0.x, p0.y, length * 0.34, '#E4C0C0', length * 0.015, '#331A38'));
+        this.primitives.push(this.createLine(p0.x, p0.y, p0.x - (length * 0.28) * Math.cos(0), p0.y + (length * 0.28) * Math.sin(0), '#DB1010', length * 0.02));
+        this.primitives.push(this.createLine(p0.x, p0.y, p0.x + (length * 0.28) * Math.cos(45), p0.y + (length * 0.28) * Math.sin(45), '#DB1010', length * 0.02));
+        this.primitives.push(this.createLine(p0.x, p0.y, p0.x + (length * 0.28) * Math.cos(45), p0.y - (length * 0.28) * Math.sin(45), '#DB1010', length * 0.02));
+        this.primitives.push(this.createCircle(p0.x, p0.y, length * 0.05, '#331A38', 0, ''));
+        this.primitives.push(this.createEllipse(p0.x - (length * 0.28) * Math.cos(0), p0.y + (length * 0.28) * Math.sin(0), length * 0.02, length * 0.07, '#DB1010', 0));
+        this.primitives.push(this.createEllipse(p0.x + (length * 0.28) * Math.cos(45), p0.y + (length * 0.28) * Math.sin(45), length * 0.02, length * 0.07, '#DB1010', 60));
+        this.primitives.push(this.createEllipse(p0.x + (length * 0.28) * Math.cos(45), p0.y - (length * 0.28) * Math.sin(45), length * 0.02, length * 0.07, '#DB1010', 120));
+    }
+    private createLine(x1: number, y1: number, x2: number, y2: number, stroke: string, strokeWidth: number): Konva.Line {
+        return new Konva.Line({
+            points: [x1, y1, x2, y2],
+            stroke: stroke,
+            strokeWidth: strokeWidth,
+        });
+    }
+    private createRectangle(x: number, y: number, height: number, width: number): Konva.Rect {
+        return new Konva.Rect({
+            x: x,
+            y: y,
+            height: height,
+            width: width,
+            fill: '#923434',
+        });
+    }
+    private createCircle(x: number, y: number, radius: number, fill: string, strokeWidth: number,
+        stroke: string): Konva.Circle {
+        return new Konva.Circle({
+            x: x,
+            y: y,
+            radius: radius,
+            stroke: stroke,
+            strokeWidth: strokeWidth,
+            fill: fill,
+        });
+    }
+    private createEllipse(x: number, y: number, radiusX: number, radiusY: number, fill: string, rotation: number): Konva.Ellipse {
+        return new Konva.Ellipse({
+            x: x,
+            y: y,
+            radiusX: radiusX,
+            radiusY: radiusY,
+            fill: fill,
+            rotation: rotation
+        });
+    }
 }

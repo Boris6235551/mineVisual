@@ -12,7 +12,6 @@ import { BaseMineDraw, Point } from './mine_drawing';
 *   TangueLeft, TangueRight (opened, closed)
 *************************************************************************/
 
-// 
 export class Bunker extends BaseMineDraw {
     constructor(p0: Point, length: number) {
         super(p0, length);
@@ -74,7 +73,7 @@ export class Bunker extends BaseMineDraw {
                 this.primitives[0].fill('#045658');
                 break;
             case false:
-                this.primitives[0].fill('#835757');
+                this.primitives[0].fill('#A6C3C4');
                 break;
         }
     }
@@ -115,7 +114,7 @@ export class FeederLeft extends BaseMineDraw {
                     break;
             }
         }
-        else this.primitives[0].fill('grey');
+        else this.primitives[0].fill('#99BAAF');
     }
 }
 
@@ -153,7 +152,7 @@ export class FeederRight extends BaseMineDraw {
                     break;
             }
         }
-        else this.primitives[0].fill('grey');
+        else this.primitives[0].fill('#99BAAF');
     }
 }
 
@@ -196,7 +195,7 @@ export class ChuteLeft extends BaseMineDraw {
                 this.primitives[0].fill('#045658');
                 break;
             case false:
-                this.primitives[0].fill('#835757');
+                this.primitives[0].fill('#D0E6C6');
                 break;
         }
     }
@@ -241,7 +240,7 @@ export class ChuteRight extends BaseMineDraw {
                 this.primitives[0].fill('#045658');
                 break;
             case false:
-                this.primitives[0].fill('#835757');
+                this.primitives[0].fill('#D0E6C6');
                 break;
         }
     }
@@ -453,29 +452,50 @@ export class GateRight extends BaseMineDraw {
     }
 }
 
-const tangueOpen = 0;
-const tangueClose = 1;
-const tangueErr = 2;
+const tongueOpen = 0;
+const tongueClose = 1;
+const tongueErr = 2;
 
-export class TangueLeft extends BaseMineDraw {
-    // private closey: number;
-    // private closex: number;
-    // private openx: number;
-    // private openy: number
+class TongueBase extends BaseMineDraw {
     public opened: boolean;
     public closed: boolean;
-    public dx: number;
-    public dy: number;
-    private prevState: number;
-
+    protected dx: number;
+    protected dy: number;
+    protected prevState: number;
     constructor(p0: Point, length: number) {
         super(p0, length);
-        this.name = 'TangueLeft';
         this.dx = (127 - 84) * length * 0.6;
         this.dy = (87 - 68) * length * 0.6;
-        this.prevState = tangueClose;
+        this.prevState = tongueClose;
         this.opened = false;
         this.closed = true;
+    }
+    protected createLineReceivingHopper(x1: number, y1: number, x2: number, y2: number, x3: number, y3: number,
+        x4: number, y4: number, fill: string, stroke: string, strokeWidth: number): Konva.Line {
+        return new Konva.Line({
+            points: [x1, y1, x2, y2, x3, y3, x4, y4],
+            fill: fill,
+            stroke: stroke,
+            strokeWidth: strokeWidth,
+            closed: true,
+        });
+    }
+}
+
+export class TongueLeft extends TongueBase {
+    // public opened: boolean;
+    // public closed: boolean;
+    // public dx: number;
+    // public dy: number;
+//    private prevState: number;
+    constructor(p0: Point, length: number) {
+        super(p0, length);
+        this.name = 'TongueLeft';
+        // this.dx = (127 - 84) * length * 0.6;
+        // this.dy = (87 - 68) * length * 0.6;
+        // this.prevState = tongueClose;
+        // this.opened = false;
+        // this.closed = true;
         this.primitives.push(this.createLineReceivingHopper(
             p0.x + length * 84, p0.y + length * 68,
             p0.x + length * 127, p0.y + length * 87,
@@ -484,55 +504,60 @@ export class TangueLeft extends BaseMineDraw {
             '#21686C', '#000000', length * 0.4)
         );
     }
-    private createLineReceivingHopper(x1: number, y1: number, x2: number, y2: number, x3: number, y3: number,
-        x4: number, y4: number, fill: string, stroke: string, strokeWidth: number): Konva.Line {
-        return new Konva.Line({
-            points: [x1, y1, x2, y2, x3, y3, x4, y4],
-            fill: fill,
-            stroke: stroke,
-            strokeWidth: strokeWidth,
-            closed: true,
-        });
+    // private createLineReceivingHopper(x1: number, y1: number, x2: number, y2: number, x3: number, y3: number,
+    //     x4: number, y4: number, fill: string, stroke: string, strokeWidth: number): Konva.Line {
+    //     return new Konva.Line({
+    //         points: [x1, y1, x2, y2, x3, y3, x4, y4],
+    //         fill: fill,
+    //         stroke: stroke,
+    //         strokeWidth: strokeWidth,
+    //         closed: true,
+    //     });
+    // }
+    setBaseProperty(mes: any){
+        console.log(`trayOpenedA=${mes.trayOpenedA}; mes.trayClosedA=${mes.trayClosedA}`)
+        this.opened = mes.trayOpenedA;
+        this.closed = mes.trayClosedA;
     }
     nextFrame(): void {
         if (this.opened) {  // open
-            if(this.prevState == tangueOpen) return;
-            else if(this.prevState == tangueClose) this.move( {x: this.dx, y: this.dy});
+            if(this.prevState == tongueOpen) return;
+            else if(this.prevState == tongueClose) this.move( {x: this.dx, y: this.dy});
             else this.move({x: 0.5 * this.dx, y: 0.5 * this.dy})
-            this.prevState = tangueOpen;
+            this.prevState = tongueOpen;
             this.primitives[0].fill('#21686C');
         }
         else if (this.closed) { //close
-            if(this.prevState == tangueClose) return;
-            else if(this.prevState == tangueOpen) this.move( {x: -this.dx, y: -this.dy});
+            if(this.prevState == tongueClose) return;
+            else if(this.prevState == tongueOpen) this.move( {x: -this.dx, y: -this.dy});
             else this.move({x: -0.5 * this.dx, y: -0.5 * this.dy})
-            this.prevState = tangueClose;
+            this.prevState = tongueClose;
             this.primitives[0].fill('#21686C');
         }
         else {  // error
-            if(this.prevState == tangueErr) return;
-            else if(this.prevState == tangueOpen) this.move({x: -0.5 * this.dx, y: -0.5 * this.dy});
+            if(this.prevState == tongueErr) return;
+            else if(this.prevState == tongueOpen) this.move({x: -0.5 * this.dx, y: -0.5 * this.dy});
             else this.move({x: 0.5 * this.dx, y: 0.5 * this.dy});
-            this.prevState = tangueErr;
+            this.prevState = tongueErr;
             this.primitives[0].fill('red');
         }
     }
 }
 
-export class TangueRight extends BaseMineDraw {
-    public opened: boolean;
-    public closed: boolean;
-    public dx: number;
-    public dy: number;
-    private prevState: number;
+export class TongueRight extends TongueBase {
+    // public opened: boolean;
+    // public closed: boolean;
+    // public dx: number;
+    // public dy: number;
+    //private prevState: number;
     constructor(p0: Point, length: number) {
         super(p0, length);
-        this.name = 'TangueRight';
-        this.dx = (127 - 84) * length * 0.6;
-        this.dy = (87 - 68) * length * 0.6;
-        this.prevState = tangueClose;
-        this.opened = false;
-        this.closed = true;
+        this.name = 'TongueRight';
+        // this.dx = (127 - 84) * length * 0.6;
+        // this.dy = (87 - 68) * length * 0.6;
+        // this.prevState = tongueClose;
+        // this.opened = false;
+        // this.closed = true;
         this.primitives.push(this.createLineReceivingHopper(
             p0.x + length * 41, p0.y + length * 87,
             p0.x + length * 84, p0.y + length * 68,
@@ -541,36 +566,40 @@ export class TangueRight extends BaseMineDraw {
             '#21686C', '#000000', length * 0.4)
         );
     }
-    private createLineReceivingHopper(x1: number, y1: number, x2: number, y2: number, x3: number, y3: number,
-        x4: number, y4: number, fill: string, stroke: string, strokeWidth: number): Konva.Line {
-        return new Konva.Line({
-            points: [x1, y1, x2, y2, x3, y3, x4, y4],
-            fill: fill,
-            stroke: stroke,
-            strokeWidth: strokeWidth,
-            closed: true,
-        });
+    // private createLineReceivingHopper(x1: number, y1: number, x2: number, y2: number, x3: number, y3: number,
+    //     x4: number, y4: number, fill: string, stroke: string, strokeWidth: number): Konva.Line {
+    //     return new Konva.Line({
+    //         points: [x1, y1, x2, y2, x3, y3, x4, y4],
+    //         fill: fill,
+    //         stroke: stroke,
+    //         strokeWidth: strokeWidth,
+    //         closed: true,
+    //     });
+    // }
+    setBaseProperty(mes: any){
+        this.opened = mes.trayOpenedB;
+        this.closed = mes.trayClosedB;
     }
     nextFrame(): void {
         if (this.opened) {  // open
-            if(this.prevState == tangueOpen) return;
-            else if(this.prevState == tangueClose) this.move( {x: this.dx, y: this.dy});
+            if(this.prevState == tongueOpen) return;
+            else if(this.prevState == tongueClose) this.move( {x: this.dx, y: this.dy});
             else this.move({x: -0.5 * this.dx, y: 0.5 * this.dy})
-            this.prevState = tangueOpen;
+            this.prevState = tongueOpen;
             this.primitives[0].fill('#21686C');
         }
         else if (this.closed) { //close
-            if(this.prevState == tangueClose) return;
-            else if(this.prevState == tangueOpen) this.move( {x: -this.dx, y: -this.dy});
+            if(this.prevState == tongueClose) return;
+            else if(this.prevState == tongueOpen) this.move( {x: -this.dx, y: -this.dy});
             else this.move({x: 0.5 * this.dx, y: -0.5 * this.dy})
-            this.prevState = tangueClose;
+            this.prevState = tongueClose;
             this.primitives[0].fill('#21686C');
         }
         else {  // error
-            if(this.prevState == tangueErr) return;
-            else if(this.prevState == tangueOpen) this.move({x: 0.5 * this.dx, y: -0.5 * this.dy});
+            if(this.prevState == tongueErr) return;
+            else if(this.prevState == tongueOpen) this.move({x: 0.5 * this.dx, y: -0.5 * this.dy});
             else this.move({x: -0.5 * this.dx, y: 0.5 * this.dy});
-            this.prevState = tangueErr;
+            this.prevState = tongueErr;
             this.primitives[0].fill('red');
         }
     }

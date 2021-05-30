@@ -80,7 +80,7 @@ export class BaseMineDraw {
     readonly disposition: Disposition;
     public state: any;
     protected animationFrame: number = 0;
-    protected primitives: (Konva.Rect | Konva.Text | Konva.Circle | Konva.Line)[] = [];
+    protected primitives: (Konva.Rect | Konva.Text | Konva.Circle | Konva.Line | Konva.Ellipse)[] = [];
     protected layer: Konva.Layer;
     constructor(p0: Point, length: number, disposition?: Disposition, percentage?: number) {
         this.name = "Base";
