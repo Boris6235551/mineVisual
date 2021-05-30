@@ -156,12 +156,12 @@ function objectsDif(previous, current){
 var PORT = 2000;
 
 let allClients = [
-    {host: '192.168.100.50', name: 'DSF'},
+    // {host: '192.168.100.50', name: 'DSF'},
     // {host: '192.168.100.51', name: 'Cage'},
     // {host: '192.168.100.52', name: 'Skip'},
     // {host: '192.168.100.53', name: 'SubStation'},
     // {host: '192.168.100.54', name: 'UndegroundStation'},
-    // {host: '192.168.100.55', name: 'Batcher'},
+    {host: '192.168.100.55', name: 'Batcher'},
     // /*   Conveyor scale   */
     // {host: '192.168.100.60', name: 'Scale3AB'},
     // {host: '192.168.100.62', name: 'Scale4'},

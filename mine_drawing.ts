@@ -124,8 +124,8 @@ export class BaseMineDraw {
     // get rect(): Rectangle{
     //     return this.rect;
     // }
-    setBaseProperty(val: any) {
-        this.propBit = val;
+    setBaseProperty(mes: any) {
+        if(mes.hasOwnProperty(this.name)) this.propBit = mes[this.name];
     }
 };
 
@@ -150,15 +150,16 @@ export class Scheme {
         if (this.widgets.length) this.interval = setInterval(this.update, 100);
     }
     send(mes: any){
-        let props = Object.getOwnPropertyNames(mes);
-        this.widgets.forEach( widget => {
-            let prop = props.find( pr => pr == widget.name );
-            if(prop != undefined) {
-                //console.log(`@@@@@@@@@@@@@ widget.name=${widget.name}; prop=${prop}; mes[prop]=${mes[prop]}`) 
-                widget.setBaseProperty(mes[prop]);
-            }
-            //else console.log(`widget.name ${widget.name} is not finded`)
-        });
+        // let props = Object.getOwnPropertyNames(mes);
+        // this.widgets.forEach( widget => {
+        //     let prop = props.find( pr => pr == widget.name );
+        //     if(prop != undefined) {
+        //         //console.log(`@@@@@@@@@@@@@ widget.name=${widget.name}; prop=${prop}; mes[prop]=${mes[prop]}`) 
+        //         widget.setBaseProperty(mes[prop]);
+        //     }
+        //     //else console.log(`widget.name ${widget.name} is not finded`)
+        // });
+        this.widgets.forEach( w => {w.setBaseProperty(mes)} );
         this.update();
     }
     addWidget(widget: BaseMineDraw) {
