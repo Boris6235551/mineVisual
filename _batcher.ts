@@ -21,7 +21,7 @@ export class BATCHER extends Scheme {
         this.BunkerLeft = new Bunker(new Point(-75, 233), 2)
         this.addWidget(this.BunkerLeft);
 
-        this.BunkerRight = new Bunker(new Point(282, 233), 2)
+        this.BunkerRight = new Bunker(new Point(282, 233), 2, false)
         this.addWidget(this.BunkerRight);
 
         this.FeederLeft1 = new FeederLeft(new Point(-75, 232), 2)

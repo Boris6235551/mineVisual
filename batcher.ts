@@ -13,9 +13,11 @@ import { BaseMineDraw, Point } from './mine_drawing';
 *************************************************************************/
 
 export class Bunker extends BaseMineDraw {
-    constructor(p0: Point, length: number) {
+    private isLeft: boolean;
+    constructor(p0: Point, length: number, left = true) {
         super(p0, length);
         this.name = 'Bunker';
+        this.isLeft = left;
         // приёмный бункер
         this.primitives.push(this.createLineReceivingHopper(p0.x + length * 62, p0.y + length * 32,
             p0.x + length * 113, p0.y + length * 32,
@@ -77,6 +79,16 @@ export class Bunker extends BaseMineDraw {
                 break;
         }
     }
+    setBaseProperty(mes: any){
+        if(this.isLeft){
+            console.log(`Bunker left active =${mes.chuteLoadA}`)
+            this.propBit = mes.chuteLoadA;
+        }
+        else{
+            console.log(`Bunker right active =${mes.chuteLoadB}`)
+            this.propBit = mes.chuteLoadB;
+        }
+    }  
 }
 
 export class FeederBase extends BaseMineDraw {
@@ -122,6 +134,11 @@ export class FeederLeft extends FeederBase {
             '#005236', '#000000', length * 0.6)
         );
     }
+    setBaseProperty(mes: any){
+        console.log(`FeederRight active =${mes.chuteLoadA}; on/off ${mes.feederOn}`)
+        this.enable = mes.chuteLoadA;
+        this.propBit = mes.feederOn;
+    }
 }
 
 export class FeederRight extends FeederBase {
@@ -136,7 +153,11 @@ export class FeederRight extends FeederBase {
             '#005236', '#000000', length * 0.6)
         );
     }
-
+    setBaseProperty(mes: any){
+        console.log(`FeederRight active =${mes.chuteLoadB}; on/off ${mes.feederOn}`)
+        this.enable = mes.chuteLoadB;
+        this.propBit = mes.feederOn;
+    }
 }
 
 export class ChuteBase extends BaseMineDraw {
@@ -188,6 +209,10 @@ export class ChuteLeft extends ChuteBase {
         this.primitives.push(this.createLine(p0.x + length * 90, p0.y + length * 48,
             p0.x + length * 90, p0.y + length * 69, length * 0.6));
     }
+    setBaseProperty(mes: any){
+        console.log(`chuteA=${mes.chuteLoadA}`)
+        this.propBit = mes.chuteLoadA;
+    }
 }
 
 export class ChuteRight extends ChuteBase {
@@ -205,6 +230,10 @@ export class ChuteRight extends ChuteBase {
         );
         this.primitives.push(this.createLine(p0.x + length * 66, p0.y + length * 48,
             p0.x + length * 66, p0.y + length * 69, length * 0.6));
+    }
+    setBaseProperty(mes: any){
+        console.log(`chuteB=${mes.chuteLoadB}`)
+        this.propBit = mes.chuteLoadB;
     }
 }
 
@@ -345,6 +374,11 @@ export class GateLeft extends GateBase {
         this.primitives.push(this.createRectangle(p0.x + length * 127, this.baseY,
             this.hight, length * 4.8, '#FDC858', '#000000', length * 0.4));
     }
+    setBaseProperty(mes: any){
+        console.log(`trayOpenedA=${mes.gateOpenedA}; mes.trayClosedA=${mes.gateClosedA}`)
+        this.opened = mes.gateOpenedA;
+        this.closed = mes.gateClosedA;
+    }
 }
 
 export class GateRight extends GateBase {
@@ -353,6 +387,11 @@ export class GateRight extends GateBase {
         this.name = 'GateRight';
         this.primitives.push(this.createRectangle(p0.x + length * 36.2, this.baseY,
             this.hight, length * 4.8, '#FDC858', '#000000', length * 0.4));
+    }
+    setBaseProperty(mes: any){
+        console.log(`trayOpenedB=${mes.gateOpenedB}; mes.trayClosedA=${mes.gateClosedB}`)
+        this.opened = mes.gateOpenedB;
+        this.closed = mes.gateClosedB;
     }
 }
 
@@ -399,7 +438,7 @@ export class TongueLeft extends TongueBase {
         );
     }
     setBaseProperty(mes: any){
-        console.log(`trayOpenedA=${mes.trayOpenedA}; mes.trayClosedA=${mes.trayClosedA}`)
+        console.log(`tongue left opened =${mes.trayOpenedA}; tongue left closed=${mes.trayClosedA}`)
         this.opened = mes.trayOpenedA;
         this.closed = mes.trayClosedA;
     }
@@ -441,6 +480,7 @@ export class TongueRight extends TongueBase {
         );
     }
     setBaseProperty(mes: any){
+        console.log(`tongue right opened =${mes.trayOpenedB}; tongue left closed=${mes.trayClosedB}`)
         this.opened = mes.trayOpenedB;
         this.closed = mes.trayClosedB;
     }
