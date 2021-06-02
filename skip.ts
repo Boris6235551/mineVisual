@@ -1,9 +1,9 @@
 import Konva from 'konva';
 import { BaseMineDraw, Point } from './mine_drawing';
 
-export enum SkipState {
-    stop = 0, run, leftUp, rightUp
-};
+// export enum SkipState {
+//     stop = 0, run, leftUp, rightUp
+// };
 
 export class Skip extends BaseMineDraw {
     private level0: number;
@@ -14,14 +14,40 @@ export class Skip extends BaseMineDraw {
         super(p0, length);
         this.name = 'Skip';
         // линия поверхности земли
-        // this.primitives.push(this.createLine(p0.x - length * 0.11, p0.y + length * 0.31,
-        //     p0.x + length * 0.57, p0.y + length * 0.31, length * 0.002));
-        // for (let i = 0; i < 17; i++) {
-        //     this.primitives.push(this.createLine(p0.x - length * 0.11 + i * length * 0.04, p0.y + length * 0.34,
-        //         p0.x - length * 0.07 + i * length * 0.04, p0.y + length * 0.31, length * 0.0005));
-        // }
+        this.primitives.push(this.createLine(
+            p0.x, p0.y + length * 0.31,
+            p0.x + length * 0.57, p0.y + length * 0.31,
+            length * 0.002));
+        for (let i = 0; i < 28; i++) {
+            this.primitives.push(this.createLine(
+                p0.x + i * length * 0.02, p0.y + length * 0.31,
+                p0.x + length * 0.02 + i * length * 0.02, p0.y + length * 0.33,
+                length * 0.002));
+        }
+        this.primitives.push(this.createLine(
+            p0.x, p0.y + length * 0.31,
+            p0.x - length * 0.57, p0.y + length * 0.31,
+            length * 0.002));
+        for (let i = 0; i < 28; i++) {
+            this.primitives.push(this.createLine(
+                p0.x - i * length * 0.02, p0.y + length * 0.31,
+                p0.x - length * 0.02 - i * length * 0.02, p0.y + length * 0.33,
+                length * 0.002));
+        }
+        for (let i = 0; i < 54; i++) {
+            this.primitives.push(this.createLine(
+                p0.x, p0.y + length * 0.31 + i * length * 0.02,
+                p0.x - length * 0.02, p0.y + length * 0.33 + i * length * 0.02,
+                length * 0.002));
+        }
+        for (let i = 0; i < 54; i++) {
+            this.primitives.push(this.createLine(
+                p0.x + length * 0.2, p0.y + length * 0.31 + i * length * 0.02,
+                p0.x + length * 0.22, p0.y + length * 0.33 + i * length * 0.02,
+                length * 0.002));
+        }
         //  вертикальный ствол шахты
-        this.primitives.push(this.createRectangleTrunk(p0.x, p0.y, length, length * 0.2, length * 0.003));
+        this.primitives.push(this.createRectangleTrunk(p0.x, p0.y, length * 1.4, length * 0.2, length * 0.003));
         // домик
         this.primitives.push(this.createLineHouse(p0.x + length * 0.42, p0.y + length * 0.31,
             p0.x + length * 0.42, p0.y + length * 0.15,
@@ -65,7 +91,7 @@ export class Skip extends BaseMineDraw {
             p0.x + length * 0.02, p0.y - length * 0.05,
             p0.x, p0.y - length * 0.05,
             p0.x + length * 0.27, p0.y + length * 0.31));
-    };
+    }
     private createRectangle(x: number, y: number, height: number, width: number, fill: string,
         stroke: string, strokeWidth: number, cornerRadius: number): Konva.Rect {
         return new Konva.Rect({
@@ -125,14 +151,15 @@ export class Skip extends BaseMineDraw {
             fill: fill,
         });
     }
-    public setState(newState: SkipState): void {
-        this.state = newState;
-    }
+    // public setState(newState: SkipState): void {
+    //     this.state = newState;
+    // }
     nextFrame(): void {
         switch (this.state) {
             case 0:
-                this.primitives[16].attrs.points[3] = this.level0;
-                this.primitives[17].y(this.level0);
+            this.primitives[16].attrs.points[3] = this.level0;
+            this.primitives[17].y(this.level0);
+                this.primitives[10].move({ x: 0, y: -5 });
                 return;
             case 1:
                 this.primitives[16].attrs.points[3] = this.level1;

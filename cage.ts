@@ -14,15 +14,17 @@ export class Cage extends BaseMineDraw {
         super(p0, length);
         this.name = 'Cage';
         // линия поверхности земли
-        // this.primitives.push(this.createLine(p0.x - length, p0.y + length * 0.31,
-        //     p0.x + length * 0.756, p0.y + length * 0.31, length * 0.002));
-        // for (let i = 0; i < 17; i++) {
-        //     this.primitives.push(this.createLine(
-        //         p0.x - length * 0.65 + i * length * 0.04, p0.y + length * 0.34,
-        //         p0.x - length * 0.61 + i * length * 0.04, p0.y + length * 0.31,
-        //         length * 0.0005)
-        //     );
-        // }
+        this.primitives.push(this.createLine(
+            p0.x - length, p0.y + length * 0.31,
+            p0.x + length * 0.3, p0.y + length * 0.31, 
+            length * 0.002));
+        for (let i = 0; i < 37; i++) {
+            this.primitives.push(this.createLine(
+                p0.x - length * 0.6 + i * length * 0.025, p0.y + length * 0.31,
+                p0.x - length * 0.626 + i * length * 0.025, p0.y + length * 0.335,
+                length * 0.003)
+            );
+        }
         // три уровня стволов шахт
         this.primitives.push(this.createRectangle(p0.x - length * 0.16, p0.y + length * 0.57, length * 0.06, length * 0.42,
             '#AC9595', '', 0, 0));

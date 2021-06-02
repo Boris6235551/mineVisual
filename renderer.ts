@@ -4,18 +4,25 @@ import { DSF } from './_dsf'
 import { SKIP } from './_skip'
 import { BATCHER } from './_batcher'
 import { SUBSTATION } from './_substation'
+import { CAGE } from './_cage'
+import { UNDEGROUNDPUMP } from './_undegroundPump'
 
 let screenMain = new Screen();
 // let techWater = new TechWater('container', window.innerWidth, window.innerHeight);
-let dsf = new DSF('containerDSF', window.innerWidth * 0.3, window.innerHeight);
-let skip = new SKIP('containerSkip', window.innerWidth * 0.3, window.innerHeight);
-let batcher = new BATCHER('batcher', window.innerWidth * 0.5, window.innerHeight);
-let substation = new SUBSTATION('substation', window.innerWidth * 0.5, window.innerHeight);
+let cage = new CAGE('containerCage', window.innerWidth * 0.25, window.innerHeight);
+// let dsf = new DSF('containerDSF', window.innerWidth * 0.3, window.innerHeight);
+let undegroundpump = new UNDEGROUNDPUMP('containerUndegroundPump', window.innerWidth * 0.5, window.innerHeight);
+let skip = new SKIP('containerSkip', window.innerWidth * 0.25, window.innerHeight);
+let batcher = new BATCHER('batcher', window.innerWidth, window.innerHeight);
+let substation = new SUBSTATION('substation', window.innerWidth, window.innerHeight);
 
 // screenMain.addScheme(techWater);
-screenMain.addScheme(dsf);
+// screenMain.addScheme(dsf);
 screenMain.addScheme(skip);
 screenMain.addScheme(batcher);
+screenMain.addScheme(cage);
+screenMain.addScheme(substation);
+screenMain.addScheme(undegroundpump);
 
 import {startClients, stopConnection, _reCreate, _testConnect, _testSend, _sendReload, _step} from './tcpipConnector'
 
@@ -25,8 +32,13 @@ function sendMes(name, mes){
 
 startClients(sendMes);
 
-animateScheme(dsf, 500);
+// animateScheme(dsf, 500);
 animateScheme(batcher, 500);
+animateScheme(skip, 500);
+animateScheme(cage, 500);
+animateScheme(substation, 500);
+animateScheme(undegroundpump, 500);
+
 
 /*
 batcher.BunkerLeft.propBit = true

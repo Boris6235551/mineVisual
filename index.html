@@ -7,12 +7,13 @@
     <!-- <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" /> -->
 </head>
 
-<body style="background: white;">
+<body style="background: white; margin: 0">
     <!-- <input type="number" id="byteNumber" min="0" max="10" >
     <input type="number" id="outputNumber" min="0" max="10" >
     
     <button onclick="testSend()">Кнопка</button> -->
-        <!-- <button onclick="testBreak()">Break</button> -->
+    <!-- <button onclick="testBreak()">Break</button> -->
+    <div style="position: absolute; left: 0px; top: 0px;">
         <input type="checkbox" id="setOrClear">
         <button onclick="testClear()">Clear</button>
         <button onclick="testConnect()">Connect</button>
@@ -20,18 +21,15 @@
         <button onclick="sendReload()">Reload</button>
         <button onclick="sendReCreate()">ReCreate</button>
         <button onclick="step()">Step</button>
-    
+    </div>
     <div style="display: flex;">
-        <!-- <div id="containerFirst"></div> -->
+        <div id="containerCage"></div>
+        <div id="containerUndegroundPump"></div>
         <div id="containerSkip"></div>
-      
-        <!-- <div id="batcherRight"></div> -->
-        <div id="containerDSF"></div>
-        <!-- <div id="containerSecond" ></div> -->
-        <!-- <div id="container"></div> -->
-    </div> 
-    <div id="batcher" style="position: absolute; left: 0px; top: 100px"></div>  
-    <div id="substation" style="position: absolute; left: 1100px; top: 0px"></div> 
+    </div>
+    <div style="position: absolute; left: 350px; top: 30px;"><img src="pump.png" width="1000" height="700"></div>
+    <div id="batcher" style="position: absolute; left: 0px; top: 0px;"></div>
+    <div id="substation" style="position: absolute; left: 0px; top: 0px;"></div>
 </body>
 
 <!-- <script>var exports = {"__esModule": true};</script> -->

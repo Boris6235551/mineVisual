@@ -1,12 +1,12 @@
 import { Scheme, Disposition, animateScheme, Point, Pool, PropParams } from './mine_drawing';
-import { Skip } from './skip'
+import { Cage } from './cage'
 
-export class SKIP extends Scheme {
-    public Skip1: Skip;
+export class CAGE extends Scheme {
+    public Cage1: Cage;
     constructor(container: string, width: number, height: number) {
         super(container, width, height);
-        this.name = 'Skip';
-        this.Skip1 = new Skip(new Point(120, 70), 600)
-        this.addWidget(this.Skip1);
+        this.name = 'Cage';
+        this.Cage1 = new Cage(new Point(200, 70), 500)
+        this.addWidget(this.Cage1);
     }
 }

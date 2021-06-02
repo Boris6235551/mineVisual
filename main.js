@@ -10,14 +10,14 @@ process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true';
 function createWindow() {
     const win = new BrowserWindow({
         // width: 3860,
-        width: 1366,
+        width: 1920,
         // minWidth: 3860,
-        minWidth: 1366,
+        // minWidth: 1850,
         // maxWidth: 3840,
         // height: 1080,
-        height: 768,
+        height: 1080,
         // minHeight: 1080,
-        minHeight: 768,
+        // minHeight: 1080,
         webPreferences: {
             allowRunningInsecureContent: true, 
             nodeIntegration: true,
@@ -28,7 +28,7 @@ function createWindow() {
 
     win.loadFile('index.html')
       // Open the DevTools.
-    win.webContents.openDevTools();
+    // win.webContents.openDevTools();
 
 }
 

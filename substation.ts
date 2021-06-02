@@ -7,19 +7,18 @@ export class Trunk extends BaseMineDraw {
         this.name = 'Trunk';
         // общая шина ячеек
         let i: number;
-        length = length * 0.647;
-        this.primitives.push(this.createRectangle(p0.x, p0.y, length * 0.0183, length, '',
+        this.primitives.push(this.createRectangle(p0.x, p0.y, length * 0.0183, length * 1.41, '',
             '#FA458C', length * 0.001));
         for (i = 1; i <= 5; i++) {
             this.primitives.push(this.createLine(p0.x, p0.y + length * 0.003 * i,
-                p0.x + length, p0.y + length * 0.003 * i, '#FA458C', length * 0.001));
+                p0.x + length * 1.41, p0.y + length * 0.003 * i, '#FA458C', length * 0.001));
         }
-        for (i = 1; i <= 166; i++) {
+        for (i = 1; i <= 235; i++) {
             this.primitives.push(this.createLine(p0.x + length * 0.006 * i, p0.y,
                 p0.x + length * 0.006 * i, p0.y + length * 0.0183, '#FA458C', length * 0.001));
         }
         this.primitives.push(this.createLine(p0.x, p0.y + length * 0.00915,
-            p0.x + length, p0.y + length * 0.00915, '#055659', length * 0.003));
+            p0.x + length * 1.41, p0.y + length * 0.00915, '#055659', length * 0.003));
         // ячейки
         // for (i = 0; i <= 16; i++) {
 

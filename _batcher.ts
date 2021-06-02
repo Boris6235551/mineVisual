@@ -18,40 +18,40 @@ export class BATCHER extends Scheme {
         this.addBatcher();
     }
     addBatcher() {
-        this.BunkerLeft = new Bunker(new Point(-75, 233), 2)
+        this.BunkerLeft = new Bunker(new Point(1262, 333), 2)
         this.addWidget(this.BunkerLeft);
 
-        this.BunkerRight = new Bunker(new Point(282, 233), 2, false)
+        this.BunkerRight = new Bunker(new Point(1617, 333), 2, false)
         this.addWidget(this.BunkerRight);
 
-        this.FeederLeft1 = new FeederLeft(new Point(-75, 232), 2)
+        this.FeederLeft1 = new FeederLeft(new Point(1262, 332), 2)
         this.addWidget(this.FeederLeft1);
 
-        this.FeederRight1 = new FeederRight(new Point(325, 232), 2)
+        this.FeederRight1 = new FeederRight(new Point(1660, 332), 2)
         this.addWidget(this.FeederRight1);
 
-        this.ChuteLeft1 = new ChuteLeft(new Point(-48, 340), 2)
+        this.ChuteLeft1 = new ChuteLeft(new Point(1289, 440), 2)
         this.addWidget(this.ChuteLeft1);
 
-        this.ChuteRight1 = new ChuteRight(new Point(292, 340), 2)
+        this.ChuteRight1 = new ChuteRight(new Point(1627, 440), 2)
         this.addWidget(this.ChuteRight1);
 
-        let BatcherLeft1 = new BatcherLeft(new Point(-60, 400), 2)
+        let BatcherLeft1 = new BatcherLeft(new Point(1277, 500), 2)
         this.addWidget(BatcherLeft1);
 
-        let BatcherRight1 = new BatcherRight(new Point(280, 400), 2)
+        let BatcherRight1 = new BatcherRight(new Point(1615, 500), 2)
         this.addWidget(BatcherRight1);
 
-        this.GateLeft1 = new GateLeft(new Point(-60, 400), 2)
+        this.GateLeft1 = new GateLeft(new Point(1277, 500), 2)
         this.addWidget(this.GateLeft1);
 
-        this.GateRight1 = new GateRight(new Point(280, 400), 2)
+        this.GateRight1 = new GateRight(new Point(1615, 500), 2)
         this.addWidget(this.GateRight1);
 
-        this.TongueLeft1 = new TongueLeft(new Point(-60, 400), 2)
+        this.TongueLeft1 = new TongueLeft(new Point(1277, 500), 2)
         this.addWidget(this.TongueLeft1);
 
-        this.TongueRight1 = new TongueRight(new Point(280, 400), 2)
+        this.TongueRight1 = new TongueRight(new Point(1615, 500), 2)
         this.addWidget(this.TongueRight1);
     }
 }
