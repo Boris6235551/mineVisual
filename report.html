@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <!-- <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
+    <link rel="stylesheet" type="text/css" href="static/css/style.css">
+    <title></title>
+</head>
+
+<body style="background-color: #F2F7FD;">
+    <div id="report">
+        <button style="position: absolute; left: 760px; top: 15px;" v-on:click="close" v-if = "showButton">X</button>
+        <button style="position: absolute; left: 15px; top: 15px;" v-on:click="print" v-if = "showButton">Print</button>
+        <h3 style="text-align: center;">Protocol issued by measuring the weigth of the rock mass through <br> the weigh
+            scale installed for measurement of total hoisted stones</h3>
+        <br>
+        <p>Static Date:&emsp;{{objectShift.beginDate}}&emsp;&emsp;&emsp;{{objectShift.endDate}}</p>
+        <p>Total skips:&emsp;{{objectShift.skips}}&emsp;pcs</p>
+        <p>Total weight:&emsp;{{objectShift.weight}}&emsp;t</p>
+        <br>
+        <div class="table">
+            <table>
+                <thead>
+                    <tr class="table_header">
+                        <th>Time</th>
+                        <th>Batcher</th>
+                        <th>Number</th>
+                        <th>Gross</th>
+                        <th>Tare</th>
+                        <th>Net</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="data in objectShift.datas">
+                        <td>{{ data.time }}</td>
+                        <td>{{ data.batcher }}</td>
+                        <td>{{ data.number }}</td>
+                        <td>{{ data.gross }}</td>
+                        <td>{{ data.tare }}</td>
+                        <td>{{ data.net }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</body>
+<script src="./node_modules/vue/dist/vue.js"></script>
+<script src="./report.js"></script>
+
+</html>

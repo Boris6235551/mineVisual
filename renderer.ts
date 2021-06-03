@@ -1,3 +1,4 @@
+import Vue from 'vue/dist/vue.js'; // вместо import Vue from 'vue'
 import { Screen, animateScheme } from './mine_drawing'
 import { TechWater } from './_techWater'
 import { DSF } from './_dsf'
@@ -6,11 +7,12 @@ import { BATCHER } from './_batcher'
 import { SUBSTATION } from './_substation'
 import { CAGE } from './_cage'
 import { UNDEGROUNDPUMP } from './_undegroundPump'
+const { BrowserWindow } = require('electron').remote
 
 let screenMain = new Screen();
-// let techWater = new TechWater('container', window.innerWidth, window.innerHeight);
+// // let techWater = new TechWater('container', window.innerWidth, window.innerHeight);
 let cage = new CAGE('containerCage', window.innerWidth * 0.25, window.innerHeight);
-// let dsf = new DSF('containerDSF', window.innerWidth * 0.3, window.innerHeight);
+// // let dsf = new DSF('containerDSF', window.innerWidth * 0.3, window.innerHeight);
 let undegroundpump = new UNDEGROUNDPUMP('containerUndegroundPump', window.innerWidth * 0.5, window.innerHeight);
 let skip = new SKIP('containerSkip', window.innerWidth * 0.25, window.innerHeight);
 let batcher = new BATCHER('batcher', window.innerWidth, window.innerHeight);
@@ -24,9 +26,9 @@ screenMain.addScheme(cage);
 screenMain.addScheme(substation);
 screenMain.addScheme(undegroundpump);
 
-import {startClients, stopConnection, _reCreate, _testConnect, _testSend, _sendReload, _step} from './tcpipConnector'
+import { startClients, stopConnection, _reCreate, _testConnect, _testSend, _sendReload, _step } from './tcpipConnector'
 
-function sendMes(name, mes){
+function sendMes(name, mes) {
     screenMain.resendMessage(name, mes);
 }
 
@@ -39,6 +41,30 @@ animateScheme(cage, 500);
 animateScheme(substation, 500);
 animateScheme(undegroundpump, 500);
 
+// export default class MyComponent extends Vue {
+//   // Данные инициализации могут быть объявлены как свойства экземпляра
+//   message: string = 'Hello!'
+
+//   // Методы компонента могут быть объявлены как методы экземпляра
+//   onClick (): void {
+//     window.alert(this.message)
+//   }
+// }
+
+new Vue({
+    el: '#index_body',
+    methods: {
+        printReport: function () {
+            const reportWin = new BrowserWindow({
+                width: 800, 
+                height: 600,
+                frame: false,
+            });
+            reportWin.loadFile('report.html');
+            // logWin.webContents.openDevTools();
+        }
+    }
+})
 
 /*
 batcher.BunkerLeft.propBit = true
@@ -285,9 +311,9 @@ import { GroundHorizontalLine, GroundVerticalLine } from './groundLines'
 
 
 // function  testBreak(){
-    
+
 //     //stopConnection();
-    
+
 //     return;
 
 //     let byteNumber = (<HTMLInputElement>document.getElementById("byteNumber")).value;
@@ -299,24 +325,24 @@ import { GroundHorizontalLine, GroundVerticalLine } from './groundLines'
 //     techWater.startStop();
 // }
 
-function testConnect(){
+function testConnect() {
     _testConnect();
 }
 
-function  testSend(){
-    _testSend( (<HTMLInputElement>document.getElementById("setOrClear")).checked );
+function testSend() {
+    _testSend((<HTMLInputElement>document.getElementById("setOrClear")).checked);
 }
 
-function sendReload(){
+function sendReload() {
     _sendReload();
 }
 
-function sendReCreate(){
+function sendReCreate() {
     _reCreate();
 }
 
-function testClear(){
-    console.clear();   
+function testClear() {
+    console.clear();
 }
 
-function step(){_step();}
+function step() { _step(); }

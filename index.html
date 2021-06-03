@@ -13,6 +13,15 @@
     
     <button onclick="testSend()">Кнопка</button> -->
     <!-- <button onclick="testBreak()">Break</button> -->
+
+    <div style="display: flex;">
+        <div id="containerCage"></div>
+        <div id="containerUndegroundPump"></div>
+        <div id="containerSkip"></div>
+    </div>
+    <div style="position: absolute; left: 350px; top: 30px;"><img src="pump.png" width="1000" height="700"></div>
+    <div id="batcher" style="position: absolute; left: 0px; top: 0px;"></div>-->
+    <div id="substation" style="position: absolute; left: 0px; top: 0px;"></div>
     <div style="position: absolute; left: 0px; top: 0px;">
         <input type="checkbox" id="setOrClear">
         <button onclick="testClear()">Clear</button>
@@ -21,20 +30,14 @@
         <button onclick="sendReload()">Reload</button>
         <button onclick="sendReCreate()">ReCreate</button>
         <button onclick="step()">Step</button>
+        <button id="index_body" v-on:click="printReport">Print report</button>
     </div>
-    <div style="display: flex;">
-        <div id="containerCage"></div>
-        <div id="containerUndegroundPump"></div>
-        <div id="containerSkip"></div>
-    </div>
-    <div style="position: absolute; left: 350px; top: 30px;"><img src="pump.png" width="1000" height="700"></div>
-    <div id="batcher" style="position: absolute; left: 0px; top: 0px;"></div>
-    <div id="substation" style="position: absolute; left: 0px; top: 0px;"></div>
 </body>
 
 <!-- <script>var exports = {"__esModule": true};</script> -->
 <!-- <script type="module" src="./renderer.js"></script> -->
 <script>let exports = module.exports;</script>
+<script src="./node_modules/vue/dist/vue.js"></script>
 <script src="./renderer.js"></script>
 <!-- <script>require("./renderer.js")</script> -->
 
