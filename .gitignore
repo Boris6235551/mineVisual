@@ -6,7 +6,6 @@ ESW_tcpip_test-win32-x64
 
 *.xlsx
 *.xlsx#
-*.js
 *.map 
 
 //deleted.js
