@@ -11,8 +11,8 @@
 
 <body style="background-color: #F2F7FD;">
     <div id="report">
-        <button style="position: absolute; left: 760px; top: 15px;" v-on:click="close" v-if = "showButton">X</button>
-        <button style="position: absolute; left: 15px; top: 15px;" v-on:click="print" v-if = "showButton">Print</button>
+        <button style="position: absolute; left: 760px; top: 15px;" v-on:click="close">X</button>
+        <button style="position: absolute; left: 15px; top: 15px;" v-on:click="print">Print</button>
         <h3 style="text-align: center;">Protocol issued by measuring the weigth of the rock mass through <br> the weigh
             scale installed for measurement of total hoisted stones</h3>
         <br>
@@ -24,12 +24,10 @@
             <table>
                 <thead>
                     <tr class="table_header">
-                        <th>Time</th>
-                        <th>Batcher</th>
-                        <th>Number</th>
-                        <th>Gross</th>
-                        <th>Tare</th>
-                        <th>Net</th>
+                        <th>Time & Date</th>
+                        <th>Skip</th>
+                        <th>Skip No</th>
+                        <th>Wheight</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -37,15 +35,13 @@
                         <td>{{ data.time }}</td>
                         <td>{{ data.batcher }}</td>
                         <td>{{ data.number }}</td>
-                        <td>{{ data.gross }}</td>
-                        <td>{{ data.tare }}</td>
-                        <td>{{ data.net }}</td>
+                        <td>{{ data.gross }} - {{ data.tare }} = {{ data.net }}</td>
                     </tr>
                 </tbody>
             </table>
         </div>
-
     </div>
+
 </body>
 <script src="./node_modules/vue/dist/vue.js"></script>
 <script src="./report.js"></script>

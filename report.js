@@ -25,26 +25,17 @@ new Vue({
             endDate: '06/03/2021 12:40:12 PM',
             skips: '10',
             weight: '498',
-            datas: [{
-                batcher: "L Skip",
-                number: "3",
-                gross: "10310",
-                tare: "350",
-                net: 9960,
-                time: "2021-06-02 10:44:08"
-            }]
+            datas: [
+                { batcher: "L Skip", number: "3", gross: "10310", tare: "350", net: 9960, time: "2021-06-02 10:44:08" },
+            ]
         },
-        showButton: true,
     },
     methods: {
         close: function () {
             window.close();
         },
         print: function () {
-            this.showButton = false;
-            window.print(options, () => {
-                this.showButton = true;
-            });
+            window.print()
         }
     },
 })
