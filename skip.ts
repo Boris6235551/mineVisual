@@ -26,9 +26,9 @@ export class Skip extends BaseMineDraw {
         }
         this.primitives.push(this.createLine(
             p0.x, p0.y + length * 0.31,
-            p0.x - length * 0.57, p0.y + length * 0.31,
+            p0.x - length * 0.33, p0.y + length * 0.31,
             length * 0.002));
-        for (let i = 0; i < 28; i++) {
+        for (let i = 0; i < 16; i++) {
             this.primitives.push(this.createLine(
                 p0.x - i * length * 0.02, p0.y + length * 0.31,
                 p0.x - length * 0.02 - i * length * 0.02, p0.y + length * 0.33,

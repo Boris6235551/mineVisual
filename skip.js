@@ -32,8 +32,8 @@ var Skip = /** @class */ (function (_super) {
         for (var i = 0; i < 28; i++) {
             _this.primitives.push(_this.createLine(p0.x + i * length * 0.02, p0.y + length * 0.31, p0.x + length * 0.02 + i * length * 0.02, p0.y + length * 0.33, length * 0.002));
         }
-        _this.primitives.push(_this.createLine(p0.x, p0.y + length * 0.31, p0.x - length * 0.57, p0.y + length * 0.31, length * 0.002));
-        for (var i = 0; i < 28; i++) {
+        _this.primitives.push(_this.createLine(p0.x, p0.y + length * 0.31, p0.x - length * 0.33, p0.y + length * 0.31, length * 0.002));
+        for (var i = 0; i < 16; i++) {
             _this.primitives.push(_this.createLine(p0.x - i * length * 0.02, p0.y + length * 0.31, p0.x - length * 0.02 - i * length * 0.02, p0.y + length * 0.33, length * 0.002));
         }
         for (var i = 0; i < 54; i++) {

@@ -1,7 +1,12 @@
 @media print
 {    
-    button
-    {
+    button {
+        display: none;
+    }
+    input {
+        display: none;
+    }
+    select {
         display: none;
     }
 }
@@ -37,4 +42,14 @@ thead th {
     z-index: 1;
     background-color: #EEECEF;
     height: 35px;
+}
+
+.date {
+    display: flex;
+    justify-content: space-around;
+}
+
+.shift {
+    display: flex;
+    justify-content: space-around;
 }

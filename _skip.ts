@@ -6,7 +6,7 @@ export class SKIP extends Scheme {
     constructor(container: string, width: number, height: number) {
         super(container, width, height);
         this.name = 'Skip';
-        this.Skip1 = new Skip(new Point(120, 70), 600)
+        this.Skip1 = new Skip(new Point(1554, 70), 600)
         this.addWidget(this.Skip1);
     }
 }

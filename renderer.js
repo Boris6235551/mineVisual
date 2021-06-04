@@ -9,14 +9,13 @@ var _skip_1 = require("./_skip");
 var _batcher_1 = require("./_batcher");
 var _substation_1 = require("./_substation");
 var _cage_1 = require("./_cage");
-var _undegroundPump_1 = require("./_undegroundPump");
 var BrowserWindow = require('electron').remote.BrowserWindow;
 var screenMain = new mine_drawing_1.Screen();
 // // let techWater = new TechWater('container', window.innerWidth, window.innerHeight);
-var cage = new _cage_1.CAGE('containerCage', window.innerWidth * 0.25, window.innerHeight);
+var cage = new _cage_1.CAGE('containerCage', window.innerWidth, window.innerHeight);
 // // let dsf = new DSF('containerDSF', window.innerWidth * 0.3, window.innerHeight);
-var undegroundpump = new _undegroundPump_1.UNDEGROUNDPUMP('containerUndegroundPump', window.innerWidth * 0.5, window.innerHeight);
-var skip = new _skip_1.SKIP('containerSkip', window.innerWidth * 0.25, window.innerHeight);
+// let undegroundpump = new UNDEGROUNDPUMP('containerUndegroundPump', window.innerWidth, window.innerHeight);
+var skip = new _skip_1.SKIP('containerSkip', window.innerWidth, window.innerHeight);
 var batcher = new _batcher_1.BATCHER('batcher', window.innerWidth, window.innerHeight);
 var substation = new _substation_1.SUBSTATION('substation', window.innerWidth, window.innerHeight);
 // screenMain.addScheme(techWater);
@@ -25,7 +24,7 @@ screenMain.addScheme(skip);
 screenMain.addScheme(batcher);
 screenMain.addScheme(cage);
 screenMain.addScheme(substation);
-screenMain.addScheme(undegroundpump);
+// screenMain.addScheme(undegroundpump);
 var tcpipConnector_1 = require("./tcpipConnector");
 function sendMes(name, mes) {
     screenMain.resendMessage(name, mes);
@@ -36,7 +35,7 @@ mine_drawing_1.animateScheme(batcher, 500);
 mine_drawing_1.animateScheme(skip, 500);
 mine_drawing_1.animateScheme(cage, 500);
 mine_drawing_1.animateScheme(substation, 500);
-mine_drawing_1.animateScheme(undegroundpump, 500);
+// animateScheme(undegroundpump, 500);
 // export default class MyComponent extends Vue {
 //   // Данные инициализации могут быть объявлены как свойства экземпляра
 //   message: string = 'Hello!'
@@ -55,7 +54,7 @@ new vue_js_1.default({
                 frame: false,
             });
             reportWin.loadFile('report.html');
-            // logWin.webContents.openDevTools();
+            // reportWin.webContents.openDevTools();
         }
     }
 });

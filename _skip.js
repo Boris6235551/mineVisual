@@ -21,7 +21,7 @@ var SKIP = /** @class */ (function (_super) {
     function SKIP(container, width, height) {
         var _this = _super.call(this, container, width, height) || this;
         _this.name = 'Skip';
-        _this.Skip1 = new skip_1.Skip(new mine_drawing_1.Point(120, 70), 600);
+        _this.Skip1 = new skip_1.Skip(new mine_drawing_1.Point(1554, 70), 600);
         _this.addWidget(_this.Skip1);
         return _this;
     }

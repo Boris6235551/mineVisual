@@ -16,6 +16,19 @@
         <h3 style="text-align: center;">Protocol issued by measuring the weigth of the rock mass through <br> the weigh
             scale installed for measurement of total hoisted stones</h3>
         <br>
+        <div class="date">
+            <input type="date" name="" id="" v-model="startDate">
+            <input type="date" name="" id="" v-model="endDate">
+        </div>
+        <br>
+        <div class="shift">
+            <select name="" id="" v-model="selectShifts">
+                <option v-for="shift in shifts">
+                    {{shift}}
+                </option>
+            </select>
+        </div>
+        <br>
         <p>Static Date:&emsp;{{objectShift.beginDate}}&emsp;&emsp;&emsp;{{objectShift.endDate}}</p>
         <p>Total skips:&emsp;{{objectShift.skips}}&emsp;pcs</p>
         <p>Total weight:&emsp;{{objectShift.weight}}&emsp;t</p>

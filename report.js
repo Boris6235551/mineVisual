@@ -1,5 +1,6 @@
-// const electron = require('electron');
-// const BrowserWindow = electron.remote.BrowserWindow;
+// const datepicker = require('vuejs-datepicker');
+// import datepicker from 'vuejs-datepicker/dist/vuejs-datepicker.js';
+// import Vue from 'vue/dist/vue.js';
 
 let options = {
     silent: false,
@@ -29,6 +30,10 @@ new Vue({
                 { batcher: "L Skip", number: "3", gross: "10310", tare: "350", net: 9960, time: "2021-06-02 10:44:08" },
             ]
         },
+        startDate: '',
+        endDate: '',
+        shifts: ['Тут будет текущая смена '],
+        selectShifts: '',
     },
     methods: {
         close: function () {
