@@ -9,6 +9,13 @@
     select {
         display: none;
     }
+    .reportBlock {
+        height: 900px;
+    }
+    .footer  {
+		display: block;
+    }
+
 }
 
 td {
@@ -52,4 +59,15 @@ thead th {
 .shift {
     display: flex;
     justify-content: space-around;
+}
+
+.footer {
+    display: flex;
+    justify-content: space-between; 
+}
+
+@media screen { 
+	.footer  {
+        display: none;
+    } 
 }

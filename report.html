@@ -11,50 +11,56 @@
 
 <body style="background-color: #F2F7FD;">
     <div id="report">
-        <button style="position: absolute; left: 760px; top: 15px;" v-on:click="close">X</button>
-        <button style="position: absolute; left: 15px; top: 15px;" v-on:click="print">Print</button>
-        <h3 style="text-align: center;">Protocol issued by measuring the weigth of the rock mass through <br> the weigh
-            scale installed for measurement of total hoisted stones</h3>
-        <br>
-        <div class="date">
-            <input type="date" name="" id="" v-model="startDate">
-            <input type="date" name="" id="" v-model="endDate">
+        <div class="reportBlock">
+            <button style="position: absolute; left: 760px; top: 15px;" v-on:click="close">X</button>
+            <button style="position: absolute; left: 15px; top: 15px;" v-on:click="print">Print</button>
+            <h3 style="text-align: center;">Protocol issued by measuring the weigth of the rock mass through <br> the
+                weigh
+                scale installed for measurement of total hoisted stones</h3>
+            <br>
+            <div class="date">
+                <input type="date" name="" id="" v-model="startDate">
+                <input type="date" name="" id="" v-model="endDate">
+            </div>
+            <br>
+            <div class="shift">
+                <select name="" id="" v-model="selectShifts">
+                    <option v-for="shift in shifts">
+                        {{shift}}
+                    </option>
+                </select>
+            </div>
+            <br>
+            <p>Static Date:&emsp;{{objectShift.beginDate}}&emsp;&emsp;&emsp;{{objectShift.endDate}}</p>
+            <p>Total skips:&emsp;{{objectShift.skips}}&emsp;pcs</p>
+            <p>Total weight:&emsp;{{objectShift.weight}}&emsp;t</p>
+            <br>
+            <div class="table">
+                <table>
+                    <thead>
+                        <tr class="table_header">
+                            <th>Time & Date</th>
+                            <th>Skip</th>
+                            <th>Skip No</th>
+                            <th>Wheight</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="data in objectShift.datas">
+                            <td>{{ data.time }}</td>
+                            <td>{{ data.batcher }}</td>
+                            <td>{{ data.number }}</td>
+                            <td>{{ data.gross }} - {{ data.tare }} = {{ data.net }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
-        <br>
-        <div class="shift">
-            <select name="" id="" v-model="selectShifts">
-                <option v-for="shift in shifts">
-                    {{shift}}
-                </option>
-            </select>
-        </div>
-        <br>
-        <p>Static Date:&emsp;{{objectShift.beginDate}}&emsp;&emsp;&emsp;{{objectShift.endDate}}</p>
-        <p>Total skips:&emsp;{{objectShift.skips}}&emsp;pcs</p>
-        <p>Total weight:&emsp;{{objectShift.weight}}&emsp;t</p>
-        <br>
-        <div class="table">
-            <table>
-                <thead>
-                    <tr class="table_header">
-                        <th>Time & Date</th>
-                        <th>Skip</th>
-                        <th>Skip No</th>
-                        <th>Wheight</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="data in objectShift.datas">
-                        <td>{{ data.time }}</td>
-                        <td>{{ data.batcher }}</td>
-                        <td>{{ data.number }}</td>
-                        <td>{{ data.gross }} - {{ data.tare }} = {{ data.net }}</td>
-                    </tr>
-                </tbody>
-            </table>
+        <div class="footer">
+            <div>Date:&emsp;{{ datePrintingReport.month }}/{{ datePrintingReport.day }}/{{ datePrintingReport.year }}</div>
+            <div>Operator______________________</div>
         </div>
     </div>
-
 </body>
 <script src="./node_modules/vue/dist/vue.js"></script>
 <script src="./report.js"></script>

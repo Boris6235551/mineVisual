@@ -32,8 +32,9 @@ new Vue({
         },
         startDate: '',
         endDate: '',
-        shifts: ['Тут будет текущая смена '],
+        shifts: ['Тут будет текущая смена'],
         selectShifts: '',
+        datePrintingReport: { year: new Date().getFullYear(), day: new Date().getDate(), month: new Date().getMonth() + 1}
     },
     methods: {
         close: function () {
