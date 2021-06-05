@@ -1,22 +1,38 @@
 import Konva from 'konva';
 import { BaseMineDraw, Point } from './mine_drawing';
 
-// export enum CageState {
-//     level0 = 0, ventLevel, subLevel, productionLevel
-// };
-
 export class Cage extends BaseMineDraw {
-    private level0: number;
-    private level1: number;
-    private level2: number;
-    private level3: number;
+    public mainFastUp: boolean;
+    public mainFastDown: boolean;
+    public dynamicBreak: boolean;
+    public level0: boolean;
+    public ventLevel: boolean;
+    public subLevel: boolean;
+    public productionLevel: boolean;
+    public platformDown: boolean;
+    private pointLevel0: number;
+    private pointLevel1: number;
+    private pointLevel2: number;
+    private pointLevel3: number;
     constructor(p0: Point, length: number) {
         super(p0, length);
         this.name = 'Cage';
+        this.mainFastUp = false;
+        this.mainFastDown = false;
+        this.dynamicBreak = false;
+        this.level0 = false;
+        this.ventLevel = false;
+        this.subLevel = false;
+        this.productionLevel = false;
+        this.platformDown = false;
+        this.pointLevel0 = p0.y + length * 0.31 - length * 0.061;
+        this.pointLevel1 = p0.y + length * 0.57;
+        this.pointLevel2 = p0.y + length * 0.67;
+        this.pointLevel3 = p0.y + length * 0.8;
         // линия поверхности земли
         this.primitives.push(this.createLine(
             p0.x - length, p0.y + length * 0.31,
-            p0.x + length * 0.3, p0.y + length * 0.31, 
+            p0.x + length * 0.3, p0.y + length * 0.31,
             length * 0.002));
         for (let i = 0; i < 37; i++) {
             this.primitives.push(this.createLine(
@@ -66,13 +82,9 @@ export class Cage extends BaseMineDraw {
         this.primitives.push(this.createLine(p0.x - length * 0.24, p0.y + length * 0.205,
             p0.x + length * 0.03, p0.y + length * 0.055, length * 0.006));
         //  подвижная клеть
-        this.level0 = p0.y + length * 0.31 - length * 0.061;
-        this.level1 = p0.y + length * 0.57;
-        this.level2 = p0.y + length * 0.67;
-        this.level3 = p0.y + length * 0.8;
         this.primitives.push(this.createLine(p0.x + length * 0.052, p0.y + length * 0.07,
-            p0.x + length * 0.052, this.level2, length * 0.006));
-        this.primitives.push(this.createRectangle(p0.x + length * 0.02, this.level2,
+            p0.x + length * 0.052, this.pointLevel2, length * 0.006));
+        this.primitives.push(this.createRectangle(p0.x + length * 0.02, this.pointLevel2,
             length * 0.061, length * 0.061, '#FE982A', '#331A38', length * 0.006, 0));
         // крыша клети
         this.primitives.push(this.createRectangle(p0.x - length * 0.15, p0.y - length * 0.05,
@@ -153,27 +165,52 @@ export class Cage extends BaseMineDraw {
             fill: fill,
         });
     }
-    public setState(newState: number): void {
-        this.state = newState;
+    setBaseProperty(mes: any) {
+        this.mainFastUp = mes.mainFastUp;
+        this.mainFastDown = mes.mainFastDown;
+        this.dynamicBreak = mes.dynamicBreak;
+        this.level0 = mes.level0;
+        this.ventLevel = mes.ventLevel;
+        this.subLevel = mes.subLevel;
+        this.productionLevel = mes.productionLevel;
+        this.platformDown = mes.platformDown;
     }
     nextFrame(): void {
-        switch (this.state) {
-            case 0:
-                this.primitives[16].attrs.points[3] = this.level0;
-                this.primitives[17].y(this.level0);
-                return;
-            case 1:
-                this.primitives[16].attrs.points[3] = this.level1;
-                this.primitives[17].y(this.level1);
-                return;
-            case 2:
-                this.primitives[16].attrs.points[3] = this.level2;
-                this.primitives[17].y(this.level2);
-                return
-            case 3:
-                this.primitives[16].attrs.points[3] = this.level3;
-                this.primitives[17].y(this.level3);
-                return;
+        if (this.mainFastUp) {
+            if (this.primitives[54].attrs.points[3] > this.pointLevel0) {
+                this.primitives[54].attrs.points[3] = this.primitives[54].attrs.points[3] - 5;
+                this.primitives[55].move({ x: 0, y: -5 });
+            }
+            else {
+                this.primitives[54].attrs.points[3] = this.pointLevel3;
+                this.primitives[55].y(this.pointLevel3);
+            }
+        }
+        if (this.mainFastDown) {
+            if (this.primitives[54].attrs.points[3] < this.pointLevel3) {
+                this.primitives[54].attrs.points[3] = this.primitives[54].attrs.points[3] + 5;
+                this.primitives[55].move({ x: 0, y: 5 });
+            }
+            else {
+                this.primitives[54].attrs.points[3] = this.pointLevel0;
+                this.primitives[55].y(this.pointLevel0);
+            }
+        }
+        if (this.level0) {
+            this.primitives[54].attrs.points[3] = this.pointLevel0;
+            this.primitives[55].y(this.pointLevel0);
+        }
+        if ( this.ventLevel) {
+            this.primitives[54].attrs.points[3] = this.pointLevel1;
+            this.primitives[55].y(this.pointLevel1);
+        }
+        if (this.subLevel) {
+            this.primitives[54].attrs.points[3] = this.pointLevel2;
+            this.primitives[55].y(this.pointLevel2);
+        }
+        if (this.productionLevel) {
+            this.primitives[54].attrs.points[3] = this.pointLevel3;
+            this.primitives[55].y(this.pointLevel3);
         }
     }
 };

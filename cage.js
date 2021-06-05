@@ -19,14 +19,23 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Cage = void 0;
 var konva_1 = __importDefault(require("konva"));
 var mine_drawing_1 = require("./mine_drawing");
-// export enum CageState {
-//     level0 = 0, ventLevel, subLevel, productionLevel
-// };
 var Cage = /** @class */ (function (_super) {
     __extends(Cage, _super);
     function Cage(p0, length) {
         var _this = _super.call(this, p0, length) || this;
         _this.name = 'Cage';
+        _this.mainFastUp = false;
+        _this.mainFastDown = false;
+        _this.dynamicBreak = false;
+        _this.level0 = false;
+        _this.ventLevel = false;
+        _this.subLevel = false;
+        _this.productionLevel = false;
+        _this.platformDown = false;
+        _this.pointLevel0 = p0.y + length * 0.31 - length * 0.061;
+        _this.pointLevel1 = p0.y + length * 0.57;
+        _this.pointLevel2 = p0.y + length * 0.67;
+        _this.pointLevel3 = p0.y + length * 0.8;
         // линия поверхности земли
         _this.primitives.push(_this.createLine(p0.x - length, p0.y + length * 0.31, p0.x + length * 0.3, p0.y + length * 0.31, length * 0.002));
         for (var i = 0; i < 37; i++) {
@@ -54,12 +63,8 @@ var Cage = /** @class */ (function (_super) {
         _this.primitives.push(_this.createCircle(p0.x + length * 0.036, p0.y + length * 0.07, length * 0.016, '#FDC858', length * 0.005, '#331A38'));
         _this.primitives.push(_this.createLine(p0.x - length * 0.24, p0.y + length * 0.205, p0.x + length * 0.03, p0.y + length * 0.055, length * 0.006));
         //  подвижная клеть
-        _this.level0 = p0.y + length * 0.31 - length * 0.061;
-        _this.level1 = p0.y + length * 0.57;
-        _this.level2 = p0.y + length * 0.67;
-        _this.level3 = p0.y + length * 0.8;
-        _this.primitives.push(_this.createLine(p0.x + length * 0.052, p0.y + length * 0.07, p0.x + length * 0.052, _this.level2, length * 0.006));
-        _this.primitives.push(_this.createRectangle(p0.x + length * 0.02, _this.level2, length * 0.061, length * 0.061, '#FE982A', '#331A38', length * 0.006, 0));
+        _this.primitives.push(_this.createLine(p0.x + length * 0.052, p0.y + length * 0.07, p0.x + length * 0.052, _this.pointLevel2, length * 0.006));
+        _this.primitives.push(_this.createRectangle(p0.x + length * 0.02, _this.pointLevel2, length * 0.061, length * 0.061, '#FE982A', '#331A38', length * 0.006, 0));
         // крыша клети
         _this.primitives.push(_this.createRectangle(p0.x - length * 0.15, p0.y - length * 0.05, length * 0.03, length * 0.3, '#005236', '', 0, 0));
         _this.primitives.push(_this.createLineHouseRoof(p0.x - length * 0.1, p0.y + length * 0.31, p0.x + length * 0.11, p0.y - length * 0.05, p0.x + length * 0.13, p0.y - length * 0.05, p0.x - length * 0.08, p0.y + length * 0.31));
@@ -133,27 +138,52 @@ var Cage = /** @class */ (function (_super) {
             fill: fill,
         });
     };
-    Cage.prototype.setState = function (newState) {
-        this.state = newState;
+    Cage.prototype.setBaseProperty = function (mes) {
+        this.mainFastUp = mes.mainFastUp;
+        this.mainFastDown = mes.mainFastDown;
+        this.dynamicBreak = mes.dynamicBreak;
+        this.level0 = mes.level0;
+        this.ventLevel = mes.ventLevel;
+        this.subLevel = mes.subLevel;
+        this.productionLevel = mes.productionLevel;
+        this.platformDown = mes.platformDown;
     };
     Cage.prototype.nextFrame = function () {
-        switch (this.state) {
-            case 0:
-                this.primitives[16].attrs.points[3] = this.level0;
-                this.primitives[17].y(this.level0);
-                return;
-            case 1:
-                this.primitives[16].attrs.points[3] = this.level1;
-                this.primitives[17].y(this.level1);
-                return;
-            case 2:
-                this.primitives[16].attrs.points[3] = this.level2;
-                this.primitives[17].y(this.level2);
-                return;
-            case 3:
-                this.primitives[16].attrs.points[3] = this.level3;
-                this.primitives[17].y(this.level3);
-                return;
+        if (this.mainFastUp) {
+            if (this.primitives[54].attrs.points[3] > this.pointLevel0) {
+                this.primitives[54].attrs.points[3] = this.primitives[54].attrs.points[3] - 5;
+                this.primitives[55].move({ x: 0, y: -5 });
+            }
+            else {
+                this.primitives[54].attrs.points[3] = this.pointLevel3;
+                this.primitives[55].y(this.pointLevel3);
+            }
+        }
+        if (this.mainFastDown) {
+            if (this.primitives[54].attrs.points[3] < this.pointLevel3) {
+                this.primitives[54].attrs.points[3] = this.primitives[54].attrs.points[3] + 5;
+                this.primitives[55].move({ x: 0, y: 5 });
+            }
+            else {
+                this.primitives[54].attrs.points[3] = this.pointLevel0;
+                this.primitives[55].y(this.pointLevel0);
+            }
+        }
+        if (this.level0) {
+            this.primitives[54].attrs.points[3] = this.pointLevel0;
+            this.primitives[55].y(this.pointLevel0);
+        }
+        if (this.ventLevel) {
+            this.primitives[54].attrs.points[3] = this.pointLevel1;
+            this.primitives[55].y(this.pointLevel1);
+        }
+        if (this.subLevel) {
+            this.primitives[54].attrs.points[3] = this.pointLevel2;
+            this.primitives[55].y(this.pointLevel2);
+        }
+        if (this.productionLevel) {
+            this.primitives[54].attrs.points[3] = this.pointLevel3;
+            this.primitives[55].y(this.pointLevel3);
         }
     };
     return Cage;
