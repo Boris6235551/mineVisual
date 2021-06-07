@@ -560,7 +560,7 @@ var LeftInfo = /** @class */ (function (_super) {
             this.setText(this.primitives[2], '');
             this.setText(this.primitives[3], '');
         }
-        else if (this.endMonth = 0) {
+        else if (this.endMonth != 0) {
             this.setText(this.primitives[1], '');
             this.setText(this.primitives[2], '');
             this.setText(this.primitives[3], '');
@@ -600,7 +600,7 @@ var RightInfo = /** @class */ (function (_super) {
             this.setText(this.primitives[2], '');
             this.setText(this.primitives[3], '');
         }
-        else if (this.endMonth = 0) {
+        else if (this.endMonth != 0) {
             this.setText(this.primitives[1], '');
             this.setText(this.primitives[2], '');
             this.setText(this.primitives[3], '');
@@ -639,12 +639,12 @@ var ShiftInfo = /** @class */ (function (_super) {
         this.setText(this.primitives[1], 'Shift begin:');
         this.setText(this.primitives[2], this.beginDate);
         this.setText(this.primitives[3], 'Total skips:' + this.skipCount);
-        this.setText(this.primitives[4], 'Totalcweigt:' + this.net);
+        this.setText(this.primitives[4], 'Total weight:' + this.net);
         if (this.endMonth != 0) {
             this.setText(this.primitives[1], 'Shift end:');
             this.setText(this.primitives[2], this.endDate);
             this.setText(this.primitives[3], 'Total skips:' + this.skipCount);
-            this.setText(this.primitives[4], 'Totalcweigt:' + this.net);
+            this.setText(this.primitives[4], 'Total weight:' + this.net);
         }
     };
     return ShiftInfo;
