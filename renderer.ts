@@ -6,24 +6,25 @@ import { SKIP } from './_skip'
 import { BATCHER } from './_batcher'
 import { SUBSTATION } from './_substation'
 import { CAGE } from './_cage'
-import { UNDEGROUNDPUMP } from './_undegroundPump'
+import { COMPRESSORROOM } from './_compressorRoom'
 const { BrowserWindow } = require('electron').remote
 
 let screenMain = new Screen();
 // // let techWater = new TechWater('container', window.innerWidth, window.innerHeight);
 let cage = new CAGE('containerCage', window.innerWidth, window.innerHeight);
 // // let dsf = new DSF('containerDSF', window.innerWidth * 0.3, window.innerHeight);
-// let undegroundpump = new UNDEGROUNDPUMP('containerUndegroundPump', window.innerWidth, window.innerHeight);
+let compressoRroomUndeground = new COMPRESSORROOM('containerCompressoRroomUndeground', window.innerWidth, window.innerHeight);
 let skip = new SKIP('containerSkip', window.innerWidth, window.innerHeight);
 let batcher = new BATCHER('batcher', window.innerWidth, window.innerHeight);
-let substation = new SUBSTATION('substation', window.innerWidth, window.innerHeight);
+let substationUndeground = new SUBSTATION('substation', window.innerWidth, window.innerHeight);
 
 // screenMain.addScheme(techWater);
 // screenMain.addScheme(dsf);
 screenMain.addScheme(skip);
 screenMain.addScheme(batcher);
 screenMain.addScheme(cage);
-screenMain.addScheme(substation);
+screenMain.addScheme(substationUndeground);
+screenMain.addScheme(compressoRroomUndeground);
 // screenMain.addScheme(undegroundpump);
 
 import { startClients, stopConnection, _reCreate, _testConnect, _testSend, _sendReload, _step } from './tcpipConnector'
@@ -38,8 +39,8 @@ startClients(sendMes);
 animateScheme(batcher, 500);
 animateScheme(skip, 500);
 animateScheme(cage, 500);
-animateScheme(substation, 500);
-// animateScheme(undegroundpump, 500);
+animateScheme(substationUndeground, 500);
+animateScheme(compressoRroomUndeground, 500);
 
 // export default class MyComponent extends Vue {
 //   // Данные инициализации могут быть объявлены как свойства экземпляра
@@ -89,7 +90,7 @@ import { Scheme, Disposition, Point, Pool, PropParams } from './mine_drawing';
 
 
 // import { Label, LabelDegree } from './label'
-import { CompressorRoom } from './compressorRoom'
+// import { CompressorRoom } from './compressorRoom'
 
 
 import { UndergroundSubstation, UndergroundSubstationCell } from './undergroundSubstation'

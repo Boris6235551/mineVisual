@@ -1,5 +1,6 @@
 import Konva from 'konva';
 import { BaseMineDraw, Point } from './mine_drawing';
+const moment = require('moment');
 
 /************************************************************************
 *                               EXPORTS: 
@@ -79,16 +80,16 @@ export class Bunker extends BaseMineDraw {
                 break;
         }
     }
-    setBaseProperty(mes: any){
-        if(this.isLeft){
+    setBaseProperty(mes: any) {
+        if (this.isLeft) {
             console.log(`Bunker left active =${mes.chuteLoadA}`)
             this.propBit = mes.chuteLoadA;
         }
-        else{
+        else {
             console.log(`Bunker right active =${mes.chuteLoadB}`)
             this.propBit = mes.chuteLoadB;
         }
-    }  
+    }
 }
 
 export class FeederBase extends BaseMineDraw {
@@ -134,7 +135,7 @@ export class FeederLeft extends FeederBase {
             '#005236', '#000000', length * 0.6)
         );
     }
-    setBaseProperty(mes: any){
+    setBaseProperty(mes: any) {
         console.log(`FeederRight active =${mes.chuteLoadA}; on/off ${mes.feederOn}`)
         this.enable = mes.chuteLoadA;
         this.propBit = mes.feederOn;
@@ -153,7 +154,7 @@ export class FeederRight extends FeederBase {
             '#005236', '#000000', length * 0.6)
         );
     }
-    setBaseProperty(mes: any){
+    setBaseProperty(mes: any) {
         console.log(`FeederRight active =${mes.chuteLoadB}; on/off ${mes.feederOn}`)
         this.enable = mes.chuteLoadB;
         this.propBit = mes.feederOn;
@@ -209,7 +210,7 @@ export class ChuteLeft extends ChuteBase {
         this.primitives.push(this.createLine(p0.x + length * 90, p0.y + length * 48,
             p0.x + length * 90, p0.y + length * 69, length * 0.6));
     }
-    setBaseProperty(mes: any){
+    setBaseProperty(mes: any) {
         console.log(`chuteA=${mes.chuteLoadA}`)
         this.propBit = mes.chuteLoadA;
     }
@@ -231,7 +232,7 @@ export class ChuteRight extends ChuteBase {
         this.primitives.push(this.createLine(p0.x + length * 66, p0.y + length * 48,
             p0.x + length * 66, p0.y + length * 69, length * 0.6));
     }
-    setBaseProperty(mes: any){
+    setBaseProperty(mes: any) {
         console.log(`chuteB=${mes.chuteLoadB}`)
         this.propBit = mes.chuteLoadB;
     }
@@ -374,7 +375,7 @@ export class GateLeft extends GateBase {
         this.primitives.push(this.createRectangle(p0.x + length * 127, this.baseY,
             this.hight, length * 4.8, '#FDC858', '#000000', length * 0.4));
     }
-    setBaseProperty(mes: any){
+    setBaseProperty(mes: any) {
         console.log(`trayOpenedA=${mes.gateOpenedA}; mes.trayClosedA=${mes.gateClosedA}`)
         this.opened = mes.gateOpenedA;
         this.closed = mes.gateClosedA;
@@ -388,7 +389,7 @@ export class GateRight extends GateBase {
         this.primitives.push(this.createRectangle(p0.x + length * 36.2, this.baseY,
             this.hight, length * 4.8, '#FDC858', '#000000', length * 0.4));
     }
-    setBaseProperty(mes: any){
+    setBaseProperty(mes: any) {
         console.log(`trayOpenedB=${mes.gateOpenedB}; mes.trayClosedA=${mes.gateClosedB}`)
         this.opened = mes.gateOpenedB;
         this.closed = mes.gateClosedB;
@@ -437,30 +438,30 @@ export class TongueLeft extends TongueBase {
             '#21686C', '#000000', length * 0.4)
         );
     }
-    setBaseProperty(mes: any){
+    setBaseProperty(mes: any) {
         console.log(`tongue left opened =${mes.trayOpenedA}; tongue left closed=${mes.trayClosedA}`)
         this.opened = mes.trayOpenedA;
         this.closed = mes.trayClosedA;
     }
     nextFrame(): void {
         if (this.opened) {  // open
-            if(this.prevState == tongueOpen) return;
-            else if(this.prevState == tongueClose) this.move( {x: this.dx, y: this.dy});
-            else this.move({x: 0.5 * this.dx, y: 0.5 * this.dy})
+            if (this.prevState == tongueOpen) return;
+            else if (this.prevState == tongueClose) this.move({ x: this.dx, y: this.dy });
+            else this.move({ x: 0.5 * this.dx, y: 0.5 * this.dy })
             this.prevState = tongueOpen;
             this.primitives[0].fill('#21686C');
         }
         else if (this.closed) { //close
-            if(this.prevState == tongueClose) return;
-            else if(this.prevState == tongueOpen) this.move( {x: -this.dx, y: -this.dy});
-            else this.move({x: -0.5 * this.dx, y: -0.5 * this.dy})
+            if (this.prevState == tongueClose) return;
+            else if (this.prevState == tongueOpen) this.move({ x: -this.dx, y: -this.dy });
+            else this.move({ x: -0.5 * this.dx, y: -0.5 * this.dy })
             this.prevState = tongueClose;
             this.primitives[0].fill('#21686C');
         }
         else {  // error
-            if(this.prevState == tongueErr) return;
-            else if(this.prevState == tongueOpen) this.move({x: -0.5 * this.dx, y: -0.5 * this.dy});
-            else this.move({x: 0.5 * this.dx, y: 0.5 * this.dy});
+            if (this.prevState == tongueErr) return;
+            else if (this.prevState == tongueOpen) this.move({ x: -0.5 * this.dx, y: -0.5 * this.dy });
+            else this.move({ x: 0.5 * this.dx, y: 0.5 * this.dy });
             this.prevState = tongueErr;
             this.primitives[0].fill('red');
         }
@@ -479,32 +480,197 @@ export class TongueRight extends TongueBase {
             '#21686C', '#000000', length * 0.4)
         );
     }
-    setBaseProperty(mes: any){
+    setBaseProperty(mes: any) {
         console.log(`tongue right opened =${mes.trayOpenedB}; tongue left closed=${mes.trayClosedB}`)
         this.opened = mes.trayOpenedB;
         this.closed = mes.trayClosedB;
     }
     nextFrame(): void {
         if (this.opened) {  // open
-            if(this.prevState == tongueOpen) return;
-            else if(this.prevState == tongueClose) this.move( {x: this.dx, y: this.dy});
-            else this.move({x: -0.5 * this.dx, y: 0.5 * this.dy})
+            if (this.prevState == tongueOpen) return;
+            else if (this.prevState == tongueClose) this.move({ x: this.dx, y: this.dy });
+            else this.move({ x: -0.5 * this.dx, y: 0.5 * this.dy })
             this.prevState = tongueOpen;
             this.primitives[0].fill('#21686C');
         }
         else if (this.closed) { //close
-            if(this.prevState == tongueClose) return;
-            else if(this.prevState == tongueOpen) this.move( {x: -this.dx, y: -this.dy});
-            else this.move({x: 0.5 * this.dx, y: -0.5 * this.dy})
+            if (this.prevState == tongueClose) return;
+            else if (this.prevState == tongueOpen) this.move({ x: -this.dx, y: -this.dy });
+            else this.move({ x: 0.5 * this.dx, y: -0.5 * this.dy })
             this.prevState = tongueClose;
             this.primitives[0].fill('#21686C');
         }
         else {  // error
-            if(this.prevState == tongueErr) return;
-            else if(this.prevState == tongueOpen) this.move({x: 0.5 * this.dx, y: -0.5 * this.dy});
-            else this.move({x: -0.5 * this.dx, y: 0.5 * this.dy});
+            if (this.prevState == tongueErr) return;
+            else if (this.prevState == tongueOpen) this.move({ x: 0.5 * this.dx, y: -0.5 * this.dy });
+            else this.move({ x: -0.5 * this.dx, y: 0.5 * this.dy });
             this.prevState = tongueErr;
             this.primitives[0].fill('red');
+        }
+    }
+}
+
+export class LabelInfo extends BaseMineDraw {
+    public numberA: number;
+    public weightA: string;
+    public dateA: string;
+    public monthA: number;
+    public numberB: number;
+    public weightB: string;
+    public dateB: string;
+    public monthB: number
+    public beginMonth: number;
+    public endMonth: number;
+    public skipCount: number;
+    public net: number;
+    public beginDate: string;
+    public endDate: string;
+    constructor(p0: Point, length: number) {
+        super(p0, length);
+        this.name = 'Labelinfo';
+    }
+    protected createText(x: number, y: number, text: string, fontSize: number): Konva.Text {
+        return new Konva.Text({
+            x: x,
+            y: y,
+            text: text,
+            fontSize: fontSize,
+            fontStyle: 'bold',
+            fontFamily: 'Roboto',
+            fill: 'black'
+        });
+    }
+    protected createRectangle(x: number, y: number, height: number, width: number, fill: string,
+        stroke: string, strokeWidth: number, cornerRadius: number): Konva.Rect {
+        return new Konva.Rect({
+            x: x,
+            y: y,
+            height: height,
+            width: width,
+            fill: fill,
+            stroke: stroke,
+            strokeWidth: strokeWidth,
+            cornerRadius: cornerRadius,
+        });
+    }
+    protected setText(obj: any, text: string) {
+        obj.text(text);
+    }
+}
+
+export class LeftInfo extends LabelInfo {
+    constructor(p0: Point, length: number) {
+        super(p0, length);
+        this.name = 'Leftinfo';
+        this.numberA = 0;
+        this.weightA = '';
+        this.dateA = '';
+        this.monthA = 0;
+        this.primitives.push(this.createRectangle(p0.x, p0.y + length * 0.1, length, length * 1.8, 'white', '#FE982A', length * 0.1, length * 0.1))
+        this.primitives.push(this.createText(p0.x + length * 0.2, p0.y + length * 0.2, 'L Skip No.', length * 0.2))
+        this.primitives.push(this.createText(p0.x + length * 0.2, p0.y + length * 0.5, '', length * 0.2))
+        this.primitives.push(this.createText(p0.x + length * 0.2, p0.y + length * 0.8, '', length * 0.2))
+    }
+    setBaseProperty(mes: any) {
+        this.monthA = mes.monthA
+        this.endMonth = mes.endMonth
+        this.numberA = mes.numberA
+        this.weightA = mes.grossA + '-' + mes.tareA + '=' + (mes.grossA - mes.tareA)
+        this.dateA = moment(mes.monthA + ' ' + mes.dateA + ' ' + mes.year + ' ' + mes.hoursA + ' ' + mes.minutesA + ' ' + mes.secondsA, "MM DD YY HH mm ss").format("MM-DD-YY HH:mm:ss");
+    }
+
+    nextFrame(): void {
+        if (this.monthA != 0) {
+            this.setText(this.primitives[1], 'L Skip No.' + this.numberA);
+            this.setText(this.primitives[2], this.weightA);
+            this.setText(this.primitives[3], this.dateA);
+        }
+        else if (this.monthA == 0) {
+            this.setText(this.primitives[1], '');
+            this.setText(this.primitives[2], '');
+            this.setText(this.primitives[3], '');
+        }
+        else if (this.endMonth! = 0) {
+            this.setText(this.primitives[1], '');
+            this.setText(this.primitives[2], '');
+            this.setText(this.primitives[3], '');
+        }
+    }
+}
+
+export class RightInfo extends LabelInfo {
+    constructor(p0: Point, length: number) {
+        super(p0, length);
+        this.name = 'Rightinfo';
+        this.numberB = 0;
+        this.weightB = '';
+        this.dateB = '';
+        this.monthB = 0;
+        this.primitives.push(this.createRectangle(p0.x, p0.y + length * 0.1, length, length * 1.8, 'white', '#FE982A', length * 0.1, length * 0.1))
+        this.primitives.push(this.createText(p0.x + length * 0.2, p0.y + length * 0.2, 'R Skip No.', length * 0.2))
+        this.primitives.push(this.createText(p0.x + length * 0.2, p0.y + length * 0.5, '', length * 0.2))
+        this.primitives.push(this.createText(p0.x + length * 0.2, p0.y + length * 0.8, '', length * 0.2))
+    }
+    setBaseProperty(mes: any) {
+        this.numberB = mes.numberB
+        this.weightB = mes.grossB + '-' + mes.tareB + '=' + (mes.grossB - mes.tareB)
+        this.dateB = moment(mes.monthB + ' ' + mes.dateB + ' ' + mes.year + ' ' + mes.hoursB + ' ' + mes.minutesB + ' ' + mes.secondsB, "MM DD YY HH mm ss").format("MM-DD-YY HH:mm:ss");
+    }
+
+    nextFrame(): void {
+        if (this.monthB != 0) {
+            this.setText(this.primitives[1], 'R Skip No.' + this.numberB);
+            this.setText(this.primitives[2], this.weightB);
+            this.setText(this.primitives[3], this.dateB);
+        }
+        else if (this.monthB == 0) {
+            this.setText(this.primitives[1], '');
+            this.setText(this.primitives[2], '');
+            this.setText(this.primitives[3], '');
+        }
+        else if (this.endMonth! = 0) {
+            this.setText(this.primitives[1], '');
+            this.setText(this.primitives[2], '');
+            this.setText(this.primitives[3], '');
+        }
+    }
+}
+
+export class ShiftInfo extends LabelInfo {
+    constructor(p0: Point, length: number) {
+        super(p0, length);
+        this.name = 'Shiftinfo';
+        this.beginMonth = 0;
+        this.endMonth = 0;
+        this.skipCount = 0;
+        this.net = 0;
+        this.beginDate = '';
+        this.endDate = '';
+        this.primitives.push(this.createRectangle(p0.x, p0.y + length * 0.1, length * 1.4, length * 1.8, 'white', '#FE982A', length * 0.1, length * 0.1))
+        this.primitives.push(this.createText(p0.x + length * 0.2, p0.y + length * 0.2, '', length * 0.2))
+        this.primitives.push(this.createText(p0.x + length * 0.2, p0.y + length * 0.5, '', length * 0.2))
+        this.primitives.push(this.createText(p0.x + length * 0.2, p0.y + length * 0.8, '', length * 0.2))
+        this.primitives.push(this.createText(p0.x + length * 0.2, p0.y + length * 1.1, '', length * 0.2))
+    }
+    setBaseProperty(mes: any) {
+        this.beginMonth = mes.beginMonth;
+        this.endMonth = mes.endMonth;
+        this.beginDate = moment(mes.beginMonth + ' ' + mes.beginDate + ' ' + mes.year + ' ' + mes.beginHours + ' ' + mes.beginMinutes + ' ' + mes.beginSeconds, "MM DD YY HH mm ss").format("MM-DD-YY HH:mm:ss");
+        this.endDate = moment(mes.endMonth + ' ' + mes.endDate + ' ' + mes.year + ' ' + mes.endHours + ' ' + mes.endMinutes + ' ' + mes.endSeconds, "MM DD YY HH mm ss").format("MM-DD-YY HH:mm:ss");
+        this.skipCount = mes.skipCount;
+        this.net = mes.net;
+    }
+
+    nextFrame(): void {
+        this.setText(this.primitives[1], 'Shift begin:');
+        this.setText(this.primitives[2], this.beginDate);
+        this.setText(this.primitives[3], 'Total skips:' + this.skipCount);
+        this.setText(this.primitives[4], 'Totalcweigt:' + this.net);
+        if (this.endMonth != 0) {
+            this.setText(this.primitives[1], 'Shift end:');
+            this.setText(this.primitives[2], this.endDate);
+            this.setText(this.primitives[3], 'Total skips:' + this.skipCount);
+            this.setText(this.primitives[4], 'Totalcweigt:' + this.net);
         }
     }
 }
