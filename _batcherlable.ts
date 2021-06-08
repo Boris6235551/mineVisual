@@ -17,7 +17,7 @@ export class BATCHERLABLE extends Scheme {
         this.RightInfo1 = new RightInfo(new Point(1694, 700), 80)
         this.addWidget(this.RightInfo1);
 
-        this.ShiftInfo1 = new ShiftInfo(new Point(1694, 800), 80)
+        this.ShiftInfo1 = new ShiftInfo(new Point(1520, 800), 80)
         this.addWidget(this.ShiftInfo1);
     }
 }

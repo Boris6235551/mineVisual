@@ -1,4 +1,4 @@
-import { Scheme, Disposition, animateScheme, Point, Pool, PropParams } from './mine_drawing';
+import { Scheme, Disposition, animateScheme, Point, PropParams } from './mine_drawing';
 import { Bunker, FeederLeft, FeederRight, ChuteLeft, ChuteRight, BatcherLeft, BatcherRight, GateLeft, GateRight, TongueLeft, TongueRight } from './batcher'
 
 export class BATCHER extends Scheme {

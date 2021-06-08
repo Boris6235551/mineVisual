@@ -29,7 +29,7 @@ var BATCHERLABLE = /** @class */ (function (_super) {
         this.addWidget(this.LeftInfo1);
         this.RightInfo1 = new batcherlable_1.RightInfo(new mine_drawing_1.Point(1694, 700), 80);
         this.addWidget(this.RightInfo1);
-        this.ShiftInfo1 = new batcherlable_1.ShiftInfo(new mine_drawing_1.Point(1694, 800), 80);
+        this.ShiftInfo1 = new batcherlable_1.ShiftInfo(new mine_drawing_1.Point(1520, 800), 80);
         this.addWidget(this.ShiftInfo1);
     };
     return BATCHERLABLE;

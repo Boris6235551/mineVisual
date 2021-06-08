@@ -263,6 +263,67 @@ export class Pump extends BaseMineDraw {
     }
 }
 
+
+
+export class UndegraundPump extends Pump {
+    constructor(p0: Point, length: number, disposition: Disposition) {
+        super(p0, length, Disposition.Vertical);
+
+        let p1lx: number = p0.x + this.calcSize(length)/2; let p1ly: number = p0.y;
+        let p2lx: number = p0.x + this.calcSize(length)/2; let p2ly: number = p0.y + length;
+        let p3lx: number = p0.x + length; let p3ly: number = p0.y + length;
+        let p4lx: number = p0.x + length; let p4ly: number = p0.y;
+        let offsetX: number = length * 0.5 - this.calcSize(length) * 0.25;
+        this.primitives.push(this.createLineUndegraund(p1lx, p1ly, p2lx, p2ly, p3lx, p3ly,
+            p4lx, p4ly, length * 0.0157, offsetX, 0));
+
+        p1lx = p0.x + length, p1ly = p0.y,
+            p2lx = p3lx = p4lx = p0.x + 1.1 * length,
+            p2ly = p3ly = p4ly = p0.y + 0.1 * length;
+
+        for (let i = 0; i < length; i = i + 0.1 * length)
+            this.primitives.push(this.createLineUndegraund(p1lx, p1ly, p2lx, p2ly, p3lx, p3ly, p4lx, p4ly,
+                length * 0.0157, offsetX, -i));
+
+        p1lx = p0.x + length - offsetX, p1ly = p0.y + length,
+            p2lx = p3lx = p4lx = p0.x + 0.9 * length - offsetX,
+            p2ly = p3ly = p4ly = p0.y + 0.1 * length + length;
+
+        for (let i = 0; i < 0.8 * length; i = i + 0.1 * length)
+            this.primitives.push(this.createLineUndegraund(p1lx, p1ly, p2lx, p2ly, p3lx, p3ly, p4lx, p4ly,
+                length * 0.0157, i, 0));
+
+        p1lx = p0.x + this.calcSize(length)/2, p1ly = p0.y + length,
+            p2lx = p3lx = p4lx = p0.x - 0.1 * length + this.calcSize(length)/2,
+            p2ly = p3ly = p4ly = p0.y + 0.9 * length;
+
+        for (let i = 0; i < length; i = i + 0.1 * length)
+            this.primitives.push(this.createLineUndegraund(p1lx, p1ly, p2lx, p2ly, p3lx, p3ly, p4lx, p4ly,
+                length * 0.0157, offsetX, i));
+
+        this.primitives[1].hide();
+        this.primitives[5].hide();
+        this.primitives[6].hide();
+
+        console.log(this.primitives)
+    }
+    setState(newState: PumpState): void {
+        this.state = newState == PumpState.run ? PumpState.revers : newState;
+    }
+    private createLineUndegraund(p1lx: number, p1ly: number, p2lx: number, p2ly: number, p3lx: number, p3ly: number,
+        p4lx: number, p4ly: number, strokeWidth: number, offsetX: number, offsetY: number): Konva.Line {
+        return new Konva.Line({
+            points: [p1lx, p1ly, p2lx, p2ly, p3lx, p3ly, p4lx, p4ly],
+            stroke: '#980505',
+            strokeWidth: strokeWidth,
+            offset: {
+                x: offsetX,
+                y: offsetY,
+            },
+        });
+    }
+}
+
 export class Compressor extends BaseMineDraw {
     constructor(p0: Point, length: number) {
         super(p0, length);

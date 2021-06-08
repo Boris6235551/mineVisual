@@ -16,7 +16,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Compressor = exports.Pump = exports.PumpState = void 0;
+exports.Compressor = exports.UndegraundPump = exports.Pump = exports.PumpState = void 0;
 var konva_1 = __importDefault(require("konva"));
 var mine_drawing_1 = require("./mine_drawing");
 var PumpState;
@@ -303,6 +303,58 @@ var Pump = /** @class */ (function (_super) {
     return Pump;
 }(mine_drawing_1.BaseMineDraw));
 exports.Pump = Pump;
+var UndegraundPump = /** @class */ (function (_super) {
+    __extends(UndegraundPump, _super);
+    function UndegraundPump(p0, length, disposition) {
+        var _this = _super.call(this, p0, length, mine_drawing_1.Disposition.Vertical) || this;
+        var p1lx = p0.x + _this.calcSize(length) / 2;
+        var p1ly = p0.y;
+        var p2lx = p0.x + _this.calcSize(length) / 2;
+        var p2ly = p0.y + length;
+        var p3lx = p0.x + length;
+        var p3ly = p0.y + length;
+        var p4lx = p0.x + length;
+        var p4ly = p0.y;
+        var offsetX = length * 0.5 - _this.calcSize(length) * 0.25;
+        _this.primitives.push(_this.createLineUndegraund(p1lx, p1ly, p2lx, p2ly, p3lx, p3ly, p4lx, p4ly, length * 0.0157, offsetX, 0));
+        p1lx = p0.x + length, p1ly = p0.y,
+            p2lx = p3lx = p4lx = p0.x + 1.1 * length,
+            p2ly = p3ly = p4ly = p0.y + 0.1 * length;
+        for (var i = 0; i < length; i = i + 0.1 * length)
+            _this.primitives.push(_this.createLineUndegraund(p1lx, p1ly, p2lx, p2ly, p3lx, p3ly, p4lx, p4ly, length * 0.0157, offsetX, -i));
+        p1lx = p0.x + length - offsetX, p1ly = p0.y + length,
+            p2lx = p3lx = p4lx = p0.x + 0.9 * length - offsetX,
+            p2ly = p3ly = p4ly = p0.y + 0.1 * length + length;
+        for (var i = 0; i < 0.8 * length; i = i + 0.1 * length)
+            _this.primitives.push(_this.createLineUndegraund(p1lx, p1ly, p2lx, p2ly, p3lx, p3ly, p4lx, p4ly, length * 0.0157, i, 0));
+        p1lx = p0.x + _this.calcSize(length) / 2, p1ly = p0.y + length,
+            p2lx = p3lx = p4lx = p0.x - 0.1 * length + _this.calcSize(length) / 2,
+            p2ly = p3ly = p4ly = p0.y + 0.9 * length;
+        for (var i = 0; i < length; i = i + 0.1 * length)
+            _this.primitives.push(_this.createLineUndegraund(p1lx, p1ly, p2lx, p2ly, p3lx, p3ly, p4lx, p4ly, length * 0.0157, offsetX, i));
+        _this.primitives[1].hide();
+        _this.primitives[5].hide();
+        _this.primitives[6].hide();
+        console.log(_this.primitives);
+        return _this;
+    }
+    UndegraundPump.prototype.setState = function (newState) {
+        this.state = newState == PumpState.run ? PumpState.revers : newState;
+    };
+    UndegraundPump.prototype.createLineUndegraund = function (p1lx, p1ly, p2lx, p2ly, p3lx, p3ly, p4lx, p4ly, strokeWidth, offsetX, offsetY) {
+        return new konva_1.default.Line({
+            points: [p1lx, p1ly, p2lx, p2ly, p3lx, p3ly, p4lx, p4ly],
+            stroke: '#980505',
+            strokeWidth: strokeWidth,
+            offset: {
+                x: offsetX,
+                y: offsetY,
+            },
+        });
+    };
+    return UndegraundPump;
+}(Pump));
+exports.UndegraundPump = UndegraundPump;
 var Compressor = /** @class */ (function (_super) {
     __extends(Compressor, _super);
     function Compressor(p0, length) {

@@ -1,22 +1,9 @@
 "use strict";
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Pool = exports.Screen = exports.animateScheme = exports.Scheme = exports.BaseMineDraw = exports.PropParams = exports.Rectangle = exports.Point = exports.Disposition = void 0;
+exports.Screen = exports.animateScheme = exports.Scheme = exports.BaseMineDraw = exports.PropParams = exports.Rectangle = exports.Point = exports.Disposition = void 0;
 var konva_1 = __importDefault(require("konva"));
 //const Konva = require('konva');
 // https://www.typescriptlang.org/docs/handbook/classes.html
@@ -225,125 +212,4 @@ var Screen = /** @class */ (function () {
     return Screen;
 }());
 exports.Screen = Screen;
-// this.primitives[ValvePrimitive.triangle0], 
-var Pool = /** @class */ (function (_super) {
-    __extends(Pool, _super);
-    //private primitives: any[]; // triangle0, triangle1, rectangleCentr, круг, текст
-    function Pool(p0, length, percentage) {
-        var _this = _super.call(this, p0, length, percentage) || this;
-        // private rectangle3: Konva.Rect;
-        _this.rectangle3 = new Array();
-        _this.name = 'Pool';
-        _this.rectangle1 = _this.createRectangle1(p0, length);
-        _this.rectangle2 = _this.createRectangle2(p0, length);
-        var i;
-        var waterLevel = [
-            '#02498B', '#00519C', '#0061BA', '#0071D9', '#0085FF',
-            '#1F94FF', '#359EFF', '#5BB1FF', '#8DC9FF', '', '#02498B'
-        ];
-        if (percentage == 0)
-            _this.rectangle3[0] = _this.createRectangle3(p0, length, waterLevel[9]);
-        else if (percentage == 100)
-            _this.rectangle3[0] = _this.createRectangle3(p0, length, waterLevel[9]);
-        else {
-            p0.y = p0.y + _this.calcSize(length) * 0.93 - 5;
-            for (i = 0; i < percentage.toString()[0]; i++) {
-                p0.y = p0.y - _this.calcSize(length) * 0.093;
-                _this.rectangle3[i] = _this.createRectangle3(p0, length, waterLevel[i]);
-            }
-        }
-        _this.circle = _this.createCircle(length);
-        return _this;
-    }
-    Pool.prototype.createRectangle1 = function (p0, length) {
-        return new konva_1.default.Rect({
-            x: p0.x,
-            y: p0.y,
-            height: this.calcSize(length),
-            width: length,
-            fill: '#FE896F',
-            stroke: '#D28878',
-            strokeWidth: 10,
-            cornerRadius: 10
-        });
-    };
-    Pool.prototype.createRectangle2 = function (p0, length) {
-        return new konva_1.default.Rect({
-            x: p0.x + this.calcSize(length) * 0.125,
-            y: p0.y - 3,
-            height: this.calcSize(length) * 0.93,
-            width: length * 0.84,
-            fill: '#E1F1FB',
-            stroke: '#34E7E7',
-            strokeWidth: 5,
-            cornerRadius: 10
-        });
-    };
-    Pool.prototype.createRectangle3 = function (p0, length, waterLevel) {
-        return new konva_1.default.Rect({
-            x: p0.x + this.calcSize(length) * 0.125 + 3,
-            y: p0.y,
-            height: this.calcSize(length) * 0.093,
-            width: length * 0.84 - 6,
-            fill: waterLevel,
-            // stroke: '',
-            // strokeWidth: 0,
-            cornerRadius: [0, 0, 50, 0],
-        });
-    };
-    Pool.prototype.createCircle = function (length) {
-        var x;
-        var y;
-        if (this.disposition == Disposition.Horizontal) {
-            x = this.rect.getMiddlePoint().x;
-            y = this.rect.getMiddlePoint().y - Math.trunc(0.39 * length);
-        }
-        else {
-            x = this.rect.getMiddlePoint().x - Math.trunc(0.39 * length);
-            y = this.rect.getMiddlePoint().y;
-        }
-        ;
-        return new konva_1.default.Circle({
-            x: x,
-            y: y,
-            radius: Math.trunc(length / 4.79),
-            fill: '',
-            stroke: '',
-            strokeWidth: 1,
-        });
-    };
-    Pool.prototype.createText = function (length, disposition) {
-        var x;
-        var y;
-        if (disposition == Disposition.Horizontal) {
-            x = this.rect.getMiddlePoint().x - Math.trunc(0.1 * length);
-            y = this.rect.getMiddlePoint().y - Math.trunc(0.43 * length);
-        }
-        else {
-            x = this.rect.getMiddlePoint().x - Math.trunc(0.5 * length);
-            y = this.rect.getMiddlePoint().y - Math.trunc(0.04 * length);
-        }
-        ;
-        return new konva_1.default.Text({
-            x: x,
-            y: y,
-            text: '100 %',
-            fontSize: 18,
-            fontFamily: 'Roboto',
-            fill: '',
-        });
-    };
-    Pool.prototype.calcSize = function (length, factor) {
-        if (factor === void 0) { factor = 1.59; }
-        return this.getOdd(length / factor);
-    };
-    ;
-    Pool.prototype.draw = function (layer) {
-        var i;
-        for (i = 0; i < this.rectangle3.length; i++)
-            layer.add(this.rectangle1, this.rectangle2, this.rectangle3[i]);
-    };
-    return Pool;
-}(BaseMineDraw));
-exports.Pool = Pool;
 //# sourceMappingURL=mine_drawing.js.map

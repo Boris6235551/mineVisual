@@ -79,20 +79,23 @@ var LeftInfo = /** @class */ (function (_super) {
         this.dateA = moment(mes.monthA + ' ' + mes.dateA + ' ' + mes.year + ' ' + mes.hoursA + ' ' + mes.minutesA + ' ' + mes.secondsA, "MM DD YY HH mm ss").format("MM-DD-YY HH:mm:ss");
     };
     LeftInfo.prototype.nextFrame = function () {
-        if (this.monthA != 0) {
+        if (this.monthA != 12) {
             this.setText(this.primitives[1], 'L Skip No.' + this.numberA);
             this.setText(this.primitives[2], this.weightA);
             this.setText(this.primitives[3], this.dateA);
+            this.primitives[0].visible(true);
         }
-        else if (this.monthA == 0) {
+        else if (this.monthA == 12) {
             this.setText(this.primitives[1], '');
             this.setText(this.primitives[2], '');
             this.setText(this.primitives[3], '');
+            this.primitives[0].visible(false);
         }
-        else if (this.endMonth != 0) {
+        else if (this.endMonth != 12) {
             this.setText(this.primitives[1], '');
             this.setText(this.primitives[2], '');
             this.setText(this.primitives[3], '');
+            this.primitives[0].visible(false);
         }
     };
     return LeftInfo;
@@ -119,20 +122,23 @@ var RightInfo = /** @class */ (function (_super) {
         this.dateB = moment(mes.monthB + ' ' + mes.dateB + ' ' + mes.year + ' ' + mes.hoursB + ' ' + mes.minutesB + ' ' + mes.secondsB, "MM DD YY HH mm ss").format("MM-DD-YY HH:mm:ss");
     };
     RightInfo.prototype.nextFrame = function () {
-        if (this.monthB != 0) {
+        if (this.monthB != 12) {
             this.setText(this.primitives[1], 'R Skip No.' + this.numberB);
             this.setText(this.primitives[2], this.weightB);
             this.setText(this.primitives[3], this.dateB);
+            this.primitives[0].visible(true);
         }
-        else if (this.monthB == 0) {
+        else if (this.monthB == 12) {
             this.setText(this.primitives[1], '');
             this.setText(this.primitives[2], '');
             this.setText(this.primitives[3], '');
+            this.primitives[0].visible(false);
         }
-        else if (this.endMonth != 0) {
+        else if (this.endMonth != 12) {
             this.setText(this.primitives[1], '');
             this.setText(this.primitives[2], '');
             this.setText(this.primitives[3], '');
+            this.primitives[0].visible(false);
         }
     };
     return RightInfo;
@@ -149,7 +155,7 @@ var ShiftInfo = /** @class */ (function (_super) {
         _this.net = 0;
         _this.beginDate = '';
         _this.endDate = '';
-        _this.primitives.push(_this.createRectangle(p0.x, p0.y + length * 0.1, length * 1.4, length * 1.8, 'white', '#FE982A', length * 0.1, length * 0.1));
+        _this.primitives.push(_this.createRectangle(p0.x, p0.y + length * 0.1, length * 1.4, length * 2.3, 'white', '#FE982A', length * 0.1, length * 0.1));
         _this.primitives.push(_this.createText(p0.x + length * 0.2, p0.y + length * 0.2, '', length * 0.2));
         _this.primitives.push(_this.createText(p0.x + length * 0.2, p0.y + length * 0.5, '', length * 0.2));
         _this.primitives.push(_this.createText(p0.x + length * 0.2, p0.y + length * 0.8, '', length * 0.2));
@@ -165,16 +171,10 @@ var ShiftInfo = /** @class */ (function (_super) {
         this.net = mes.net;
     };
     ShiftInfo.prototype.nextFrame = function () {
-        this.setText(this.primitives[1], 'Shift begin:');
-        this.setText(this.primitives[2], this.beginDate);
-        this.setText(this.primitives[3], 'Total skips:' + this.skipCount);
-        this.setText(this.primitives[4], 'Total weight:' + this.net);
-        if (this.endMonth != 0) {
-            this.setText(this.primitives[1], 'Shift end:');
-            this.setText(this.primitives[2], this.endDate);
-            this.setText(this.primitives[3], 'Total skips:' + this.skipCount);
-            this.setText(this.primitives[4], 'Total weight:' + this.net);
-        }
+        this.setText(this.primitives[1], 'Shift start:  ' + this.beginDate);
+        this.setText(this.primitives[2], 'Shift end:    ' + this.endDate);
+        this.setText(this.primitives[3], 'Total skips:   ' + this.skipCount + 'pcs');
+        this.setText(this.primitives[4], 'Total weight: ' + this.net + 'kg');
     };
     return ShiftInfo;
 }(LabelInfo));
