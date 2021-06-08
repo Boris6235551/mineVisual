@@ -13,22 +13,26 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.COMPRESSORROOM = void 0;
+exports.BATCHERLABLE = void 0;
 var mine_drawing_1 = require("./mine_drawing");
-var compressorRoom_1 = require("./compressorRoom");
-var COMPRESSORROOM = /** @class */ (function (_super) {
-    __extends(COMPRESSORROOM, _super);
-    function COMPRESSORROOM(container, width, height) {
+var batcherlable_1 = require("./batcherlable");
+var BATCHERLABLE = /** @class */ (function (_super) {
+    __extends(BATCHERLABLE, _super);
+    function BATCHERLABLE(container, width, height) {
         var _this = _super.call(this, container, width, height) || this;
-        _this.name = 'Compressorroom';
+        _this.name = 'BatcherLable';
         _this.addBatcher();
         return _this;
     }
-    COMPRESSORROOM.prototype.addBatcher = function () {
-        this.Pump1 = new compressorRoom_1.Pump(new mine_drawing_1.Point(400, 100), 80, 0);
-        this.addWidget(this.Pump1);
+    BATCHERLABLE.prototype.addBatcher = function () {
+        this.LeftInfo1 = new batcherlable_1.LeftInfo(new mine_drawing_1.Point(1390, 700), 80);
+        this.addWidget(this.LeftInfo1);
+        this.RightInfo1 = new batcherlable_1.RightInfo(new mine_drawing_1.Point(1694, 700), 80);
+        this.addWidget(this.RightInfo1);
+        this.ShiftInfo1 = new batcherlable_1.ShiftInfo(new mine_drawing_1.Point(1694, 800), 80);
+        this.addWidget(this.ShiftInfo1);
     };
-    return COMPRESSORROOM;
+    return BATCHERLABLE;
 }(mine_drawing_1.Scheme));
-exports.COMPRESSORROOM = COMPRESSORROOM;
-//# sourceMappingURL=_compressorRoom.js.map
+exports.BATCHERLABLE = BATCHERLABLE;
+//# sourceMappingURL=_batcherlable.js.map

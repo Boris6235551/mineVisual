@@ -7,6 +7,7 @@ import { BATCHER } from './_batcher'
 import { SUBSTATION } from './_substation'
 import { CAGE } from './_cage'
 import { COMPRESSORROOM } from './_compressorRoom'
+import { BATCHERLABLE } from './_batcherlable'
 const { BrowserWindow } = require('electron').remote
 
 let screenMain = new Screen();
@@ -17,6 +18,7 @@ let compressoRroomUndeground = new COMPRESSORROOM('containerCompressoRroomUndegr
 let skip = new SKIP('containerSkip', window.innerWidth, window.innerHeight);
 let batcher = new BATCHER('batcher', window.innerWidth, window.innerHeight);
 let substationUndeground = new SUBSTATION('substation', window.innerWidth, window.innerHeight);
+let batcherlable = new BATCHERLABLE('batcherlable', window.innerWidth, window.innerHeight);
 
 // screenMain.addScheme(techWater);
 // screenMain.addScheme(dsf);
@@ -25,6 +27,7 @@ screenMain.addScheme(batcher);
 screenMain.addScheme(cage);
 screenMain.addScheme(substationUndeground);
 screenMain.addScheme(compressoRroomUndeground);
+screenMain.addScheme(batcherlable);
 // screenMain.addScheme(undegroundpump);
 
 import { startClients, stopConnection, _reCreate, _testConnect, _testSend, _sendReload, _step } from './tcpipConnector'
@@ -41,6 +44,7 @@ animateScheme(skip, 500);
 animateScheme(cage, 500);
 animateScheme(substationUndeground, 500);
 animateScheme(compressoRroomUndeground, 500);
+animateScheme(batcherlable, 500);
 
 // export default class MyComponent extends Vue {
 //   // Данные инициализации могут быть объявлены как свойства экземпляра

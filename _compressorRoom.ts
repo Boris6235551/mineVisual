@@ -9,7 +9,7 @@ export class COMPRESSORROOM extends Scheme {
         this.addBatcher();
     }
     addBatcher() {
-        this.Pump1 = new Pump(new Point(400, 100), 60, 0)
+        this.Pump1 = new Pump(new Point(400, 100), 80, 0)
         this.addWidget(this.Pump1);
     }
 }

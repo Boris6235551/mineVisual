@@ -10,6 +10,7 @@ var _batcher_1 = require("./_batcher");
 var _substation_1 = require("./_substation");
 var _cage_1 = require("./_cage");
 var _compressorRoom_1 = require("./_compressorRoom");
+var _batcherlable_1 = require("./_batcherlable");
 var BrowserWindow = require('electron').remote.BrowserWindow;
 var screenMain = new mine_drawing_1.Screen();
 // // let techWater = new TechWater('container', window.innerWidth, window.innerHeight);
@@ -19,6 +20,7 @@ var compressoRroomUndeground = new _compressorRoom_1.COMPRESSORROOM('containerCo
 var skip = new _skip_1.SKIP('containerSkip', window.innerWidth, window.innerHeight);
 var batcher = new _batcher_1.BATCHER('batcher', window.innerWidth, window.innerHeight);
 var substationUndeground = new _substation_1.SUBSTATION('substation', window.innerWidth, window.innerHeight);
+var batcherlable = new _batcherlable_1.BATCHERLABLE('batcherlable', window.innerWidth, window.innerHeight);
 // screenMain.addScheme(techWater);
 // screenMain.addScheme(dsf);
 screenMain.addScheme(skip);
@@ -26,6 +28,7 @@ screenMain.addScheme(batcher);
 screenMain.addScheme(cage);
 screenMain.addScheme(substationUndeground);
 screenMain.addScheme(compressoRroomUndeground);
+screenMain.addScheme(batcherlable);
 // screenMain.addScheme(undegroundpump);
 var tcpipConnector_1 = require("./tcpipConnector");
 function sendMes(name, mes) {
@@ -38,6 +41,7 @@ mine_drawing_1.animateScheme(skip, 500);
 mine_drawing_1.animateScheme(cage, 500);
 mine_drawing_1.animateScheme(substationUndeground, 500);
 mine_drawing_1.animateScheme(compressoRroomUndeground, 500);
+mine_drawing_1.animateScheme(batcherlable, 500);
 // export default class MyComponent extends Vue {
 //   // Данные инициализации могут быть объявлены как свойства экземпляра
 //   message: string = 'Hello!'
