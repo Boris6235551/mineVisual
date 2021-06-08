@@ -161,7 +161,7 @@ let allClients = [
     // {host: '192.168.100.52', name: 'Skip'},
     // {host: '192.168.100.53', name: 'SubStation'},
     // {host: '192.168.100.54', name: 'UndegroundStation'},
-    {host: '192.168.100.55', name: 'Batcher'},
+    //{host: '192.168.100.55', name: 'Batcher'},
     // /*   Conveyor scale   */
     // {host: '192.168.100.60', name: 'Scale3AB'},
     // {host: '192.168.100.62', name: 'Scale4'},
@@ -173,7 +173,8 @@ let allClients = [
     // {host: '192.168.100.41', name: 'clearPumps'},
     // {host: '192.168.100.43', name: 'drainageA'},
     // {host: '192.168.100.45', name: 'drainageB'},
-    //{host: '192.168.100.70', name: 'RailScale'}
+    //{host: '192.168.100.70', name: 'RailScale'},
+    {host: '192.168.100.103', name: 'BatcherLable'}
 ];
 
 enum socketState {

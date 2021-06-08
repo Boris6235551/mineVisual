@@ -203,6 +203,7 @@ export class Screen {
         this.schemes.forEach(function(scheme) {
             if(scheme.name == objName) {
                 scheme.send(mes);
+                return;
             }
         });
     }
