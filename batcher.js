@@ -88,11 +88,11 @@ var Bunker = /** @class */ (function (_super) {
     };
     Bunker.prototype.setBaseProperty = function (mes) {
         if (this.isLeft) {
-            console.log("Bunker left active =" + mes.chuteLoadA);
+            //            console.log(`Bunker left active =${mes.chuteLoadA}`)
             this.propBit = mes.chuteLoadA;
         }
         else {
-            console.log("Bunker right active =" + mes.chuteLoadB);
+            //            console.log(`Bunker right active =${mes.chuteLoadB}`)
             this.propBit = mes.chuteLoadB;
         }
     };
@@ -140,7 +140,7 @@ var FeederLeft = /** @class */ (function (_super) {
         return _this;
     }
     FeederLeft.prototype.setBaseProperty = function (mes) {
-        console.log("FeederRight active =" + mes.chuteLoadA + "; on/off " + mes.feederOn);
+        //        console.log(`FeederRight active =${mes.chuteLoadA}; on/off ${mes.feederOn}`)
         this.enable = mes.chuteLoadA;
         this.propBit = mes.feederOn;
     };
@@ -156,7 +156,7 @@ var FeederRight = /** @class */ (function (_super) {
         return _this;
     }
     FeederRight.prototype.setBaseProperty = function (mes) {
-        console.log("FeederRight active =" + mes.chuteLoadB + "; on/off " + mes.feederOn);
+        //        console.log(`FeederRight active =${mes.chuteLoadB}; on/off ${mes.feederOn}`)
         this.enable = mes.chuteLoadB;
         this.propBit = mes.feederOn;
     };
@@ -207,7 +207,7 @@ var ChuteLeft = /** @class */ (function (_super) {
         return _this;
     }
     ChuteLeft.prototype.setBaseProperty = function (mes) {
-        console.log("chuteA=" + mes.chuteLoadA);
+        //        console.log(`chuteA=${mes.chuteLoadA}`)
         this.propBit = mes.chuteLoadA;
     };
     return ChuteLeft;
@@ -223,7 +223,7 @@ var ChuteRight = /** @class */ (function (_super) {
         return _this;
     }
     ChuteRight.prototype.setBaseProperty = function (mes) {
-        console.log("chuteB=" + mes.chuteLoadB);
+        //        console.log(`chuteB=${mes.chuteLoadB}`)
         this.propBit = mes.chuteLoadB;
     };
     return ChuteRight;
@@ -347,7 +347,7 @@ var GateLeft = /** @class */ (function (_super) {
         return _this;
     }
     GateLeft.prototype.setBaseProperty = function (mes) {
-        console.log("trayOpenedA=" + mes.gateOpenedA + "; mes.trayClosedA=" + mes.gateClosedA);
+        //        console.log(`trayOpenedA=${mes.gateOpenedA}; mes.trayClosedA=${mes.gateClosedA}`)
         this.opened = mes.gateOpenedA;
         this.closed = mes.gateClosedA;
     };
@@ -363,7 +363,7 @@ var GateRight = /** @class */ (function (_super) {
         return _this;
     }
     GateRight.prototype.setBaseProperty = function (mes) {
-        console.log("trayOpenedB=" + mes.gateOpenedB + "; mes.trayClosedA=" + mes.gateClosedB);
+        //        console.log(`trayOpenedB=${mes.gateOpenedB}; mes.trayClosedA=${mes.gateClosedB}`)
         this.opened = mes.gateOpenedB;
         this.closed = mes.gateClosedB;
     };
@@ -404,7 +404,7 @@ var TongueLeft = /** @class */ (function (_super) {
         return _this;
     }
     TongueLeft.prototype.setBaseProperty = function (mes) {
-        console.log("tongue left opened =" + mes.trayOpenedA + "; tongue left closed=" + mes.trayClosedA);
+        //        console.log(`tongue left opened =${mes.trayOpenedA}; tongue left closed=${mes.trayClosedA}`)
         this.opened = mes.trayOpenedA;
         this.closed = mes.trayClosedA;
     };
@@ -452,8 +452,8 @@ var TongueRight = /** @class */ (function (_super) {
         return _this;
     }
     TongueRight.prototype.setBaseProperty = function (mes) {
-        console.log("tongue right opened =" + mes.trayOpenedB + "; tongue left closed=" + mes.trayClosedB);
-        this.opened = mes.trayOpenedB;
+        //        console.log(`tongue right opened =${mes.trayOpenB}; tongue left closed=${mes.trayClosedB}`)
+        this.opened = mes.trayOpenB; //trayOpenB
         this.closed = mes.trayClosedB;
     };
     TongueRight.prototype.nextFrame = function () {

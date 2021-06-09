@@ -347,6 +347,7 @@ function sendReCreate() {
 }
 
 function testClear() {
+    console.log('CCCCCCCCCCCCCCLLLLLLLLLLLLLEEEEEEEEEEEAAAAAAAAAAARRRRRRRRRRR')
     console.clear();
 }
 

@@ -195,20 +195,7 @@ var allClients = [
     // {host: '192.168.100.52', name: 'Skip'},
     // {host: '192.168.100.53', name: 'SubStation'},
     // {host: '192.168.100.54', name: 'UndegroundStation'},
-    //{host: '192.168.100.55', name: 'Batcher'},
-    // /*   Conveyor scale   */
-    // {host: '192.168.100.60', name: 'Scale3AB'},
-    // {host: '192.168.100.62', name: 'Scale4'},
-    // {host: '192.168.100.64', name: 'Scale6AB'},
-    // {host: '192.168.100.66', name: 'Scale7'},
-    // {host: '192.168.100.68', name: 'Scale8_9'},
-    /*   Pumps   */
-    //{host: '192.168.100.40', name: 'techPumps'},
-    // {host: '192.168.100.41', name: 'clearPumps'},
-    // {host: '192.168.100.43', name: 'drainageA'},
-    // {host: '192.168.100.45', name: 'drainageB'},
-    //{host: '192.168.100.70', name: 'RailScale'},
-    { host: '192.168.100.103', name: 'BatcherLable' }
+    { host: '192.168.100.55', name: 'Batcher' },
 ];
 var socketState;
 (function (socketState) {
@@ -268,14 +255,14 @@ var DriveClients = /** @class */ (function () {
         if (this.clients[index].obj != null) {
             var dif = objectsDif(this.clients[index].obj, newObj);
             if (dif != null && this.showDif)
-                console.log(JSON.stringify(dif, null, 4));
+                console.log(moment().format("DD MMM YYYY HH:mm:ss"), JSON.stringify(dif, null, 4));
         }
         this.clients[index].obj = newObj;
         if (!this.showDif)
             console.log(JSON.stringify(newObj, null, 4));
         if (this.callBack != null)
             this.callBack(obj.devName, newObj);
-        //this.showDif = true; 
+        this.showDif = true;
     };
     DriveClients.prototype.connect = function (/*plc index*/ index) {
         var _this = this;

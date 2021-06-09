@@ -227,6 +227,7 @@ function sendReCreate() {
     tcpipConnector_1._reCreate();
 }
 function testClear() {
+    console.log('CCCCCCCCCCCCCCLLLLLLLLLLLLLEEEEEEEEEEEAAAAAAAAAAARRRRRRRRRRR');
     console.clear();
 }
 function step() { tcpipConnector_1._step(); }

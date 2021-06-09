@@ -161,7 +161,7 @@ let allClients = [
     // {host: '192.168.100.52', name: 'Skip'},
     // {host: '192.168.100.53', name: 'SubStation'},
     // {host: '192.168.100.54', name: 'UndegroundStation'},
-    //{host: '192.168.100.55', name: 'Batcher'},
+    {host: '192.168.100.55', name: 'Batcher'},
     // /*   Conveyor scale   */
     // {host: '192.168.100.60', name: 'Scale3AB'},
     // {host: '192.168.100.62', name: 'Scale4'},
@@ -171,10 +171,10 @@ let allClients = [
     /*   Pumps   */
     //{host: '192.168.100.40', name: 'techPumps'},
     // {host: '192.168.100.41', name: 'clearPumps'},
-    // {host: '192.168.100.43', name: 'drainageA'},
+    //{host: '192.168.100.43', name: 'drainageA'},
     // {host: '192.168.100.45', name: 'drainageB'},
     //{host: '192.168.100.70', name: 'RailScale'},
-    {host: '192.168.100.103', name: 'BatcherLable'}
+    //{host: '192.168.100.103', name: 'BatcherLable'}
 ];
 
 enum socketState {
@@ -246,12 +246,13 @@ class DriveClients  {
         //exportToExcel(newObj);
         if(this.clients[index].obj != null){
             let dif = objectsDif(this.clients[index].obj, newObj);
-            if(dif != null && this.showDif) console.log(JSON.stringify(dif, null, 4));
+            if(dif != null && this.showDif) 
+                console.log(moment().format("DD MMM YYYY HH:mm:ss"), JSON.stringify(dif, null, 4));
         }
         this.clients[index].obj = newObj;
         if(!this.showDif) console.log(JSON.stringify(newObj, null, 4));
         if(this.callBack != null) this.callBack(obj.devName, newObj);
-        //this.showDif = true; 
+        this.showDif = true; 
     }
     connect(/*plc index*/ index: number){
         //console.log(`connectPlc ${allClients[index].name}`);
