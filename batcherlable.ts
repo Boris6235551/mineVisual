@@ -75,7 +75,7 @@ export class LeftInfo extends LabelInfo {
 
     nextFrame(): void {
         if (this.monthA != 12) {
-            this.setText(this.primitives[1], 'L Skip No.' + this.numberA);
+            this.setText(this.primitives[1], 'L Skip No. ' + this.numberA);
             this.setText(this.primitives[2], this.weightA);
             this.setText(this.primitives[3], this.dateA);
             this.primitives[0].visible(true)
@@ -116,7 +116,7 @@ export class RightInfo extends LabelInfo {
 
     nextFrame(): void {
         if (this.monthB != 12) {
-            this.setText(this.primitives[1], 'R Skip No.' + this.numberB);
+            this.setText(this.primitives[1], 'R Skip No. ' + this.numberB);
             this.setText(this.primitives[2], this.weightB);
             this.setText(this.primitives[3], this.dateB);
             this.primitives[0].visible(true)
@@ -146,7 +146,7 @@ export class ShiftInfo extends LabelInfo {
         this.net = 0;
         this.beginDate = '';
         this.endDate = '';
-        this.primitives.push(this.createRectangle(p0.x, p0.y + length * 0.1, length * 1.4, length * 2.3, 'white', '#FE982A', length * 0.1, length * 0.1))
+        this.primitives.push(this.createRectangle(p0.x, p0.y + length * 0.1, length * 1.4, length * 2.7, 'white', '#FE982A', length * 0.1, length * 0.1))
         this.primitives.push(this.createText(p0.x + length * 0.2, p0.y + length * 0.2, '', length * 0.2))
         this.primitives.push(this.createText(p0.x + length * 0.2, p0.y + length * 0.5, '', length * 0.2))
         this.primitives.push(this.createText(p0.x + length * 0.2, p0.y + length * 0.8, '', length * 0.2))
@@ -161,10 +161,22 @@ export class ShiftInfo extends LabelInfo {
         this.net = mes.net;
     }
 
+    numberWithSpaces(x: number) {
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      }
+
     nextFrame(): void {
-        this.setText(this.primitives[1], 'Shift start:  ' + this.beginDate);
-        this.setText(this.primitives[2], 'Shift end:    ' + this.endDate);
-        this.setText(this.primitives[3], 'Total skips:   ' + this.skipCount + 'pcs');
-        this.setText(this.primitives[4], 'Total weight: ' + this.net + 'kg');
+        if (false) {
+            this.setText(this.primitives[1], 'Shift start:  ' + this.beginDate);
+            this.setText(this.primitives[2], 'Shift end:    ' + this.endDate);
+            this.setText(this.primitives[3], 'Total skips:   ' + this.skipCount + ' pcs');
+            this.setText(this.primitives[4], 'Total weight: ' + this.net + ' kg');
+        }
+        else if (true) {
+            this.setText(this.primitives[1], 'Shift start:  ' + this.beginDate);
+            this.setText(this.primitives[2], 'Shift end:    ');
+            this.setText(this.primitives[3], 'Total skips:   ' + this.skipCount + ' pcs');
+            this.setText(this.primitives[4], 'Total weight: ' + this.numberWithSpaces(100000) + ' kg');
+        }
     }
 }

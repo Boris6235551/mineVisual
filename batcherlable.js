@@ -80,7 +80,7 @@ var LeftInfo = /** @class */ (function (_super) {
     };
     LeftInfo.prototype.nextFrame = function () {
         if (this.monthA != 12) {
-            this.setText(this.primitives[1], 'L Skip No.' + this.numberA);
+            this.setText(this.primitives[1], 'L Skip No. ' + this.numberA);
             this.setText(this.primitives[2], this.weightA);
             this.setText(this.primitives[3], this.dateA);
             this.primitives[0].visible(true);
@@ -123,7 +123,7 @@ var RightInfo = /** @class */ (function (_super) {
     };
     RightInfo.prototype.nextFrame = function () {
         if (this.monthB != 12) {
-            this.setText(this.primitives[1], 'R Skip No.' + this.numberB);
+            this.setText(this.primitives[1], 'R Skip No. ' + this.numberB);
             this.setText(this.primitives[2], this.weightB);
             this.setText(this.primitives[3], this.dateB);
             this.primitives[0].visible(true);
@@ -155,7 +155,7 @@ var ShiftInfo = /** @class */ (function (_super) {
         _this.net = 0;
         _this.beginDate = '';
         _this.endDate = '';
-        _this.primitives.push(_this.createRectangle(p0.x, p0.y + length * 0.1, length * 1.4, length * 2.3, 'white', '#FE982A', length * 0.1, length * 0.1));
+        _this.primitives.push(_this.createRectangle(p0.x, p0.y + length * 0.1, length * 1.4, length * 2.7, 'white', '#FE982A', length * 0.1, length * 0.1));
         _this.primitives.push(_this.createText(p0.x + length * 0.2, p0.y + length * 0.2, '', length * 0.2));
         _this.primitives.push(_this.createText(p0.x + length * 0.2, p0.y + length * 0.5, '', length * 0.2));
         _this.primitives.push(_this.createText(p0.x + length * 0.2, p0.y + length * 0.8, '', length * 0.2));
@@ -170,11 +170,22 @@ var ShiftInfo = /** @class */ (function (_super) {
         this.skipCount = mes.skipCount;
         this.net = mes.net;
     };
+    ShiftInfo.prototype.numberWithSpaces = function (x) {
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    };
     ShiftInfo.prototype.nextFrame = function () {
-        this.setText(this.primitives[1], 'Shift start:  ' + this.beginDate);
-        this.setText(this.primitives[2], 'Shift end:    ' + this.endDate);
-        this.setText(this.primitives[3], 'Total skips:   ' + this.skipCount + 'pcs');
-        this.setText(this.primitives[4], 'Total weight: ' + this.net + 'kg');
+        if (false) {
+            this.setText(this.primitives[1], 'Shift start:  ' + this.beginDate);
+            this.setText(this.primitives[2], 'Shift end:    ' + this.endDate);
+            this.setText(this.primitives[3], 'Total skips:   ' + this.skipCount + ' pcs');
+            this.setText(this.primitives[4], 'Total weight: ' + this.net + ' kg');
+        }
+        else if (true) {
+            this.setText(this.primitives[1], 'Shift start:  ' + this.beginDate);
+            this.setText(this.primitives[2], 'Shift end:    ');
+            this.setText(this.primitives[3], 'Total skips:   ' + this.skipCount + ' pcs');
+            this.setText(this.primitives[4], 'Total weight: ' + this.numberWithSpaces(100000) + ' kg');
+        }
     };
     return ShiftInfo;
 }(LabelInfo));
