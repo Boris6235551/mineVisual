@@ -27,6 +27,8 @@ var UNDEGROUNDPUMP = /** @class */ (function (_super) {
     UNDEGROUNDPUMP.prototype.addBatcher = function () {
         this.Pump1 = new Pump_1.Pump(new mine_drawing_1.Point(200, 233), 100, 1);
         this.addWidget(this.Pump1);
+        this.Undegraund1 = new Pump_1.Undegraund(new mine_drawing_1.Point(400, 233), 100, 1);
+        this.addWidget(this.Undegraund1);
     };
     return UNDEGROUNDPUMP;
 }(mine_drawing_1.Scheme));

@@ -1,6 +1,4 @@
-import {
-    Scheme, Disposition, animateScheme, Point, Pool,    
-} from './mine_drawing';
+import {Scheme, Disposition, animateScheme, Point} from './mine_drawing';
 
 import {Valve, ValveState} from './valve';
 

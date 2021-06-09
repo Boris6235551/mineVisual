@@ -48,20 +48,20 @@ export class Skip extends BaseMineDraw {
                 p0.x - length * 0.02 - i * length * 0.02, p0.y + length * 0.33,
                 length * 0.002));
         }
-        for (let i = 0; i < 54; i++) {
+        for (let i = 0; i < 44; i++) {
             this.primitives.push(this.createLine(
                 p0.x, p0.y + length * 0.31 + i * length * 0.02,
                 p0.x - length * 0.02, p0.y + length * 0.33 + i * length * 0.02,
                 length * 0.002));
         }
-        for (let i = 0; i < 54; i++) {
+        for (let i = 0; i < 44; i++) {
             this.primitives.push(this.createLine(
                 p0.x + length * 0.2, p0.y + length * 0.31 + i * length * 0.02,
                 p0.x + length * 0.22, p0.y + length * 0.33 + i * length * 0.02,
                 length * 0.002));
         }
         //  вертикальный ствол шахты
-        this.primitives.push(this.createRectangleTrunk(p0.x, p0.y, length * 1.4, length * 0.2, length * 0.003));
+        this.primitives.push(this.createRectangleTrunk(p0.x, p0.y, length * 1.2, length * 0.2, length * 0.003));
         // домик
         this.primitives.push(this.createLineHouse(p0.x + length * 0.42, p0.y + length * 0.31,
             p0.x + length * 0.42, p0.y + length * 0.15,
@@ -175,10 +175,10 @@ export class Skip extends BaseMineDraw {
         });
     }
     private hidingCover(): void {
-        this.primitives[169].visible(false);
-        this.primitives[170].visible(false);
-        this.primitives[171].visible(false);
-        this.primitives[172].visible(false);
+        this.primitives[149].visible(false);
+        this.primitives[150].visible(false);
+        this.primitives[151].visible(false);
+        this.primitives[152].visible(false);
     }
     setBaseProperty(mes: any) {
         this.positionUp = mes.upPositionA;
@@ -191,72 +191,72 @@ export class Skip extends BaseMineDraw {
     nextFrame(): void {
         this.hidingCover();
         if (this.positionUp) {                           // положение скипа А вверху, а скипа В внизу
-            this.primitives[163].attrs.points[3] = (this.topSkip);
-            this.primitives[164].y(this.topSkip);
-            this.primitives[165].attrs.points[3] = (this.bottomSkip);
-            this.primitives[166].y(this.bottomSkip);
+            this.primitives[143].attrs.points[3] = (this.topSkip);
+            this.primitives[144].y(this.topSkip);
+            this.primitives[145].attrs.points[3] = (this.bottomSkip);
+            this.primitives[146].y(this.bottomSkip);
         }
         else if (this.positionDown) {                   // положение скипа А внизу, а скипа В вверху
-            this.primitives[163].attrs.points[3] = this.bottomSkip;
-            this.primitives[164].y(this.bottomSkip);
-            this.primitives[165].attrs.points[3] = this.topSkip;
-            this.primitives[166].y(this.topSkip);
+            this.primitives[143].attrs.points[3] = this.bottomSkip;
+            this.primitives[144].y(this.bottomSkip);
+            this.primitives[145].attrs.points[3] = this.topSkip;
+            this.primitives[146].y(this.topSkip);
         }
         else if (this.moveUp) {                        // движение скипа А вверх, а скипа В вниз
-            if (this.primitives[163].attrs.points[3] >= this.topSkip) {
-                this.primitives[163].attrs.points[3] = this.primitives[163].attrs.points[3] - 5
-                this.primitives[164].move({ x: 0, y: -5 });
-                this.primitives[165].attrs.points[3] = this.primitives[165].attrs.points[3] + 5
-                this.primitives[166].move({ x: 0, y: 5 });
+            if (this.primitives[143].attrs.points[3] >= this.topSkip) {
+                this.primitives[143].attrs.points[3] = this.primitives[143].attrs.points[3] - 5
+                this.primitives[144].move({ x: 0, y: -5 });
+                this.primitives[145].attrs.points[3] = this.primitives[145].attrs.points[3] + 5
+                this.primitives[146].move({ x: 0, y: 5 });
             }
             else {
-                this.primitives[163].attrs.points[3] = this.bottomSkip
-                this.primitives[164].y(this.bottomSkip);
-                this.primitives[165].attrs.points[3] = this.topSkip
-                this.primitives[166].y(this.topSkip);
+                this.primitives[143].attrs.points[3] = this.bottomSkip
+                this.primitives[144].y(this.bottomSkip);
+                this.primitives[145].attrs.points[3] = this.topSkip
+                this.primitives[146].y(this.topSkip);
             }
         }
         else if (this.moveDown) {                     // движение скипа А вниз, а скипа В вверх
-            if (this.primitives[163].attrs.points[3] <= this.bottomSkip) {
-                this.primitives[163].attrs.points[3] = this.primitives[163].attrs.points[3] + 5
-                this.primitives[164].move({ x: 0, y: +5 });
-                this.primitives[165].attrs.points[3] = this.primitives[165].attrs.points[3] - 5
-                this.primitives[166].move({ x: 0, y: -5 });
+            if (this.primitives[143].attrs.points[3] <= this.bottomSkip) {
+                this.primitives[143].attrs.points[3] = this.primitives[143].attrs.points[3] + 5
+                this.primitives[144].move({ x: 0, y: +5 });
+                this.primitives[145].attrs.points[3] = this.primitives[145].attrs.points[3] - 5
+                this.primitives[146].move({ x: 0, y: -5 });
             }
             else {
-                this.primitives[163].attrs.points[3] = this.topSkip
-                this.primitives[164].y(this.topSkip);
-                this.primitives[165].attrs.points[3] = this.bottomSkip
-                this.primitives[166].y(this.bottomSkip);
+                this.primitives[143].attrs.points[3] = this.topSkip
+                this.primitives[144].y(this.topSkip);
+                this.primitives[145].attrs.points[3] = this.bottomSkip
+                this.primitives[146].y(this.bottomSkip);
             }
         }
         else if (this.skipLoadA) {                  // скип А внизу, скип В вверху, отображение левой полосы 
-            this.primitives[163].attrs.points[3] = this.bottomSkip;
-            this.primitives[164].y(this.bottomSkip);
-            this.primitives[165].attrs.points[3] = this.topSkip;
-            this.primitives[166].y(this.topSkip);
-            this.primitives[169].visible(true);
+            this.primitives[143].attrs.points[3] = this.bottomSkip;
+            this.primitives[144].y(this.bottomSkip);
+            this.primitives[145].attrs.points[3] = this.topSkip;
+            this.primitives[146].y(this.topSkip);
+            this.primitives[149].visible(true);
         }
         else if (this.skipLoadB) {                  // скип А вверху, скип В внизу, отображение правой полосы 
-            this.primitives[163].attrs.points[3] = (this.topSkip);
-            this.primitives[164].y(this.topSkip);
-            this.primitives[165].attrs.points[3] = (this.bottomSkip);
-            this.primitives[166].y(this.bottomSkip);
-            this.primitives[170].visible(true);
+            this.primitives[143].attrs.points[3] = (this.topSkip);
+            this.primitives[144].y(this.topSkip);
+            this.primitives[145].attrs.points[3] = (this.bottomSkip);
+            this.primitives[146].y(this.bottomSkip);
+            this.primitives[150].visible(true);
         }
         else if (this.openA) {
-            this.primitives[163].attrs.points[3] = (this.topSkip);
-            this.primitives[164].y(this.topSkip);
-            this.primitives[165].attrs.points[3] = (this.bottomSkip);
-            this.primitives[166].y(this.bottomSkip);
-            this.primitives[171].visible(true);
+            this.primitives[143].attrs.points[3] = (this.topSkip);
+            this.primitives[144].y(this.topSkip);
+            this.primitives[145].attrs.points[3] = (this.bottomSkip);
+            this.primitives[146].y(this.bottomSkip);
+            this.primitives[151].visible(true);
         }
         else if (this.openB) {
-            this.primitives[163].attrs.points[3] = this.bottomSkip;
-            this.primitives[164].y(this.bottomSkip);
-            this.primitives[165].attrs.points[3] = this.topSkip;
-            this.primitives[166].y(this.topSkip);
-            this.primitives[172].visible(true);
+            this.primitives[143].attrs.points[3] = this.bottomSkip;
+            this.primitives[144].y(this.bottomSkip);
+            this.primitives[145].attrs.points[3] = this.topSkip;
+            this.primitives[146].y(this.topSkip);
+            this.primitives[152].visible(true);
         }
     }
 };

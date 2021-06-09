@@ -90,7 +90,7 @@ batcher.GateRight1.closed
 // ###############################################################################################
 // ###############################################################################################
 // ###############################################################################################
-import { Scheme, Disposition, Point, Pool, PropParams } from './mine_drawing';
+import { Scheme, Disposition, Point, PropParams } from './mine_drawing';
 
 
 // import { Label, LabelDegree } from './label'

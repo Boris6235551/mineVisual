@@ -263,6 +263,313 @@ export class Pump extends BaseMineDraw {
     }
 }
 
+export class Pool extends BaseMineDraw {
+    private step: number;
+    private a: number;
+    constructor(p0: Point, length: number) {
+        super(p0, length);
+        this.name = 'Pool';
+        this.primitives.push(this.createRectangle(p0.x, p0.y, length * 0.15, length, '#7D5A5A', '#C06B5A', length * 0.001, length * 0.001));
+        this.primitives.push(this.createRectangle(p0.x + length * 0.01, p0.y, length * 0.13, length * 0.98, '#E9EDEA', '#34E7E7', length * 0.0005, 0));
+        this.primitives.push(this.createRectangle(p0.x + length * 0.01, p0.y, length * 0.01372, length * 0.98, '#E6F4EF', '', 0, 0));
+        this.primitives.push(this.createRectangle(p0.x + length * 0.01, p0.y + length * 0.01372 * 1, length * 0.01372, length * 0.98, '#E1F4ED', '', 0, 0));
+        this.primitives.push(this.createRectangle(p0.x + length * 0.01, p0.y + length * 0.01372 * 2, length * 0.01372, length * 0.98, '#D1E9E0', '', 0, 0));
+        this.primitives.push(this.createRectangle(p0.x + length * 0.01, p0.y + length * 0.01372 * 3, length * 0.01372, length * 0.98, '#C1DBD1', '', 0, 0));
+        this.primitives.push(this.createRectangle(p0.x + length * 0.01, p0.y + length * 0.01372 * 4, length * 0.01372, length * 0.98, '#A7CABD', '', 0, 0));
+        this.primitives.push(this.createRectangle(p0.x + length * 0.01, p0.y + length * 0.01372 * 5, length * 0.01372, length * 0.98, '#97BFB0', '', 0, 0));
+        this.primitives.push(this.createRectangle(p0.x + length * 0.01, p0.y + length * 0.01372 * 6, length * 0.01372, length * 0.98, '#8DB5A6', '', 0, 0));
+        this.primitives.push(this.createRectangle(p0.x + length * 0.01, p0.y + length * 0.01372 * 7, length * 0.01372, length * 0.98, '#85AC9D', '', 0, 0));
+        this.primitives.push(this.createRectangle(p0.x + length * 0.01, p0.y + length * 0.01372 * 8, length * 0.01372, length * 0.98, '#789F90', '', 0, 0));
+        this.primitives.push(this.createRectangle(p0.x + length * 0.01, p0.y + length * 0.01372 * 9, length * 0.01372, length * 0.98, '#6F9385', '', 0, 0));
+    }
+    private createRectangle(x: number, y: number, height: number, width: number, fill: string, stroke?: string,
+        strokeWidth?: number, cornerRadius?: number): Konva.Rect {
+        return new Konva.Rect({
+            x: x,
+            y: y,
+            height: height,
+            width: width,
+            fill: fill,
+            stroke: stroke,
+            strokeWidth: strokeWidth,
+            cornerRadius: cornerRadius,
+        });
+    }
+}
+
+export enum ValveState {
+    closed = 0, opened, opening, closing, alarm, stop
+};
+
+enum ValvePrimitive {
+    triangle0 = 0, triangle1, rectangleCentr, circle, opening
+}
+
+export class Valve extends BaseMineDraw {
+    constructor(p0: Point, length: number, disposition: Disposition, percentage: number) {
+        super(p0, length, disposition);
+        this.name = 'Valve';
+        this.state = ValveState.closed;
+        let p00: Point = this.rect.p0;
+        let p01: Point = (disposition == Disposition.Vertical) ? this.rect.rightTop() : this.rect.getMiddlePoint();
+        let p02: Point = (disposition == Disposition.Vertical) ? this.rect.getMiddlePoint() : this.rect.leftButtom();
+        this.primitives.push(this.createTriangle(p00, p01, p02, length));
+        let p10: Point = this.rect.p1;
+        let p11: Point = (disposition == Disposition.Vertical) ? this.rect.leftButtom() : this.rect.getMiddlePoint();
+        let p12: Point = (disposition == Disposition.Vertical) ? this.rect.getMiddlePoint() : this.rect.rightTop();
+        this.primitives.push(this.createTriangle(p10, p11, p12, length));
+        this.primitives.push(this.createRectangle(length));
+        this.primitives.push(this.createCircle(length));
+        this.primitives.push(this.createText(length, percentage));
+        this.rect.p0.y -= 2;
+        this.rect.p1.y += 2;
+        this.nextFrame();
+    }
+    setState(newState: ValveState): void {
+        this.state = newState;
+    }
+    setPercentage(percentage: number) {
+        return percentage + '%'
+    }
+    private createTriangle(p0: Point, p1: Point, p2: Point, length: number): Konva.Line {
+        return new Konva.Line({
+            points: [p0.x, p0.y, p1.x, p1.y, p2.x, p2.y],
+            fill: '',
+            stroke: '',
+            strokeWidth: Math.trunc(length*0.02),
+            closed: true,
+        });
+    }
+    private createRectangle(length: number): Konva.Rect {
+        let dxC = (this.disposition == Disposition.Horizontal) ? Math.trunc(length / 19.8) : Math.trunc(length / 5.4);
+        let dyC = (this.disposition == Disposition.Horizontal) ? Math.trunc(length / 5.4) : Math.trunc(length / 19.8);
+        let height = (this.disposition == Disposition.Horizontal) ? length / 2.7 : length / 9.9;
+        let width = (this.disposition == Disposition.Horizontal) ? length / 9.9 : length / 2.7;
+        return new Konva.Rect({
+            x: this.rect.getMiddlePoint().x - dxC,
+            y: this.rect.getMiddlePoint().y - dyC,
+            height: height,
+            width: width,
+            fill: '',
+        });
+    }
+
+    private createCircle(length: number): Konva.Circle {
+        let dxC = (this.disposition == Disposition.Horizontal) ? 0 : Math.trunc(0.39 * length);
+        let dyC = (this.disposition == Disposition.Horizontal) ? Math.trunc(0.39 * length) : 0;
+        return new Konva.Circle({
+            x: this.rect.getMiddlePoint().x - dxC,
+            y: this.rect.getMiddlePoint().y - dyC,
+            radius: Math.trunc(length / 4.79),
+            fill: '',
+            stroke: '',
+            strokeWidth: 1,
+        });
+    }
+
+    private createText(length: number, percentage): Konva.Text {
+        let dxC = (this.disposition == Disposition.Horizontal) ? Math.trunc(0.16 * length) : Math.trunc(0.54 * length);
+        let dyC = (this.disposition == Disposition.Horizontal) ? Math.trunc(0.45 * length) : Math.trunc(0.06 * length);
+        return new Konva.Text({
+            x: this.rect.getMiddlePoint().x - dxC,
+            y: this.rect.getMiddlePoint().y - dyC,
+            text: this.setPercentage(percentage),
+            fontSize: length/6,
+            fontStyle: 'bold',
+            fontFamily: 'Roboto',
+            fill: '',
+        });
+    }
+    protected calcSize(length: number, factor: number = 1.59): number {
+        return this.getOdd(length / factor);
+    };
+
+    private showFrame(fill0: string, fill1: string, stroke: string, rectFill: string, circleStroke: string): void {
+        this.primitives[ValvePrimitive.triangle0].stroke(stroke);
+        this.primitives[ValvePrimitive.triangle0].fill(fill0);
+        this.primitives[ValvePrimitive.triangle1].stroke(stroke);
+        this.primitives[ValvePrimitive.triangle1].fill(fill1);
+        this.primitives[ValvePrimitive.rectangleCentr].fill(rectFill);
+        this.primitives[ValvePrimitive.circle].stroke(circleStroke);
+    }
+
+    nextFrame(): void {
+        switch (this.state) {
+            case ValveState.closed:
+                this.showFrame('#FE668B', '#FE668B', '#E3093E', '#E3093E', '#E3093E');
+                break;
+            case ValveState.opened:
+                if (this.animationFrame == 0) {
+                    this.showFrame('#1D8EEA', '#E1F1FB', '#00C734', '#7AD03E', '#7AD03E');
+                    this.animationFrame = 1;
+                }
+                else if (this.animationFrame == 1) {
+                    this.showFrame('#1D8EEA', '#1D8EEA', '#00C734', '#7AD03E', '#7AD03E');
+                    this.animationFrame = 2;
+                }
+                else {
+                    this.showFrame('#E1F1FB', '#1D8EEA', '#00C734', '#7AD03E', '#7AD03E');
+                    this.animationFrame = 0;
+                }
+                break;
+            case ValveState.opening:
+                if (this.animationFrame == 0) {
+                    this.showFrame('#A1DC77', '#E1F1FB', '#F0FF41', '#7AD03E', '#7AD03E');
+                    this.animationFrame = 1;
+                }
+                else {
+                    this.showFrame('#E1F1FB', '#A1DC77', '#7AD03E', '#7AD03E', '#7AD03E');
+                    this.animationFrame = 0;
+                }
+                break;
+            case ValveState.closing:
+                if (this.animationFrame == 0) {
+                    this.showFrame('#FE668B', '#E1F1FB', '#F0FF41', '#E3093E', '#E3093E');
+                    this.animationFrame = 1;
+                }
+                else {
+                    this.showFrame('#E1F1FB', '#FE668B', '#E3093E', '#E3093E', '#E3093E');
+                    this.animationFrame = 0;
+                }
+                break;
+            case ValveState.alarm:
+                if (this.animationFrame == 0) {
+                    this.showFrame('#EF0000', '#EF0000', '#010101', '#EF0000', '#EF0000');
+                    this.animationFrame = 1;
+                }
+                else {
+                    this.showFrame('#010101', '#010101', '#FF0000', '#EF0000', '#EF0000');
+                    this.animationFrame = 0;
+                }
+                break;
+        }
+    }
+}
+
+export class ValveCheck extends BaseMineDraw {
+    constructor(p0: Point, length: number, disposition: Disposition) {
+        super(p0, length, disposition);
+        this.name = 'Valvecheck';
+        this.state = ValveState.closed;
+        let p00: Point = this.rect.p0;
+        let p01: Point = (disposition == Disposition.Vertical) ? this.rect.rightTop() : this.rect.getMiddlePoint();
+        let p02: Point = (disposition == Disposition.Vertical) ? this.rect.getMiddlePoint() : this.rect.leftButtom();
+        this.primitives.push(this.createTriangle(p00, p01, p02, length));
+        let p10: Point = this.rect.p1;
+        let p11: Point = (disposition == Disposition.Vertical) ? this.rect.leftButtom() : this.rect.getMiddlePoint();
+        let p12: Point = (disposition == Disposition.Vertical) ? this.rect.getMiddlePoint() : this.rect.rightTop();
+        this.primitives.push(this.createTriangle(p10, p11, p12, length));
+        this.primitives.push(this.createRectangle(length));
+        this.primitives.push(this.createCircle(length));
+        this.rect.p0.y -= 2;
+        this.rect.p1.y += 2;
+        this.nextFrame();
+    }
+    setState(newState: ValveState): void {
+        this.state = newState;
+    }
+    private createTriangle(p0: Point, p1: Point, p2: Point, length: number): Konva.Line {
+        return new Konva.Line({
+            points: [p0.x, p0.y, p1.x, p1.y, p2.x, p2.y],
+            fill: '',
+            stroke: '',
+            strokeWidth: Math.trunc(length*0.02),
+            closed: true,
+        });
+    }
+    private createRectangle(length: number): Konva.Rect {
+        let dxC = (this.disposition == Disposition.Horizontal) ? Math.trunc(length / 19.8) : Math.trunc(length / 5.4);
+        let dyC = (this.disposition == Disposition.Horizontal) ? Math.trunc(length / 5.4) : Math.trunc(length / 19.8);
+        let height = (this.disposition == Disposition.Horizontal) ? length / 2.7 : length / 9.9;
+        let width = (this.disposition == Disposition.Horizontal) ? length / 9.9 : length / 2.7;
+        return new Konva.Rect({
+            x: this.rect.getMiddlePoint().x - dxC,
+            y: this.rect.getMiddlePoint().y - dyC,
+            height: height,
+            width: width,
+            fill: '',
+        });
+    }
+
+    private createCircle(length: number): Konva.Circle {
+        let dxC = (this.disposition == Disposition.Horizontal) ? 0 : Math.trunc(0.39 * length);
+        let dyC = (this.disposition == Disposition.Horizontal) ? Math.trunc(0.39 * length) : 0;
+        return new Konva.Circle({
+            x: this.rect.getMiddlePoint().x - dxC,
+            y: this.rect.getMiddlePoint().y - dyC,
+            radius: Math.trunc(length / 4.79),
+            fill: '',
+            stroke: '',
+            strokeWidth: 1,
+        });
+    }
+    protected calcSize(length: number, factor: number = 1.59): number {
+        return this.getOdd(length / factor);
+    };
+    nextFrame(): void {
+
+    }
+}
+
+export class UndegraundPump extends Pump {
+    constructor(p0: Point, length: number, disposition: Disposition) {
+        super(p0, length, Disposition.Vertical);
+
+        let p1lx: number = p0.x + this.calcSize(length)/2; let p1ly: number = p0.y;
+        let p2lx: number = p0.x + this.calcSize(length)/2; let p2ly: number = p0.y + length;
+        let p3lx: number = p0.x + length; let p3ly: number = p0.y + length;
+        let p4lx: number = p0.x + length; let p4ly: number = p0.y;
+        let offsetX: number = length * 0.5 - this.calcSize(length) * 0.25;
+        this.primitives.push(this.createLineUndegraund(p1lx, p1ly, p2lx, p2ly, p3lx, p3ly,
+            p4lx, p4ly, length * 0.0157, offsetX, 0));
+
+        p1lx = p0.x + length, p1ly = p0.y,
+            p2lx = p3lx = p4lx = p0.x + 1.1 * length,
+            p2ly = p3ly = p4ly = p0.y + 0.1 * length;
+
+        for (let i = 0; i < length; i = i + 0.1 * length)
+            this.primitives.push(this.createLineUndegraund(p1lx, p1ly, p2lx, p2ly, p3lx, p3ly, p4lx, p4ly,
+                length * 0.0157, offsetX, -i));
+
+        p1lx = p0.x + length - offsetX, p1ly = p0.y + length,
+            p2lx = p3lx = p4lx = p0.x + 0.9 * length - offsetX,
+            p2ly = p3ly = p4ly = p0.y + 0.1 * length + length;
+
+        for (let i = 0; i < 0.8 * length; i = i + 0.1 * length)
+            this.primitives.push(this.createLineUndegraund(p1lx, p1ly, p2lx, p2ly, p3lx, p3ly, p4lx, p4ly,
+                length * 0.0157, i, 0));
+
+        p1lx = p0.x + this.calcSize(length)/2, p1ly = p0.y + length,
+            p2lx = p3lx = p4lx = p0.x - 0.1 * length + this.calcSize(length)/2,
+            p2ly = p3ly = p4ly = p0.y + 0.9 * length;
+
+        for (let i = 0; i < length; i = i + 0.1 * length)
+            this.primitives.push(this.createLineUndegraund(p1lx, p1ly, p2lx, p2ly, p3lx, p3ly, p4lx, p4ly,
+                length * 0.0157, offsetX, i));
+
+        this.primitives[1].hide();
+        this.primitives[5].hide();
+        this.primitives[6].hide();
+
+        console.log(this.primitives)
+    }
+    setState(newState: PumpState): void {
+        this.state = newState == PumpState.run ? PumpState.revers : newState;
+    }
+    private createLineUndegraund(p1lx: number, p1ly: number, p2lx: number, p2ly: number, p3lx: number, p3ly: number,
+        p4lx: number, p4ly: number, strokeWidth: number, offsetX: number, offsetY: number): Konva.Line {
+        return new Konva.Line({
+            points: [p1lx, p1ly, p2lx, p2ly, p3lx, p3ly, p4lx, p4ly],
+            stroke: '#980505',
+            strokeWidth: strokeWidth,
+            offset: {
+                x: offsetX,
+                y: offsetY,
+            },
+        });
+    }
+}
+
 export class Compressor extends BaseMineDraw {
     constructor(p0: Point, length: number) {
         super(p0, length);
