@@ -190,12 +190,25 @@ function objectsDif(previous, current) {
  ******************************************************************/
 var PORT = 2000;
 var allClients = [
-    // {host: '192.168.100.50', name: 'DSF'},
+    // {host: '192.168.100.50', name: 'DSF'},   // ok
     // {host: '192.168.100.51', name: 'Cage'},
     // {host: '192.168.100.52', name: 'Skip'},
     // {host: '192.168.100.53', name: 'SubStation'},
     // {host: '192.168.100.54', name: 'UndegroundStation'},
-    { host: '192.168.100.55', name: 'Batcher' },
+    // {host: '192.168.100.55', name: 'Batcher'},   // ok
+    // /*   Conveyor scale   */
+    // {host: '192.168.100.60', name: 'Scale3AB'},
+    // {host: '192.168.100.62', name: 'Scale4'},
+    // {host: '192.168.100.64', name: 'Scale6AB'},
+    // {host: '192.168.100.66', name: 'Scale7'},
+    // {host: '192.168.100.68', name: 'Scale8_9'},
+    /*   Pumps   */
+    //{host: '192.168.100.40', name: 'techPumps'},
+    // {host: '192.168.100.41', name: 'clearPumps'},
+    //{host: '192.168.100.43', name: 'drainageA'},
+    // {host: '192.168.100.45', name: 'drainageB'},
+    //{host: '192.168.100.70', name: 'RailScale'},
+    { host: '192.168.100.103', name: 'BatcherLable' }
 ];
 var socketState;
 (function (socketState) {
@@ -249,7 +262,7 @@ var DriveClients = /** @class */ (function () {
         //this.timer = setInterval(this.drive, 10000);
     }
     DriveClients.prototype.checkObj = function (obj, index) {
-        console.log("get object index=" + index + " name=" + allClients[index].name);
+        //        console.log(`get object index=${index} name=${allClients[index].name}`)
         var newObj = parseObject(obj);
         //exportToExcel(newObj);
         if (this.clients[index].obj != null) {
@@ -259,7 +272,7 @@ var DriveClients = /** @class */ (function () {
         }
         this.clients[index].obj = newObj;
         if (!this.showDif)
-            console.log(JSON.stringify(newObj, null, 4));
+            console.log(moment().format("DD MMM YYYY HH:mm:ss"), JSON.stringify(newObj, null, 4));
         if (this.callBack != null)
             this.callBack(obj.devName, newObj);
         this.showDif = true;
@@ -277,7 +290,7 @@ var DriveClients = /** @class */ (function () {
         });
         cl.socket.on('data', function (data) {
             var ar = new Uint8Array(data);
-            console.log(moment().format("DD MMM YYYY HH:mm:ss") + " " + cl.name + "(" + cl.socket.remoteAddress + ")");
+            //            console.log(`${moment().format("DD MMM YYYY HH:mm:ss")} ${cl.name}(${cl.socket.remoteAddress})`); 
             cl.state = socketState.Connected; //clients[index].state = socketState.Connected;
             var obj = parseCPUmessage(ar); //showTest(index);
             //console.log(JSON.stringify(obj, null, 4))

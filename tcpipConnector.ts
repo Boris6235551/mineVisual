@@ -156,12 +156,12 @@ function objectsDif(previous, current){
 var PORT = 2000;
 
 let allClients = [
-    // {host: '192.168.100.50', name: 'DSF'},
+    // {host: '192.168.100.50', name: 'DSF'},   // ok
     // {host: '192.168.100.51', name: 'Cage'},
     // {host: '192.168.100.52', name: 'Skip'},
     // {host: '192.168.100.53', name: 'SubStation'},
     // {host: '192.168.100.54', name: 'UndegroundStation'},
-    {host: '192.168.100.55', name: 'Batcher'},
+    // {host: '192.168.100.55', name: 'Batcher'},   // ok
     // /*   Conveyor scale   */
     // {host: '192.168.100.60', name: 'Scale3AB'},
     // {host: '192.168.100.62', name: 'Scale4'},
@@ -174,7 +174,8 @@ let allClients = [
     //{host: '192.168.100.43', name: 'drainageA'},
     // {host: '192.168.100.45', name: 'drainageB'},
     //{host: '192.168.100.70', name: 'RailScale'},
-    //{host: '192.168.100.103', name: 'BatcherLable'}
+    
+    {host: '192.168.100.103', name: 'BatcherLable'}
 ];
 
 enum socketState {
@@ -241,7 +242,7 @@ class DriveClients  {
         //this.timer = setInterval(this.drive, 10000);
     }
     checkObj(obj, index){
-        console.log(`get object index=${index} name=${allClients[index].name}`)
+//        console.log(`get object index=${index} name=${allClients[index].name}`)
         let newObj = parseObject(obj);
         //exportToExcel(newObj);
         if(this.clients[index].obj != null){
@@ -250,7 +251,7 @@ class DriveClients  {
                 console.log(moment().format("DD MMM YYYY HH:mm:ss"), JSON.stringify(dif, null, 4));
         }
         this.clients[index].obj = newObj;
-        if(!this.showDif) console.log(JSON.stringify(newObj, null, 4));
+        if(!this.showDif) console.log(moment().format("DD MMM YYYY HH:mm:ss"), JSON.stringify(newObj, null, 4)); 
         if(this.callBack != null) this.callBack(obj.devName, newObj);
         this.showDif = true; 
     }
@@ -266,7 +267,7 @@ class DriveClients  {
         }); 
         cl.socket.on('data', (data) => {     
             let ar = new Uint8Array(data);
-            console.log(`${moment().format("DD MMM YYYY HH:mm:ss")} ${cl.name}(${cl.socket.remoteAddress})`); 
+//            console.log(`${moment().format("DD MMM YYYY HH:mm:ss")} ${cl.name}(${cl.socket.remoteAddress})`); 
             cl.state = socketState.Connected; //clients[index].state = socketState.Connected;
             let obj = parseCPUmessage(ar);  //showTest(index);
             //console.log(JSON.stringify(obj, null, 4))

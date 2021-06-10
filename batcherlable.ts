@@ -86,7 +86,7 @@ export class LeftInfo extends LabelInfo {
             this.setText(this.primitives[3], '');
             this.primitives[0].visible(false)
         }
-        else if (this.endMonth != 12) {
+        if (this.endMonth != 12) {
             this.setText(this.primitives[1], '');
             this.setText(this.primitives[2], '');
             this.setText(this.primitives[3], '');
@@ -127,7 +127,7 @@ export class RightInfo extends LabelInfo {
             this.setText(this.primitives[3], '');
             this.primitives[0].visible(false)
         }
-        else if (this.endMonth != 12) {
+        if (this.endMonth != 12) {
             this.setText(this.primitives[1], '');
             this.setText(this.primitives[2], '');
             this.setText(this.primitives[3], '');
