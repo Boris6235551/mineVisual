@@ -16,7 +16,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.TongueRight = exports.TongueLeft = exports.GateRight = exports.GateLeft = exports.GateBase = exports.BatcherRight = exports.BatcherLeft = exports.BatcherBase = exports.ChuteRight = exports.ChuteLeft = exports.ChuteBase = exports.FeederRight = exports.FeederLeft = exports.FeederBase = exports.Bunker = void 0;
+exports.SkipPosition = exports.TongueRight = exports.TongueLeft = exports.GateRight = exports.GateLeft = exports.GateBase = exports.BatcherRight = exports.BatcherLeft = exports.BatcherBase = exports.ChuteRight = exports.ChuteLeft = exports.ChuteBase = exports.FeederRight = exports.FeederLeft = exports.FeederBase = exports.Bunker = void 0;
 var konva_1 = __importDefault(require("konva"));
 var mine_drawing_1 = require("./mine_drawing");
 var moment = require('moment');
@@ -30,6 +30,9 @@ var moment = require('moment');
 *   GateLeft, GateRight (opened, closed)
 *   TangueLeft, TangueRight (opened, closed)
 *************************************************************************/
+var fillDisable = '#E9F0EE';
+var strokeDisable = '#BFC9C6';
+var strokeEnable = '#000000';
 var Bunker = /** @class */ (function (_super) {
     __extends(Bunker, _super);
     function Bunker(p0, length, left) {
@@ -80,9 +83,11 @@ var Bunker = /** @class */ (function (_super) {
         switch (this.propBit) {
             case true:
                 this.primitives[0].fill('#045658');
+                this.primitives[0].stroke(strokeEnable);
                 break;
             case false:
-                this.primitives[0].fill('#A6C3C4');
+                this.primitives[0].fill(fillDisable);
+                this.primitives[0].stroke(strokeDisable);
                 break;
         }
     };
@@ -124,8 +129,10 @@ var FeederBase = /** @class */ (function (_super) {
                     break;
             }
         }
-        else
-            this.primitives[0].fill('#99BAAF');
+        else {
+            this.primitives[0].fill(fillDisable);
+            this.primitives[0].stroke(strokeDisable);
+        }
     };
     return FeederBase;
 }(mine_drawing_1.BaseMineDraw));
@@ -491,4 +498,67 @@ var TongueRight = /** @class */ (function (_super) {
     return TongueRight;
 }(TongueBase));
 exports.TongueRight = TongueRight;
+var SkipPosition = /** @class */ (function (_super) {
+    __extends(SkipPosition, _super);
+    function SkipPosition(p0, length) {
+        var _this = _super.call(this, p0, length) || this;
+        _this.name = 'Skipposition';
+        _this.skipLoadA = false;
+        _this.skipLoadB = false;
+        //  две нижние подставки скипов 
+        _this.primitives.push(_this.createRectangle(p0.x, p0.y, length * 0.3, length + 10, 'red', '', 0, 0));
+        _this.primitives.push(_this.createRectangle(p0.x + length * 2 - 11, p0.y, length * 0.3, length + 10, 'red', '', 0, 0));
+        return _this;
+        //  две верхние крышки скипов 
+        // this.primitives.push(this.createRectangle(p0.x + length * 0.02 - length * 0.1, this.topSkip,
+        //     length * 0.01, length * 0.1, 'red', '', 0, 0));
+        // this.primitives.push(this.createRectangle(p0.x + length * 0.12 + length * 0.061, this.topSkip,
+        //     length * 0.01, length * 0.1, 'red', '', 0, 0));
+        // скрытие верхних и нижних крышек скипов
+    }
+    SkipPosition.prototype.createRectangle = function (x, y, height, width, fill, stroke, strokeWidth, cornerRadius) {
+        return new konva_1.default.Rect({
+            x: x,
+            y: y,
+            height: height,
+            width: width,
+            fill: fill,
+            stroke: stroke,
+            strokeWidth: strokeWidth,
+            cornerRadius: cornerRadius,
+        });
+    };
+    SkipPosition.prototype.setBaseProperty = function (mes) {
+        // mes = {
+        //     "skipLoadB": true,
+        //     "skipLoadA": true,
+        //     "trayClosedB": true,
+        //     "trayOpenB": false,
+        //     "gateClosedB": true,
+        //     "gateOpenedB": false,
+        //     "trayClosedA": true,
+        //     "trayOpenedA": false,
+        //     "gateClosedA": true,
+        //     "gateOpenedA": false,
+        //     "chuteLoadB": false,
+        //     "chuteLoadA": true,
+        //     "feederOn": true
+        // }
+        // console.log(mes)
+        this.skipLoadA = mes.skipLoadA;
+        this.skipLoadB = mes.skipLoadB;
+    };
+    SkipPosition.prototype.nextFrame = function () {
+        if (this.skipLoadA)
+            this.primitives[0].visible(true);
+        else
+            this.primitives[0].visible(false);
+        if (this.skipLoadB)
+            this.primitives[1].visible(true);
+        else
+            this.primitives[1].visible(false);
+    };
+    return SkipPosition;
+}(mine_drawing_1.BaseMineDraw));
+exports.SkipPosition = SkipPosition;
 //# sourceMappingURL=batcher.js.map

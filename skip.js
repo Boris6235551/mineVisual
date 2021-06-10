@@ -72,14 +72,19 @@ var Skip = /** @class */ (function (_super) {
         // крыша скипа
         _this.primitives.push(_this.createRectangle(p0.x - length * 0.02, p0.y - length * 0.05, length * 0.03, length * 0.3, '#005236', '', 0, 0));
         _this.primitives.push(_this.createLineHouseRoof(p0.x + length * 0.29, p0.y + length * 0.31, p0.x + length * 0.02, p0.y - length * 0.05, p0.x, p0.y - length * 0.05, p0.x + length * 0.27, p0.y + length * 0.31));
-        //  две нижние подставки скипов 
-        _this.primitives.push(_this.createRectangle(p0.x, length * 1.12, length * 0.02, length * 0.1, 'red', '', 0, 0));
-        _this.primitives.push(_this.createRectangle(p0.x + length * 0.1, length * 1.12, length * 0.02, length * 0.1, 'red', '', 0, 0));
-        //  две верхние крышки скипов 
-        _this.primitives.push(_this.createRectangle(p0.x + length * 0.02 - length * 0.1, _this.topSkip, length * 0.01, length * 0.1, 'red', '', 0, 0));
-        _this.primitives.push(_this.createRectangle(p0.x + length * 0.12 + length * 0.061, _this.topSkip, length * 0.01, length * 0.1, 'red', '', 0, 0));
-        // скрытие верхних и нижних крышек скипов
-        _this.hidingCover();
+        // //  две нижние подставки скипов 
+        // this.primitives.push(this.createRectangle(p0.x, length * 1.12,
+        //     length * 0.02, length * 0.1, 'red', '', 0, 0));
+        // this.primitives.push(this.createRectangle(p0.x + length * 0.1, length * 1.12,
+        //     length * 0.02, length * 0.1, 'red', '', 0, 0));
+        // //  две верхние крышки скипов 
+        // this.primitives.push(this.createRectangle(p0.x + length * 0.02 - length * 0.1, this.topSkip,
+        //     length * 0.01, length * 0.1, 'red', '', 0, 0));
+        // this.primitives.push(this.createRectangle(p0.x + length * 0.12 + length * 0.061, this.topSkip,
+        //     length * 0.01, length * 0.1, 'red', '', 0, 0));
+        // // скрытие верхних и нижних крышек скипов
+        // this.hidingCover();
+        _this.setBaseProperty(null);
         return _this;
     }
     Skip.prototype.createRectangle = function (x, y, height, width, fill, stroke, strokeWidth, cornerRadius) {
@@ -137,13 +142,26 @@ var Skip = /** @class */ (function (_super) {
             fill: fill,
         });
     };
-    Skip.prototype.hidingCover = function () {
-        this.primitives[149].visible(false);
-        this.primitives[150].visible(false);
-        this.primitives[151].visible(false);
-        this.primitives[152].visible(false);
-    };
+    // private hidingCover(): void {
+    //     this.primitives[149].visible(false);
+    //     this.primitives[150].visible(false);
+    //     this.primitives[151].visible(false);
+    //     this.primitives[152].visible(false);
+    // }
     Skip.prototype.setBaseProperty = function (mes) {
+        mes = {
+            "onPositionA": true,
+            "onPositionB": false,
+            "openA": false,
+            "openB": true,
+            "normalUp": false,
+            "normalDown": false,
+            "slowlyUp": false,
+            "slowlyDown": false,
+            "bunkHighUnload": false,
+            "bunkLowUnload": false
+        };
+        console.log(JSON.stringify(mes, null, 4));
         this.positionUp = mes.upPositionA;
         this.positionDown = mes.downPositionA;
         this.moveUp = mes.normalUp;
@@ -152,20 +170,20 @@ var Skip = /** @class */ (function (_super) {
         this.skipLoadB = mes.skipLoadB;
     };
     Skip.prototype.nextFrame = function () {
-        this.hidingCover();
+        // this.hidingCover();
         if (this.positionUp) { // положение скипа А вверху, а скипа В внизу
             this.primitives[143].attrs.points[3] = (this.topSkip);
             this.primitives[144].y(this.topSkip);
             this.primitives[145].attrs.points[3] = (this.bottomSkip);
             this.primitives[146].y(this.bottomSkip);
         }
-        else if (this.positionDown) { // положение скипа А внизу, а скипа В вверху
+        if (this.positionDown) { // положение скипа А внизу, а скипа В вверху
             this.primitives[143].attrs.points[3] = this.bottomSkip;
             this.primitives[144].y(this.bottomSkip);
             this.primitives[145].attrs.points[3] = this.topSkip;
             this.primitives[146].y(this.topSkip);
         }
-        else if (this.moveUp) { // движение скипа А вверх, а скипа В вниз
+        if (this.moveUp) { // движение скипа А вверх, а скипа В вниз
             if (this.primitives[143].attrs.points[3] >= this.topSkip) {
                 this.primitives[143].attrs.points[3] = this.primitives[143].attrs.points[3] - 5;
                 this.primitives[144].move({ x: 0, y: -5 });
@@ -179,7 +197,7 @@ var Skip = /** @class */ (function (_super) {
                 this.primitives[146].y(this.topSkip);
             }
         }
-        else if (this.moveDown) { // движение скипа А вниз, а скипа В вверх
+        if (this.moveDown) { // движение скипа А вниз, а скипа В вверх
             if (this.primitives[143].attrs.points[3] <= this.bottomSkip) {
                 this.primitives[143].attrs.points[3] = this.primitives[143].attrs.points[3] + 5;
                 this.primitives[144].move({ x: 0, y: +5 });
@@ -193,28 +211,28 @@ var Skip = /** @class */ (function (_super) {
                 this.primitives[146].y(this.bottomSkip);
             }
         }
-        else if (this.skipLoadA) { // скип А внизу, скип В вверху, отображение левой полосы 
+        if (this.skipLoadA) { // скип А внизу, скип В вверху, отображение левой полосы 
             this.primitives[143].attrs.points[3] = this.bottomSkip;
             this.primitives[144].y(this.bottomSkip);
             this.primitives[145].attrs.points[3] = this.topSkip;
             this.primitives[146].y(this.topSkip);
             this.primitives[149].visible(true);
         }
-        else if (this.skipLoadB) { // скип А вверху, скип В внизу, отображение правой полосы 
+        if (this.skipLoadB) { // скип А вверху, скип В внизу, отображение правой полосы 
             this.primitives[143].attrs.points[3] = (this.topSkip);
             this.primitives[144].y(this.topSkip);
             this.primitives[145].attrs.points[3] = (this.bottomSkip);
             this.primitives[146].y(this.bottomSkip);
             this.primitives[150].visible(true);
         }
-        else if (this.openA) {
+        if (this.openA) {
             this.primitives[143].attrs.points[3] = (this.topSkip);
             this.primitives[144].y(this.topSkip);
             this.primitives[145].attrs.points[3] = (this.bottomSkip);
             this.primitives[146].y(this.bottomSkip);
             this.primitives[151].visible(true);
         }
-        else if (this.openB) {
+        if (this.openB) {
             this.primitives[143].attrs.points[3] = this.bottomSkip;
             this.primitives[144].y(this.bottomSkip);
             this.primitives[145].attrs.points[3] = this.topSkip;

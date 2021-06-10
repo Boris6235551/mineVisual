@@ -146,7 +146,7 @@ export class ShiftInfo extends LabelInfo {
         this.net = 0;
         this.beginDate = '';
         this.endDate = '';
-        this.primitives.push(this.createRectangle(p0.x, p0.y + length * 0.1, length * 1.4, length * 2.7, 'white', '#FE982A', length * 0.1, length * 0.1))
+        this.primitives.push(this.createRectangle(p0.x, p0.y + length * 0.1, length * 1.4, length * 3.1, 'white', '#FE982A', length * 0.1, length * 0.1))
         this.primitives.push(this.createText(p0.x + length * 0.2, p0.y + length * 0.2, '', length * 0.2))
         this.primitives.push(this.createText(p0.x + length * 0.2, p0.y + length * 0.5, '', length * 0.2))
         this.primitives.push(this.createText(p0.x + length * 0.2, p0.y + length * 0.8, '', length * 0.2))
@@ -166,17 +166,17 @@ export class ShiftInfo extends LabelInfo {
       }
 
     nextFrame(): void {
-        if (false) {
+        if (this.beginMonth != 12) {
             this.setText(this.primitives[1], 'Shift start:  ' + this.beginDate);
             this.setText(this.primitives[2], 'Shift end:    ' + this.endDate);
             this.setText(this.primitives[3], 'Total skips:   ' + this.skipCount + ' pcs');
-            this.setText(this.primitives[4], 'Total weight: ' + this.net + ' kg');
+            this.setText(this.primitives[4], 'Total weight: ' + this.numberWithSpaces(this.net) + ' kg');
         }
-        else if (true) {
-            this.setText(this.primitives[1], 'Shift start:  ' + this.beginDate);
+        else {
+            this.setText(this.primitives[1], 'Shift start:  ');
             this.setText(this.primitives[2], 'Shift end:    ');
-            this.setText(this.primitives[3], 'Total skips:   ' + this.skipCount + ' pcs');
-            this.setText(this.primitives[4], 'Total weight: ' + this.numberWithSpaces(100000) + ' kg');
+            this.setText(this.primitives[3], 'Total skips:   ');
+            this.setText(this.primitives[4], 'Total weight: ');
         }
     }
 }

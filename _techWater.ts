@@ -1,6 +1,6 @@
 import {Scheme, Disposition, animateScheme, Point} from './mine_drawing';
 
-//import {Valve, ValveState} from './valve';
+// import {Valve, ValveState} from './valve';
 
 import {Connection, Corner, CornerOrientation} from './tube';
 

@@ -139,6 +139,19 @@ var Cage = /** @class */ (function (_super) {
         });
     };
     Cage.prototype.setBaseProperty = function (mes) {
+        // console.log(mes)
+        mes = {
+            "mainFastUp": true,
+            "mainFastDown": false,
+            "dynamicBreak": false,
+            "smallUp": false,
+            "smallDown": false,
+            "level0": false,
+            "ventLevel": false,
+            "subLevel": false,
+            "productionLevel": false,
+            "platformDown": false
+        };
         this.mainFastUp = mes.mainFastUp;
         this.mainFastDown = mes.mainFastDown;
         this.dynamicBreak = mes.dynamicBreak;
@@ -149,7 +162,9 @@ var Cage = /** @class */ (function (_super) {
         this.platformDown = mes.platformDown;
     };
     Cage.prototype.nextFrame = function () {
+        // console.log(this.level0)
         if (this.mainFastUp) {
+            console.log('mainFastUp');
             if (this.primitives[54].attrs.points[3] > this.pointLevel0) {
                 this.primitives[54].attrs.points[3] = this.primitives[54].attrs.points[3] - 5;
                 this.primitives[55].move({ x: 0, y: -5 });
@@ -160,6 +175,7 @@ var Cage = /** @class */ (function (_super) {
             }
         }
         if (this.mainFastDown) {
+            console.log('mainFastDown');
             if (this.primitives[54].attrs.points[3] < this.pointLevel3) {
                 this.primitives[54].attrs.points[3] = this.primitives[54].attrs.points[3] + 5;
                 this.primitives[55].move({ x: 0, y: 5 });
@@ -170,18 +186,22 @@ var Cage = /** @class */ (function (_super) {
             }
         }
         if (this.level0) {
+            console.log('level0');
             this.primitives[54].attrs.points[3] = this.pointLevel0;
             this.primitives[55].y(this.pointLevel0);
         }
         if (this.ventLevel) {
+            console.log('level1');
             this.primitives[54].attrs.points[3] = this.pointLevel1;
             this.primitives[55].y(this.pointLevel1);
         }
         if (this.subLevel) {
+            console.log('level2');
             this.primitives[54].attrs.points[3] = this.pointLevel2;
             this.primitives[55].y(this.pointLevel2);
         }
         if (this.productionLevel) {
+            console.log('level3');
             this.primitives[54].attrs.points[3] = this.pointLevel3;
             this.primitives[55].y(this.pointLevel3);
         }

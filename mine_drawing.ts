@@ -200,8 +200,10 @@ export class Screen {
         this.schemes.push(scheme);
     }
     resendMessage(/*scheme name*/objName: string, mes: any){
+        // console.log(objName)
         this.schemes.forEach(function(scheme) {
             if(scheme.name == objName) {
+                // console.log(scheme.name)
                 scheme.send(mes);
                 return;
             }

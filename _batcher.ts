@@ -1,5 +1,6 @@
 import { Scheme, Disposition, animateScheme, Point, PropParams } from './mine_drawing';
-import { Bunker, FeederLeft, FeederRight, ChuteLeft, ChuteRight, BatcherLeft, BatcherRight, GateLeft, GateRight, TongueLeft, TongueRight } from './batcher'
+import { Bunker, FeederLeft, FeederRight, ChuteLeft, ChuteRight, BatcherLeft, BatcherRight, GateLeft, 
+    GateRight, TongueLeft, TongueRight, SkipPosition } from './batcher'
 
 export class BATCHER extends Scheme {
     public BunkerLeft: Bunker;
@@ -12,6 +13,7 @@ export class BATCHER extends Scheme {
     public GateRight1: GateRight;
     public TongueLeft1: TongueLeft;
     public TongueRight1: TongueRight;
+    public SkipPosition1: SkipPosition;
     constructor(container: string, width: number, height: number) {
         super(container, width, height);
         this.name = 'Batcher';
@@ -53,5 +55,8 @@ export class BATCHER extends Scheme {
 
         this.TongueRight1 = new TongueRight(new Point(1615, 500), 2)
         this.addWidget(this.TongueRight1);
+
+        this.SkipPosition1 = new SkipPosition(new Point(1555, 700), 40)
+        this.addWidget(this.SkipPosition1);
     }
 }

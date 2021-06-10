@@ -15,7 +15,7 @@ var __extends = (this && this.__extends) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.TechWater = void 0;
 var mine_drawing_1 = require("./mine_drawing");
-//import {Valve, ValveState} from './valve';
+// import {Valve, ValveState} from './valve';
 var tube_1 = require("./tube");
 var Pump_1 = require("./Pump");
 var TechWater = /** @class */ (function (_super) {

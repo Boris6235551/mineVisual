@@ -13,6 +13,10 @@ const moment = require('moment');
 *   TangueLeft, TangueRight (opened, closed)
 *************************************************************************/
 
+const fillDisable = '#E9F0EE';
+const strokeDisable = '#BFC9C6';
+const strokeEnable = '#000000';
+
 export class Bunker extends BaseMineDraw {
     private isLeft: boolean;
     constructor(p0: Point, length: number, left = true) {
@@ -74,9 +78,11 @@ export class Bunker extends BaseMineDraw {
         switch (this.propBit) {
             case true:
                 this.primitives[0].fill('#045658');
+                this.primitives[0].stroke(strokeEnable);
                 break;
             case false:
-                this.primitives[0].fill('#A6C3C4');
+                this.primitives[0].fill(fillDisable);
+                this.primitives[0].stroke(strokeDisable);
                 break;
         }
     }
@@ -118,7 +124,10 @@ export class FeederBase extends BaseMineDraw {
                     break;
             }
         }
-        else this.primitives[0].fill('#99BAAF');
+        else {
+            this.primitives[0].fill(fillDisable);
+            this.primitives[0].stroke(strokeDisable);
+        }
     }
 }
 
@@ -507,5 +516,66 @@ export class TongueRight extends TongueBase {
             this.prevState = tongueErr;
             this.primitives[0].fill('red');
         }
+    }
+}
+
+export class SkipPosition extends BaseMineDraw {
+    public skipLoadA: boolean;
+    public skipLoadB: boolean
+    constructor(p0: Point, length: number) {
+        super(p0, length);
+        this.name = 'Skipposition';
+        this.skipLoadA = false;
+        this.skipLoadB = false;
+        //  две нижние подставки скипов 
+        this.primitives.push(this.createRectangle(p0.x, p0.y,
+            length * 0.3, length + 10, 'red', '', 0, 0));
+        this.primitives.push(this.createRectangle(p0.x + length * 2 - 11, p0.y,
+            length * 0.3, length + 10, 'red', '', 0, 0));
+        //  две верхние крышки скипов 
+        // this.primitives.push(this.createRectangle(p0.x + length * 0.02 - length * 0.1, this.topSkip,
+        //     length * 0.01, length * 0.1, 'red', '', 0, 0));
+        // this.primitives.push(this.createRectangle(p0.x + length * 0.12 + length * 0.061, this.topSkip,
+        //     length * 0.01, length * 0.1, 'red', '', 0, 0));
+        // скрытие верхних и нижних крышек скипов
+    }
+    private createRectangle(x: number, y: number, height: number, width: number, fill: string,
+        stroke: string, strokeWidth: number, cornerRadius: number): Konva.Rect {
+        return new Konva.Rect({
+            x: x,
+            y: y,
+            height: height,
+            width: width,
+            fill: fill,
+            stroke: stroke,
+            strokeWidth: strokeWidth,
+            cornerRadius: cornerRadius,
+        });
+    }
+    setBaseProperty(mes: any) {
+        // mes = {
+        //     "skipLoadB": true,
+        //     "skipLoadA": true,
+        //     "trayClosedB": true,
+        //     "trayOpenB": false,
+        //     "gateClosedB": true,
+        //     "gateOpenedB": false,
+        //     "trayClosedA": true,
+        //     "trayOpenedA": false,
+        //     "gateClosedA": true,
+        //     "gateOpenedA": false,
+        //     "chuteLoadB": false,
+        //     "chuteLoadA": true,
+        //     "feederOn": true
+        // }
+        // console.log(mes)
+        this.skipLoadA = mes.skipLoadA;
+        this.skipLoadB = mes.skipLoadB;
+    }
+    nextFrame(): void {
+        if (this.skipLoadA) this.primitives[0].visible(true);
+        else this.primitives[0].visible(false);
+        if (this.skipLoadB) this.primitives[1].visible(true);
+        else this.primitives[1].visible(false);
     }
 }

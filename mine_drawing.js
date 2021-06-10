@@ -203,8 +203,10 @@ var Screen = /** @class */ (function () {
         this.schemes.push(scheme);
     };
     Screen.prototype.resendMessage = function (/*scheme name*/ objName, mes) {
+        // console.log(objName)
         this.schemes.forEach(function (scheme) {
             if (scheme.name == objName) {
+                // console.log(scheme.name)
                 scheme.send(mes);
                 return;
             }

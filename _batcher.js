@@ -49,6 +49,8 @@ var BATCHER = /** @class */ (function (_super) {
         this.addWidget(this.TongueLeft1);
         this.TongueRight1 = new batcher_1.TongueRight(new mine_drawing_1.Point(1615, 500), 2);
         this.addWidget(this.TongueRight1);
+        this.SkipPosition1 = new batcher_1.SkipPosition(new mine_drawing_1.Point(1555, 700), 40);
+        this.addWidget(this.SkipPosition1);
     };
     return BATCHER;
 }(mine_drawing_1.Scheme));
