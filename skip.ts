@@ -102,18 +102,18 @@ export class Skip extends BaseMineDraw {
             p0.x + length * 0.02, p0.y - length * 0.05,
             p0.x, p0.y - length * 0.05,
             p0.x + length * 0.27, p0.y + length * 0.31));
-        //  две нижние подставки скипов 
-        this.primitives.push(this.createRectangle(p0.x, length * 1.12,
-            length * 0.02, length * 0.1, 'red', '', 0, 0));
-        this.primitives.push(this.createRectangle(p0.x + length * 0.1, length * 1.12,
-            length * 0.02, length * 0.1, 'red', '', 0, 0));
-        //  две верхние крышки скипов 
-        this.primitives.push(this.createRectangle(p0.x + length * 0.02 - length * 0.1, this.topSkip,
-            length * 0.01, length * 0.1, 'red', '', 0, 0));
-        this.primitives.push(this.createRectangle(p0.x + length * 0.12 + length * 0.061, this.topSkip,
-            length * 0.01, length * 0.1, 'red', '', 0, 0));
-        // скрытие верхних и нижних крышек скипов
-        this.hidingCover();
+        // //  две нижние подставки скипов 
+        // this.primitives.push(this.createRectangle(p0.x, length * 1.12,
+        //     length * 0.02, length * 0.1, 'red', '', 0, 0));
+        // this.primitives.push(this.createRectangle(p0.x + length * 0.1, length * 1.12,
+        //     length * 0.02, length * 0.1, 'red', '', 0, 0));
+        // //  две верхние крышки скипов 
+        // this.primitives.push(this.createRectangle(p0.x + length * 0.02 - length * 0.1, this.topSkip,
+        //     length * 0.01, length * 0.1, 'red', '', 0, 0));
+        // this.primitives.push(this.createRectangle(p0.x + length * 0.12 + length * 0.061, this.topSkip,
+        //     length * 0.01, length * 0.1, 'red', '', 0, 0));
+        // // скрытие верхних и нижних крышек скипов
+        // this.hidingCover();
     }
     private createRectangle(x: number, y: number, height: number, width: number, fill: string,
         stroke: string, strokeWidth: number, cornerRadius: number): Konva.Rect {

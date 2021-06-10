@@ -360,7 +360,7 @@ var Valve = /** @class */ (function (_super) {
     function Valve(p0, length, disposition, percentage) {
         var _this = _super.call(this, p0, length, disposition) || this;
         _this.name = 'Valve';
-        _this.state = ValveState.closed;
+        _this.state = ValveState.opened;
         var p00 = _this.rect.p0;
         var p01 = (disposition == mine_drawing_1.Disposition.Vertical) ? _this.rect.rightTop() : _this.rect.getMiddlePoint();
         var p02 = (disposition == mine_drawing_1.Disposition.Vertical) ? _this.rect.getMiddlePoint() : _this.rect.leftButtom();
@@ -406,25 +406,25 @@ var Valve = /** @class */ (function (_super) {
         });
     };
     Valve.prototype.createCircle = function (length) {
-        var dxC = (this.disposition == mine_drawing_1.Disposition.Horizontal) ? 0 : Math.trunc(0.39 * length);
-        var dyC = (this.disposition == mine_drawing_1.Disposition.Horizontal) ? Math.trunc(0.39 * length) : 0;
+        var dxC = (this.disposition == mine_drawing_1.Disposition.Horizontal) ? 0 : Math.trunc(0.55 * length);
+        var dyC = (this.disposition == mine_drawing_1.Disposition.Horizontal) ? Math.trunc(0.55 * length) : 0;
         return new konva_1.default.Circle({
             x: this.rect.getMiddlePoint().x - dxC,
             y: this.rect.getMiddlePoint().y - dyC,
-            radius: Math.trunc(length / 4.79),
+            radius: Math.trunc(length / 2.7),
             fill: '',
             stroke: '',
             strokeWidth: 1,
         });
     };
     Valve.prototype.createText = function (length, percentage) {
-        var dxC = (this.disposition == mine_drawing_1.Disposition.Horizontal) ? Math.trunc(0.16 * length) : Math.trunc(0.54 * length);
-        var dyC = (this.disposition == mine_drawing_1.Disposition.Horizontal) ? Math.trunc(0.45 * length) : Math.trunc(0.06 * length);
+        var dxC = (this.disposition == mine_drawing_1.Disposition.Horizontal) ? Math.trunc(0.28 * length) : Math.trunc(0.8 * length);
+        var dyC = (this.disposition == mine_drawing_1.Disposition.Horizontal) ? Math.trunc(0.65 * length) : Math.trunc(0.1 * length);
         return new konva_1.default.Text({
             x: this.rect.getMiddlePoint().x - dxC,
             y: this.rect.getMiddlePoint().y - dyC,
             text: this.setPercentage(percentage),
-            fontSize: length / 6,
+            fontSize: length / 4,
             fontStyle: 'bold',
             fontFamily: 'Roboto',
             fill: '',
@@ -499,60 +499,21 @@ var Valve = /** @class */ (function (_super) {
 exports.Valve = Valve;
 var ValveCheck = /** @class */ (function (_super) {
     __extends(ValveCheck, _super);
-    function ValveCheck(p0, length, disposition) {
-        var _this = _super.call(this, p0, length, disposition) || this;
+    function ValveCheck(p0, length) {
+        var _this = _super.call(this, p0, length) || this;
         _this.name = 'Valvecheck';
-        _this.state = ValveState.closed;
-        var p00 = _this.rect.p0;
-        var p01 = (disposition == mine_drawing_1.Disposition.Vertical) ? _this.rect.rightTop() : _this.rect.getMiddlePoint();
-        var p02 = (disposition == mine_drawing_1.Disposition.Vertical) ? _this.rect.getMiddlePoint() : _this.rect.leftButtom();
-        _this.primitives.push(_this.createTriangle(p00, p01, p02, length));
-        var p10 = _this.rect.p1;
-        var p11 = (disposition == mine_drawing_1.Disposition.Vertical) ? _this.rect.leftButtom() : _this.rect.getMiddlePoint();
-        var p12 = (disposition == mine_drawing_1.Disposition.Vertical) ? _this.rect.getMiddlePoint() : _this.rect.rightTop();
-        _this.primitives.push(_this.createTriangle(p10, p11, p12, length));
-        _this.primitives.push(_this.createRectangle(length));
-        _this.primitives.push(_this.createCircle(length));
-        _this.rect.p0.y -= 2;
-        _this.rect.p1.y += 2;
-        _this.nextFrame();
+        _this.primitives.push(_this.createTriangle(p0.x, p0.y, p0.x + _this.calcSize(length), p0.y, p0.x + _this.calcSize(length) * 0.5, p0.y + length * 0.5, '#E1F1FB', '#000000', length * 0.02));
+        _this.primitives.push(_this.createTriangle(p0.x, p0.y + length, p0.x + _this.calcSize(length) * 0.5, p0.y + length * 0.5, p0.x + _this.calcSize(length), p0.y + length, '#1D8EEA', '#00C734', length * 0.02));
+        _this.primitives.push(_this.createTriangle(p0.x + length * 0.16, p0.y + length * 0.09, p0.x + _this.calcSize(length) - length * 0.16, p0.y + length * 0.09, p0.x + _this.calcSize(length) * 0.5, p0.y + length * 0.5 - length * 0.16, '#000000', '', 0));
         return _this;
     }
-    ValveCheck.prototype.setState = function (newState) {
-        this.state = newState;
-    };
-    ValveCheck.prototype.createTriangle = function (p0, p1, p2, length) {
+    ValveCheck.prototype.createTriangle = function (x1, y1, x2, y2, x3, y3, fill, stroke, strokeWidth) {
         return new konva_1.default.Line({
-            points: [p0.x, p0.y, p1.x, p1.y, p2.x, p2.y],
-            fill: '',
-            stroke: '',
-            strokeWidth: Math.trunc(length * 0.02),
+            points: [x1, y1, x2, y2, x3, y3],
+            fill: fill,
+            stroke: stroke,
+            strokeWidth: strokeWidth,
             closed: true,
-        });
-    };
-    ValveCheck.prototype.createRectangle = function (length) {
-        var dxC = (this.disposition == mine_drawing_1.Disposition.Horizontal) ? Math.trunc(length / 19.8) : Math.trunc(length / 5.4);
-        var dyC = (this.disposition == mine_drawing_1.Disposition.Horizontal) ? Math.trunc(length / 5.4) : Math.trunc(length / 19.8);
-        var height = (this.disposition == mine_drawing_1.Disposition.Horizontal) ? length / 2.7 : length / 9.9;
-        var width = (this.disposition == mine_drawing_1.Disposition.Horizontal) ? length / 9.9 : length / 2.7;
-        return new konva_1.default.Rect({
-            x: this.rect.getMiddlePoint().x - dxC,
-            y: this.rect.getMiddlePoint().y - dyC,
-            height: height,
-            width: width,
-            fill: '',
-        });
-    };
-    ValveCheck.prototype.createCircle = function (length) {
-        var dxC = (this.disposition == mine_drawing_1.Disposition.Horizontal) ? 0 : Math.trunc(0.39 * length);
-        var dyC = (this.disposition == mine_drawing_1.Disposition.Horizontal) ? Math.trunc(0.39 * length) : 0;
-        return new konva_1.default.Circle({
-            x: this.rect.getMiddlePoint().x - dxC,
-            y: this.rect.getMiddlePoint().y - dyC,
-            radius: Math.trunc(length / 4.79),
-            fill: '',
-            stroke: '',
-            strokeWidth: 1,
         });
     };
     ValveCheck.prototype.calcSize = function (length, factor) {
@@ -560,8 +521,6 @@ var ValveCheck = /** @class */ (function (_super) {
         return this.getOdd(length / factor);
     };
     ;
-    ValveCheck.prototype.nextFrame = function () {
-    };
     return ValveCheck;
 }(mine_drawing_1.BaseMineDraw));
 exports.ValveCheck = ValveCheck;

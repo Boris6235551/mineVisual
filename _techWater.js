@@ -15,7 +15,7 @@ var __extends = (this && this.__extends) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.TechWater = void 0;
 var mine_drawing_1 = require("./mine_drawing");
-var valve_1 = require("./valve");
+// import {Valve, ValveState} from './valve';
 var tube_1 = require("./tube");
 var Pump_1 = require("./Pump");
 var TechWater = /** @class */ (function (_super) {
@@ -28,13 +28,13 @@ var TechWater = /** @class */ (function (_super) {
     }
     TechWater.prototype.addValve = function () {
         // let pumpM1_1 = new Pump(10, 10, Disposition.Horizontal);
-        var valveY1 = new valve_1.Valve(new mine_drawing_1.Point(100, 30), 90, mine_drawing_1.Disposition.Vertical, 90);
+        // let valveY1 = new Valve(new Point(100, 30), 90, Disposition.Vertical, 90);
         //valveY1.setPercentage(100);
-        valveY1.setState(valve_1.ValveState.opening);
-        this.addWidget(valveY1);
-        var valveY2 = new valve_1.Valve(new mine_drawing_1.Point(100, 801), 90, mine_drawing_1.Disposition.Vertical, 80);
-        valveY2.setState(valve_1.ValveState.opened);
-        this.addWidget(valveY2);
+        // valveY1.setState(ValveState.opening);
+        // this.addWidget(valveY1);
+        // let valveY2 = new Valve(new Point(100, 801), 90, Disposition.Vertical, 80);
+        // valveY2.setState(ValveState.opened);
+        // this.addWidget(valveY2);
         var corn = new tube_1.Corner(new mine_drawing_1.Point(200, 200), 1, mine_drawing_1.Disposition.Vertical, tube_1.CornerOrientation.LeftUp, true);
         this.addWidget(corn);
         var Pump1 = new Pump_1.Pump(new mine_drawing_1.Point(200, 50), 250, mine_drawing_1.Disposition.Horizontal);
@@ -54,7 +54,7 @@ var TechWater = /** @class */ (function (_super) {
         //  valveY3.setState(ValveState.opened);
         // surfaceScheme.addWidget(pool1);
         var line1 = new tube_1.Connection(new mine_drawing_1.Point(0, 0), 100, mine_drawing_1.Disposition.Vertical);
-        line1.connectVertical(valveY1, valveY2);
+        // line1.connectVertical(valveY1, valveY2);
         this.addWidget(line1);
     };
     return TechWater;

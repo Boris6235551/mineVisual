@@ -72,15 +72,19 @@ var Skip = /** @class */ (function (_super) {
         // крыша скипа
         _this.primitives.push(_this.createRectangle(p0.x - length * 0.02, p0.y - length * 0.05, length * 0.03, length * 0.3, '#005236', '', 0, 0));
         _this.primitives.push(_this.createLineHouseRoof(p0.x + length * 0.29, p0.y + length * 0.31, p0.x + length * 0.02, p0.y - length * 0.05, p0.x, p0.y - length * 0.05, p0.x + length * 0.27, p0.y + length * 0.31));
-        //  две нижние подставки скипов 
-        _this.primitives.push(_this.createRectangle(p0.x, length * 1.12, length * 0.02, length * 0.1, 'red', '', 0, 0));
-        _this.primitives.push(_this.createRectangle(p0.x + length * 0.1, length * 1.12, length * 0.02, length * 0.1, 'red', '', 0, 0));
-        //  две верхние крышки скипов 
-        _this.primitives.push(_this.createRectangle(p0.x + length * 0.02 - length * 0.1, _this.topSkip, length * 0.01, length * 0.1, 'red', '', 0, 0));
-        _this.primitives.push(_this.createRectangle(p0.x + length * 0.12 + length * 0.061, _this.topSkip, length * 0.01, length * 0.1, 'red', '', 0, 0));
-        // скрытие верхних и нижних крышек скипов
-        _this.hidingCover();
         return _this;
+        // //  две нижние подставки скипов 
+        // this.primitives.push(this.createRectangle(p0.x, length * 1.12,
+        //     length * 0.02, length * 0.1, 'red', '', 0, 0));
+        // this.primitives.push(this.createRectangle(p0.x + length * 0.1, length * 1.12,
+        //     length * 0.02, length * 0.1, 'red', '', 0, 0));
+        // //  две верхние крышки скипов 
+        // this.primitives.push(this.createRectangle(p0.x + length * 0.02 - length * 0.1, this.topSkip,
+        //     length * 0.01, length * 0.1, 'red', '', 0, 0));
+        // this.primitives.push(this.createRectangle(p0.x + length * 0.12 + length * 0.061, this.topSkip,
+        //     length * 0.01, length * 0.1, 'red', '', 0, 0));
+        // // скрытие верхних и нижних крышек скипов
+        // this.hidingCover();
     }
     Skip.prototype.createRectangle = function (x, y, height, width, fill, stroke, strokeWidth, cornerRadius) {
         return new konva_1.default.Rect({

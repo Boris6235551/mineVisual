@@ -1,6 +1,6 @@
 import {Scheme, Disposition, animateScheme, Point} from './mine_drawing';
 
-import {Valve, ValveState} from './valve';
+// import {Valve, ValveState} from './valve';
 
 import {Connection, Corner, CornerOrientation} from './tube';
 
@@ -17,14 +17,14 @@ export class TechWater extends Scheme{
     }
     addValve(){
         // let pumpM1_1 = new Pump(10, 10, Disposition.Horizontal);
-        let valveY1 = new Valve(new Point(100, 30), 90, Disposition.Vertical, 90);
+        // let valveY1 = new Valve(new Point(100, 30), 90, Disposition.Vertical, 90);
         //valveY1.setPercentage(100);
-        valveY1.setState(ValveState.opening);
-        this.addWidget(valveY1);
+        // valveY1.setState(ValveState.opening);
+        // this.addWidget(valveY1);
 
-        let valveY2 = new Valve(new Point(100, 801), 90, Disposition.Vertical, 80);
-        valveY2.setState(ValveState.opened);
-        this.addWidget(valveY2);
+        // let valveY2 = new Valve(new Point(100, 801), 90, Disposition.Vertical, 80);
+        // valveY2.setState(ValveState.opened);
+        // this.addWidget(valveY2);
 
         let corn = new Corner(new Point(200, 200), 1, Disposition.Vertical, CornerOrientation.LeftUp, true );
         this.addWidget(corn);
@@ -52,7 +52,7 @@ export class TechWater extends Scheme{
 
         // surfaceScheme.addWidget(pool1);
         let line1 = new Connection(new Point(0,0), 100, Disposition.Vertical);
-        line1.connectVertical(valveY1, valveY2);
+        // line1.connectVertical(valveY1, valveY2);
         this.addWidget(line1);
 
     }

@@ -390,7 +390,6 @@ export class GateRight extends GateBase {
             this.hight, length * 4.8, '#FDC858', '#000000', length * 0.4));
     }
     setBaseProperty(mes: any) {
-        console.log(`trayOpenedB=${mes.gateOpenedB}; mes.trayClosedA=${mes.gateClosedB}`)
         this.opened = mes.gateOpenedB;
         this.closed = mes.gateClosedB;
     }
@@ -481,8 +480,7 @@ export class TongueRight extends TongueBase {
         );
     }
     setBaseProperty(mes: any) {
-        console.log(`tongue right opened =${mes.trayOpenedB}; tongue left closed=${mes.trayClosedB}`)
-        this.opened = mes.trayOpenedB;
+        this.opened = mes.trayOpenB;
         this.closed = mes.trayClosedB;
     }
     nextFrame(): void {
@@ -507,5 +505,56 @@ export class TongueRight extends TongueBase {
             this.prevState = tongueErr;
             this.primitives[0].fill('red');
         }
+    }
+}
+
+export class SkipPosition extends BaseMineDraw {
+    public skipLoadA: boolean;
+    public skipLoadB: boolean
+    constructor(p0: Point, length: number) {
+        super(p0, length);
+        this.name = 'Skipposition';
+        this.skipLoadA = false;
+        this.skipLoadB = false;
+        //  две нижние подставки скипов 
+        this.primitives.push(this.createRectangle(p0.x, length * 1.12,
+            length * 0.02, length * 0.1, 'red', '', 0, 0));
+        this.primitives.push(this.createRectangle(p0.x + length * 0.1, length * 1.12,
+            length * 0.02, length * 0.1, 'red', '', 0, 0));
+        //  две верхние крышки скипов 
+        // this.primitives.push(this.createRectangle(p0.x + length * 0.02 - length * 0.1, this.topSkip,
+        //     length * 0.01, length * 0.1, 'red', '', 0, 0));
+        // this.primitives.push(this.createRectangle(p0.x + length * 0.12 + length * 0.061, this.topSkip,
+        //     length * 0.01, length * 0.1, 'red', '', 0, 0));
+        // скрытие верхних и нижних крышек скипов
+        this.hidingCover();
+    }
+    private createRectangle(x: number, y: number, height: number, width: number, fill: string,
+        stroke: string, strokeWidth: number, cornerRadius: number): Konva.Rect {
+        return new Konva.Rect({
+            x: x,
+            y: y,
+            height: height,
+            width: width,
+            fill: fill,
+            stroke: stroke,
+            strokeWidth: strokeWidth,
+            cornerRadius: cornerRadius,
+        });
+    }
+    private hidingCover(): void {
+        this.primitives[0].visible(false);
+        this.primitives[1].visible(false);
+    }
+    setBaseProperty(mes: any) {
+        this.skipLoadA = mes.skipLoadA;
+        this.skipLoadB = mes.skipLoadB;
+    }
+    nextFrame(): void {
+        this.hidingCover();
+        if (this.skipLoadA)
+            this.primitives[0].visible(true);
+        else if (this.skipLoadB)
+            this.primitives[1].visible(true);
     }
 }

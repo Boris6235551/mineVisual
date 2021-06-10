@@ -16,7 +16,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.TongueRight = exports.TongueLeft = exports.GateRight = exports.GateLeft = exports.GateBase = exports.BatcherRight = exports.BatcherLeft = exports.BatcherBase = exports.ChuteRight = exports.ChuteLeft = exports.ChuteBase = exports.FeederRight = exports.FeederLeft = exports.FeederBase = exports.Bunker = void 0;
+exports.SkipPosition = exports.TongueRight = exports.TongueLeft = exports.GateRight = exports.GateLeft = exports.GateBase = exports.BatcherRight = exports.BatcherLeft = exports.BatcherBase = exports.ChuteRight = exports.ChuteLeft = exports.ChuteBase = exports.FeederRight = exports.FeederLeft = exports.FeederBase = exports.Bunker = void 0;
 var konva_1 = __importDefault(require("konva"));
 var mine_drawing_1 = require("./mine_drawing");
 var moment = require('moment');
@@ -363,7 +363,6 @@ var GateRight = /** @class */ (function (_super) {
         return _this;
     }
     GateRight.prototype.setBaseProperty = function (mes) {
-        console.log("trayOpenedB=" + mes.gateOpenedB + "; mes.trayClosedA=" + mes.gateClosedB);
         this.opened = mes.gateOpenedB;
         this.closed = mes.gateClosedB;
     };
@@ -452,8 +451,7 @@ var TongueRight = /** @class */ (function (_super) {
         return _this;
     }
     TongueRight.prototype.setBaseProperty = function (mes) {
-        console.log("tongue right opened =" + mes.trayOpenedB + "; tongue left closed=" + mes.trayClosedB);
-        this.opened = mes.trayOpenedB;
+        this.opened = mes.trayOpenB;
         this.closed = mes.trayClosedB;
     };
     TongueRight.prototype.nextFrame = function () {
@@ -491,4 +489,53 @@ var TongueRight = /** @class */ (function (_super) {
     return TongueRight;
 }(TongueBase));
 exports.TongueRight = TongueRight;
+var SkipPosition = /** @class */ (function (_super) {
+    __extends(SkipPosition, _super);
+    function SkipPosition(p0, length) {
+        var _this = _super.call(this, p0, length) || this;
+        _this.name = 'Skipposition';
+        _this.skipLoadA = false;
+        _this.skipLoadB = false;
+        //  две нижние подставки скипов 
+        _this.primitives.push(_this.createRectangle(p0.x, length * 1.12, length * 0.02, length * 0.1, 'red', '', 0, 0));
+        _this.primitives.push(_this.createRectangle(p0.x + length * 0.1, length * 1.12, length * 0.02, length * 0.1, 'red', '', 0, 0));
+        //  две верхние крышки скипов 
+        // this.primitives.push(this.createRectangle(p0.x + length * 0.02 - length * 0.1, this.topSkip,
+        //     length * 0.01, length * 0.1, 'red', '', 0, 0));
+        // this.primitives.push(this.createRectangle(p0.x + length * 0.12 + length * 0.061, this.topSkip,
+        //     length * 0.01, length * 0.1, 'red', '', 0, 0));
+        // скрытие верхних и нижних крышек скипов
+        _this.hidingCover();
+        return _this;
+    }
+    SkipPosition.prototype.createRectangle = function (x, y, height, width, fill, stroke, strokeWidth, cornerRadius) {
+        return new konva_1.default.Rect({
+            x: x,
+            y: y,
+            height: height,
+            width: width,
+            fill: fill,
+            stroke: stroke,
+            strokeWidth: strokeWidth,
+            cornerRadius: cornerRadius,
+        });
+    };
+    SkipPosition.prototype.hidingCover = function () {
+        this.primitives[0].visible(false);
+        this.primitives[1].visible(false);
+    };
+    SkipPosition.prototype.setBaseProperty = function (mes) {
+        this.skipLoadA = mes.skipLoadA;
+        this.skipLoadB = mes.skipLoadB;
+    };
+    SkipPosition.prototype.nextFrame = function () {
+        this.hidingCover();
+        if (this.skipLoadA)
+            this.primitives[0].visible(true);
+        else if (this.skipLoadB)
+            this.primitives[1].visible(true);
+    };
+    return SkipPosition;
+}(mine_drawing_1.BaseMineDraw));
+exports.SkipPosition = SkipPosition;
 //# sourceMappingURL=batcher.js.map

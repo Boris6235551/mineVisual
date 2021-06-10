@@ -155,7 +155,7 @@ var ShiftInfo = /** @class */ (function (_super) {
         _this.net = 0;
         _this.beginDate = '';
         _this.endDate = '';
-        _this.primitives.push(_this.createRectangle(p0.x, p0.y + length * 0.1, length * 1.4, length * 2.7, 'white', '#FE982A', length * 0.1, length * 0.1));
+        _this.primitives.push(_this.createRectangle(p0.x, p0.y + length * 0.1, length * 1.4, length * 3.1, 'white', '#FE982A', length * 0.1, length * 0.1));
         _this.primitives.push(_this.createText(p0.x + length * 0.2, p0.y + length * 0.2, '', length * 0.2));
         _this.primitives.push(_this.createText(p0.x + length * 0.2, p0.y + length * 0.5, '', length * 0.2));
         _this.primitives.push(_this.createText(p0.x + length * 0.2, p0.y + length * 0.8, '', length * 0.2));
@@ -184,7 +184,7 @@ var ShiftInfo = /** @class */ (function (_super) {
             this.setText(this.primitives[1], 'Shift start:  ' + this.beginDate);
             this.setText(this.primitives[2], 'Shift end:    ');
             this.setText(this.primitives[3], 'Total skips:   ' + this.skipCount + ' pcs');
-            this.setText(this.primitives[4], 'Total weight: ' + this.numberWithSpaces(100000) + ' kg');
+            this.setText(this.primitives[4], 'Total weight: ' + this.numberWithSpaces(this.net) + ' kg');
         }
     };
     return ShiftInfo;
