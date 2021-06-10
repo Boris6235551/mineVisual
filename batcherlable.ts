@@ -109,7 +109,9 @@ export class RightInfo extends LabelInfo {
         this.primitives.push(this.createText(p0.x + length * 0.2, p0.y + length * 0.8, '', length * 0.2))
     }
     setBaseProperty(mes: any) {
-        this.numberB = mes.numberB
+        this.monthB = mes.monthB;
+        this.endMonth = mes.endMonth;
+        this.numberB = mes.numberB;
         this.weightB = mes.grossB + '-' + mes.tareB + '=' + (mes.grossB - mes.tareB)
         this.dateB = moment(mes.monthB + ' ' + mes.dateB + ' ' + mes.year + ' ' + mes.hoursB + ' ' + mes.minutesB + ' ' + mes.secondsB, "MM DD YY HH mm ss").format("MM-DD-YY HH:mm:ss");
     }
@@ -136,6 +138,8 @@ export class RightInfo extends LabelInfo {
     }
 }
 
+const UNREAL_MONTH = 12;
+
 export class ShiftInfo extends LabelInfo {
     constructor(p0: Point, length: number) {
         super(p0, length);
@@ -155,8 +159,8 @@ export class ShiftInfo extends LabelInfo {
     setBaseProperty(mes: any) {
         this.beginMonth = mes.beginMonth;
         this.endMonth = mes.endMonth;
-        this.beginDate = moment(mes.beginMonth + ' ' + mes.beginDate + ' ' + mes.year + ' ' + mes.beginHours + ' ' + mes.beginMinutes + ' ' + mes.beginSeconds, "MM DD YY HH mm ss").format("MM-DD-YY HH:mm:ss");
-        this.endDate = moment(mes.endMonth + ' ' + mes.endDate + ' ' + mes.year + ' ' + mes.endHours + ' ' + mes.endMinutes + ' ' + mes.endSeconds, "MM DD YY HH mm ss").format("MM-DD-YY HH:mm:ss");
+        this.beginDate = moment(mes.beginMonth + ' ' + mes.beginDate + ' ' + mes.year + ' ' + mes.beginHours + ' ' + mes.beginMinutes + ' ' + mes.beginSeconds, "MM DD YY HH mm ss").format("MM/DD/YY HH:mm:ss");
+        this.endDate = moment(mes.endMonth + ' ' + mes.endDate + ' ' + mes.year + ' ' + mes.endHours + ' ' + mes.endMinutes + ' ' + mes.endSeconds, "MM DD YY HH mm ss").format("MM/DD/YY HH:mm:ss");
         this.skipCount = mes.skipCount;
         this.net = mes.net;
     }
@@ -166,17 +170,17 @@ export class ShiftInfo extends LabelInfo {
       }
 
     nextFrame(): void {
-        if (this.beginMonth != 12) {
-            this.setText(this.primitives[1], 'Shift start:  ' + this.beginDate);
-            this.setText(this.primitives[2], 'Shift end:    ' + this.endDate);
-            this.setText(this.primitives[3], 'Total skips:   ' + this.skipCount + ' pcs');
-            this.setText(this.primitives[4], 'Total weight: ' + this.numberWithSpaces(this.net) + ' kg');
-        }
-        else {
+        if (this.beginMonth == UNREAL_MONTH) {
             this.setText(this.primitives[1], 'Shift start:  ');
-            this.setText(this.primitives[2], 'Shift end:    ');
             this.setText(this.primitives[3], 'Total skips:   ');
             this.setText(this.primitives[4], 'Total weight: ');
         }
+        else {
+            this.setText(this.primitives[1], 'Shift start:  ' + this.beginDate);
+            this.setText(this.primitives[3], 'Total skips:   ' + this.skipCount + ' pcs');
+            this.setText(this.primitives[4], 'Total weight: ' + this.numberWithSpaces(this.net) + ' kg');
+        }
+        if(this.endMonth == UNREAL_MONTH) this.setText(this.primitives[2], 'Shift end:    ');
+        else this.setText(this.primitives[2], 'Shift end:    ' + this.endDate); 
     }
 }

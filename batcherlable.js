@@ -117,6 +117,8 @@ var RightInfo = /** @class */ (function (_super) {
         return _this;
     }
     RightInfo.prototype.setBaseProperty = function (mes) {
+        this.monthB = mes.monthB;
+        this.endMonth = mes.endMonth;
         this.numberB = mes.numberB;
         this.weightB = mes.grossB + '-' + mes.tareB + '=' + (mes.grossB - mes.tareB);
         this.dateB = moment(mes.monthB + ' ' + mes.dateB + ' ' + mes.year + ' ' + mes.hoursB + ' ' + mes.minutesB + ' ' + mes.secondsB, "MM DD YY HH mm ss").format("MM-DD-YY HH:mm:ss");
@@ -144,6 +146,7 @@ var RightInfo = /** @class */ (function (_super) {
     return RightInfo;
 }(LabelInfo));
 exports.RightInfo = RightInfo;
+var UNREAL_MONTH = 12;
 var ShiftInfo = /** @class */ (function (_super) {
     __extends(ShiftInfo, _super);
     function ShiftInfo(p0, length) {
@@ -165,8 +168,8 @@ var ShiftInfo = /** @class */ (function (_super) {
     ShiftInfo.prototype.setBaseProperty = function (mes) {
         this.beginMonth = mes.beginMonth;
         this.endMonth = mes.endMonth;
-        this.beginDate = moment(mes.beginMonth + ' ' + mes.beginDate + ' ' + mes.year + ' ' + mes.beginHours + ' ' + mes.beginMinutes + ' ' + mes.beginSeconds, "MM DD YY HH mm ss").format("MM-DD-YY HH:mm:ss");
-        this.endDate = moment(mes.endMonth + ' ' + mes.endDate + ' ' + mes.year + ' ' + mes.endHours + ' ' + mes.endMinutes + ' ' + mes.endSeconds, "MM DD YY HH mm ss").format("MM-DD-YY HH:mm:ss");
+        this.beginDate = moment(mes.beginMonth + ' ' + mes.beginDate + ' ' + mes.year + ' ' + mes.beginHours + ' ' + mes.beginMinutes + ' ' + mes.beginSeconds, "MM DD YY HH mm ss").format("MM/DD/YY HH:mm:ss");
+        this.endDate = moment(mes.endMonth + ' ' + mes.endDate + ' ' + mes.year + ' ' + mes.endHours + ' ' + mes.endMinutes + ' ' + mes.endSeconds, "MM DD YY HH mm ss").format("MM/DD/YY HH:mm:ss");
         this.skipCount = mes.skipCount;
         this.net = mes.net;
     };
@@ -174,18 +177,20 @@ var ShiftInfo = /** @class */ (function (_super) {
         return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     };
     ShiftInfo.prototype.nextFrame = function () {
-        if (this.beginMonth != 12) {
-            this.setText(this.primitives[1], 'Shift start:  ' + this.beginDate);
-            this.setText(this.primitives[2], 'Shift end:    ' + this.endDate);
-            this.setText(this.primitives[3], 'Total skips:   ' + this.skipCount + ' pcs');
-            this.setText(this.primitives[4], 'Total weight: ' + this.numberWithSpaces(this.net) + ' kg');
-        }
-        else {
+        if (this.beginMonth == UNREAL_MONTH) {
             this.setText(this.primitives[1], 'Shift start:  ');
-            this.setText(this.primitives[2], 'Shift end:    ');
             this.setText(this.primitives[3], 'Total skips:   ');
             this.setText(this.primitives[4], 'Total weight: ');
         }
+        else {
+            this.setText(this.primitives[1], 'Shift start:  ' + this.beginDate);
+            this.setText(this.primitives[3], 'Total skips:   ' + this.skipCount + ' pcs');
+            this.setText(this.primitives[4], 'Total weight: ' + this.numberWithSpaces(this.net) + ' kg');
+        }
+        if (this.endMonth == UNREAL_MONTH)
+            this.setText(this.primitives[2], 'Shift end:    ');
+        else
+            this.setText(this.primitives[2], 'Shift end:    ' + this.endDate);
     };
     return ShiftInfo;
 }(LabelInfo));
