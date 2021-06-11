@@ -2,6 +2,10 @@
 // import datepicker from 'vuejs-datepicker/dist/vuejs-datepicker.js';
 // import Vue from 'vue/dist/vue.js';
 
+import{ getShifts, connectDB } from '../BatcherWatcher/DB/db'
+
+connectDB(true);
+
 let options = {
     silent: false,
     printBackground: true,

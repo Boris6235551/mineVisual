@@ -12,6 +12,7 @@
       "strict": false,
       "esModuleInterop": true,
       // "noImplicitThis": true
+      "rootDirs": ["./", "../BatcherWatcher/DB/"],
     },
     "exclude": [
       "node_modules",
@@ -19,3 +20,13 @@
       "ESW_tcpip_test-win32-x64"
     ]
   }
+
+//   {
+//     "compilerOptions": {
+//       "allowSyntheticDefaultImports": true,
+//       "lib": ["ES2020"],
+//       "module": "ES2020",
+//       "moduleResolution": "node",
+//       "target": "ES2020"
+//     }
+//   }
