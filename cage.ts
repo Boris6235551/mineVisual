@@ -4,10 +4,13 @@ import { BaseMineDraw, Point } from './mine_drawing';
 export class Cage extends BaseMineDraw {
     public mainFastUp: boolean;
     public mainFastDown: boolean;
+    public smallUp: boolean;
+    public smallDown: boolean;
     public dynamicBreak: boolean;
     public level0: boolean;
     public ventLevel: boolean;
     public subLevel: boolean;
+    public m: number;
     public productionLevel: boolean;
     public platformDown: boolean;
     private pointLevel0: number;
@@ -17,8 +20,11 @@ export class Cage extends BaseMineDraw {
     constructor(p0: Point, length: number) {
         super(p0, length);
         this.name = 'Cage';
-        this.mainFastUp = false;
+        this.m = p0.x;
+        this.mainFastUp = true;
         this.mainFastDown = false;
+        this.smallUp = false;
+        this.smallDown = false;
         this.dynamicBreak = false;
         this.level0 = false;
         this.ventLevel = false;
@@ -61,6 +67,11 @@ export class Cage extends BaseMineDraw {
             '246 m', length * 0.0096));
         this.primitives.push(this.createText(p0.x + length * 0.145, p0.y + length * 0.801,
             '270 m', length * 0.0096));
+        // две подвижные платформы
+        this.primitives.push(this.createRectangle(p0.x, p0.y,
+            length * 0.02, length * 0.05, 'red', '', 0, 0));
+        this.primitives.push(this.createRectangle(p0.x + length * 0.05, p0.y,
+            length * 0.02, length * 0.05, 'red', '', 0, 0));
         // вертикальный ствол шахты
         this.primitives.push(this.createRectangleTrunk(p0.x, p0.y, length, length * 0.1, length * 0.003));
         // домик
@@ -93,7 +104,6 @@ export class Cage extends BaseMineDraw {
             p0.x + length * 0.11, p0.y - length * 0.05,
             p0.x + length * 0.13, p0.y - length * 0.05,
             p0.x - length * 0.08, p0.y + length * 0.31));
-        console.log(this.primitives[34])
     };
     private createRectangle(x: number, y: number, height: number, width: number, fill: string,
         stroke: string, strokeWidth: number, cornerRadius: number): Konva.Rect {
@@ -166,19 +176,6 @@ export class Cage extends BaseMineDraw {
         });
     }
     setBaseProperty(mes: any) {
-        // console.log(mes)
-        mes = {
-            "mainFastUp": true,
-            "mainFastDown": false,
-            "dynamicBreak": false,
-            "smallUp": false,
-            "smallDown": false,
-            "level0": false,
-            "ventLevel": false,
-            "subLevel": false,
-            "productionLevel": false,
-            "platformDown": false
-        }
         this.mainFastUp = mes.mainFastUp;
         this.mainFastDown = mes.mainFastDown;
         this.dynamicBreak = mes.dynamicBreak;
@@ -187,50 +184,107 @@ export class Cage extends BaseMineDraw {
         this.subLevel = mes.subLevel;
         this.productionLevel = mes.productionLevel;
         this.platformDown = mes.platformDown;
+        this.smallUp = mes.smallUp;
+        this.smallDown = mes.smallDown;
     }
     nextFrame(): void {
-        // console.log(this.level0)
         if (this.mainFastUp) {
-            console.log('mainFastUp')
-            if (this.primitives[54].attrs.points[3] > this.pointLevel0) {
-                this.primitives[54].attrs.points[3] = this.primitives[54].attrs.points[3] - 5;
-                this.primitives[55].move({ x: 0, y: -5 });
+            if (this.primitives[56].attrs.points[3] > this.pointLevel0) {
+                this.primitives[56].attrs.points[3] = this.primitives[56].attrs.points[3] - 6;
+                this.primitives[57].move({ x: 0, y: -6 });
             }
             else {
-                this.primitives[54].attrs.points[3] = this.pointLevel3;
-                this.primitives[55].y(this.pointLevel3);
+                this.primitives[56].attrs.points[3] = this.pointLevel3;
+                this.primitives[57].y(this.pointLevel3);
             }
         }
         if (this.mainFastDown) {
-            console.log('mainFastDown')
-            if (this.primitives[54].attrs.points[3] < this.pointLevel3) {
-                this.primitives[54].attrs.points[3] = this.primitives[54].attrs.points[3] + 5;
-                this.primitives[55].move({ x: 0, y: 5 });
+            if (this.primitives[56].attrs.points[3] < this.pointLevel3) {
+                this.primitives[56].attrs.points[3] = this.primitives[56].attrs.points[3] + 6;
+                this.primitives[57].move({ x: 0, y: 6 });
             }
             else {
-                this.primitives[54].attrs.points[3] = this.pointLevel0;
-                this.primitives[55].y(this.pointLevel0);
+                this.primitives[56].attrs.points[3] = this.pointLevel0;
+                this.primitives[57].y(this.pointLevel0);
+            }
+        }
+        if (this.smallUp) {
+            if (this.primitives[56].attrs.points[3] > this.pointLevel0) {
+                this.primitives[56].attrs.points[3] = this.primitives[56].attrs.points[3] - 3;
+                this.primitives[57].move({ x: 0, y: -3 });
+            }
+            else {
+                this.primitives[56].attrs.points[3] = this.pointLevel3;
+                this.primitives[57].y(this.pointLevel3);
+            }
+        }
+        if (this.smallDown) {
+            if (this.primitives[56].attrs.points[3] < this.pointLevel3) {
+                this.primitives[56].attrs.points[3] = this.primitives[56].attrs.points[3] + 3;
+                this.primitives[57].move({ x: 0, y: 3 });
+            }
+            else {
+                this.primitives[56].attrs.points[3] = this.pointLevel0;
+                this.primitives[57].y(this.pointLevel0);
             }
         }
         if (this.level0) {
-            console.log('level0')
-            this.primitives[54].attrs.points[3] = this.pointLevel0;
-            this.primitives[55].y(this.pointLevel0);
+            this.primitives[56].attrs.points[3] = this.pointLevel0;
+            this.primitives[57].y(this.pointLevel0);
         }
-        if ( this.ventLevel) {
-            console.log('level1')
-            this.primitives[54].attrs.points[3] = this.pointLevel1;
-            this.primitives[55].y(this.pointLevel1);
+        if (this.level0 && this.platformDown) {
+            this.primitives[56].attrs.points[3] = this.pointLevel0;
+            this.primitives[57].y(this.pointLevel0);
+            this.primitives[47].y(this.pointLevel0 + 20);
+            this.primitives[48].y(this.pointLevel0 + 20);
+            if (this.primitives[47].x() > this.m - 25) {
+                this.primitives[47].move({ x: -5, y: 0 });
+                this.primitives[48].move({ x: 5, y: 0 });
+            }
+        }
+        if (this.ventLevel) {
+            this.primitives[56].attrs.points[3] = this.pointLevel1;
+            this.primitives[57].y(this.pointLevel1);
+        }
+        if (this.ventLevel && this.platformDown) {
+            this.primitives[56].attrs.points[3] = this.pointLevel1;
+            this.primitives[57].y(this.pointLevel1);
+            this.primitives[47].y(this.pointLevel1 + 20);
+            this.primitives[48].y(this.pointLevel1 + 20);
+            if (this.primitives[47].x() > this.m - 25) {
+                this.primitives[47].move({ x: -5, y: 0 });
+                this.primitives[48].move({ x: 5, y: 0 });
+            }
         }
         if (this.subLevel) {
-            console.log('level2')
-            this.primitives[54].attrs.points[3] = this.pointLevel2;
-            this.primitives[55].y(this.pointLevel2);
+            this.primitives[56].attrs.points[3] = this.pointLevel2;
+            this.primitives[57].y(this.pointLevel2);
+        }
+        if (this.subLevel && this.platformDown) {
+            this.primitives[56].attrs.points[3] = this.pointLevel2;
+            this.primitives[57].y(this.pointLevel2);
+            this.primitives[47].y(this.pointLevel2 + 20);
+            this.primitives[48].y(this.pointLevel2 + 20);
+            if (this.primitives[47].x() > this.m - 25) {
+                this.primitives[47].move({ x: -5, y: 0 });
+                this.primitives[48].move({ x: 5, y: 0 });
+            }
         }
         if (this.productionLevel) {
-            console.log('level3')
-            this.primitives[54].attrs.points[3] = this.pointLevel3;
-            this.primitives[55].y(this.pointLevel3);
+            this.primitives[56].attrs.points[3] = this.pointLevel3;
+            this.primitives[57].y(this.pointLevel3);
         }
+        if (this.productionLevel && this.platformDown) {
+            this.primitives[56].attrs.points[3] = this.pointLevel3;
+            this.primitives[57].y(this.pointLevel3);
+            this.primitives[47].y(this.pointLevel3 + 20);
+            this.primitives[48].y(this.pointLevel3 + 20);
+            if (this.primitives[47].x() > this.m - 25) {
+                this.primitives[47].move({ x: -5, y: 0 });
+                this.primitives[48].move({ x: 5, y: 0 });
+            }
+        }
+        if (this.dynamicBreak) this.primitives[56].stroke('#FDC858')
+        if (this.dynamicBreak == false) this.primitives[56].stroke('#8AC171')
     }
 };

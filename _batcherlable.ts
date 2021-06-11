@@ -11,7 +11,7 @@ export class BATCHERLABLE extends Scheme {
         this.addBatcher();
     }
     addBatcher() {
-        this.LeftInfo1 = new LeftInfo(new Point(1390, 700), 80)
+        this.LeftInfo1 = new LeftInfo(new Point(1335, 700), 80)
         this.addWidget(this.LeftInfo1);
 
         this.RightInfo1 = new RightInfo(new Point(1694, 700), 80)

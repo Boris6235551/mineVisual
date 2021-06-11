@@ -114,7 +114,7 @@ var BaseMineDraw = /** @class */ (function () {
     // };
     BaseMineDraw.prototype.draw = function (layer) {
         this.layer = layer;
-        console.log("this.primitives.length " + this.primitives.length);
+        // console.log(`this.primitives.length ${this.primitives.length}`)
         if (this.primitives.length) {
             for (var i = 0; i < this.primitives.length; i++)
                 layer.add(this.primitives[i]);
@@ -165,7 +165,7 @@ var Scheme = /** @class */ (function () {
     };
     Scheme.prototype.addWidget = function (widget) {
         this.widgets.push(widget);
-        console.log("Scheme . addWidget ", typeof this.widgets, this.widgets);
+        // console.log("Scheme . addWidget ", typeof this.widgets, this.widgets);
         //for(let i = 0; i < this.widgets.length; i++) this.widgets[i].draw(this.layer);
         this.widgets[this.widgets.length - 1].draw(this.layer);
         this.layer.draw();

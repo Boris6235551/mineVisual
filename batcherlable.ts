@@ -49,6 +49,9 @@ export class LabelInfo extends BaseMineDraw {
     protected setText(obj: any, text: string) {
         obj.text(text);
     }
+    numberWithSpaces(x: number) {
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      }
 }
 
 export class LeftInfo extends LabelInfo {
@@ -59,7 +62,7 @@ export class LeftInfo extends LabelInfo {
         this.weightA = '';
         this.dateA = '';
         this.monthA = 0;
-        this.primitives.push(this.createRectangle(p0.x, p0.y + length * 0.1, length, length * 1.8, 'white', '#FE982A', length * 0.1, length * 0.1))
+        this.primitives.push(this.createRectangle(p0.x, p0.y + length * 0.1, length, length * 2.5, 'white', '#FE982A', length * 0.1, length * 0.1))
         this.primitives.push(this.createText(p0.x + length * 0.2, p0.y + length * 0.2, 'L Skip No.', length * 0.2))
         this.primitives.push(this.createText(p0.x + length * 0.2, p0.y + length * 0.5, '', length * 0.2))
         this.primitives.push(this.createText(p0.x + length * 0.2, p0.y + length * 0.8, '', length * 0.2))
@@ -69,7 +72,7 @@ export class LeftInfo extends LabelInfo {
         this.monthA = mes.monthA
         this.endMonth = mes.endMonth
         this.numberA = mes.numberA
-        this.weightA = mes.grossA + '-' + mes.tareA + '=' + (mes.grossA - mes.tareA)
+        this.weightA = this.numberWithSpaces(mes.grossA) + ' - ' + this.numberWithSpaces(mes.tareA) + ' = ' + this.numberWithSpaces(mes.grossA - mes.tareA)
         this.dateA = moment(mes.monthA + ' ' + mes.dateA + ' ' + mes.year + ' ' + mes.hoursA + ' ' + mes.minutesA + ' ' + mes.secondsA, "MM DD YY HH mm ss").format("MM-DD-YY HH:mm:ss");
     }
 
@@ -103,7 +106,7 @@ export class RightInfo extends LabelInfo {
         this.weightB = '';
         this.dateB = '';
         this.monthB = 0;
-        this.primitives.push(this.createRectangle(p0.x, p0.y + length * 0.1, length, length * 1.8, 'white', '#FE982A', length * 0.1, length * 0.1))
+        this.primitives.push(this.createRectangle(p0.x, p0.y + length * 0.1, length, length * 2.5, 'white', '#FE982A', length * 0.1, length * 0.1))
         this.primitives.push(this.createText(p0.x + length * 0.2, p0.y + length * 0.2, 'R Skip No.', length * 0.2))
         this.primitives.push(this.createText(p0.x + length * 0.2, p0.y + length * 0.5, '', length * 0.2))
         this.primitives.push(this.createText(p0.x + length * 0.2, p0.y + length * 0.8, '', length * 0.2))
@@ -112,7 +115,7 @@ export class RightInfo extends LabelInfo {
         this.monthB = mes.monthB;
         this.endMonth = mes.endMonth;
         this.numberB = mes.numberB;
-        this.weightB = mes.grossB + '-' + mes.tareB + '=' + (mes.grossB - mes.tareB)
+        this.weightB = this.numberWithSpaces(mes.grossB) + ' - ' + this.numberWithSpaces(mes.tareB) + ' = ' + this.numberWithSpaces(mes.grossB - mes.tareB)
         this.dateB = moment(mes.monthB + ' ' + mes.dateB + ' ' + mes.year + ' ' + mes.hoursB + ' ' + mes.minutesB + ' ' + mes.secondsB, "MM DD YY HH mm ss").format("MM-DD-YY HH:mm:ss");
     }
 
@@ -164,10 +167,6 @@ export class ShiftInfo extends LabelInfo {
         this.skipCount = mes.skipCount;
         this.net = mes.net;
     }
-
-    numberWithSpaces(x: number) {
-        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-      }
 
     nextFrame(): void {
         if (this.beginMonth == UNREAL_MONTH) {
