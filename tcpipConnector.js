@@ -238,7 +238,7 @@ function showTest(index) {
 function stopConnection() {
     //client.destroy(); 
     for (var i = 0; i < clients.length; i++) {
-        console.log("socket " + clients[i].socket.remoteAddress + " destroy");
+        // console.log(`socket ${clients[i].socket.remoteAddress} destroy`)
         clients[i].socket.destroy();
         clients[i].state = socketState.Created;
     }
@@ -256,7 +256,7 @@ var DriveClients = /** @class */ (function () {
         this.clientsCount = allClients.length; //console.log(`allClients.length ${allClients.length}`);
         this.showDif = false; //true;
         for (var i = 0; i < this.clientsCount; i++) {
-            console.log(" i = " + i + "; create  " + allClients[i].name);
+            // console.log(` i = ${i}; create  ${allClients[i].name}`);
             this.clients[i] = new ClientSocket(i);
         }
         //this.timer = setInterval(this.drive, 10000);
@@ -267,12 +267,11 @@ var DriveClients = /** @class */ (function () {
         //exportToExcel(newObj);
         if (this.clients[index].obj != null) {
             var dif = objectsDif(this.clients[index].obj, newObj);
-            if (dif != null && this.showDif)
-                console.log(moment().format("DD MMM YYYY HH:mm:ss"), JSON.stringify(dif, null, 4));
+            // if(dif != null && this.showDif) 
+            //     console.log(moment().format("DD MMM YYYY HH:mm:ss"), JSON.stringify(dif, null, 4));
         }
         this.clients[index].obj = newObj;
-        if (!this.showDif)
-            console.log(moment().format("DD MMM YYYY HH:mm:ss"), JSON.stringify(newObj, null, 4));
+        // if(!this.showDif) console.log(moment().format("DD MMM YYYY HH:mm:ss"), JSON.stringify(newObj, null, 4)); 
         if (this.callBack != null)
             this.callBack(obj.devName, newObj);
         this.showDif = true;
@@ -285,7 +284,7 @@ var DriveClients = /** @class */ (function () {
         var hs = this.clients[index].host; // console.log(this.clients[index]);
         cl.state = socketState.TryConnect; //this.clients[index].state = socketState.TryConnect;
         cl.socket.connect(PORT, hs /*HOST*/, function () {
-            console.log("client connected to remote address ===> " + cl.socket.remoteAddress);
+            // console.log(`client connected to remote address ===> ${cl.socket.remoteAddress}`);
             cl.state = socketState.Connected;
         });
         cl.socket.on('data', function (data) {
@@ -297,7 +296,7 @@ var DriveClients = /** @class */ (function () {
             _this.checkObj(obj, index);
         });
         cl.socket.on('close', function () {
-            console.log("Client closed ==> " + cl.host + " " + cl.socket.remoteAddress);
+            // console.log(`Client closed ==> ${cl.host} ${cl.socket.remoteAddress}`); 
             if (cl.state != socketState.ConnectErr && cl.state != socketState.SendErr) {
                 cl.state = cl.state == socketState.Sending ? socketState.SendErr : socketState.ConnectErr;
             }
@@ -337,7 +336,7 @@ var DriveClients = /** @class */ (function () {
     DriveClients.prototype.create = function (i) {
     };
     DriveClients.prototype.reloadPlc = function (/*plc index*/ i) {
-        console.log("reloadPlc " + allClients[i].name);
+        // console.log(`reloadPlc ${allClients[i].name}`);
         this.clients[i].state = socketState.Sending;
         this.clients[i].socket.write(new Uint8Array([2, 3]));
     };
@@ -377,7 +376,7 @@ var DriveClients = /** @class */ (function () {
                 driveClients.recreate(driveClients.current);
                 break;
         }
-        console.log(mes + "; after state: " + this.showState(driveClients.current));
+        // console.log(`${mes}; after state: ${this.showState(driveClients.current)}`);
         return;
         if (driveClients.current >= driveClients.clientsCount - 1)
             driveClients.current = 0;
@@ -443,7 +442,7 @@ function _sendReload() {
 }
 exports._sendReload = _sendReload;
 function _reCreate() {
-    console.log("driveClients.recreate(testIndex = " + testIndex + ")");
+    // console.log(`driveClients.recreate(testIndex = ${testIndex})`);
     driveClients.recreate(testIndex);
 }
 exports._reCreate = _reCreate;

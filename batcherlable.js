@@ -53,6 +53,9 @@ var LabelInfo = /** @class */ (function (_super) {
     LabelInfo.prototype.setText = function (obj, text) {
         obj.text(text);
     };
+    LabelInfo.prototype.numberWithSpaces = function (x) {
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    };
     return LabelInfo;
 }(mine_drawing_1.BaseMineDraw));
 exports.LabelInfo = LabelInfo;
@@ -65,7 +68,7 @@ var LeftInfo = /** @class */ (function (_super) {
         _this.weightA = '';
         _this.dateA = '';
         _this.monthA = 0;
-        _this.primitives.push(_this.createRectangle(p0.x, p0.y + length * 0.1, length, length * 1.8, 'white', '#FE982A', length * 0.1, length * 0.1));
+        _this.primitives.push(_this.createRectangle(p0.x, p0.y + length * 0.1, length, length * 2.5, 'white', '#FE982A', length * 0.1, length * 0.1));
         _this.primitives.push(_this.createText(p0.x + length * 0.2, p0.y + length * 0.2, 'L Skip No.', length * 0.2));
         _this.primitives.push(_this.createText(p0.x + length * 0.2, p0.y + length * 0.5, '', length * 0.2));
         _this.primitives.push(_this.createText(p0.x + length * 0.2, p0.y + length * 0.8, '', length * 0.2));
@@ -75,7 +78,7 @@ var LeftInfo = /** @class */ (function (_super) {
         this.monthA = mes.monthA;
         this.endMonth = mes.endMonth;
         this.numberA = mes.numberA;
-        this.weightA = mes.grossA + '-' + mes.tareA + '=' + (mes.grossA - mes.tareA);
+        this.weightA = this.numberWithSpaces(mes.grossA) + ' - ' + this.numberWithSpaces(mes.tareA) + ' = ' + this.numberWithSpaces(mes.grossA - mes.tareA);
         this.dateA = moment(mes.monthA + ' ' + mes.dateA + ' ' + mes.year + ' ' + mes.hoursA + ' ' + mes.minutesA + ' ' + mes.secondsA, "MM DD YY HH mm ss").format("MM-DD-YY HH:mm:ss");
     };
     LeftInfo.prototype.nextFrame = function () {
@@ -110,7 +113,7 @@ var RightInfo = /** @class */ (function (_super) {
         _this.weightB = '';
         _this.dateB = '';
         _this.monthB = 0;
-        _this.primitives.push(_this.createRectangle(p0.x, p0.y + length * 0.1, length, length * 1.8, 'white', '#FE982A', length * 0.1, length * 0.1));
+        _this.primitives.push(_this.createRectangle(p0.x, p0.y + length * 0.1, length, length * 2.5, 'white', '#FE982A', length * 0.1, length * 0.1));
         _this.primitives.push(_this.createText(p0.x + length * 0.2, p0.y + length * 0.2, 'R Skip No.', length * 0.2));
         _this.primitives.push(_this.createText(p0.x + length * 0.2, p0.y + length * 0.5, '', length * 0.2));
         _this.primitives.push(_this.createText(p0.x + length * 0.2, p0.y + length * 0.8, '', length * 0.2));
@@ -120,7 +123,7 @@ var RightInfo = /** @class */ (function (_super) {
         this.monthB = mes.monthB;
         this.endMonth = mes.endMonth;
         this.numberB = mes.numberB;
-        this.weightB = mes.grossB + '-' + mes.tareB + '=' + (mes.grossB - mes.tareB);
+        this.weightB = this.numberWithSpaces(mes.grossB) + ' - ' + this.numberWithSpaces(mes.tareB) + ' = ' + this.numberWithSpaces(mes.grossB - mes.tareB);
         this.dateB = moment(mes.monthB + ' ' + mes.dateB + ' ' + mes.year + ' ' + mes.hoursB + ' ' + mes.minutesB + ' ' + mes.secondsB, "MM DD YY HH mm ss").format("MM-DD-YY HH:mm:ss");
     };
     RightInfo.prototype.nextFrame = function () {
@@ -172,9 +175,6 @@ var ShiftInfo = /** @class */ (function (_super) {
         this.endDate = moment(mes.endMonth + ' ' + mes.endDate + ' ' + mes.year + ' ' + mes.endHours + ' ' + mes.endMinutes + ' ' + mes.endSeconds, "MM DD YY HH mm ss").format("MM/DD/YY HH:mm:ss");
         this.skipCount = mes.skipCount;
         this.net = mes.net;
-    };
-    ShiftInfo.prototype.numberWithSpaces = function (x) {
-        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     };
     ShiftInfo.prototype.nextFrame = function () {
         if (this.beginMonth == UNREAL_MONTH) {

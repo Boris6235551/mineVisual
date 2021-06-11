@@ -25,7 +25,7 @@ var BATCHERLABLE = /** @class */ (function (_super) {
         return _this;
     }
     BATCHERLABLE.prototype.addBatcher = function () {
-        this.LeftInfo1 = new batcherlable_1.LeftInfo(new mine_drawing_1.Point(1390, 700), 80);
+        this.LeftInfo1 = new batcherlable_1.LeftInfo(new mine_drawing_1.Point(1335, 700), 80);
         this.addWidget(this.LeftInfo1);
         this.RightInfo1 = new batcherlable_1.RightInfo(new mine_drawing_1.Point(1694, 700), 80);
         this.addWidget(this.RightInfo1);
