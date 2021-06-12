@@ -19,12 +19,12 @@
                 scale installed for measurement of total hoisted stones</h3>
             <br>
             <div class="date">
-                <input type="date" name="" id="" v-model="startDate">
-                <input type="date" name="" id="" v-model="endDate">
+                <input type="date" name="" id="" v-on:change="fromDateChange" v-model="startDate">
+                <input type="date" name="" id="" v-on:change="tillDateChange" v-model="endDate">
             </div>
             <br>
             <div class="shift">
-                <select name="" id="" v-model="selectShifts">
+                <select name="" id="" v-model="selectShifts" @change="selectShiftChange">
                     <option v-for="shift in shifts">
                         {{shift}}
                     </option>
@@ -62,7 +62,11 @@
         </div>
     </div>
 </body>
+<!-- <script>let exports = module.exports;</script> -->
 <script src="./node_modules/vue/dist/vue.js"></script>
 <script src="./report.js"></script>
+
+<!-- <script src="./node_modules/vue/dist/vue.js"></script>
+<script src="./report.js"></script> -->
 
 </html>

@@ -8,7 +8,15 @@ import { SUBSTATION } from './_substation'
 import { CAGE } from './_cage'
 import { COMPRESSORROOM } from './_compressorRoom'
 import { BATCHERLABLE } from './_batcherlable'
+const { ipcRenderer }  = require('electron');
 const { BrowserWindow } = require('electron').remote
+
+
+ipcRenderer.on('resended', (event, arr) => {
+    console.log('resended');
+});
+
+
 
 let screenMain = new Screen();
 // // let techWater = new TechWater('container', window.innerWidth, window.innerHeight);
@@ -64,6 +72,9 @@ new Vue({
                 width: 800, 
                 height: 600,
                 frame: false,
+                webPreferences: {
+                    nodeIntegration: true
+                }
             });
             reportWin.loadFile('report.html');
             // reportWin.webContents.openDevTools();

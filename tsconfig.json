@@ -12,8 +12,9 @@
       "strict": false,
       "esModuleInterop": true,
       // "noImplicitThis": true
-      "rootDirs": ["./", "../BatcherWatcher/DB/"],
+      //"rootDirs": ["./", "../BatcherWatcher/DB/"],
     },
+    //"include": ["./", "DB/**/*"],
     "exclude": [
       "node_modules",
       ".npm",

@@ -11,7 +11,11 @@ var _substation_1 = require("./_substation");
 var _cage_1 = require("./_cage");
 var _compressorRoom_1 = require("./_compressorRoom");
 var _batcherlable_1 = require("./_batcherlable");
+var ipcRenderer = require('electron').ipcRenderer;
 var BrowserWindow = require('electron').remote.BrowserWindow;
+ipcRenderer.on('resended', function (event, arr) {
+    console.log('resended');
+});
 var screenMain = new mine_drawing_1.Screen();
 // // let techWater = new TechWater('container', window.innerWidth, window.innerHeight);
 var cage = new _cage_1.CAGE('containerCage', window.innerWidth, window.innerHeight);
@@ -58,6 +62,9 @@ new vue_js_1.default({
                 width: 800,
                 height: 600,
                 frame: false,
+                webPreferences: {
+                    nodeIntegration: true
+                }
             });
             reportWin.loadFile('report.html');
             // reportWin.webContents.openDevTools();
