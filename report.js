@@ -110,3 +110,82 @@ console.log(`checkAndSetPeriod fm=${fm.format('YYYY-MM-DD HH:mm:ss')}; tm=${tm.f
     },
 });
 //# sourceMappingURL=report.js.map
+
+let mes = {
+    Y11Status: 0,   // enum ValveStatus InitState = 0, Closed, Opening, Opened, Closing , Calibration
+    Y12Status: 1,
+    Y13Status: 3,
+    Y14Status: 4,
+    Y15Status: 5,
+    Y21Status: 2,
+    Y22Status: 4,
+    Y23Status: 5,
+    Y24Status: 0,
+    Y25Status: 1,
+    Y31Status: 2,
+    Y32Status: 3,
+    Y33Status: 4,
+    Y34Status: 5,
+    Y35Status: 4,
+    
+    Y11Mode: 0,     // enum ValveMode HandDrive = 0, Service, Auto
+    Y12Mode: 1,
+    Y13Mode: 2,
+    Y14Mode: 2,
+    Y15Mode: 1,
+    Y21Mode: 0,
+    Y22Mode: 1,
+    Y23Mode: 2,
+    Y24Mode: 0,
+    Y25Mode: 1,
+    Y31Mode: 2,
+    Y32Mode: 2,
+    Y33Mode: 1,
+    Y34Mode: 0,
+    Y35Mode: 1,
+    
+    Y11Error: 0,    // enum ValveError NoError = 0, CloseAndOpenVlaveInputs, OpeningTimeOut, ClosingTimeOut, AlarmValveInput 
+    Y12Error: 1,
+    Y13Error: 2,
+    Y14Error: 3,
+    Y15Error: 2,
+    Y21Error: 1,
+    Y22Error: 0,
+    Y23Error: 1,
+    Y24Error: 2,
+    Y25Error: 3,
+    Y31Error: 3,
+    Y32Error: 2,
+    Y33Error: 1,
+    Y34Error: 0,
+    Y35Error: 1,
+    
+    Pump1Status: 0, // enum PumpStatus Stopped = 0, Starting, Working, Stopping, Error
+    Pump2Status: 1,
+    Pump3Status: 4,
+    
+    Pump1Mode: 1,   // enum PumpMode Service = 1, Auto
+    Pump2Mode: 2,
+    Pump3Mode: 1,
+    
+    Pump1Error: 0,  // enum PumpError NoError = 0, StartingTimeOut, StoppingTimeOut, AccidentPressure
+    Pump2Error: 1,
+    Pump3Error: 3,
+    
+    posY11: 0,      // 0 - 100
+    posY12: 100,
+    posY13: 35,
+    posY14: 0,
+    posY15: 0,
+    posY21: 0,
+    posY22: 0,
+    posY23: 0,
+    posY24: 0,
+    posY25: 0,
+    posY31: 0,
+    posY32: 0,
+    posY33: 0,
+    posY34: 0,
+    posY35: 0,
+    reserve: null
+    } 
