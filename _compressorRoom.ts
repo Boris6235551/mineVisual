@@ -52,18 +52,23 @@ export class COMPRESSORROOM extends Scheme {
     addBatcher() {
         this.Pump1 = new Pump(new Point(430, 350), 100, 0)
         this.addWidget(this.Pump1);
+        this.Pump1.name = 'Pump1'
 
         this.Pump2 = new Pump(new Point(612.5, 350), 100, 0)
         this.addWidget(this.Pump2);
+        this.Pump1.name = 'Pump2'
 
         this.Pump3 = new Pump(new Point(795, 350), 100, 0)
         this.addWidget(this.Pump3);
+        this.Pump1.name = 'Pump3'
 
         this.Pump4 = new Pump(new Point(977.5, 350), 100, 0)
         this.addWidget(this.Pump4);
+        this.Pump1.name = 'Pump4'
 
         this.Pump5 = new Pump(new Point(1160, 350), 100, 0)
         this.addWidget(this.Pump5);
+        this.Pump1.name = 'Pump5'
 
         this.Pool1 = new Pool(new Point(400, 550), 900)
         this.addWidget(this.Pool1);

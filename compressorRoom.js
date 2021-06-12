@@ -16,23 +16,19 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Compressor = exports.UndegraundPump = exports.ValveCheck = exports.Valve = exports.ValveState = exports.Pool = exports.Pump = exports.PumpState = void 0;
+exports.Compressor = exports.UndegraundPump = exports.ValveCheck = exports.Valve = exports.ValveState = exports.Pool = exports.Pump = void 0;
 var konva_1 = __importDefault(require("konva"));
 var mine_drawing_1 = require("./mine_drawing");
-var PumpState;
-(function (PumpState) {
-    PumpState[PumpState["run"] = 0] = "run";
-    PumpState[PumpState["revers"] = 1] = "revers";
-    PumpState[PumpState["stop"] = 2] = "stop";
-    PumpState[PumpState["alarm"] = 3] = "alarm";
-})(PumpState = exports.PumpState || (exports.PumpState = {}));
-;
+// export enum PumpState {
+//     run = 0, revers, stop, alarm
+//     stopped = 0, starting, working, stopping
+// };
 var Pump = /** @class */ (function (_super) {
     __extends(Pump, _super);
     function Pump(p0, length, disposition) {
         var _this = _super.call(this, p0, length, disposition) || this;
         _this.name = 'Pump';
-        _this.state = PumpState;
+        // this.status = PumpState;
         var p00 = _this.rect.p0;
         var p02 = _this.rect.getMiddlePoint();
         // верхний прямоугольник 0
@@ -171,9 +167,9 @@ var Pump = /** @class */ (function (_super) {
         return this.getOdd(length / factor);
     };
     ;
-    Pump.prototype.setState = function (newState) {
-        this.state = newState;
-    };
+    // setState(newState: PumpState): void {
+    //     this.state = newState;
+    // }
     Pump.prototype.createRectangle = function (x, y, height, width, fill, stroke, strokeWidth, cornerRadius) {
         return new konva_1.default.Rect({
             x: x,
@@ -231,74 +227,69 @@ var Pump = /** @class */ (function (_super) {
         this.primitives[16].stroke(stroke16);
         this.primitives[7].strokeWidth(strokeWidth7);
     };
+    Pump.prototype.setBaseProperty = function (mes) {
+        this.status = mes.StatusPump;
+        this.mode = mes.ModePump;
+        this.error = mes.ErrorPump;
+    };
     Pump.prototype.nextFrame = function (angel) {
         if (angel === void 0) { angel = 30; }
         var dy = this.step;
-        switch (this.state) {
-            case PumpState.run:
-                this.primitives[14].rotate(angel);
-                this.primitives[15].rotate(angel);
-                this.primitives[16].rotate(angel);
-                if (this.animationFrame < 2) {
-                    dy = this.step;
-                    this.primitives[10].fill('');
-                    this.animationFrame += 1;
-                }
-                else {
-                    dy = -(2 * this.step);
-                    this.primitives[10].fill('#EDF6FC');
-                    this.animationFrame = 0;
-                }
-                if (this.disposition == mine_drawing_1.Disposition.Vertical) {
-                    this.primitives[8].move({ x: 0, y: dy });
-                    this.primitives[9].move({ x: 0, y: dy });
-                    this.primitives[10].move({ x: 0, y: dy });
-                }
-                else {
-                    this.primitives[8].move({ x: dy, y: 0 });
-                    this.primitives[9].move({ x: dy, y: 0 });
-                    this.primitives[10].move({ x: dy, y: 0 });
-                }
-                return;
-            case PumpState.revers:
-                this.primitives[14].rotate(angel);
-                this.primitives[15].rotate(angel);
-                this.primitives[16].rotate(angel);
-                if (this.animationFrame < 2) {
-                    dy = this.step;
-                    this.primitives[8].fill('');
-                    this.animationFrame += 1;
-                }
-                else {
-                    dy = -(2 * this.step);
-                    this.primitives[8].fill('#EDF6FC');
-                    this.animationFrame = 0;
-                }
-                if (this.disposition == mine_drawing_1.Disposition.Vertical) {
-                    this.primitives[8].move({ x: 0, y: -dy });
-                    this.primitives[9].move({ x: 0, y: -dy });
-                    this.primitives[10].move({ x: 0, y: -dy });
-                }
-                else {
-                    this.primitives[8].move({ x: -dy, y: 0 });
-                    this.primitives[9].move({ x: -dy, y: 0 });
-                    this.primitives[10].move({ x: -dy, y: 0 });
-                }
-                return;
-            case PumpState.stop:
-                this.showFrame('#EFEFEF', '#FE668B', '#AEB4B4', '#AEB4B4', '#FE668B', '#EDF6FC', '', '', '', '#CFCDCD', '#7E7D7D', '#AEB4B4', '#D99CAB', '#AAA6A6', '#AAA6A6', '#AAA6A6', '#AAA6A6', '#AAA6A6', '#AAA6A6', 3);
-                return;
-            case PumpState.alarm:
-                if (this.animationFrame == 0) {
-                    this.showFrame('#000000', '#DB0000', '#DB0000', '#DB0000', '#DB0000', '#EDF6FC', '', '', '', '#000000', '#FF0000', '#000000', '#000000', '#444343', '#444343', '#444343', '#444343', '#444343', '#444343', 3);
-                    this.animationFrame = 1;
-                }
-                else {
-                    this.showFrame('#DB0000', '#000000', '#000000', '#000000', '#000000', '#EDF6FC', '', '', '', '#000000', '#FF0000', '#000000', '#DB0000', '#000000', '#444343', '#444343', '#444343', '#444343', '#444343', 3);
-                    this.animationFrame = 0;
-                }
-                return;
-        }
+        // switch (this.status) {
+        //     case PumpState.working:
+        //         this.primitives[14].rotate(angel);
+        //         this.primitives[15].rotate(angel);
+        //         this.primitives[16].rotate(angel);
+        //         if (this.animationFrame < 2) { dy = this.step; this.primitives[10].fill(''); this.animationFrame += 1; }
+        //         else { dy = - (2 * this.step); this.primitives[10].fill('#EDF6FC'); this.animationFrame = 0; }
+        //         if (this.disposition == Disposition.Vertical) {
+        //             this.primitives[8].move({ x: 0, y: dy });
+        //             this.primitives[9].move({ x: 0, y: dy });
+        //             this.primitives[10].move({ x: 0, y: dy });
+        //         }
+        //         else {
+        //             this.primitives[8].move({ x: dy, y: 0 });
+        //             this.primitives[9].move({ x: dy, y: 0 });
+        //             this.primitives[10].move({ x: dy, y: 0 });
+        //         }
+        //         return;
+        //     // case PumpState.revers:
+        //     //     this.primitives[14].rotate(angel);
+        //     //     this.primitives[15].rotate(angel);
+        //     //     this.primitives[16].rotate(angel);
+        //     //     if (this.animationFrame < 2) { dy = this.step; this.primitives[8].fill(''); this.animationFrame += 1; }
+        //     //     else { dy = - (2 * this.step); this.primitives[8].fill('#EDF6FC'); this.animationFrame = 0; }
+        //     //     if (this.disposition == Disposition.Vertical) {
+        //     //         this.primitives[8].move({ x: 0, y: -dy });
+        //     //         this.primitives[9].move({ x: 0, y: -dy });
+        //     //         this.primitives[10].move({ x: 0, y: -dy });
+        //     //     }
+        //     //     else {
+        //     //         this.primitives[8].move({ x: -dy, y: 0 });
+        //     //         this.primitives[9].move({ x: -dy, y: 0 });
+        //     //         this.primitives[10].move({ x: -dy, y: 0 });
+        //     //     }
+        //     //     return;
+        //     case PumpState.stop:
+        //         this.showFrame('#EFEFEF', '#FE668B', '#AEB4B4', '#AEB4B4', '#FE668B', '#EDF6FC', '', '', '',
+        //             '#CFCDCD', '#7E7D7D', '#AEB4B4', '#D99CAB', '#AAA6A6', '#AAA6A6', '#AAA6A6', '#AAA6A6',
+        //             '#AAA6A6', '#AAA6A6', 3);
+        //         return;
+        //     case PumpState.alarm:
+        //         if (this.animationFrame == 0) {
+        //             this.showFrame('#000000', '#DB0000', '#DB0000', '#DB0000', '#DB0000', '#EDF6FC', '', '', '',
+        //                 '#000000', '#FF0000', '#000000', '#000000', '#444343', '#444343', '#444343', '#444343',
+        //                 '#444343', '#444343', 3);
+        //             this.animationFrame = 1;
+        //         }
+        //         else {
+        //             this.showFrame('#DB0000', '#000000', '#000000', '#000000', '#000000', '#EDF6FC', '', '', '',
+        //                 '#000000', '#FF0000', '#000000', '#DB0000', '#000000', '#444343', '#444343', '#444343',
+        //                 '#444343', '#444343', 3);
+        //             this.animationFrame = 0;
+        //         }
+        //         return;
+        // }
     };
     return Pump;
 }(mine_drawing_1.BaseMineDraw));
@@ -559,9 +550,9 @@ var UndegraundPump = /** @class */ (function (_super) {
         console.log(_this.primitives);
         return _this;
     }
-    UndegraundPump.prototype.setState = function (newState) {
-        this.state = newState == PumpState.run ? PumpState.revers : newState;
-    };
+    // setState(newState: PumpState): void {
+    //     this.state = newState == PumpState.run ? PumpState.revers : newState;
+    // }
     UndegraundPump.prototype.createLineUndegraund = function (p1lx, p1ly, p2lx, p2ly, p3lx, p3ly, p4lx, p4ly, strokeWidth, offsetX, offsetY) {
         return new konva_1.default.Line({
             points: [p1lx, p1ly, p2lx, p2ly, p3lx, p3ly, p4lx, p4ly],
