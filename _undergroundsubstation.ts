@@ -1,24 +1,25 @@
 import { Scheme, Disposition, animateScheme, Point, PropParams } from './mine_drawing';
-import { Trunk, SubstationCell, Generator } from './substation'
+import { Trunk, UndergroundSubstationCell, Generator } from './substation'
 
-export class SUBSTATION extends Scheme {
+export class UNDERGROUNDSUBSTATION extends Scheme {
     public Generator1: Generator;
     public Trunk1: Trunk;
+    public UndergroundSubstationCell1: UndergroundSubstationCell;
     // public SubstationCells: SubstationCell;
     constructor(container: string, width: number, height: number) {
         super(container, width, height);
-        this.name = 'Substation';
+        this.name = 'UndegroundStation';
         this.addBatcher();
     }
     addBatcher() {
         // this.Generator1 = new Generator(new Point(200, 233), 100)
         // this.addWidget(this.Generator1);
-        this.Trunk1 = new Trunk(new Point(30, 800), 1000)
+
+        this.Trunk1 = new Trunk(new Point(250, 800), 670)
         this.addWidget(this.Trunk1);
-        let SubstationCells = []
-        for (let n: number = 0; n <= 23; n++) {
-            SubstationCells[n] = new SubstationCell(new Point(30, 800), 1000, 'UndegroundStation', n)
-                this.addWidget(SubstationCells[n]);
-            }
+        
+        this.UndergroundSubstationCell1 = new UndergroundSubstationCell(new Point(250, 800), 1000)
+        this.addWidget(this.UndergroundSubstationCell1);
+
     }
 }

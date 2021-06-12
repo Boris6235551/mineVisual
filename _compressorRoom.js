@@ -28,14 +28,19 @@ var COMPRESSORROOM = /** @class */ (function (_super) {
     COMPRESSORROOM.prototype.addBatcher = function () {
         this.Pump1 = new compressorRoom_1.Pump(new mine_drawing_1.Point(430, 350), 100, 0);
         this.addWidget(this.Pump1);
+        this.Pump1.name = 'Pump1';
         this.Pump2 = new compressorRoom_1.Pump(new mine_drawing_1.Point(612.5, 350), 100, 0);
         this.addWidget(this.Pump2);
+        this.Pump1.name = 'Pump2';
         this.Pump3 = new compressorRoom_1.Pump(new mine_drawing_1.Point(795, 350), 100, 0);
         this.addWidget(this.Pump3);
+        this.Pump1.name = 'Pump3';
         this.Pump4 = new compressorRoom_1.Pump(new mine_drawing_1.Point(977.5, 350), 100, 0);
         this.addWidget(this.Pump4);
+        this.Pump1.name = 'Pump4';
         this.Pump5 = new compressorRoom_1.Pump(new mine_drawing_1.Point(1160, 350), 100, 0);
         this.addWidget(this.Pump5);
+        this.Pump1.name = 'Pump5';
         this.Pool1 = new compressorRoom_1.Pool(new mine_drawing_1.Point(400, 550), 900);
         this.addWidget(this.Pool1);
         this.Valve1 = new compressorRoom_1.Valve(new mine_drawing_1.Point(400, 100), 30, 1, 50);

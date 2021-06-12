@@ -1,17 +1,21 @@
 import Konva from 'konva';
 import { BaseMineDraw, Point, Disposition, } from './mine_drawing';
 
-export enum PumpState {
-    run = 0, revers, stop, alarm
-};
+// export enum PumpState {
+//     run = 0, revers, stop, alarm
+//     stopped = 0, starting, working, stopping
+// };
 
 export class Pump extends BaseMineDraw {
     private step: number;
     private a: number;
+    public status: string;
+    public mode: string;
+    public error: string;
     constructor(p0: Point, length: number, disposition: Disposition) {
         super(p0, length, disposition);
         this.name = 'Pump';
-        this.state = PumpState;
+        // this.status = PumpState;
         let p00: Point = this.rect.p0;
         let p02: Point = this.rect.getMiddlePoint();
 
@@ -132,9 +136,9 @@ export class Pump extends BaseMineDraw {
         return this.getOdd(length / factor);
     };
 
-    setState(newState: PumpState): void {
-        this.state = newState;
-    }
+    // setState(newState: PumpState): void {
+    //     this.state = newState;
+    // }
 
     private createRectangle(x: number, y: number, height: number, width: number, fill: string, stroke?: string,
         strokeWidth?: number, cornerRadius?: number): Konva.Rect {
@@ -203,63 +207,69 @@ export class Pump extends BaseMineDraw {
         this.primitives[7].strokeWidth(strokeWidth7);
     }
 
+    setBaseProperty(mes: any) {
+        this.status = mes.StatusPump;
+        this.mode = mes.ModePump;
+        this.error = mes.ErrorPump
+    }
+
     nextFrame(angel: number = 30): void {
         let dy: number = this.step;
-        switch (this.state) {
-            case PumpState.run:
-                this.primitives[14].rotate(angel);
-                this.primitives[15].rotate(angel);
-                this.primitives[16].rotate(angel);
-                if (this.animationFrame < 2) { dy = this.step; this.primitives[10].fill(''); this.animationFrame += 1; }
-                else { dy = - (2 * this.step); this.primitives[10].fill('#EDF6FC'); this.animationFrame = 0; }
-                if (this.disposition == Disposition.Vertical) {
-                    this.primitives[8].move({ x: 0, y: dy });
-                    this.primitives[9].move({ x: 0, y: dy });
-                    this.primitives[10].move({ x: 0, y: dy });
-                }
-                else {
-                    this.primitives[8].move({ x: dy, y: 0 });
-                    this.primitives[9].move({ x: dy, y: 0 });
-                    this.primitives[10].move({ x: dy, y: 0 });
-                }
-                return;
-            case PumpState.revers:
-                this.primitives[14].rotate(angel);
-                this.primitives[15].rotate(angel);
-                this.primitives[16].rotate(angel);
-                if (this.animationFrame < 2) { dy = this.step; this.primitives[8].fill(''); this.animationFrame += 1; }
-                else { dy = - (2 * this.step); this.primitives[8].fill('#EDF6FC'); this.animationFrame = 0; }
-                if (this.disposition == Disposition.Vertical) {
-                    this.primitives[8].move({ x: 0, y: -dy });
-                    this.primitives[9].move({ x: 0, y: -dy });
-                    this.primitives[10].move({ x: 0, y: -dy });
-                }
-                else {
-                    this.primitives[8].move({ x: -dy, y: 0 });
-                    this.primitives[9].move({ x: -dy, y: 0 });
-                    this.primitives[10].move({ x: -dy, y: 0 });
-                }
-                return;
-            case PumpState.stop:
-                this.showFrame('#EFEFEF', '#FE668B', '#AEB4B4', '#AEB4B4', '#FE668B', '#EDF6FC', '', '', '',
-                    '#CFCDCD', '#7E7D7D', '#AEB4B4', '#D99CAB', '#AAA6A6', '#AAA6A6', '#AAA6A6', '#AAA6A6',
-                    '#AAA6A6', '#AAA6A6', 3);
-                return;
-            case PumpState.alarm:
-                if (this.animationFrame == 0) {
-                    this.showFrame('#000000', '#DB0000', '#DB0000', '#DB0000', '#DB0000', '#EDF6FC', '', '', '',
-                        '#000000', '#FF0000', '#000000', '#000000', '#444343', '#444343', '#444343', '#444343',
-                        '#444343', '#444343', 3);
-                    this.animationFrame = 1;
-                }
-                else {
-                    this.showFrame('#DB0000', '#000000', '#000000', '#000000', '#000000', '#EDF6FC', '', '', '',
-                        '#000000', '#FF0000', '#000000', '#DB0000', '#000000', '#444343', '#444343', '#444343',
-                        '#444343', '#444343', 3);
-                    this.animationFrame = 0;
-                }
-                return;
-        }
+        // switch (this.status) {
+        //     case PumpState.working:
+        //         this.primitives[14].rotate(angel);
+        //         this.primitives[15].rotate(angel);
+        //         this.primitives[16].rotate(angel);
+        //         if (this.animationFrame < 2) { dy = this.step; this.primitives[10].fill(''); this.animationFrame += 1; }
+        //         else { dy = - (2 * this.step); this.primitives[10].fill('#EDF6FC'); this.animationFrame = 0; }
+        //         if (this.disposition == Disposition.Vertical) {
+        //             this.primitives[8].move({ x: 0, y: dy });
+        //             this.primitives[9].move({ x: 0, y: dy });
+        //             this.primitives[10].move({ x: 0, y: dy });
+        //         }
+        //         else {
+        //             this.primitives[8].move({ x: dy, y: 0 });
+        //             this.primitives[9].move({ x: dy, y: 0 });
+        //             this.primitives[10].move({ x: dy, y: 0 });
+        //         }
+        //         return;
+        //     // case PumpState.revers:
+        //     //     this.primitives[14].rotate(angel);
+        //     //     this.primitives[15].rotate(angel);
+        //     //     this.primitives[16].rotate(angel);
+        //     //     if (this.animationFrame < 2) { dy = this.step; this.primitives[8].fill(''); this.animationFrame += 1; }
+        //     //     else { dy = - (2 * this.step); this.primitives[8].fill('#EDF6FC'); this.animationFrame = 0; }
+        //     //     if (this.disposition == Disposition.Vertical) {
+        //     //         this.primitives[8].move({ x: 0, y: -dy });
+        //     //         this.primitives[9].move({ x: 0, y: -dy });
+        //     //         this.primitives[10].move({ x: 0, y: -dy });
+        //     //     }
+        //     //     else {
+        //     //         this.primitives[8].move({ x: -dy, y: 0 });
+        //     //         this.primitives[9].move({ x: -dy, y: 0 });
+        //     //         this.primitives[10].move({ x: -dy, y: 0 });
+        //     //     }
+        //     //     return;
+        //     case PumpState.stop:
+        //         this.showFrame('#EFEFEF', '#FE668B', '#AEB4B4', '#AEB4B4', '#FE668B', '#EDF6FC', '', '', '',
+        //             '#CFCDCD', '#7E7D7D', '#AEB4B4', '#D99CAB', '#AAA6A6', '#AAA6A6', '#AAA6A6', '#AAA6A6',
+        //             '#AAA6A6', '#AAA6A6', 3);
+        //         return;
+        //     case PumpState.alarm:
+        //         if (this.animationFrame == 0) {
+        //             this.showFrame('#000000', '#DB0000', '#DB0000', '#DB0000', '#DB0000', '#EDF6FC', '', '', '',
+        //                 '#000000', '#FF0000', '#000000', '#000000', '#444343', '#444343', '#444343', '#444343',
+        //                 '#444343', '#444343', 3);
+        //             this.animationFrame = 1;
+        //         }
+        //         else {
+        //             this.showFrame('#DB0000', '#000000', '#000000', '#000000', '#000000', '#EDF6FC', '', '', '',
+        //                 '#000000', '#FF0000', '#000000', '#DB0000', '#000000', '#444343', '#444343', '#444343',
+        //                 '#444343', '#444343', 3);
+        //             this.animationFrame = 0;
+        //         }
+        //         return;
+        // }
     }
 }
 
@@ -517,9 +527,9 @@ export class UndegraundPump extends Pump {
 
         console.log(this.primitives)
     }
-    setState(newState: PumpState): void {
-        this.state = newState == PumpState.run ? PumpState.revers : newState;
-    }
+    // setState(newState: PumpState): void {
+    //     this.state = newState == PumpState.run ? PumpState.revers : newState;
+    // }
     private createLineUndegraund(p1lx: number, p1ly: number, p2lx: number, p2ly: number, p3lx: number, p3ly: number,
         p4lx: number, p4ly: number, strokeWidth: number, offsetX: number, offsetY: number): Konva.Line {
         return new Konva.Line({

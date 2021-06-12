@@ -7,7 +7,7 @@ var vue_js_1 = __importDefault(require("vue/dist/vue.js")); // вместо impo
 var mine_drawing_1 = require("./mine_drawing");
 var _skip_1 = require("./_skip");
 var _batcher_1 = require("./_batcher");
-var _substation_1 = require("./_substation");
+var _undergroundsubstation_1 = require("./_undergroundsubstation");
 var _cage_1 = require("./_cage");
 var _compressorRoom_1 = require("./_compressorRoom");
 var _batcherlable_1 = require("./_batcherlable");
@@ -19,7 +19,7 @@ var cage = new _cage_1.CAGE('containerCage', window.innerWidth, window.innerHeig
 var compressoRroomUndeground = new _compressorRoom_1.COMPRESSORROOM('containerCompressoRroomUndeground', window.innerWidth, window.innerHeight);
 var skip = new _skip_1.SKIP('containerSkip', window.innerWidth, window.innerHeight);
 var batcher = new _batcher_1.BATCHER('batcher', window.innerWidth, window.innerHeight);
-var substationUndeground = new _substation_1.SUBSTATION('substation', window.innerWidth, window.innerHeight);
+var substationUndeground = new _undergroundsubstation_1.UNDERGROUNDSUBSTATION('undergroundsubstation', window.innerWidth, window.innerHeight);
 var batcherlable = new _batcherlable_1.BATCHERLABLE('batcherlable', window.innerWidth, window.innerHeight);
 // screenMain.addScheme(techWater);
 // screenMain.addScheme(dsf);

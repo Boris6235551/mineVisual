@@ -4,7 +4,7 @@ import { TechWater } from './_techWater'
 import { DSF } from './_dsf'
 import { SKIP } from './_skip'
 import { BATCHER } from './_batcher'
-import { SUBSTATION } from './_substation'
+import { UNDERGROUNDSUBSTATION } from './_undergroundsubstation'
 import { CAGE } from './_cage'
 import { COMPRESSORROOM } from './_compressorRoom'
 import { BATCHERLABLE } from './_batcherlable'
@@ -17,7 +17,7 @@ let cage = new CAGE('containerCage', window.innerWidth, window.innerHeight);
 let compressoRroomUndeground = new COMPRESSORROOM('containerCompressoRroomUndeground', window.innerWidth, window.innerHeight);
 let skip = new SKIP('containerSkip', window.innerWidth, window.innerHeight);
 let batcher = new BATCHER('batcher', window.innerWidth, window.innerHeight);
-let substationUndeground = new SUBSTATION('substation', window.innerWidth, window.innerHeight);
+let substationUndeground = new UNDERGROUNDSUBSTATION('undergroundsubstation', window.innerWidth, window.innerHeight);
 let batcherlable = new BATCHERLABLE('batcherlable', window.innerWidth, window.innerHeight);
 
 // screenMain.addScheme(techWater);
@@ -95,10 +95,6 @@ import { Scheme, Disposition, Point, PropParams } from './mine_drawing';
 
 // import { Label, LabelDegree } from './label'
 // import { CompressorRoom } from './compressorRoom'
-
-
-import { UndergroundSubstation, UndergroundSubstationCell } from './undergroundSubstation'
-
 // import { Skip } from './skip'
 
 import { Cage } from './cage'
