@@ -7,7 +7,7 @@
     <!-- <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" /> -->
 </head>
 
-<body style="background: white; margin: 0">
+<body style="background: white; margin: 0; overflow-x: hidden;">
     <!-- <input type="number" id="byteNumber" min="0" max="10" >
     <input type="number" id="outputNumber" min="0" max="10" >
     
@@ -21,6 +21,8 @@
     <div id="batcher" style="position: absolute; left: 0px; top: 0px;"></div>
     <div id="undergroundsubstation" style="position: absolute; left: 0px; top: 0px;"></div>
     <div id="batcherlable" style="position: absolute; left: 0px; top: 0px;"></div>
+    <div id="containerDSF" style="position: absolute; left: 1920px; top: 0px; width: 1920px;"></div>
+    <div id="receivinghopper" style="position: absolute; left: 1920px; top: 0px; width: 1920px;"></div>
     <div style="position: absolute; left: 0px; top: 0px;">
         <input type="checkbox" id="setOrClear">
         <button onclick="testClear()">Clear</button>

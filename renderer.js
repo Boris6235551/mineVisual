@@ -5,12 +5,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var vue_js_1 = __importDefault(require("vue/dist/vue.js")); // вместо import Vue from 'vue'
 var mine_drawing_1 = require("./mine_drawing");
+var _dsf_1 = require("./_dsf");
 var _skip_1 = require("./_skip");
 var _batcher_1 = require("./_batcher");
 var _undergroundsubstation_1 = require("./_undergroundsubstation");
 var _cage_1 = require("./_cage");
 var _compressorRoom_1 = require("./_compressorRoom");
 var _batcherlable_1 = require("./_batcherlable");
+var _receivinghopper_1 = require("./_receivinghopper");
 var ipcRenderer = require('electron').ipcRenderer;
 var BrowserWindow = require('electron').remote.BrowserWindow;
 ipcRenderer.on('resended', function (event, arr) {
@@ -19,20 +21,22 @@ ipcRenderer.on('resended', function (event, arr) {
 var screenMain = new mine_drawing_1.Screen();
 // // let techWater = new TechWater('container', window.innerWidth, window.innerHeight);
 var cage = new _cage_1.CAGE('containerCage', window.innerWidth, window.innerHeight);
-// // let dsf = new DSF('containerDSF', window.innerWidth * 0.3, window.innerHeight);
+var dsf = new _dsf_1.DSF('containerDSF', window.innerWidth, window.innerHeight);
 var compressoRroomUndeground = new _compressorRoom_1.COMPRESSORROOM('containerCompressoRroomUndeground', window.innerWidth, window.innerHeight);
 var skip = new _skip_1.SKIP('containerSkip', window.innerWidth, window.innerHeight);
 var batcher = new _batcher_1.BATCHER('batcher', window.innerWidth, window.innerHeight);
 var substationUndeground = new _undergroundsubstation_1.UNDERGROUNDSUBSTATION('undergroundsubstation', window.innerWidth, window.innerHeight);
 var batcherlable = new _batcherlable_1.BATCHERLABLE('batcherlable', window.innerWidth, window.innerHeight);
+var receivingHopper = new _receivinghopper_1.RECEIVINGHOPPER('receivinghopper', window.innerWidth, window.innerHeight);
 // screenMain.addScheme(techWater);
-// screenMain.addScheme(dsf);
+screenMain.addScheme(dsf);
 screenMain.addScheme(skip);
 screenMain.addScheme(batcher);
 screenMain.addScheme(cage);
 screenMain.addScheme(substationUndeground);
 screenMain.addScheme(compressoRroomUndeground);
 screenMain.addScheme(batcherlable);
+screenMain.addScheme(receivingHopper);
 // screenMain.addScheme(undegroundpump);
 var tcpipConnector_1 = require("./tcpipConnector");
 function sendMes(name, mes) {
@@ -46,6 +50,7 @@ mine_drawing_1.animateScheme(cage, 500);
 mine_drawing_1.animateScheme(substationUndeground, 500);
 mine_drawing_1.animateScheme(compressoRroomUndeground, 500);
 mine_drawing_1.animateScheme(batcherlable, 500);
+mine_drawing_1.animateScheme(receivingHopper, 500);
 // export default class MyComponent extends Vue {
 //   // Данные инициализации могут быть объявлены как свойства экземпляра
 //   message: string = 'Hello!'

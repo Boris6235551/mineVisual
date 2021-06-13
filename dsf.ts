@@ -48,9 +48,16 @@ export class Conveyor extends BaseMineDraw {
             fill: fill,
         });
     }
+    setBaseProperty(mes: any) {
+        // mes = {
+        //     "upPositionA": false,
+
+        // }
+        this.positionUp = mes.upPositionA;
+    }
     nextFrame(): void {
-        if(this.propBit) this.primitives[4].fill('#6BC4A6');
-        else  this.primitives[4].fill('red');
+        if (this.propBit) this.primitives[4].fill('#6BC4A6');
+        else this.primitives[4].fill('red');
     }
 };
 
@@ -442,7 +449,7 @@ export class BatcherLeft extends BaseMineDraw {
         super(p0, length);
         let colorState = '';
         this.primitives.push(this.createLine(p0.x, p0.y, p0.x, p0.y + length,
-            p0.x - length * 2, p0.y + length * 1.4, p0.x - length * 2, p0.y + length * 1.1, colorState, '', 0));
+            p0.x - length * 2, p0.y + length * 1.4, p0.x - length * 2, p0.y + length * 1.1, '#46802B', '', 0));
     };
     private createLine(x1: number, y1: number, x2: number, y2: number, x3: number, y3: number,
         x4: number, y4: number, fill: string, stroke: string, strokeWidth: number): Konva.Line {
@@ -454,16 +461,16 @@ export class BatcherLeft extends BaseMineDraw {
             closed: true,
         });
     }
-    nextFrame(): void {
-        switch (this.propBit) {
-            case true:
-                this.primitives[0].fill('#46802B');
-                break;
-            case false:
-                this.primitives[0].fill('red');
-                break;
-        }
-    }
+    // nextFrame(): void {
+    //     switch (this.propBit) {
+    //         case true:
+    //             this.primitives[0].fill('#46802B');
+    //             break;
+    //         case false:
+    //             this.primitives[0].fill('red');
+    //             break;
+    //     }
+    // }
 }
 
 export class BatcherRight extends BaseMineDraw {
@@ -483,21 +490,25 @@ export class BatcherRight extends BaseMineDraw {
             closed: true,
         });
     }
-    nextFrame(): void {
-        switch (this.propBit) {
-            case true:
-                this.primitives[0].fill('#46802B');
-                break;
-            case false:
-                this.primitives[0].fill('red');
-                break;
-        }
-    }
+    // nextFrame(): void {
+    //     switch (this.propBit) {
+    //         case true:
+    //             this.primitives[0].fill('#46802B');
+    //             break;
+    //         case false:
+    //             this.primitives[0].fill('red');
+    //             break;
+    //     }
+    // }
 }
 
 export class ReceivingHopper extends BaseMineDraw {
+    public bunkHighUnload: boolean;
+    public bunkLowUnload: boolean
     constructor(p0: Point, length: number) {
         super(p0, length);
+        this.bunkHighUnload = false;
+        this.bunkLowUnload = false;
         // p0 верхняя левая точка
         this.primitives.push(this.createLine(p0.x, p0.y,
             p0.x + length, p0.y,
@@ -532,6 +543,36 @@ export class ReceivingHopper extends BaseMineDraw {
             p0.x + length * 0.73, p0.y + length * 0.54,
             length * 0.02)
         );
+        // mode bunkLowUnload
+        this.primitives.push(this.createLine(
+            p0.x + length * 0.26, p0.y + length * 0.43,
+            p0.x + length * 0.75, p0.y + length * 0.43,
+            p0.x + length * 0.79, p0.y + length * 0.67,
+            p0.x + length * 0.21, p0.y + length * 0.67,
+            p0.x + length * 0.26, p0.y + length * 0.43,
+            p0.x + length * 0.26, p0.y + length * 0.43,
+            '', '', 0)
+        );
+        // mode bunkHighUnload
+        this.primitives.push(this.createLine(
+            p0.x, p0.y,
+            p0.x + length, p0.y,
+            p0.x + length * 0.88, p0.y + length * 0.21,
+            p0.x + length * 0.12, p0.y + length * 0.21,
+            p0.x, p0.y,
+            p0.x, p0.y,
+            '', '', 0)
+        );
+        this.primitives.push(this.createLine(
+            p0.x + length * 0.355, p0.y + length * 0.69,
+            p0.x + length * 0.5, p0.y + length * 0.45,
+            p0.x + length * 0.645, p0.y + length * 0.69,
+            p0.x + length * 0.355, p0.y + length * 0.69,
+            p0.x + length * 0.355, p0.y + length * 0.69,
+            p0.x + length * 0.355, p0.y + length * 0.69,
+            'white', '', 0)
+        );
+        // this.setBaseProperty(null);
     }
     private createLine(x1: number, y1: number, x2: number, y2: number, x3: number, y3: number,
         x4: number, y4: number, x5: number, y5: number, x6: number, y6: number,
@@ -551,55 +592,45 @@ export class ReceivingHopper extends BaseMineDraw {
             strokeWidth: strokeWidth,
         });
     }
+    setBaseProperty(mes: any) {
+        // mes = {
+        //     "bunkHighUnload": true,
+        //     "bunkLowUnload": true,
+        // }
+        this.bunkHighUnload = mes.bunkHighUnload;
+        this.bunkLowUnload = mes.bunkLowUnload;
+    }
+    nextFrame(): void {
+        if (this.bunkHighUnload) {
+            this.primitives[6].fill('red');
+        }
+        if (this.bunkLowUnload) {
+            this.primitives[7].fill('red');
+        }
+    }
 }
 
-export class ArrowPointerRight extends BaseMineDraw {
-    constructor(p0: Point, lengthWidth: number, lengthHeight: number) {
+export class ArrowPointer extends BaseMineDraw {
+    constructor(p0: Point, lengthWidth: number, lengthHeight: number, color: string) {
         super(p0, lengthWidth);
-        this.primitives.push(this.createLine(p0.x, p0.y, p0.x - lengthWidth, p0.y, 2));
-        this.primitives.push(this.createLine(p0.x, p0.y, p0.x, p0.y + lengthHeight, 2));
-        this.primitives.push(this.createTriangle(p0.x, p0.y + lengthHeight, 7));
+        this.primitives.push(this.createLine(p0.x, p0.y, p0.x - lengthWidth, p0.y, color, 2));
+        this.primitives.push(this.createLine(p0.x, p0.y, p0.x, p0.y + lengthHeight, color, 2));
+        this.primitives.push(this.createTriangle(p0.x, p0.y + lengthHeight, color, 7));
     }
-    private createLine(x1: number, y1: number, x2: number, y2: number, strokeWidth: number): Konva.Line {
+    private createLine(x1: number, y1: number, x2: number, y2: number, stroke: string, strokeWidth: number): Konva.Line {
         return new Konva.Line({
             points: [x1, y1, x2, y2],
-            stroke: 'black',
+            stroke: stroke,
             strokeWidth: strokeWidth,
         });
     };
-    private createTriangle(x: number, y: number, radius: number): Konva.RegularPolygon {
+    private createTriangle(x: number, y: number, fill: string, radius: number): Konva.RegularPolygon {
         return new Konva.RegularPolygon({
             x: x,
             y: y,
             sides: 3,
             radius: radius,
-            fill: 'black',
-            rotation: 180,
-        });
-    }
-}
-
-export class ArrowPointerLeft extends BaseMineDraw {
-    constructor(p0: Point, lengthWidth: number, lengthHeight: number) {
-        super(p0, lengthWidth);
-        this.primitives.push(this.createLine(p0.x, p0.y, p0.x + lengthWidth, p0.y, 2));
-        this.primitives.push(this.createLine(p0.x, p0.y, p0.x, p0.y + lengthHeight, 2));
-        this.primitives.push(this.createTriangle(p0.x, p0.y + lengthHeight, 7));
-    }
-    private createLine(x1: number, y1: number, x2: number, y2: number, strokeWidth: number): Konva.Line {
-        return new Konva.Line({
-            points: [x1, y1, x2, y2],
-            stroke: 'black',
-            strokeWidth: strokeWidth,
-        });
-    };
-    private createTriangle(x: number, y: number, radius: number): Konva.RegularPolygon {
-        return new Konva.RegularPolygon({
-            x: x,
-            y: y,
-            sides: 3,
-            radius: radius,
-            fill: 'black',
+            fill: fill,
             rotation: 180,
         });
     }
@@ -619,6 +650,24 @@ export class InformationTable extends BaseMineDraw {
             stroke: 'black',
             strokeWidth: strokeWidth,
             cornerRadius: 10,
+        });
+    }
+}
+
+export class Pile extends BaseMineDraw {
+    constructor(p0: Point, length: number) {
+        super(p0, length);
+        this.primitives.push(this.createTriangle(p0.x, p0.y, length * 0.5, '', 'black', length * 0.03));
+    }
+    private createTriangle(x: number, y: number, radius: number, fill: string, stroke: string, strokeWidth: number): Konva.RegularPolygon {
+        return new Konva.RegularPolygon({
+            x: x,
+            y: y,
+            sides: 3,
+            radius: radius,
+            fill: fill,
+            stroke: stroke,
+            strokeWidth: strokeWidth,
         });
     }
 }

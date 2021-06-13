@@ -16,7 +16,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.InformationTable = exports.ArrowPointerLeft = exports.ArrowPointerRight = exports.ReceivingHopper = exports.BatcherRight = exports.BatcherLeft = exports.Stone = exports.Crush = exports.ConeCrusher = exports.SeparatorLeft = exports.SeparatorRight = exports.Conveyor = void 0;
+exports.Pile = exports.InformationTable = exports.ArrowPointer = exports.ReceivingHopper = exports.BatcherRight = exports.BatcherLeft = exports.Stone = exports.Crush = exports.ConeCrusher = exports.SeparatorLeft = exports.SeparatorRight = exports.Conveyor = void 0;
 var konva_1 = __importDefault(require("konva"));
 var mine_drawing_1 = require("./mine_drawing");
 var Conveyor = /** @class */ (function (_super) {
@@ -61,6 +61,12 @@ var Conveyor = /** @class */ (function (_super) {
             strokeWidth: strokeWidth,
             fill: fill,
         });
+    };
+    Conveyor.prototype.setBaseProperty = function (mes) {
+        // mes = {
+        //     "upPositionA": false,
+        // }
+        this.positionUp = mes.upPositionA;
     };
     Conveyor.prototype.nextFrame = function () {
         if (this.propBit)
@@ -425,7 +431,7 @@ var BatcherLeft = /** @class */ (function (_super) {
     function BatcherLeft(p0, length) {
         var _this = _super.call(this, p0, length) || this;
         var colorState = '';
-        _this.primitives.push(_this.createLine(p0.x, p0.y, p0.x, p0.y + length, p0.x - length * 2, p0.y + length * 1.4, p0.x - length * 2, p0.y + length * 1.1, colorState, '', 0));
+        _this.primitives.push(_this.createLine(p0.x, p0.y, p0.x, p0.y + length, p0.x - length * 2, p0.y + length * 1.4, p0.x - length * 2, p0.y + length * 1.1, '#46802B', '', 0));
         return _this;
     }
     ;
@@ -437,16 +443,6 @@ var BatcherLeft = /** @class */ (function (_super) {
             strokeWidth: strokeWidth,
             closed: true,
         });
-    };
-    BatcherLeft.prototype.nextFrame = function () {
-        switch (this.propBit) {
-            case true:
-                this.primitives[0].fill('#46802B');
-                break;
-            case false:
-                this.primitives[0].fill('red');
-                break;
-        }
     };
     return BatcherLeft;
 }(mine_drawing_1.BaseMineDraw));
@@ -468,16 +464,6 @@ var BatcherRight = /** @class */ (function (_super) {
             closed: true,
         });
     };
-    BatcherRight.prototype.nextFrame = function () {
-        switch (this.propBit) {
-            case true:
-                this.primitives[0].fill('#46802B');
-                break;
-            case false:
-                this.primitives[0].fill('red');
-                break;
-        }
-    };
     return BatcherRight;
 }(mine_drawing_1.BaseMineDraw));
 exports.BatcherRight = BatcherRight;
@@ -485,6 +471,8 @@ var ReceivingHopper = /** @class */ (function (_super) {
     __extends(ReceivingHopper, _super);
     function ReceivingHopper(p0, length) {
         var _this = _super.call(this, p0, length) || this;
+        _this.bunkHighUnload = false;
+        _this.bunkLowUnload = false;
         // p0 верхняя левая точка
         _this.primitives.push(_this.createLine(p0.x, p0.y, p0.x + length, p0.y, p0.x + length * 0.71, p0.y + length * 0.49, p0.x + length * 0.79, p0.y + length * 0.67, p0.x + length * 0.21, p0.y + length * 0.67, p0.x + length * 0.29, p0.y + length * 0.49, '#21686C', '', 0));
         _this.primitives.push(_this.createLineReceivingHopper(p0.x + length * 0.057, p0.y + length * 0.1, p0.x + length * 0.94, p0.y + length * 0.1, length * 0.02));
@@ -492,7 +480,13 @@ var ReceivingHopper = /** @class */ (function (_super) {
         _this.primitives.push(_this.createLineReceivingHopper(p0.x + length * 0.19, p0.y + length * 0.32, p0.x + length * 0.81, p0.y + length * 0.32, length * 0.02));
         _this.primitives.push(_this.createLineReceivingHopper(p0.x + length * 0.25, p0.y + length * 0.43, p0.x + length * 0.75, p0.y + length * 0.43, length * 0.02));
         _this.primitives.push(_this.createLineReceivingHopper(p0.x + length * 0.27, p0.y + length * 0.54, p0.x + length * 0.73, p0.y + length * 0.54, length * 0.02));
+        // mode bunkLowUnload
+        _this.primitives.push(_this.createLine(p0.x + length * 0.26, p0.y + length * 0.43, p0.x + length * 0.75, p0.y + length * 0.43, p0.x + length * 0.79, p0.y + length * 0.67, p0.x + length * 0.21, p0.y + length * 0.67, p0.x + length * 0.26, p0.y + length * 0.43, p0.x + length * 0.26, p0.y + length * 0.43, '', '', 0));
+        // mode bunkHighUnload
+        _this.primitives.push(_this.createLine(p0.x, p0.y, p0.x + length, p0.y, p0.x + length * 0.88, p0.y + length * 0.21, p0.x + length * 0.12, p0.y + length * 0.21, p0.x, p0.y, p0.x, p0.y, '', '', 0));
+        _this.primitives.push(_this.createLine(p0.x + length * 0.355, p0.y + length * 0.69, p0.x + length * 0.5, p0.y + length * 0.45, p0.x + length * 0.645, p0.y + length * 0.69, p0.x + length * 0.355, p0.y + length * 0.69, p0.x + length * 0.355, p0.y + length * 0.69, p0.x + length * 0.355, p0.y + length * 0.69, 'white', '', 0));
         return _this;
+        // this.setBaseProperty(null);
     }
     ReceivingHopper.prototype.createLine = function (x1, y1, x2, y2, x3, y3, x4, y4, x5, y5, x6, y6, fill, stroke, strokeWidth) {
         return new konva_1.default.Line({
@@ -510,69 +504,55 @@ var ReceivingHopper = /** @class */ (function (_super) {
             strokeWidth: strokeWidth,
         });
     };
+    ReceivingHopper.prototype.setBaseProperty = function (mes) {
+        // mes = {
+        //     "bunkHighUnload": true,
+        //     "bunkLowUnload": true,
+        // }
+        this.bunkHighUnload = mes.bunkHighUnload;
+        this.bunkLowUnload = mes.bunkLowUnload;
+    };
+    ReceivingHopper.prototype.nextFrame = function () {
+        if (this.bunkHighUnload) {
+            this.primitives[6].fill('red');
+        }
+        if (this.bunkLowUnload) {
+            this.primitives[7].fill('red');
+        }
+    };
     return ReceivingHopper;
 }(mine_drawing_1.BaseMineDraw));
 exports.ReceivingHopper = ReceivingHopper;
-var ArrowPointerRight = /** @class */ (function (_super) {
-    __extends(ArrowPointerRight, _super);
-    function ArrowPointerRight(p0, lengthWidth, lengthHeight) {
+var ArrowPointer = /** @class */ (function (_super) {
+    __extends(ArrowPointer, _super);
+    function ArrowPointer(p0, lengthWidth, lengthHeight, color) {
         var _this = _super.call(this, p0, lengthWidth) || this;
-        _this.primitives.push(_this.createLine(p0.x, p0.y, p0.x - lengthWidth, p0.y, 2));
-        _this.primitives.push(_this.createLine(p0.x, p0.y, p0.x, p0.y + lengthHeight, 2));
-        _this.primitives.push(_this.createTriangle(p0.x, p0.y + lengthHeight, 7));
+        _this.primitives.push(_this.createLine(p0.x, p0.y, p0.x - lengthWidth, p0.y, color, 2));
+        _this.primitives.push(_this.createLine(p0.x, p0.y, p0.x, p0.y + lengthHeight, color, 2));
+        _this.primitives.push(_this.createTriangle(p0.x, p0.y + lengthHeight, color, 7));
         return _this;
     }
-    ArrowPointerRight.prototype.createLine = function (x1, y1, x2, y2, strokeWidth) {
+    ArrowPointer.prototype.createLine = function (x1, y1, x2, y2, stroke, strokeWidth) {
         return new konva_1.default.Line({
             points: [x1, y1, x2, y2],
-            stroke: 'black',
+            stroke: stroke,
             strokeWidth: strokeWidth,
         });
     };
     ;
-    ArrowPointerRight.prototype.createTriangle = function (x, y, radius) {
+    ArrowPointer.prototype.createTriangle = function (x, y, fill, radius) {
         return new konva_1.default.RegularPolygon({
             x: x,
             y: y,
             sides: 3,
             radius: radius,
-            fill: 'black',
+            fill: fill,
             rotation: 180,
         });
     };
-    return ArrowPointerRight;
+    return ArrowPointer;
 }(mine_drawing_1.BaseMineDraw));
-exports.ArrowPointerRight = ArrowPointerRight;
-var ArrowPointerLeft = /** @class */ (function (_super) {
-    __extends(ArrowPointerLeft, _super);
-    function ArrowPointerLeft(p0, lengthWidth, lengthHeight) {
-        var _this = _super.call(this, p0, lengthWidth) || this;
-        _this.primitives.push(_this.createLine(p0.x, p0.y, p0.x + lengthWidth, p0.y, 2));
-        _this.primitives.push(_this.createLine(p0.x, p0.y, p0.x, p0.y + lengthHeight, 2));
-        _this.primitives.push(_this.createTriangle(p0.x, p0.y + lengthHeight, 7));
-        return _this;
-    }
-    ArrowPointerLeft.prototype.createLine = function (x1, y1, x2, y2, strokeWidth) {
-        return new konva_1.default.Line({
-            points: [x1, y1, x2, y2],
-            stroke: 'black',
-            strokeWidth: strokeWidth,
-        });
-    };
-    ;
-    ArrowPointerLeft.prototype.createTriangle = function (x, y, radius) {
-        return new konva_1.default.RegularPolygon({
-            x: x,
-            y: y,
-            sides: 3,
-            radius: radius,
-            fill: 'black',
-            rotation: 180,
-        });
-    };
-    return ArrowPointerLeft;
-}(mine_drawing_1.BaseMineDraw));
-exports.ArrowPointerLeft = ArrowPointerLeft;
+exports.ArrowPointer = ArrowPointer;
 var InformationTable = /** @class */ (function (_super) {
     __extends(InformationTable, _super);
     function InformationTable(p0, length) {
@@ -594,4 +574,25 @@ var InformationTable = /** @class */ (function (_super) {
     return InformationTable;
 }(mine_drawing_1.BaseMineDraw));
 exports.InformationTable = InformationTable;
+var Pile = /** @class */ (function (_super) {
+    __extends(Pile, _super);
+    function Pile(p0, length) {
+        var _this = _super.call(this, p0, length) || this;
+        _this.primitives.push(_this.createTriangle(p0.x, p0.y, length * 0.5, '', 'black', length * 0.03));
+        return _this;
+    }
+    Pile.prototype.createTriangle = function (x, y, radius, fill, stroke, strokeWidth) {
+        return new konva_1.default.RegularPolygon({
+            x: x,
+            y: y,
+            sides: 3,
+            radius: radius,
+            fill: fill,
+            stroke: stroke,
+            strokeWidth: strokeWidth,
+        });
+    };
+    return Pile;
+}(mine_drawing_1.BaseMineDraw));
+exports.Pile = Pile;
 //# sourceMappingURL=dsf.js.map

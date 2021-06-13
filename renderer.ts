@@ -8,6 +8,7 @@ import { UNDERGROUNDSUBSTATION } from './_undergroundsubstation'
 import { CAGE } from './_cage'
 import { COMPRESSORROOM } from './_compressorRoom'
 import { BATCHERLABLE } from './_batcherlable'
+import { RECEIVINGHOPPER } from './_receivinghopper'
 const { ipcRenderer }  = require('electron');
 const { BrowserWindow } = require('electron').remote
 
@@ -21,21 +22,23 @@ ipcRenderer.on('resended', (event, arr) => {
 let screenMain = new Screen();
 // // let techWater = new TechWater('container', window.innerWidth, window.innerHeight);
 let cage = new CAGE('containerCage', window.innerWidth, window.innerHeight);
-// // let dsf = new DSF('containerDSF', window.innerWidth * 0.3, window.innerHeight);
+let dsf = new DSF('containerDSF', window.innerWidth, window.innerHeight);
 let compressoRroomUndeground = new COMPRESSORROOM('containerCompressoRroomUndeground', window.innerWidth, window.innerHeight);
 let skip = new SKIP('containerSkip', window.innerWidth, window.innerHeight);
 let batcher = new BATCHER('batcher', window.innerWidth, window.innerHeight);
 let substationUndeground = new UNDERGROUNDSUBSTATION('undergroundsubstation', window.innerWidth, window.innerHeight);
 let batcherlable = new BATCHERLABLE('batcherlable', window.innerWidth, window.innerHeight);
+let receivingHopper = new RECEIVINGHOPPER('receivinghopper', window.innerWidth, window.innerHeight);
 
 // screenMain.addScheme(techWater);
-// screenMain.addScheme(dsf);
+screenMain.addScheme(dsf);
 screenMain.addScheme(skip);
 screenMain.addScheme(batcher);
 screenMain.addScheme(cage);
 screenMain.addScheme(substationUndeground);
 screenMain.addScheme(compressoRroomUndeground);
 screenMain.addScheme(batcherlable);
+screenMain.addScheme(receivingHopper);
 // screenMain.addScheme(undegroundpump);
 
 import { startClients, stopConnection, _reCreate, _testConnect, _testSend, _sendReload, _step } from './tcpipConnector'
@@ -53,6 +56,7 @@ animateScheme(cage, 500);
 animateScheme(substationUndeground, 500);
 animateScheme(compressoRroomUndeground, 500);
 animateScheme(batcherlable, 500);
+animateScheme(receivingHopper, 500);
 
 // export default class MyComponent extends Vue {
 //   // Данные инициализации могут быть объявлены как свойства экземпляра
