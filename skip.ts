@@ -113,7 +113,7 @@ export class Skip extends BaseMineDraw {
             length * 0.01, length * 0.1, 'red', '', 0, 0));
         // скрытие верхних крышек скипов
         this.hidingCover();
-        // this.setBaseProperty(null)
+        this.setBaseProperty(null)
     }
     private createRectangle(x: number, y: number, height: number, width: number, fill: string,
         stroke: string, strokeWidth: number, cornerRadius: number): Konva.Rect {
@@ -179,18 +179,18 @@ export class Skip extends BaseMineDraw {
         this.primitives[150].visible(false);
     }
     setBaseProperty(mes: any) {
-        // mes = {
-        //     "upPositionA": false,
-        //     "downPositionA": false,
-        //     "openA": false,
-        //     "openB": true,
-        //     "normalUp": false,
-        //     "normalDown": false,
-        //     "slowlyUp": false,
-        //     "slowlyDown": false,
-        //     "bunkHighUnload": false,
-        //     "bunkLowUnload": false
-        // }
+        mes = {
+            "upPositionA": false,
+            "downPositionA": false,
+            "openA": true,
+            "openB": true,
+            "normalUp": false,
+            "normalDown": false,
+            "slowlyUp": false,
+            "slowlyDown": false,
+            "bunkHighUnload": false,
+            "bunkLowUnload": true
+        }
         this.positionUp = mes.upPositionA;
         this.positionDown = mes.downPositionA;
         this.moveUp = mes.normalUp;

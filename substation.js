@@ -16,7 +16,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Generator = exports.UndergroundSubstationCell = exports.SubstationCell = exports.Trunk = void 0;
+exports.Generator = exports.Incomers = exports.SubstationCell = exports.UndergroundSubstationCell = exports.Cell = exports.Trunk = void 0;
 var konva_1 = __importDefault(require("konva"));
 var mine_drawing_1 = require("./mine_drawing");
 var Trunk = /** @class */ (function (_super) {
@@ -58,14 +58,14 @@ var Trunk = /** @class */ (function (_super) {
     return Trunk;
 }(mine_drawing_1.BaseMineDraw));
 exports.Trunk = Trunk;
-var SubstationCell = /** @class */ (function (_super) {
-    __extends(SubstationCell, _super);
-    function SubstationCell(p0, length) {
+var Cell = /** @class */ (function (_super) {
+    __extends(Cell, _super);
+    function Cell(p0, length) {
         var _this = _super.call(this, p0, length) || this;
         _this.name = 'SubstationCell';
         return _this;
     }
-    SubstationCell.prototype.createRectangle = function (x, y, height, width, fill, stroke, strokeWidth) {
+    Cell.prototype.createRectangle = function (x, y, height, width, fill, stroke, strokeWidth) {
         return new konva_1.default.Rect({
             x: x,
             y: y,
@@ -76,21 +76,21 @@ var SubstationCell = /** @class */ (function (_super) {
             strokeWidth: strokeWidth,
         });
     };
-    SubstationCell.prototype.createLine = function (x1, y1, x2, y2, stroke, strokeWidth) {
+    Cell.prototype.createLine = function (x1, y1, x2, y2, stroke, strokeWidth) {
         return new konva_1.default.Line({
             points: [x1, y1, x2, y2],
             stroke: stroke,
             strokeWidth: strokeWidth,
         });
     };
-    SubstationCell.prototype.createLineSwitch = function (x1, y1, x2, y2, x3, y3, x4, y4, x5, y5, x6, y6, x7, y7, stroke, strokeWidth) {
+    Cell.prototype.createLineSwitch = function (x1, y1, x2, y2, x3, y3, x4, y4, x5, y5, x6, y6, x7, y7, stroke, strokeWidth) {
         return new konva_1.default.Line({
             points: [x1, y1, x2, y2, x3, y3, x4, y4, x5, y5, x6, y6, x7, y7],
             stroke: stroke,
             strokeWidth: strokeWidth,
         });
     };
-    SubstationCell.prototype.createText = function (x, y, text, fontSize) {
+    Cell.prototype.createText = function (x, y, text, fontSize) {
         return new konva_1.default.Text({
             x: x,
             y: y,
@@ -101,7 +101,7 @@ var SubstationCell = /** @class */ (function (_super) {
             fill: 'black'
         });
     };
-    SubstationCell.prototype.createCircle = function (x, y, radius, fill) {
+    Cell.prototype.createCircle = function (x, y, radius, fill) {
         return new konva_1.default.Circle({
             x: x,
             y: y,
@@ -109,9 +109,9 @@ var SubstationCell = /** @class */ (function (_super) {
             fill: fill,
         });
     };
-    return SubstationCell;
+    return Cell;
 }(mine_drawing_1.BaseMineDraw));
-exports.SubstationCell = SubstationCell;
+exports.Cell = Cell;
 var UndergroundSubstationCell = /** @class */ (function (_super) {
     __extends(UndergroundSubstationCell, _super);
     function UndergroundSubstationCell(p0, length) {
@@ -193,8 +193,111 @@ var UndergroundSubstationCell = /** @class */ (function (_super) {
     };
     ;
     return UndergroundSubstationCell;
-}(SubstationCell));
+}(Cell));
 exports.UndergroundSubstationCell = UndergroundSubstationCell;
+var SubstationCell = /** @class */ (function (_super) {
+    __extends(SubstationCell, _super);
+    function SubstationCell(p0, length, firstNumber, amount) {
+        var _this = _super.call(this, p0, length) || this;
+        _this.name = 'UndegroundStation';
+        _this.cell = new Array();
+        var n;
+        for (n = firstNumber; n < amount; n++) {
+            _this.cell[n] = false;
+            // ячейки
+            _this.primitives.push(_this.createRectangle(p0.x + n * length * 0.0588, p0.y + length * 0.04, length * 0.07, length * 0.0588, 'rgba(138, 193, 113, 0.41)', '#46802B', length * 0.001));
+            _this.primitives.push(_this.createLine(p0.x + n * length * 0.0588, p0.y + length * 0.075, p0.x + length * 0.059 + n * length * 0.0588, p0.y + length * 0.075, '#46802B', length * 0.001));
+            // вертикальная линия соединения ячейки с шиной
+            _this.primitives.push(_this.createLine(p0.x + n * length * 0.0588 + length * 0.0294, p0.y + length * 0.007, p0.x + n * length * 0.0588 + length * 0.0294, p0.y + length * 0.0476, '#84AFB1', length * 0.003));
+            _this.primitives.push(_this.createText(p0.x + n * length * 0.0585 + length * 0.009, p0.y + length * 0.087, 'Cell # ' + (n + 1), length * 0.013));
+            // ячейки прямоугольник анимации
+            // a = c, b = d анимация выключателя
+            var a = p0.x + length * 0.0282 + n * length * 0.0588;
+            var b = p0.y + length * 0.0576;
+            var c = p0.x + length * 0.0322 + n * length * 0.0588;
+            var d = p0.y + length * 0.0676;
+            _this.primitives.push(_this.createLineSwitch(a, b, p0.x + length * 0.0202 + n * length * 0.0588, p0.y + length * 0.0676, p0.x + length * 0.0082 + n * length * 0.0588, p0.y + length * 0.0676, p0.x + length * 0.0082 + n * length * 0.0588, p0.y + length * 0.0476, p0.x + length * 0.0502 + n * length * 0.0588, p0.y + length * 0.0476, p0.x + length * 0.0502 + n * length * 0.0588, p0.y + length * 0.0676, c, d, '#84AFB1', length * 0.003));
+            _this.primitives.push(_this.createCircle(p0.x + length * 0.0082 + n * length * 0.0588, p0.y + length * 0.0676, length * 0.0025, '#C46B6B'));
+            _this.primitives.push(_this.createCircle(p0.x + length * 0.0502 + n * length * 0.0588, p0.y + length * 0.0676, length * 0.0025, '#C46B6B'));
+        }
+        return _this;
+        // this.setBaseProperty(null)
+    }
+    SubstationCell.prototype.setBaseProperty = function (mes) {
+        // mes = {
+        //     "cell1": true,
+        //     "cell2": false,
+        //     "cell3": false,
+        //     "cell4": true,
+        //     "cell5": false,
+        //     "cell6": false,
+        //     "cell7": false,
+        //     "cell8": false,
+        //     "cell10": false,
+        //     "cell11": false,
+        //     "cell12": false,
+        //     "cell13": false,
+        //     "cell14": false,
+        //     "cell15": false,
+        //     "cell16": false,
+        //     "cell17": true,
+        // }
+        for (var n = 0; n < 16; n++) {
+            this.cell[n] = Object.values(mes)[n];
+        }
+    };
+    SubstationCell.prototype.nextFrame = function () {
+        for (var n = 0; n < 16; n++) {
+            if (this.cell[n]) {
+                this.primitives[n * 7 + 4].attrs.points[0] = this.primitives[n * 7 + 4].attrs.points[12];
+                this.primitives[n * 7 + 4].attrs.points[1] = this.primitives[n * 7 + 4].attrs.points[13];
+                this.primitives[n * 7 + 4].stroke('#055659');
+                this.primitives[n * 7 + 2].stroke('#055659');
+                this.primitives[n * 7].fill('#8AC171');
+                this.primitives[n * 7 + 5].fill('#FDC858');
+                this.primitives[n * 7 + 6].fill('#FDC858');
+            }
+            else {
+                this.primitives[n * 7 + 4].attrs.points[0] = this.primitives[n * 7 + 4].attrs.points[0];
+                this.primitives[n * 7 + 4].attrs.points[1] = this.primitives[n * 7 + 4].attrs.points[1];
+                this.primitives[n * 7 + 4].stroke('#84AFB1');
+                this.primitives[n * 7 + 2].stroke('#84AFB1');
+                this.primitives[n * 7].fill('rgba(138, 193, 113, 0.41)');
+                this.primitives[n * 7 + 5].fill('#C46B6B');
+                this.primitives[n * 7 + 6].fill('#C46B6B');
+            }
+        }
+    };
+    ;
+    return SubstationCell;
+}(Cell));
+exports.SubstationCell = SubstationCell;
+var Incomers = /** @class */ (function (_super) {
+    __extends(Incomers, _super);
+    function Incomers(p0, length) {
+        var _this = _super.call(this, p0, length) || this;
+        _this.name = 'Incomers';
+        return _this;
+        // this.primitives.push(this.createLine());
+    }
+    Incomers.prototype.createLine = function (x1, y1, x2, y2, x3, y3, x4, y4, strokeWidth) {
+        return new konva_1.default.Line({
+            points: [x1, y1, x2, y2, x3, y3, x4, y4],
+            stroke: 'black',
+            strokeWidth: strokeWidth,
+        });
+    };
+    Incomers.prototype.createCircle = function (x, y, radius, fill) {
+        return new konva_1.default.Circle({
+            x: x,
+            y: y,
+            radius: radius,
+            fill: fill,
+        });
+    };
+    return Incomers;
+}(mine_drawing_1.BaseMineDraw));
+exports.Incomers = Incomers;
 var Generator = /** @class */ (function (_super) {
     __extends(Generator, _super);
     function Generator(p0, length) {

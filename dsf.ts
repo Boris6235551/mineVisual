@@ -53,7 +53,7 @@ export class Conveyor extends BaseMineDraw {
         //     "upPositionA": false,
 
         // }
-        this.positionUp = mes.upPositionA;
+        // this.positionUp = mes.upPositionA;
     }
     nextFrame(): void {
         if (this.propBit) this.primitives[4].fill('#6BC4A6');

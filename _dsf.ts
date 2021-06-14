@@ -131,12 +131,12 @@ export class DSF extends Scheme {
         this.ConeCrusher2.name = 'coneCrusher2B'
 
         // 16. точка (x,y), длина, высота
-        let Conveyor6 = new Conveyor(new Point(155, 460), 50, 10);
+        let Conveyor6 = new Conveyor(new Point(155, 460), 70, 10);
         this.addWidget(Conveyor6);
         Conveyor6.name = 'conveyor3A'
 
         // 17. точка (x,y), длина, высота
-        let Conveyor7 = new Conveyor(new Point(470, 460), 50, 10);
+        let Conveyor7 = new Conveyor(new Point(450, 460), 70, 10);
         this.addWidget(Conveyor7);
         Conveyor7.name = 'conveyor3B'
 
@@ -181,7 +181,7 @@ export class DSF extends Scheme {
         this.SeparatorLeft4.name = 'screen3'
 
         // 26. точка (x,y), длина, высота
-        let Conveyor9 = new Conveyor(new Point(220, 795), 30, 10);
+        let Conveyor9 = new Conveyor(new Point(190, 795), 30, 10);
         this.addWidget(Conveyor9);
         Conveyor9.name = 'conveyor5'
 
@@ -196,17 +196,17 @@ export class DSF extends Scheme {
         Conveyor11.name = 'conveyor7'
 
         // 29. второй параметр задаёт длину динамической строны треугльника
-        this.SeparatorLeft5 = new SeparatorLeft(new Point(220, 820), 50);
+        this.SeparatorLeft5 = new SeparatorLeft(new Point(190, 820), 50);
         this.addWidget(this.SeparatorLeft5);
         this.SeparatorLeft5.name = 'screen4'
 
         // 30. точка (x,y), длина, высота
-        let Conveyor12 = new Conveyor(new Point(135, 885), 30, 10);
+        let Conveyor12 = new Conveyor(new Point(105, 885), 30, 10);
         this.addWidget(Conveyor12);
         Conveyor12.name = 'conveyor8'
 
         // 31. точка (x,y), длина, высота
-        let Conveyor13 = new Conveyor(new Point(190, 885), 30, 10);
+        let Conveyor13 = new Conveyor(new Point(160, 885), 30, 10);
         this.addWidget(Conveyor13);
         Conveyor13.name = 'conveyor9'
 
@@ -235,24 +235,28 @@ export class DSF extends Scheme {
         this.addWidget(this.ArrowPointer6);
 
         // Point - общая точка двух линий, длина горизонтальной линии, высота вертикальной линии
-        this.ArrowPointer7 = new ArrowPointer(new Point(450, 650), 0, 20, 'black');
+        this.ArrowPointer7 = new ArrowPointer(new Point(215, 650), 0, 20, 'black');
         this.addWidget(this.ArrowPointer7);
 
         // Point - общая точка двух линий, длина горизонтальной линии, высота вертикальной линии
-        this.ArrowPointer8 = new ArrowPointer(new Point(492, 625), 10, 65, '#FE982A');
-        this.addWidget(this.ArrowPointer8);
+        this.ArrowPointer8 = new ArrowPointer(new Point(450, 650), 0, 20, 'black');
+        this.addWidget(this.ArrowPointer8);////////////////////////////////////
 
         // Point - общая точка двух линий, длина горизонтальной линии, высота вертикальной линии
-        this.ArrowPointer9 = new ArrowPointer(new Point(380, 625), 133, 65, '#FE982A');
+        this.ArrowPointer9 = new ArrowPointer(new Point(492, 625), 10, 65, '#FE982A');
         this.addWidget(this.ArrowPointer9);
 
         // Point - общая точка двух линий, длина горизонтальной линии, высота вертикальной линии
-        this.ArrowPointer10 = new ArrowPointer(new Point(298, 755), 0, 30, '#FE982A');
+        this.ArrowPointer10 = new ArrowPointer(new Point(380, 625), 133, 65, '#FE982A');
         this.addWidget(this.ArrowPointer10);
 
         // Point - общая точка двух линий, длина горизонтальной линии, высота вертикальной линии
-        this.ArrowPointer11 = new ArrowPointer(new Point(240, 762), -67, 23, 'black');
+        this.ArrowPointer11 = new ArrowPointer(new Point(298, 755), 0, 30, '#FE982A');
         this.addWidget(this.ArrowPointer11);
+
+        // Point - общая точка двух линий, длина горизонтальной линии, высота вертикальной линии
+        this.ArrowPointer12 = new ArrowPointer(new Point(210, 762), -97, 23, 'black');
+        this.addWidget(this.ArrowPointer12);
 
         let Pile1 = new Pile(new Point(575, 330), 60);
         this.addWidget(Pile1);
@@ -260,13 +264,13 @@ export class DSF extends Scheme {
         let Pile2 = new Pile(new Point(170, 740), 60);
         this.addWidget(Pile2);
 
-        let Pile3 = new Pile(new Point(130, 940), 60);
+        let Pile3 = new Pile(new Point(100, 940), 60);
         this.addWidget(Pile3);
 
-        let Pile4 = new Pile(new Point(225, 940), 60);
+        let Pile4 = new Pile(new Point(195, 940), 60);
         this.addWidget(Pile4);
 
-        let Pile5 = new Pile(new Point(305, 850), 60);
+        let Pile5 = new Pile(new Point(265, 850), 60);
         this.addWidget(Pile5);
 
         let Pile6 = new Pile(new Point(425, 850), 60);

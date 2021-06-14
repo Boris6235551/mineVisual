@@ -9,6 +9,7 @@ import { CAGE } from './_cage'
 import { COMPRESSORROOM } from './_compressorRoom'
 import { BATCHERLABLE } from './_batcherlable'
 import { RECEIVINGHOPPER } from './_receivinghopper'
+import { SUBSTATION } from './_substation'
 const { ipcRenderer }  = require('electron');
 const { BrowserWindow } = require('electron').remote
 
@@ -29,6 +30,7 @@ let batcher = new BATCHER('batcher', window.innerWidth, window.innerHeight);
 let substationUndeground = new UNDERGROUNDSUBSTATION('undergroundsubstation', window.innerWidth, window.innerHeight);
 let batcherlable = new BATCHERLABLE('batcherlable', window.innerWidth, window.innerHeight);
 let receivingHopper = new RECEIVINGHOPPER('receivinghopper', window.innerWidth, window.innerHeight);
+let substation = new SUBSTATION('substation', window.innerWidth, window.innerHeight);
 
 // screenMain.addScheme(techWater);
 screenMain.addScheme(dsf);
@@ -39,6 +41,7 @@ screenMain.addScheme(substationUndeground);
 screenMain.addScheme(compressoRroomUndeground);
 screenMain.addScheme(batcherlable);
 screenMain.addScheme(receivingHopper);
+screenMain.addScheme(substation);
 // screenMain.addScheme(undegroundpump);
 
 import { startClients, stopConnection, _reCreate, _testConnect, _testSend, _sendReload, _step } from './tcpipConnector'
@@ -57,6 +60,7 @@ animateScheme(substationUndeground, 500);
 animateScheme(compressoRroomUndeground, 500);
 animateScheme(batcherlable, 500);
 animateScheme(receivingHopper, 500);
+animateScheme(substation, 500);
 
 // export default class MyComponent extends Vue {
 //   // Данные инициализации могут быть объявлены как свойства экземпляра

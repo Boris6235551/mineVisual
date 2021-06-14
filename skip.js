@@ -79,8 +79,8 @@ var Skip = /** @class */ (function (_super) {
         _this.primitives.push(_this.createRectangle(p0.x + length * 0.12 + length * 0.061, _this.topSkip, length * 0.01, length * 0.1, 'red', '', 0, 0));
         // скрытие верхних крышек скипов
         _this.hidingCover();
+        _this.setBaseProperty(null);
         return _this;
-        // this.setBaseProperty(null)
     }
     Skip.prototype.createRectangle = function (x, y, height, width, fill, stroke, strokeWidth, cornerRadius) {
         return new konva_1.default.Rect({
@@ -142,18 +142,18 @@ var Skip = /** @class */ (function (_super) {
         this.primitives[150].visible(false);
     };
     Skip.prototype.setBaseProperty = function (mes) {
-        // mes = {
-        //     "upPositionA": false,
-        //     "downPositionA": false,
-        //     "openA": false,
-        //     "openB": true,
-        //     "normalUp": false,
-        //     "normalDown": false,
-        //     "slowlyUp": false,
-        //     "slowlyDown": false,
-        //     "bunkHighUnload": false,
-        //     "bunkLowUnload": false
-        // }
+        mes = {
+            "upPositionA": false,
+            "downPositionA": false,
+            "openA": true,
+            "openB": true,
+            "normalUp": false,
+            "normalDown": false,
+            "slowlyUp": false,
+            "slowlyDown": false,
+            "bunkHighUnload": false,
+            "bunkLowUnload": true
+        };
         this.positionUp = mes.upPositionA;
         this.positionDown = mes.downPositionA;
         this.moveUp = mes.normalUp;

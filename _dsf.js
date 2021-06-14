@@ -82,11 +82,11 @@ var DSF = /** @class */ (function (_super) {
         _this.addWidget(_this.ConeCrusher2);
         _this.ConeCrusher2.name = 'coneCrusher2B';
         // 16. точка (x,y), длина, высота
-        var Conveyor6 = new dsf_1.Conveyor(new mine_drawing_1.Point(155, 460), 50, 10);
+        var Conveyor6 = new dsf_1.Conveyor(new mine_drawing_1.Point(155, 460), 70, 10);
         _this.addWidget(Conveyor6);
         Conveyor6.name = 'conveyor3A';
         // 17. точка (x,y), длина, высота
-        var Conveyor7 = new dsf_1.Conveyor(new mine_drawing_1.Point(470, 460), 50, 10);
+        var Conveyor7 = new dsf_1.Conveyor(new mine_drawing_1.Point(450, 460), 70, 10);
         _this.addWidget(Conveyor7);
         Conveyor7.name = 'conveyor3B';
         // 18. второй параметр задаёт длину динамической строны треугльника
@@ -122,7 +122,7 @@ var DSF = /** @class */ (function (_super) {
         _this.addWidget(_this.SeparatorLeft4);
         _this.SeparatorLeft4.name = 'screen3';
         // 26. точка (x,y), длина, высота
-        var Conveyor9 = new dsf_1.Conveyor(new mine_drawing_1.Point(220, 795), 30, 10);
+        var Conveyor9 = new dsf_1.Conveyor(new mine_drawing_1.Point(190, 795), 30, 10);
         _this.addWidget(Conveyor9);
         Conveyor9.name = 'conveyor5';
         // 27. точка (x,y), длина, высота
@@ -134,15 +134,15 @@ var DSF = /** @class */ (function (_super) {
         _this.addWidget(Conveyor11);
         Conveyor11.name = 'conveyor7';
         // 29. второй параметр задаёт длину динамической строны треугльника
-        _this.SeparatorLeft5 = new dsf_1.SeparatorLeft(new mine_drawing_1.Point(220, 820), 50);
+        _this.SeparatorLeft5 = new dsf_1.SeparatorLeft(new mine_drawing_1.Point(190, 820), 50);
         _this.addWidget(_this.SeparatorLeft5);
         _this.SeparatorLeft5.name = 'screen4';
         // 30. точка (x,y), длина, высота
-        var Conveyor12 = new dsf_1.Conveyor(new mine_drawing_1.Point(135, 885), 30, 10);
+        var Conveyor12 = new dsf_1.Conveyor(new mine_drawing_1.Point(105, 885), 30, 10);
         _this.addWidget(Conveyor12);
         Conveyor12.name = 'conveyor8';
         // 31. точка (x,y), длина, высота
-        var Conveyor13 = new dsf_1.Conveyor(new mine_drawing_1.Point(190, 885), 30, 10);
+        var Conveyor13 = new dsf_1.Conveyor(new mine_drawing_1.Point(160, 885), 30, 10);
         _this.addWidget(Conveyor13);
         Conveyor13.name = 'conveyor9';
         // Point - общая точка двух линий, длина горизонтальной линии, высота вертикальной линии
@@ -164,29 +164,32 @@ var DSF = /** @class */ (function (_super) {
         _this.ArrowPointer6 = new dsf_1.ArrowPointer(new mine_drawing_1.Point(170, 676), -280, 20, 'black');
         _this.addWidget(_this.ArrowPointer6);
         // Point - общая точка двух линий, длина горизонтальной линии, высота вертикальной линии
-        _this.ArrowPointer7 = new dsf_1.ArrowPointer(new mine_drawing_1.Point(450, 650), 0, 20, 'black');
+        _this.ArrowPointer7 = new dsf_1.ArrowPointer(new mine_drawing_1.Point(215, 650), 0, 20, 'black');
         _this.addWidget(_this.ArrowPointer7);
         // Point - общая точка двух линий, длина горизонтальной линии, высота вертикальной линии
-        _this.ArrowPointer8 = new dsf_1.ArrowPointer(new mine_drawing_1.Point(492, 625), 10, 65, '#FE982A');
-        _this.addWidget(_this.ArrowPointer8);
+        _this.ArrowPointer8 = new dsf_1.ArrowPointer(new mine_drawing_1.Point(450, 650), 0, 20, 'black');
+        _this.addWidget(_this.ArrowPointer8); ////////////////////////////////////
         // Point - общая точка двух линий, длина горизонтальной линии, высота вертикальной линии
-        _this.ArrowPointer9 = new dsf_1.ArrowPointer(new mine_drawing_1.Point(380, 625), 133, 65, '#FE982A');
+        _this.ArrowPointer9 = new dsf_1.ArrowPointer(new mine_drawing_1.Point(492, 625), 10, 65, '#FE982A');
         _this.addWidget(_this.ArrowPointer9);
         // Point - общая точка двух линий, длина горизонтальной линии, высота вертикальной линии
-        _this.ArrowPointer10 = new dsf_1.ArrowPointer(new mine_drawing_1.Point(298, 755), 0, 30, '#FE982A');
+        _this.ArrowPointer10 = new dsf_1.ArrowPointer(new mine_drawing_1.Point(380, 625), 133, 65, '#FE982A');
         _this.addWidget(_this.ArrowPointer10);
         // Point - общая точка двух линий, длина горизонтальной линии, высота вертикальной линии
-        _this.ArrowPointer11 = new dsf_1.ArrowPointer(new mine_drawing_1.Point(240, 762), -67, 23, 'black');
+        _this.ArrowPointer11 = new dsf_1.ArrowPointer(new mine_drawing_1.Point(298, 755), 0, 30, '#FE982A');
         _this.addWidget(_this.ArrowPointer11);
+        // Point - общая точка двух линий, длина горизонтальной линии, высота вертикальной линии
+        _this.ArrowPointer12 = new dsf_1.ArrowPointer(new mine_drawing_1.Point(210, 762), -97, 23, 'black');
+        _this.addWidget(_this.ArrowPointer12);
         var Pile1 = new dsf_1.Pile(new mine_drawing_1.Point(575, 330), 60);
         _this.addWidget(Pile1);
         var Pile2 = new dsf_1.Pile(new mine_drawing_1.Point(170, 740), 60);
         _this.addWidget(Pile2);
-        var Pile3 = new dsf_1.Pile(new mine_drawing_1.Point(130, 940), 60);
+        var Pile3 = new dsf_1.Pile(new mine_drawing_1.Point(100, 940), 60);
         _this.addWidget(Pile3);
-        var Pile4 = new dsf_1.Pile(new mine_drawing_1.Point(225, 940), 60);
+        var Pile4 = new dsf_1.Pile(new mine_drawing_1.Point(195, 940), 60);
         _this.addWidget(Pile4);
-        var Pile5 = new dsf_1.Pile(new mine_drawing_1.Point(305, 850), 60);
+        var Pile5 = new dsf_1.Pile(new mine_drawing_1.Point(265, 850), 60);
         _this.addWidget(Pile5);
         var Pile6 = new dsf_1.Pile(new mine_drawing_1.Point(425, 850), 60);
         _this.addWidget(Pile6);

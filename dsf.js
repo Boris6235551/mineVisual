@@ -66,7 +66,7 @@ var Conveyor = /** @class */ (function (_super) {
         // mes = {
         //     "upPositionA": false,
         // }
-        this.positionUp = mes.upPositionA;
+        // this.positionUp = mes.upPositionA;
     };
     Conveyor.prototype.nextFrame = function () {
         if (this.propBit)

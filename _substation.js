@@ -28,13 +28,14 @@ var SUBSTATION = /** @class */ (function (_super) {
     SUBSTATION.prototype.addBatcher = function () {
         // this.Generator1 = new Generator(new Point(200, 233), 100)
         // this.addWidget(this.Generator1);
-        this.Trunk1 = new substation_1.Trunk(new mine_drawing_1.Point(30, 800), 1000);
+        this.Trunk1 = new substation_1.Trunk(new mine_drawing_1.Point(700, 860), 295);
         this.addWidget(this.Trunk1);
-        var SubstationCells = [];
-        for (var n = 0; n <= 23; n++) {
-            SubstationCells[n] = new substation_1.SubstationCell(new mine_drawing_1.Point(30, 800), 1000, 'UndegroundStation', n);
-            this.addWidget(SubstationCells[n]);
-        }
+        this.Trunk2 = new substation_1.Trunk(new mine_drawing_1.Point(1200, 860), 335);
+        this.addWidget(this.Trunk2);
+        this.SubstationCell1 = new substation_1.SubstationCell(new mine_drawing_1.Point(700, 857), 1000, 0, 7);
+        this.addWidget(this.SubstationCell1);
+        this.SubstationCell2 = new substation_1.SubstationCell(new mine_drawing_1.Point(790, 857), 1000, 7, 15);
+        this.addWidget(this.SubstationCell2);
     };
     return SUBSTATION;
 }(mine_drawing_1.Scheme));
