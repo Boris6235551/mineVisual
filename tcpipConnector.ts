@@ -156,23 +156,23 @@ function objectsDif(previous, current){
 var PORT = 2000;
 
 let allClients = [
-    {host: '192.168.100.50', name: 'DSF'},   // ok
+    // {host: '192.168.100.50', name: 'DSF'},   // ok
     // {host: '192.168.100.51', name: 'Cage'},
     // {host: '192.168.100.52', name: 'Skip'},
     // {host: '192.168.100.53', name: 'SubStation'},
-    // // {host: '192.168.100.54', name: 'UndegroundStation'},
+    // {host: '192.168.100.54', name: 'UndegroundStation'},
     // {host: '192.168.100.55', name: 'Batcher'},   // ok
-    // // /*   Conveyor scale   */
-    // // {host: '192.168.100.60', name: 'Scale3AB'},
-    // // {host: '192.168.100.62', name: 'Scale4'},
-    // // {host: '192.168.100.64', name: 'Scale6AB'},
-    // // {host: '192.168.100.66', name: 'Scale7'},
-    // // {host: '192.168.100.68', name: 'Scale8_9'},
+    // /*   Conveyor scale   */
+    // {host: '192.168.100.60', name: 'Scale3AB'},
+    // {host: '192.168.100.62', name: 'Scale4'},
+    // {host: '192.168.100.64', name: 'Scale6AB'},
+    // {host: '192.168.100.66', name: 'Scale7'},
+    // {host: '192.168.100.68', name: 'Scale8_9'},
     // /*   Pumps   */
     // //{host: '192.168.100.40', name: 'techPumps'},
     // // {host: '192.168.100.41', name: 'clearPumps'},
     // //{host: '192.168.100.43', name: 'drainageA'},
-    // // {host: '192.168.100.45', name: 'drainageB'},
+    {host: '192.168.100.45', name: 'drainageB'},
     // //{host: '192.168.100.70', name: 'RailScale'},
     
     // {host: '192.168.100.103', name: 'BatcherLable'}
@@ -367,7 +367,7 @@ let testIndex = 0;
 export function startClients(func: any){
     driveClients = new DriveClients();
     driveClients.callBack = func;
-    driveClients.timer = setInterval(driveClients.drive, 1000);
+    //driveClients.timer = setInterval(driveClients.drive, 1000);
 }
 
 

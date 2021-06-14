@@ -17,6 +17,9 @@ export class Point {
         this.x = p.x;
         this.y = p.y;
     }
+    newPointMoved(dx: number, dy: number){
+        return new Point(this.x + dx, this.y + dy);
+    }
 };
 
 export class Rectangle {

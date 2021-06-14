@@ -42,7 +42,7 @@ export class Trunk extends BaseMineDraw {
     }
 }
 
-export class SubstationCell extends BaseMineDraw {
+export class Cell extends BaseMineDraw {
     public cell: any[];
     constructor(p0: Point, length: number) {
         super(p0, length);
@@ -97,7 +97,7 @@ export class SubstationCell extends BaseMineDraw {
     }
 }
 
-export class UndergroundSubstationCell extends SubstationCell {
+export class UndergroundSubstationCell extends Cell {
     constructor(p0: Point, length: number) {
         super(p0, length);
         this.name = 'UndegroundStation';
@@ -187,6 +187,119 @@ export class UndergroundSubstationCell extends SubstationCell {
             }
         }
     };
+}
+
+export class SubstationCell extends Cell {
+    constructor(p0: Point, length: number, firstNumber: number, amount: number) {
+        super(p0, length);
+        this.name = 'UndegroundStation';
+        this.cell = new Array();
+        let n: number;
+        for (n = firstNumber; n < amount; n++) {
+            this.cell[n] = false;
+            // ячейки
+            this.primitives.push(this.createRectangle(p0.x + n * length * 0.0588, p0.y + length * 0.04,
+                length * 0.07, length * 0.0588, 'rgba(138, 193, 113, 0.41)', '#46802B', length * 0.001));
+            this.primitives.push(this.createLine(p0.x + n * length * 0.0588, p0.y + length * 0.075,
+                p0.x + length * 0.059 + n * length * 0.0588, p0.y + length * 0.075, '#46802B', length * 0.001));
+            // вертикальная линия соединения ячейки с шиной
+            this.primitives.push(this.createLine(p0.x + n * length * 0.0588 + length * 0.0294, p0.y + length * 0.007,
+                p0.x + n * length * 0.0588 + length * 0.0294, p0.y + length * 0.0476, '#84AFB1', length * 0.003));
+            this.primitives.push(this.createText(p0.x + n * length * 0.0585 + length * 0.009, p0.y + length * 0.087,
+                'Cell # ' + (n + 1), length * 0.013));
+            // ячейки прямоугольник анимации
+            // a = c, b = d анимация выключателя
+            let a = p0.x + length * 0.0282 + n * length * 0.0588;
+            let b = p0.y + length * 0.0576;
+            let c = p0.x + length * 0.0322 + n * length * 0.0588;
+            let d = p0.y + length * 0.0676;
+            this.primitives.push(this.createLineSwitch(
+                a, b,
+                p0.x + length * 0.0202 + n * length * 0.0588, p0.y + length * 0.0676,
+                p0.x + length * 0.0082 + n * length * 0.0588, p0.y + length * 0.0676,
+                p0.x + length * 0.0082 + n * length * 0.0588, p0.y + length * 0.0476,
+                p0.x + length * 0.0502 + n * length * 0.0588, p0.y + length * 0.0476,
+                p0.x + length * 0.0502 + n * length * 0.0588, p0.y + length * 0.0676,
+                c, d,
+                '#84AFB1', length * 0.003));
+            this.primitives.push(this.createCircle(p0.x + length * 0.0082 + n * length * 0.0588, p0.y + length * 0.0676,
+                length * 0.0025, '#C46B6B'));
+            this.primitives.push(this.createCircle(p0.x + length * 0.0502 + n * length * 0.0588, p0.y + length * 0.0676,
+                length * 0.0025, '#C46B6B'));
+        }
+        // this.setBaseProperty(null)
+    }
+    setBaseProperty(mes: any) {
+        // mes = {
+        //     "cell1": true,
+        //     "cell2": false,
+        //     "cell3": false,
+        //     "cell4": true,
+        //     "cell5": false,
+        //     "cell6": false,
+        //     "cell7": false,
+        //     "cell8": false,
+        //     "cell10": false,
+        //     "cell11": false,
+        //     "cell12": false,
+        //     "cell13": false,
+        //     "cell14": false,
+        //     "cell15": false,
+        //     "cell16": false,
+        //     "cell17": true,
+        // }
+        for (let n = 0; n < 16; n++) {
+            this.cell[n] = Object.values(mes)[n];
+        }
+    }
+    nextFrame(): void {
+return;
+
+
+        for (let n = 0; n < 16; n++) {
+            if (this.cell[n]) {
+                this.primitives[n * 7 + 4].attrs.points[0] = this.primitives[n * 7 + 4].attrs.points[12];
+                this.primitives[n * 7 + 4].attrs.points[1] = this.primitives[n * 7 + 4].attrs.points[13];
+                this.primitives[n * 7 + 4].stroke('#055659');
+                this.primitives[n * 7 + 2].stroke('#055659');
+                this.primitives[n * 7].fill('#8AC171');
+                this.primitives[n * 7 + 5].fill('#FDC858');
+                this.primitives[n * 7 + 6].fill('#FDC858');
+            }
+            else {
+                this.primitives[n * 7 + 4].attrs.points[0] = this.primitives[n * 7 + 4].attrs.points[0];
+                this.primitives[n * 7 + 4].attrs.points[1] = this.primitives[n * 7 + 4].attrs.points[1];
+                this.primitives[n * 7 + 4].stroke('#84AFB1')
+                this.primitives[n * 7 + 2].stroke('#84AFB1')
+                this.primitives[n * 7].fill('rgba(138, 193, 113, 0.41)');
+                this.primitives[n * 7 + 5].fill('#C46B6B');
+                this.primitives[n * 7 + 6].fill('#C46B6B');
+            }
+        }
+    };
+}
+
+export class Incomers extends BaseMineDraw {
+    constructor(p0: Point, length: number) {
+        super(p0, length);
+        this.name = 'Incomers';
+        // this.primitives.push(this.createLine());
+    }
+    protected createLine(x1: number, y1: number, x2: number, y2: number, x3: number, y3: number, x4: number, y4: number, strokeWidth: number): Konva.Line {
+        return new Konva.Line({
+            points: [x1, y1, x2, y2, x3, y3, x4, y4],
+            stroke: 'black',
+            strokeWidth: strokeWidth,
+        });
+    }
+    protected createCircle(x: number, y: number, radius: number, fill: string): Konva.Circle {
+        return new Konva.Circle({
+            x: x,
+            y: y,
+            radius: radius,
+            fill: fill,
+        });
+    }
 }
 
 export class Generator extends BaseMineDraw {
