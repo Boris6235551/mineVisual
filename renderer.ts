@@ -6,7 +6,7 @@ import { SKIP } from './_skip'
 import { BATCHER } from './_batcher'
 import { UNDERGROUNDSUBSTATION } from './_undergroundsubstation'
 import { CAGE } from './_cage'
-import { COMPRESSORROOM } from './_compressorRoom'
+import { UNDEGROUNDPUMP } from './_undegroundPump'
 import { BATCHERLABLE } from './_batcherlable'
 const { ipcRenderer }  = require('electron');
 const { BrowserWindow } = require('electron').remote
@@ -22,7 +22,7 @@ let screenMain = new Screen();
 // // let techWater = new TechWater('container', window.innerWidth, window.innerHeight);
 let cage = new CAGE('containerCage', window.innerWidth, window.innerHeight);
 // // let dsf = new DSF('containerDSF', window.innerWidth * 0.3, window.innerHeight);
-let compressoRroomUndeground = new COMPRESSORROOM('containerCompressoRroomUndeground', window.innerWidth, window.innerHeight);
+let UndegroundPump = new UNDEGROUNDPUMP('containerUndegroundPump', window.innerWidth, window.innerHeight);
 let skip = new SKIP('containerSkip', window.innerWidth, window.innerHeight);
 let batcher = new BATCHER('batcher', window.innerWidth, window.innerHeight);
 let substationUndeground = new UNDERGROUNDSUBSTATION('undergroundsubstation', window.innerWidth, window.innerHeight);
@@ -34,7 +34,7 @@ screenMain.addScheme(skip);
 screenMain.addScheme(batcher);
 screenMain.addScheme(cage);
 screenMain.addScheme(substationUndeground);
-screenMain.addScheme(compressoRroomUndeground);
+screenMain.addScheme(UndegroundPump);
 screenMain.addScheme(batcherlable);
 // screenMain.addScheme(undegroundpump);
 
@@ -51,7 +51,7 @@ animateScheme(batcher, 500);
 animateScheme(skip, 500);
 animateScheme(cage, 500);
 animateScheme(substationUndeground, 500);
-animateScheme(compressoRroomUndeground, 500);
+animateScheme(UndegroundPump, 500);
 animateScheme(batcherlable, 500);
 
 // export default class MyComponent extends Vue {
