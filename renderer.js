@@ -47,13 +47,13 @@ function sendMes(name, mes) {
 }
 tcpipConnector_1.startClients(sendMes);
 // animateScheme(dsf, 500);
-mine_drawing_1.animateScheme(batcher, 500);
-mine_drawing_1.animateScheme(skip, 500);
-mine_drawing_1.animateScheme(cage, 500);
-mine_drawing_1.animateScheme(substationUndeground, 500);
-mine_drawing_1.animateScheme(compressoRroomUndeground, 500);
-mine_drawing_1.animateScheme(batcherlable, 500);
-mine_drawing_1.animateScheme(receivingHopper, 500);
+// animateScheme(batcher, 500);
+// animateScheme(skip, 500);
+// animateScheme(cage, 500);
+// animateScheme(substationUndeground, 500);
+// animateScheme(compressoRroomUndeground, 500);
+// animateScheme(batcherlable, 500);
+// animateScheme(receivingHopper, 500);
 mine_drawing_1.animateScheme(substation, 500);
 // export default class MyComponent extends Vue {
 //   // Данные инициализации могут быть объявлены как свойства экземпляра

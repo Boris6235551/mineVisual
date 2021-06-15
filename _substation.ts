@@ -1,5 +1,5 @@
 import { Scheme, Disposition, animateScheme, Point, PropParams } from './mine_drawing';
-import { Trunk, SubstationCell, Generator } from './substation'
+import { Trunk, SubstationCell, Generator, Incomers } from './substation'
 
 export class SUBSTATION extends Scheme {
     public Generator1: Generator;
@@ -7,6 +7,7 @@ export class SUBSTATION extends Scheme {
     public Trunk2: Trunk;
     public SubstationCell1: SubstationCell;
     public SubstationCell2: SubstationCell;
+    public Incomers1: Incomers;
     // public SubstationCells: SubstationCell;
     constructor(container: string, width: number, height: number) {
         super(container, width, height);
@@ -29,5 +30,7 @@ export class SUBSTATION extends Scheme {
         this.SubstationCell2 = new SubstationCell(new Point(790, 857), 1000, 7, 15)
         this.addWidget(this.SubstationCell2);
 
+        this.Incomers1 = new Incomers(new Point(1115, 863), 85)
+        this.addWidget(this.Incomers1);
     }
 }

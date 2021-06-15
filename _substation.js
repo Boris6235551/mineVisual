@@ -36,6 +36,8 @@ var SUBSTATION = /** @class */ (function (_super) {
         this.addWidget(this.SubstationCell1);
         this.SubstationCell2 = new substation_1.SubstationCell(new mine_drawing_1.Point(790, 857), 1000, 7, 15);
         this.addWidget(this.SubstationCell2);
+        this.Incomers1 = new substation_1.Incomers(new mine_drawing_1.Point(1115, 863), 85);
+        this.addWidget(this.Incomers1);
     };
     return SUBSTATION;
 }(mine_drawing_1.Scheme));

@@ -53,13 +53,13 @@ function sendMes(name, mes) {
 startClients(sendMes);
 
 // animateScheme(dsf, 500);
-animateScheme(batcher, 500);
-animateScheme(skip, 500);
-animateScheme(cage, 500);
-animateScheme(substationUndeground, 500);
-animateScheme(compressoRroomUndeground, 500);
-animateScheme(batcherlable, 500);
-animateScheme(receivingHopper, 500);
+// animateScheme(batcher, 500);
+// animateScheme(skip, 500);
+// animateScheme(cage, 500);
+// animateScheme(substationUndeground, 500);
+// animateScheme(compressoRroomUndeground, 500);
+// animateScheme(batcherlable, 500);
+// animateScheme(receivingHopper, 500);
 animateScheme(substation, 500);
 
 // export default class MyComponent extends Vue {

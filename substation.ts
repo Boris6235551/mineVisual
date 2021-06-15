@@ -190,16 +190,20 @@ export class UndergroundSubstationCell extends Cell {
 }
 
 export class SubstationCell extends Cell {
+    public firstNumber: number;
+    public amount: number
     constructor(p0: Point, length: number, firstNumber: number, amount: number) {
         super(p0, length);
-        this.name = 'UndegroundStation';
+        this.name = 'Substation';
         this.cell = new Array();
+        this.firstNumber = firstNumber;
+        this.amount = amount;
         let n: number;
         for (n = firstNumber; n < amount; n++) {
             this.cell[n] = false;
             // ячейки
             this.primitives.push(this.createRectangle(p0.x + n * length * 0.0588, p0.y + length * 0.04,
-                length * 0.07, length * 0.0588, 'rgba(138, 193, 113, 0.41)', '#46802B', length * 0.001));
+                length * 0.07, length * 0.0588, 'rgba(253, 200, 88, 0.54)', '#46802B', length * 0.001));
             this.primitives.push(this.createLine(p0.x + n * length * 0.0588, p0.y + length * 0.075,
                 p0.x + length * 0.059 + n * length * 0.0588, p0.y + length * 0.075, '#46802B', length * 0.001));
             // вертикальная линия соединения ячейки с шиной
@@ -231,44 +235,46 @@ export class SubstationCell extends Cell {
     }
     setBaseProperty(mes: any) {
         // mes = {
-        //     "cell1": true,
-        //     "cell2": false,
-        //     "cell3": false,
-        //     "cell4": true,
-        //     "cell5": false,
-        //     "cell6": false,
-        //     "cell7": false,
-        //     "cell8": false,
-        //     "cell10": false,
-        //     "cell11": false,
-        //     "cell12": false,
-        //     "cell13": false,
-        //     "cell14": false,
-        //     "cell15": false,
-        //     "cell16": false,
-        //     "cell17": true,
+        //     "C1": true,
+        //     "C2": true,
+        //     "C3": false,
+        //     "C4": false,
+        //     "C5": false,
+        //     "C6": false,
+        //     "C7": true,
+        //     "D1": true,
+        //     "D2": false,
+        //     "D3": false,
+        //     "D4": false,
+        //     "D5": true,
+        //     "D6": false,
+        //     "D7": true,
+        //     "D8": true,
+        //     "B1": true,
+        //     "B2": true,
         // }
-        for (let n = 0; n < 16; n++) {
+        for (let n = 0; n < 15; n++) {
             this.cell[n] = Object.values(mes)[n];
         }
+
     }
     nextFrame(): void {
-        for (let n = 0; n < 16; n++) {
-            if (this.cell[n]) {
+        for (let n = 0; n < (this.amount - this.firstNumber); n++) {
+            if (this.cell[this.firstNumber + n]) {
                 this.primitives[n * 7 + 4].attrs.points[0] = this.primitives[n * 7 + 4].attrs.points[12];
                 this.primitives[n * 7 + 4].attrs.points[1] = this.primitives[n * 7 + 4].attrs.points[13];
                 this.primitives[n * 7 + 4].stroke('#055659');
                 this.primitives[n * 7 + 2].stroke('#055659');
-                this.primitives[n * 7].fill('#8AC171');
-                this.primitives[n * 7 + 5].fill('#FDC858');
-                this.primitives[n * 7 + 6].fill('#FDC858');
+                this.primitives[n * 7].fill('#FDC858');
+                this.primitives[n * 7 + 5].fill('#6BC4A6');
+                this.primitives[n * 7 + 6].fill('#6BC4A6');
             }
             else {
                 this.primitives[n * 7 + 4].attrs.points[0] = this.primitives[n * 7 + 4].attrs.points[0];
                 this.primitives[n * 7 + 4].attrs.points[1] = this.primitives[n * 7 + 4].attrs.points[1];
                 this.primitives[n * 7 + 4].stroke('#84AFB1')
                 this.primitives[n * 7 + 2].stroke('#84AFB1')
-                this.primitives[n * 7].fill('rgba(138, 193, 113, 0.41)');
+                this.primitives[n * 7].fill('rgba(253, 200, 88, 0.54)');
                 this.primitives[n * 7 + 5].fill('#C46B6B');
                 this.primitives[n * 7 + 6].fill('#C46B6B');
             }
@@ -277,26 +283,138 @@ export class SubstationCell extends Cell {
 }
 
 export class Incomers extends BaseMineDraw {
+    public incomer: any[];
+    private buttonOn: number[];
+    private buttonOff: number[];
     constructor(p0: Point, length: number) {
         super(p0, length);
-        this.name = 'Incomers';
-        // this.primitives.push(this.createLine());
+        this.name = 'Substation';
+        this.incomer = new Array();
+        this.primitives.push(this.createLine( // this.primitives[0].attrs.points[5]  switch A1
+            p0.x - length * 2.41, p0.y - length,
+            p0.x - length * 2.74, p0.y - length,
+            p0.x - length * 3.07, p0.y - length,
+            length * 0.02
+        ));
+        this.primitives.push(this.createLine( // this.primitives[1].attrs.points[5]  switch A2
+            p0.x - length * 1.75, p0.y - length,
+            p0.x - length * 2.08, p0.y - length,
+            p0.x - length * 2.41, p0.y - length,
+            length * 0.02
+        ));
+        this.primitives.push(this.createLine( // this.primitives[2].attrs.points[5]  switch A4
+            p0.x + length * 2.7, p0.y - length,
+            p0.x + length * 3.03, p0.y - length,
+            p0.x + length * 3.36, p0.y - length,
+            length * 0.02
+        ));
+        this.primitives.push(this.createLine( // this.primitives[3].attrs.points[5]  switch A5
+            p0.x + length * 3.36, p0.y - length,
+            p0.x + length * 3.69, p0.y - length,
+            p0.x + length * 4.02, p0.y - length,
+            length * 0.02
+        ));
+        this.primitives.push(this.createLine( // this.primitives[4].attrs.points[4]  switch B1
+            p0.x + length * 0.8, p0.y,
+            p0.x + length * 0.8, p0.y - length * 0.33,
+            p0.x + length * 0.8, p0.y - length * 0.66,
+            length * 0.02
+        ));
+        this.primitives.push(this.createLine( // this.primitives[5].attrs.points[5]  switch B2
+            p0.x, p0.y,
+            p0.x + length * 0.33, p0.y,
+            p0.x + length * 0.66, p0.y,
+            length * 0.02
+        ));
+        this.primitives.push(this.createLine( // this.primitives[6].attrs.points[4]  switch B3
+            p0.x + length * 0.15, p0.y,
+            p0.x + length * 0.15, p0.y - length * 0.33,
+            p0.x + length * 0.15, p0.y - length * 0.66,
+            length * 0.02
+        ));
+        // ------------------------------------------------------------------------------------
+        this.primitives.push(this.createLine(p0.x + length * 0.66, p0.y, p0.x + length, p0.y, p0.x + length, p0.y, length * 0.02));
+
+        this.primitives.push(this.createLine(p0.x + length * 0.15, p0.y - length * 0.66, p0.x + length * 0.15, p0.y - length,
+            p0.x + length * 0.15, p0.y - length, length * 0.02));
+        this.primitives.push(this.createLine(p0.x + length * 0.8, p0.y - length * 0.66, p0.x + length * 0.8, p0.y - length,
+            p0.x + length * 0.8, p0.y - length, length * 0.02));
+        this.primitives.push(this.createLine(p0.x + length * 0.15, p0.y - length, p0.x - length * 0.85, p0.y - length,
+            p0.x - length * 0.85, p0.y - length, length * 0.02));
+        this.primitives.push(this.createLine(p0.x + length * 0.8, p0.y - length, p0.x + length * 1.8, p0.y - length,
+            p0.x + length * 1.8, p0.y - length, length * 0.02));
+        this.primitives.push(this.createCircle(p0.x - length * 1.1, p0.y - length, length * 0.25, length * 0.02));
+        this.primitives.push(this.createCircle(p0.x - length * 1.5, p0.y - length, length * 0.25, length * 0.02));
+        this.primitives.push(this.createCircle(p0.x + length * 2.05, p0.y - length, length * 0.25, length * 0.02));
+        this.primitives.push(this.createCircle(p0.x + length * 2.45, p0.y - length, length * 0.25, length * 0.02));
+        this.primitives.push(this.createLine(p0.x - length * 3.07, p0.y - length, p0.x - length * 4.07, p0.y - length,
+            p0.x - length * 4.07, p0.y - length, length * 0.02));
+        this.primitives.push(this.createLine(p0.x + length * 4.02, p0.y - length, p0.x + length * 5.02, p0.y - length,
+            p0.x + length * 5.02, p0.y - length, length * 0.02));
+        this.buttonOn = [
+            this.primitives[0].attrs.points[5],
+            this.primitives[1].attrs.points[5],
+            this.primitives[2].attrs.points[5],
+            this.primitives[3].attrs.points[5],
+            this.primitives[4].attrs.points[4],
+            this.primitives[5].attrs.points[5],
+            this.primitives[6].attrs.points[4]
+        ];
+        this.buttonOff = [
+            this.primitives[0].attrs.points[5] - 20,
+            this.primitives[1].attrs.points[5] - 20,
+            this.primitives[2].attrs.points[5] - 20,
+            this.primitives[3].attrs.points[5] - 20,
+            this.primitives[4].attrs.points[4] - 20,
+            this.primitives[5].attrs.points[5] - 20,
+            this.primitives[6].attrs.points[4] - 20
+        ];
+        // this.setBaseProperty(null)
     }
-    protected createLine(x1: number, y1: number, x2: number, y2: number, x3: number, y3: number, x4: number, y4: number, strokeWidth: number): Konva.Line {
+    protected createLine(x1: number, y1: number, x2: number, y2: number, x3: number, y3: number, strokeWidth: number): Konva.Line {
         return new Konva.Line({
-            points: [x1, y1, x2, y2, x3, y3, x4, y4],
+            points: [x1, y1, x2, y2, x3, y3],
             stroke: 'black',
             strokeWidth: strokeWidth,
         });
     }
-    protected createCircle(x: number, y: number, radius: number, fill: string): Konva.Circle {
+    protected createCircle(x: number, y: number, radius: number, strokeWidth: number): Konva.Circle {
         return new Konva.Circle({
             x: x,
             y: y,
             radius: radius,
-            fill: fill,
+            fill: '',
+            stroke: 'black',
+            strokeWidth: strokeWidth,
         });
     }
+    setBaseProperty(mes: any) {
+        // mes = {
+        //     "A1": true,
+        //     "A2": true,
+        //     "A4": true,
+        //     "A5": false,
+        //     "B1": true,
+        //     "B2": true,
+        //     "B3": true,
+        // }
+        for (let n = 0; n < 7; n++) {
+            this.incomer[n] = Object.values(mes)[n];
+        }
+    }
+    nextFrame(): void {
+        for (let n = 0; n < 7; n++) {
+            if (this.incomer[n]) {
+                if (n == 4 || n == 6) this.primitives[n].attrs.points[4] = this.buttonOn[n]
+                else this.primitives[n].attrs.points[5] = this.buttonOn[n]
+            }
+            else {
+                if (n == 4 || n == 6)
+                    this.primitives[n].attrs.points[4] = this.buttonOff[n]
+                else this.primitives[n].attrs.points[5] = this.buttonOff[n]
+            }
+        }
+    };
 }
 
 export class Generator extends BaseMineDraw {
