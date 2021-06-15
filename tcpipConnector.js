@@ -39,7 +39,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports._step = exports._reCreate = exports._sendReload = exports._testSend = exports._testConnect = exports.startClients = exports.stopConnection = void 0;
+exports._step = exports._sendReload = exports._reCreate = exports._testSend = exports._testConnect = exports.startClients = exports.stopConnection = void 0;
 var net = require('net');
 var moment = require('moment');
 var mesObj = {
@@ -192,23 +192,21 @@ var PORT = 2000;
 var allClients = [
     // {host: '192.168.100.50', name: 'DSF'},   // ok
     // {host: '192.168.100.51', name: 'Cage'},
-    //  {host: '192.168.100.52', name: 'Skip'},
+    // {host: '192.168.100.52', name: 'Skip'},
     // {host: '192.168.100.53', name: 'SubStation'},
     // {host: '192.168.100.54', name: 'UndegroundStation'},
-    //{host: '192.168.100.55', name: 'Batcher'},   // ok
+    // {host: '192.168.100.55', name: 'Batcher'},   // ok
     // /*   Conveyor scale   */
     // {host: '192.168.100.60', name: 'Scale3AB'},
     // {host: '192.168.100.62', name: 'Scale4'},
     // {host: '192.168.100.64', name: 'Scale6AB'},
     // {host: '192.168.100.66', name: 'Scale7'},
     // {host: '192.168.100.68', name: 'Scale8_9'},
-    /*   Pumps   */
-    //{host: '192.168.100.40', name: 'techPumps'},
-    // {host: '192.168.100.41', name: 'clearPumps'},
-    //{host: '192.168.100.43', name: 'drainageA'},
-    // {host: '192.168.100.45', name: 'drainageB'},
-    //{host: '192.168.100.70', name: 'RailScale'},
-    { host: '192.168.100.103', name: 'BatcherLable' }
+    // /*   Pumps   */
+    // //{host: '192.168.100.40', name: 'techPumps'},
+    // // {host: '192.168.100.41', name: 'clearPumps'},
+    // //{host: '192.168.100.43', name: 'drainageA'},
+    { host: '192.168.100.45', name: 'drainageB' },
 ];
 var socketState;
 (function (socketState) {
@@ -226,6 +224,7 @@ var ClientSocket = /** @class */ (function () {
         this.state = socketState.Created;
         this.name = allClients[index].name;
         this.obj = null;
+        this.timeOut = 0;
     }
     return ClientSocket;
 }());
@@ -245,6 +244,7 @@ function stopConnection() {
     //startClient();
 }
 exports.stopConnection = stopConnection;
+var MAX_TIME_OUT = 60;
 var DriveClients = /** @class */ (function () {
     function DriveClients() {
         this.clients = new Array(allClients.length);
@@ -259,7 +259,7 @@ var DriveClients = /** @class */ (function () {
             // console.log(` i = ${i}; create  ${allClients[i].name}`);
             this.clients[i] = new ClientSocket(i);
         }
-        //this.timer = setInterval(this.drive, 10000);
+        //this.timer = setInterval(this.drive, 1000);
     }
     DriveClients.prototype.checkObj = function (obj, index) {
         //        console.log(`get object index=${index} name=${allClients[index].name}`)
@@ -267,11 +267,12 @@ var DriveClients = /** @class */ (function () {
         //exportToExcel(newObj);
         if (this.clients[index].obj != null) {
             var dif = objectsDif(this.clients[index].obj, newObj);
-            // if(dif != null && this.showDif) 
-            //     console.log(moment().format("DD MMM YYYY HH:mm:ss"), JSON.stringify(dif, null, 4));
+            if (dif != null && this.showDif)
+                console.log(obj.devName + " ", moment().format("DD MMM YYYY HH:mm:ss"), JSON.stringify(dif, null, 4));
         }
         this.clients[index].obj = newObj;
-        // if(!this.showDif) console.log(moment().format("DD MMM YYYY HH:mm:ss"), JSON.stringify(newObj, null, 4)); 
+        if (!this.showDif)
+            console.log(obj.devName + " ", moment().format("DD MMM YYYY HH:mm:ss"), JSON.stringify(newObj, null, 4));
         if (this.callBack != null)
             this.callBack(obj.devName, newObj);
         this.showDif = true;
@@ -284,25 +285,28 @@ var DriveClients = /** @class */ (function () {
         var hs = this.clients[index].host; // console.log(this.clients[index]);
         cl.state = socketState.TryConnect; //this.clients[index].state = socketState.TryConnect;
         cl.socket.connect(PORT, hs /*HOST*/, function () {
-            // console.log(`client connected to remote address ===> ${cl.socket.remoteAddress}`);
+            console.log("client connected to remote address ===> " + cl.socket.remoteAddress);
             cl.state = socketState.Connected;
+            cl.timeOut = MAX_TIME_OUT;
         });
         cl.socket.on('data', function (data) {
             var ar = new Uint8Array(data);
             //            console.log(`${moment().format("DD MMM YYYY HH:mm:ss")} ${cl.name}(${cl.socket.remoteAddress})`); 
             cl.state = socketState.Connected; //clients[index].state = socketState.Connected;
+            cl.timeOut = 0;
             var obj = parseCPUmessage(ar); //showTest(index);
             //console.log(JSON.stringify(obj, null, 4))
             _this.checkObj(obj, index);
         });
         cl.socket.on('close', function () {
-            // console.log(`Client closed ==> ${cl.host} ${cl.socket.remoteAddress}`); 
+            console.log("Client " + cl.name + " closed ==> " + cl.host + " " + cl.socket.remoteAddress);
             if (cl.state != socketState.ConnectErr && cl.state != socketState.SendErr) {
                 cl.state = cl.state == socketState.Sending ? socketState.SendErr : socketState.ConnectErr;
             }
         });
         cl.socket.on('error', function (err) {
             console.error(err);
+            console.log("Client " + cl.name + " closed ==> " + cl.host + " " + cl.socket.remoteAddress);
             cl.state = cl.state == socketState.Sending ? socketState.SendErr : socketState.ConnectErr;
         });
     };
@@ -357,16 +361,23 @@ var DriveClients = /** @class */ (function () {
     DriveClients.prototype.drive = function () {
         //driveClients.current = 0;
         //console.log(`driveClients.current = ${driveClients.current}`)
-        var mes = "before state: " + this.showState(driveClients.current);
+        var name = driveClients.clients[driveClients.current].name;
+        var mes = name + " before state: " + driveClients.showState(driveClients.current);
         switch (driveClients.clients[driveClients.current].state) {
             case socketState.Created:
-                driveClients.connect(driveClients.current);
+                driveClients.connect(driveClients.current); // next state TryConnect
+                driveClients.showDif = false;
                 break;
-            case socketState.TryConnect:
+            case socketState.TryConnect: // if connect-> Connected else -> ConnectErr
                 console.log('Wait to connect');
                 break;
             case socketState.Connected:
-                driveClients.getPlcData(driveClients.current);
+                driveClients.clients[driveClients.current].timeOut += 1;
+                if (driveClients.clients[driveClients.current].timeOut >= MAX_TIME_OUT) {
+                    driveClients.clients[driveClients.current].timeOut = 0;
+                    driveClients.showDif = false;
+                    driveClients.getPlcData(driveClients.current);
+                }
                 break;
             case socketState.Sending:
                 console.log('Wait to finish sending');
@@ -376,8 +387,9 @@ var DriveClients = /** @class */ (function () {
                 driveClients.recreate(driveClients.current);
                 break;
         }
-        // console.log(`${mes}; after state: ${this.showState(driveClients.current)}`);
-        return;
+        if (driveClients.clients[driveClients.current].state != socketState.Connected)
+            console.log(mes + "; after state: " + driveClients.showState(driveClients.current) + "\n");
+        //return;
         if (driveClients.current >= driveClients.clientsCount - 1)
             driveClients.current = 0;
         else
@@ -390,6 +402,7 @@ var testIndex = 0;
 function startClients(func) {
     driveClients = new DriveClients();
     driveClients.callBack = func;
+    //driveClients.timer = setInterval(driveClients.drive, 1000);
 }
 exports.startClients = startClients;
 function _testConnect() {
@@ -401,29 +414,13 @@ function _testSend(showAll) {
     if (showAll)
         driveClients.showDif = false;
     driveClients.getPlcData(testIndex);
-    return;
-    //     let s = new Uint8Array([1,2]);    // let s = new Uint8Array(1);
-    //         // s[0] = 2;
-    //     //console.log(JSON.stringify(s))
-    //     //client.write('sa');
-    //     console.log('TEST SEND BEGIN')
-    //     for(let i = 0; i < clients.length; i++){
-    //         showTest(i);
-    //         if( clients[i].state == socketState.Connected ){
-    //             // console.log('before SEND')
-    //             // showTest(i);
-    //             clients[i].state = socketState.Sending;
-    //             clients[i].socket.write(s);
-    //             // console.log('after send')
-    //             // showTest(i);
-    //         }
-    //         else connectSocket(i);
-    //     }
-    //     //console.log('TEST SEND END')
-    //     return;
-    //     //client.write(s);
 }
 exports._testSend = _testSend;
+function _reCreate() {
+    // console.log(`driveClients.recreate(testIndex = ${testIndex})`);
+    driveClients.recreate(testIndex);
+}
+exports._reCreate = _reCreate;
 function _sendReload() {
     driveClients.reloadPlc(testIndex);
     // let s = new Uint8Array([2,3]);
@@ -441,11 +438,6 @@ function _sendReload() {
     // }
 }
 exports._sendReload = _sendReload;
-function _reCreate() {
-    // console.log(`driveClients.recreate(testIndex = ${testIndex})`);
-    driveClients.recreate(testIndex);
-}
-exports._reCreate = _reCreate;
 function _step() { driveClients.drive(); }
 exports._step = _step;
 // function connectSocket(index){

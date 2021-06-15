@@ -79,8 +79,8 @@ var Skip = /** @class */ (function (_super) {
         _this.primitives.push(_this.createRectangle(p0.x + length * 0.12 + length * 0.061, _this.topSkip, length * 0.01, length * 0.1, 'red', '', 0, 0));
         // скрытие верхних крышек скипов
         _this.hidingCover();
-        _this.setBaseProperty(null);
         return _this;
+        // this.setBaseProperty(null)
     }
     Skip.prototype.createRectangle = function (x, y, height, width, fill, stroke, strokeWidth, cornerRadius) {
         return new konva_1.default.Rect({
@@ -142,26 +142,32 @@ var Skip = /** @class */ (function (_super) {
         this.primitives[150].visible(false);
     };
     Skip.prototype.setBaseProperty = function (mes) {
-        mes = {
-            "upPositionA": false,
-            "downPositionA": false,
-            "openA": true,
-            "openB": true,
-            "normalUp": false,
-            "normalDown": false,
-            "slowlyUp": false,
-            "slowlyDown": false,
-            "bunkHighUnload": false,
-            "bunkLowUnload": true
-        };
-        this.positionUp = mes.upPositionA;
-        this.positionDown = mes.downPositionA;
+        // mes = {
+        //     "upPositionA": false,
+        //     "downPositionA": true,
+        //     "openA": false,
+        //     "openB": false,
+        //     "normalUp": false,
+        //     "normalDown": false,
+        //     "slowlyUp": false,
+        //     "slowlyDown": true,
+        //     "bunkHighUnload": false,
+        //     "bunkLowUnload": false
+        // }
+        this.positionUp = mes.onPositionA;
+        this.positionDown = mes.onPositionB;
         this.moveUp = mes.normalUp;
         this.moveDown = mes.normalDown;
         this.slowlyUp = mes.slowlyUp;
         this.slowlyDown = mes.slowlyDown;
         this.openA = mes.openA;
         this.openB = mes.openB;
+    };
+    Skip.prototype.moveSkip = function (speedA, speedB) {
+        this.primitives[143].attrs.points[3] = this.primitives[143].attrs.points[3] + speedA;
+        this.primitives[144].move({ x: 0, y: speedA });
+        this.primitives[145].attrs.points[3] = this.primitives[145].attrs.points[3] + speedB;
+        this.primitives[146].move({ x: 0, y: speedB });
     };
     Skip.prototype.nextFrame = function () {
         this.hidingCover();
@@ -177,12 +183,19 @@ var Skip = /** @class */ (function (_super) {
             this.primitives[145].attrs.points[3] = this.topSkip;
             this.primitives[146].y(this.topSkip);
         }
-        if (this.moveUp) { // быстрое движение скипа А вверх, а скипа В вниз
+        if (this.moveUp || this.slowlyUp) { // быстрое движение скипа А вверх, а скипа В вниз
             if (this.primitives[143].attrs.points[3] >= this.topSkip) {
-                this.primitives[143].attrs.points[3] = this.primitives[143].attrs.points[3] - 6;
-                this.primitives[144].move({ x: 0, y: -6 });
-                this.primitives[145].attrs.points[3] = this.primitives[145].attrs.points[3] + 6;
-                this.primitives[146].move({ x: 0, y: 6 });
+                var speedA = void 0;
+                var speedB = void 0;
+                if (this.moveUp) {
+                    speedA = -6;
+                    speedB = 6;
+                }
+                else {
+                    speedA = -3;
+                    speedB = 3;
+                }
+                this.moveSkip(speedA, speedB);
             }
             else {
                 this.primitives[143].attrs.points[3] = this.bottomSkip;
@@ -191,12 +204,19 @@ var Skip = /** @class */ (function (_super) {
                 this.primitives[146].y(this.topSkip);
             }
         }
-        if (this.moveDown) { // быстрое движение скипа А вниз, а скипа В вверх
+        if (this.moveDown || this.slowlyDown) { // быстрое движение скипа А вниз, а скипа В вверх
             if (this.primitives[143].attrs.points[3] <= this.bottomSkip) {
-                this.primitives[143].attrs.points[3] = this.primitives[143].attrs.points[3] + 6;
-                this.primitives[144].move({ x: 0, y: +6 });
-                this.primitives[145].attrs.points[3] = this.primitives[145].attrs.points[3] - 6;
-                this.primitives[146].move({ x: 0, y: -6 });
+                var speedA = void 0;
+                var speedB = void 0;
+                if (this.moveDown) {
+                    speedA = 6;
+                    speedB = -6;
+                }
+                else {
+                    speedA = 3;
+                    speedB = -3;
+                }
+                this.moveSkip(speedA, speedB);
             }
             else {
                 this.primitives[143].attrs.points[3] = this.topSkip;
@@ -205,48 +225,15 @@ var Skip = /** @class */ (function (_super) {
                 this.primitives[146].y(this.bottomSkip);
             }
         }
-        if (this.slowlyUp) { // медленное движение скипа А вверх, а скипа В вниз
-            if (this.primitives[143].attrs.points[3] >= this.topSkip) {
-                this.primitives[143].attrs.points[3] = this.primitives[143].attrs.points[3] - 3;
-                this.primitives[144].move({ x: 0, y: -3 });
-                this.primitives[145].attrs.points[3] = this.primitives[145].attrs.points[3] + 3;
-                this.primitives[146].move({ x: 0, y: 3 });
-            }
-            else {
-                this.primitives[143].attrs.points[3] = this.bottomSkip;
-                this.primitives[144].y(this.bottomSkip);
-                this.primitives[145].attrs.points[3] = this.topSkip;
-                this.primitives[146].y(this.topSkip);
-            }
-        }
-        if (this.slowlyDown) { // медленное движение скипа А вниз, а скипа В вверх
-            if (this.primitives[143].attrs.points[3] <= this.bottomSkip) {
-                this.primitives[143].attrs.points[3] = this.primitives[143].attrs.points[3] + 3;
-                this.primitives[144].move({ x: 0, y: +3 });
-                this.primitives[145].attrs.points[3] = this.primitives[145].attrs.points[3] - 3;
-                this.primitives[146].move({ x: 0, y: -3 });
-            }
-            else {
-                this.primitives[143].attrs.points[3] = this.topSkip;
-                this.primitives[144].y(this.topSkip);
-                this.primitives[145].attrs.points[3] = this.bottomSkip;
-                this.primitives[146].y(this.bottomSkip);
-            }
-        }
-        if (this.openA) {
-            this.primitives[143].attrs.points[3] = (this.topSkip);
-            this.primitives[144].y(this.topSkip);
-            this.primitives[145].attrs.points[3] = (this.bottomSkip);
-            this.primitives[146].y(this.bottomSkip);
-            this.primitives[149].visible(true);
-        }
-        if (this.openB) {
-            this.primitives[143].attrs.points[3] = this.bottomSkip;
-            this.primitives[144].y(this.bottomSkip);
-            this.primitives[145].attrs.points[3] = this.topSkip;
-            this.primitives[146].y(this.topSkip);
-            this.primitives[150].visible(true);
-        }
+        this.primitives[149].visible(this.openA);
+        this.primitives[150].visible(this.openB);
+        // if (this.openB) {
+        //     // this.primitives[143].attrs.points[3] = this.bottomSkip;
+        //     // this.primitives[144].y(this.bottomSkip);
+        //     // this.primitives[145].attrs.points[3] = this.topSkip;
+        //     // this.primitives[146].y(this.topSkip);
+        //     this.primitives[150].visible(true);
+        // }
     };
     return Skip;
 }(mine_drawing_1.BaseMineDraw));

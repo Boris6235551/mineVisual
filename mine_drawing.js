@@ -23,6 +23,9 @@ var Point = /** @class */ (function () {
         this.x = p.x;
         this.y = p.y;
     };
+    Point.prototype.newPointMoved = function (dx, dy) {
+        return new Point(this.x + dx, this.y + dy);
+    };
     return Point;
 }());
 exports.Point = Point;
