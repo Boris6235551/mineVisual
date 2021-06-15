@@ -16,13 +16,57 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Compressor = exports.UndegraundPump = exports.ValveCheck = exports.Valve = exports.ValveState = exports.Pool = exports.Pump = void 0;
+exports.Compressor = exports.UndegraundPump = exports.ValveCheck = exports.Valve = exports.ValveError = exports.ValveState = exports.Pool = exports.Pump = exports.PumpState = void 0;
 var konva_1 = __importDefault(require("konva"));
 var mine_drawing_1 = require("./mine_drawing");
-// export enum PumpState {
-//     run = 0, revers, stop, alarm
-//     stopped = 0, starting, working, stopping
-// };
+function CreateLabel(p, position, text) {
+    if (position == 0)
+        p.y = p.y - 10;
+    else if (position == 1)
+        p.x = p.x - 10;
+    var r = new konva_1.default.Rect({
+        x: p.x,
+        y: p.y,
+        height: 20,
+        width: 20,
+        fill: '#FEFFBC',
+        stroke: '',
+        strokeWidth: 0,
+        cornerRadius: 5,
+    });
+    var t = new konva_1.default.Text({
+        x: p.x + 5,
+        y: p.y + 4,
+        text: text,
+        fontSize: 15,
+        fontStyle: 'bold',
+        fontFamily: 'Roboto',
+        fill: '',
+    });
+    return [r, t];
+}
+var PumpState;
+(function (PumpState) {
+    PumpState[PumpState["stop"] = 0] = "stop";
+    PumpState[PumpState["starting"] = 1] = "starting";
+    PumpState[PumpState["run"] = 2] = "run";
+    PumpState[PumpState["stopping"] = 3] = "stopping";
+    PumpState[PumpState["alarm"] = 4] = "alarm";
+    PumpState[PumpState["revers"] = 5] = "revers";
+})(PumpState = exports.PumpState || (exports.PumpState = {}));
+;
+var PumpError;
+(function (PumpError) {
+    PumpError[PumpError["NoError"] = 0] = "NoError";
+    PumpError[PumpError["StartingTimeOut"] = 1] = "StartingTimeOut";
+    PumpError[PumpError["StoppingTimeOut"] = 2] = "StoppingTimeOut";
+    PumpError[PumpError["AccidentPressure"] = 3] = "AccidentPressure";
+})(PumpError || (PumpError = {}));
+var PumpMode;
+(function (PumpMode) {
+    PumpMode[PumpMode["Auto"] = 1] = "Auto";
+    PumpMode[PumpMode["Service"] = 2] = "Service";
+})(PumpMode || (PumpMode = {}));
 var Pump = /** @class */ (function (_super) {
     __extends(Pump, _super);
     function Pump(p0, length, disposition) {
@@ -160,6 +204,7 @@ var Pump = /** @class */ (function (_super) {
         p1lx = p02.x + R * Math.sin(285);
         p1ly = p02.y + R * Math.cos(285);
         _this.primitives.push(_this.createLine(p0lx, p0ly, p1lx, p1ly, stroke, strokeWidth, p02));
+        _this.primitives = _this.primitives.concat(CreateLabel(p0.newPointMoved(length * 0.4, length * 0.3), null, 'A'));
         return _this;
     }
     Pump.prototype.calcSize = function (length, factor) {
@@ -235,61 +280,73 @@ var Pump = /** @class */ (function (_super) {
     Pump.prototype.nextFrame = function (angel) {
         if (angel === void 0) { angel = 30; }
         var dy = this.step;
-        // switch (this.status) {
-        //     case PumpState.working:
-        //         this.primitives[14].rotate(angel);
-        //         this.primitives[15].rotate(angel);
-        //         this.primitives[16].rotate(angel);
-        //         if (this.animationFrame < 2) { dy = this.step; this.primitives[10].fill(''); this.animationFrame += 1; }
-        //         else { dy = - (2 * this.step); this.primitives[10].fill('#EDF6FC'); this.animationFrame = 0; }
-        //         if (this.disposition == Disposition.Vertical) {
-        //             this.primitives[8].move({ x: 0, y: dy });
-        //             this.primitives[9].move({ x: 0, y: dy });
-        //             this.primitives[10].move({ x: 0, y: dy });
-        //         }
-        //         else {
-        //             this.primitives[8].move({ x: dy, y: 0 });
-        //             this.primitives[9].move({ x: dy, y: 0 });
-        //             this.primitives[10].move({ x: dy, y: 0 });
-        //         }
-        //         return;
-        //     // case PumpState.revers:
-        //     //     this.primitives[14].rotate(angel);
-        //     //     this.primitives[15].rotate(angel);
-        //     //     this.primitives[16].rotate(angel);
-        //     //     if (this.animationFrame < 2) { dy = this.step; this.primitives[8].fill(''); this.animationFrame += 1; }
-        //     //     else { dy = - (2 * this.step); this.primitives[8].fill('#EDF6FC'); this.animationFrame = 0; }
-        //     //     if (this.disposition == Disposition.Vertical) {
-        //     //         this.primitives[8].move({ x: 0, y: -dy });
-        //     //         this.primitives[9].move({ x: 0, y: -dy });
-        //     //         this.primitives[10].move({ x: 0, y: -dy });
-        //     //     }
-        //     //     else {
-        //     //         this.primitives[8].move({ x: -dy, y: 0 });
-        //     //         this.primitives[9].move({ x: -dy, y: 0 });
-        //     //         this.primitives[10].move({ x: -dy, y: 0 });
-        //     //     }
-        //     //     return;
-        //     case PumpState.stop:
-        //         this.showFrame('#EFEFEF', '#FE668B', '#AEB4B4', '#AEB4B4', '#FE668B', '#EDF6FC', '', '', '',
-        //             '#CFCDCD', '#7E7D7D', '#AEB4B4', '#D99CAB', '#AAA6A6', '#AAA6A6', '#AAA6A6', '#AAA6A6',
-        //             '#AAA6A6', '#AAA6A6', 3);
-        //         return;
-        //     case PumpState.alarm:
-        //         if (this.animationFrame == 0) {
-        //             this.showFrame('#000000', '#DB0000', '#DB0000', '#DB0000', '#DB0000', '#EDF6FC', '', '', '',
-        //                 '#000000', '#FF0000', '#000000', '#000000', '#444343', '#444343', '#444343', '#444343',
-        //                 '#444343', '#444343', 3);
-        //             this.animationFrame = 1;
-        //         }
-        //         else {
-        //             this.showFrame('#DB0000', '#000000', '#000000', '#000000', '#000000', '#EDF6FC', '', '', '',
-        //                 '#000000', '#FF0000', '#000000', '#DB0000', '#000000', '#444343', '#444343', '#444343',
-        //                 '#444343', '#444343', 3);
-        //             this.animationFrame = 0;
-        //         }
-        //         return;
-        // }
+        switch (this.status) {
+            case PumpState.run:
+            case PumpState.stopping:
+            case PumpState.starting:
+                this.primitives[14].rotate(angel);
+                this.primitives[15].rotate(angel);
+                this.primitives[16].rotate(angel);
+                if (this.animationFrame < 2) {
+                    dy = this.step;
+                    this.primitives[10].fill('');
+                    this.animationFrame += 1;
+                }
+                else {
+                    dy = -(2 * this.step);
+                    this.primitives[10].fill('#EDF6FC');
+                    this.animationFrame = 0;
+                }
+                if (this.disposition == mine_drawing_1.Disposition.Vertical) {
+                    this.primitives[8].move({ x: 0, y: dy });
+                    this.primitives[9].move({ x: 0, y: dy });
+                    this.primitives[10].move({ x: 0, y: dy });
+                }
+                else {
+                    this.primitives[8].move({ x: dy, y: 0 });
+                    this.primitives[9].move({ x: dy, y: 0 });
+                    this.primitives[10].move({ x: dy, y: 0 });
+                }
+                return;
+            case PumpState.revers:
+                this.primitives[14].rotate(angel);
+                this.primitives[15].rotate(angel);
+                this.primitives[16].rotate(angel);
+                if (this.animationFrame < 2) {
+                    dy = this.step;
+                    this.primitives[8].fill('');
+                    this.animationFrame += 1;
+                }
+                else {
+                    dy = -(2 * this.step);
+                    this.primitives[8].fill('#EDF6FC');
+                    this.animationFrame = 0;
+                }
+                if (this.disposition == mine_drawing_1.Disposition.Vertical) {
+                    this.primitives[8].move({ x: 0, y: -dy });
+                    this.primitives[9].move({ x: 0, y: -dy });
+                    this.primitives[10].move({ x: 0, y: -dy });
+                }
+                else {
+                    this.primitives[8].move({ x: -dy, y: 0 });
+                    this.primitives[9].move({ x: -dy, y: 0 });
+                    this.primitives[10].move({ x: -dy, y: 0 });
+                }
+                return;
+            case PumpState.stop:
+                this.showFrame('#EFEFEF', '#FE668B', '#AEB4B4', '#AEB4B4', '#FE668B', '#EDF6FC', '', '', '', '#CFCDCD', '#7E7D7D', '#AEB4B4', '#D99CAB', '#AAA6A6', '#AAA6A6', '#AAA6A6', '#AAA6A6', '#AAA6A6', '#AAA6A6', 3);
+                return;
+            case PumpState.alarm:
+                if (this.animationFrame == 0) {
+                    this.showFrame('#000000', '#DB0000', '#DB0000', '#DB0000', '#DB0000', '#EDF6FC', '', '', '', '#000000', '#FF0000', '#000000', '#000000', '#444343', '#444343', '#444343', '#444343', '#444343', '#444343', 3);
+                    this.animationFrame = 1;
+                }
+                else {
+                    this.showFrame('#DB0000', '#000000', '#000000', '#000000', '#000000', '#EDF6FC', '', '', '', '#000000', '#FF0000', '#000000', '#DB0000', '#000000', '#444343', '#444343', '#444343', '#444343', '#444343', 3);
+                    this.animationFrame = 0;
+                }
+                return;
+        }
     };
     return Pump;
 }(mine_drawing_1.BaseMineDraw));
@@ -330,13 +387,31 @@ var Pool = /** @class */ (function (_super) {
 exports.Pool = Pool;
 var ValveState;
 (function (ValveState) {
-    ValveState[ValveState["closed"] = 0] = "closed";
-    ValveState[ValveState["opened"] = 1] = "opened";
+    ValveState[ValveState["init"] = 0] = "init";
+    ValveState[ValveState["closed"] = 1] = "closed";
     ValveState[ValveState["opening"] = 2] = "opening";
-    ValveState[ValveState["closing"] = 3] = "closing";
-    ValveState[ValveState["alarm"] = 4] = "alarm";
-    ValveState[ValveState["stop"] = 5] = "stop";
+    ValveState[ValveState["opened"] = 3] = "opened";
+    ValveState[ValveState["closing"] = 4] = "closing";
+    ValveState[ValveState["calibration"] = 5] = "calibration";
+    ValveState[ValveState["alarm"] = 6] = "alarm";
+    ValveState[ValveState["stop"] = 7] = "stop";
 })(ValveState = exports.ValveState || (exports.ValveState = {}));
+;
+var ValveError;
+(function (ValveError) {
+    ValveError[ValveError["NoError"] = 0] = "NoError";
+    ValveError[ValveError["CloseAndOpenValveInputs"] = 1] = "CloseAndOpenValveInputs";
+    ValveError[ValveError["OpeningTimeOut"] = 2] = "OpeningTimeOut";
+    ValveError[ValveError["ClosingTimeOut"] = 3] = "ClosingTimeOut";
+    ValveError[ValveError["AlarmValveInput"] = 4] = "AlarmValveInput";
+})(ValveError = exports.ValveError || (exports.ValveError = {}));
+;
+var ValveMode;
+(function (ValveMode) {
+    ValveMode[ValveMode["HandDrive"] = 0] = "HandDrive";
+    ValveMode[ValveMode["Auto"] = 1] = "Auto";
+    ValveMode[ValveMode["Service"] = 2] = "Service";
+})(ValveMode || (ValveMode = {}));
 ;
 var ValvePrimitive;
 (function (ValvePrimitive) {
@@ -365,6 +440,7 @@ var Valve = /** @class */ (function (_super) {
         _this.primitives.push(_this.createText(length, percentage));
         _this.rect.p0.y -= 2;
         _this.rect.p1.y += 2;
+        _this.primitives = _this.primitives.concat(CreateLabel(p0.newPointMoved(length * 0.5, length * 0.5), disposition, 'A'));
         _this.nextFrame();
         return _this;
     }
@@ -436,6 +512,10 @@ var Valve = /** @class */ (function (_super) {
     };
     Valve.prototype.nextFrame = function () {
         switch (this.state) {
+            case ValveState.calibration:
+            case ValveState.init:
+                this.showFrame('#AEB4B4', '#AEB4B4', '#E3093E', '#E3093E', '#E3093E');
+                break;
             case ValveState.closed:
                 this.showFrame('#FE668B', '#FE668B', '#E3093E', '#E3093E', '#E3093E');
                 break;
@@ -497,6 +577,7 @@ var ValveCheck = /** @class */ (function (_super) {
         _this.primitives.push(_this.createTriangle(p0.x, p0.y + length, p0.x + _this.calcSize(length) * 0.5, p0.y + length * 0.5, p0.x + _this.calcSize(length), p0.y + length, '#1D8EEA', '#00C734', length * 0.02));
         _this.primitives.push(_this.createTriangle(p0.x + length * 0.16, p0.y + length * 0.09, p0.x + _this.calcSize(length) - length * 0.16, p0.y + length * 0.09, p0.x + _this.calcSize(length) * 0.5, p0.y + length * 0.5 - length * 0.16, '#000000', '', 0));
         return _this;
+        // this.primitives = this.primitives.concat(CreateLabel(p0.newPointMoved(length * 0.5, length * 0.5), Disposition.Vertical, 'A'));
     }
     ValveCheck.prototype.createTriangle = function (x1, y1, x2, y2, x3, y3, fill, stroke, strokeWidth) {
         return new konva_1.default.Line({

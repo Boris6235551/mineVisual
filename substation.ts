@@ -369,7 +369,7 @@ export class Incomers extends BaseMineDraw {
             this.primitives[5].attrs.points[5] - 20,
             this.primitives[6].attrs.points[4] - 20
         ];
-        // this.setBaseProperty(null)
+        this.setBaseProperty(null)
     }
     protected createLine(x1: number, y1: number, x2: number, y2: number, x3: number, y3: number, strokeWidth: number): Konva.Line {
         return new Konva.Line({
@@ -389,15 +389,15 @@ export class Incomers extends BaseMineDraw {
         });
     }
     setBaseProperty(mes: any) {
-        // mes = {
-        //     "A1": true,
-        //     "A2": true,
-        //     "A4": true,
-        //     "A5": false,
-        //     "B1": true,
-        //     "B2": true,
-        //     "B3": true,
-        // }
+        mes = {
+            "A1": false,
+            "A2": false,
+            "A4": false,
+            "A5": false,
+            "B1": false,
+            "B2": false,
+            "B3": false,
+        }
         for (let n = 0; n < 7; n++) {
             this.incomer[n] = Object.values(mes)[n];
         }

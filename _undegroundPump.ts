@@ -117,7 +117,7 @@ export class UNDEGROUNDPUMP extends Scheme {
     // public Pump3: Pump;
     // public Pump4: Pump;
     // public Pump5: Pump;
-    // public Pool1: Pool;
+    public Pool1: Pool;
     // public Valve3: Valve;
     // public Valve4: Valve;
     // public Valve5: Valve;

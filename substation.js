@@ -325,8 +325,8 @@ var Incomers = /** @class */ (function (_super) {
             _this.primitives[5].attrs.points[5] - 20,
             _this.primitives[6].attrs.points[4] - 20
         ];
+        _this.setBaseProperty(null);
         return _this;
-        // this.setBaseProperty(null)
     }
     Incomers.prototype.createLine = function (x1, y1, x2, y2, x3, y3, strokeWidth) {
         return new konva_1.default.Line({
@@ -346,15 +346,15 @@ var Incomers = /** @class */ (function (_super) {
         });
     };
     Incomers.prototype.setBaseProperty = function (mes) {
-        // mes = {
-        //     "A1": true,
-        //     "A2": true,
-        //     "A4": true,
-        //     "A5": false,
-        //     "B1": true,
-        //     "B2": true,
-        //     "B3": true,
-        // }
+        mes = {
+            "A1": false,
+            "A2": false,
+            "A4": false,
+            "A5": false,
+            "B1": false,
+            "B2": false,
+            "B3": false,
+        };
         for (var n = 0; n < 7; n++) {
             this.incomer[n] = Object.values(mes)[n];
         }

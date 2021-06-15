@@ -1,15 +1,48 @@
 import Konva from 'konva';
 import { BaseMineDraw, Point, Disposition, } from './mine_drawing';
 
-// export enum PumpState {
-//     run = 0, revers, stop, alarm
-//     stopped = 0, starting, working, stopping
-// };
+function CreateLabel(p: Point, position: Disposition, text: string): (Konva.Rect | Konva.Text)[] {
+    if (position == 0) p.y = p.y - 10;
+    else if (position == 1) p.x = p.x - 10;
+    let r = new Konva.Rect({
+        x: p.x,
+        y: p.y,
+        height: 20,
+        width: 20,
+        fill: '#FEFFBC',
+        stroke: '',
+        strokeWidth: 0,
+        cornerRadius: 5,
+    });
+    let t = new Konva.Text({
+        x: p.x + 5,
+        y: p.y + 4,
+        text: text,
+        fontSize: 15,
+        fontStyle: 'bold',
+        fontFamily: 'Roboto',
+        fill: '',
+    });
+    return [r, t]
+}
+
+
+export enum PumpState {
+    stop = 0, starting, run, stopping, alarm, revers
+};
+
+enum PumpError {
+    NoError = 0, StartingTimeOut, StoppingTimeOut, AccidentPressure
+}
+
+enum PumpMode {
+    Auto = 1, Service
+}
 
 export class Pump extends BaseMineDraw {
     private step: number;
     private a: number;
-    public status: string;
+    public status: PumpState;
     public mode: string;
     public error: string;
     constructor(p0: Point, length: number, disposition: Disposition) {
@@ -130,6 +163,8 @@ export class Pump extends BaseMineDraw {
         p0lx = p02.x + r * Math.sin(240); p0ly = p02.y + r * Math.cos(240);
         p1lx = p02.x + R * Math.sin(285); p1ly = p02.y + R * Math.cos(285);
         this.primitives.push(this.createLine(p0lx, p0ly, p1lx, p1ly, stroke, strokeWidth, p02));
+
+        this.primitives = this.primitives.concat(CreateLabel(p0.newPointMoved(length * 0.4, length * 0.3), null, 'A'));
     }
 
     protected calcSize(length: number, factor: number = 2.57): number {
@@ -215,61 +250,61 @@ export class Pump extends BaseMineDraw {
 
     nextFrame(angel: number = 30): void {
         let dy: number = this.step;
-        // switch (this.status) {
-        //     case PumpState.working:
-        //         this.primitives[14].rotate(angel);
-        //         this.primitives[15].rotate(angel);
-        //         this.primitives[16].rotate(angel);
-        //         if (this.animationFrame < 2) { dy = this.step; this.primitives[10].fill(''); this.animationFrame += 1; }
-        //         else { dy = - (2 * this.step); this.primitives[10].fill('#EDF6FC'); this.animationFrame = 0; }
-        //         if (this.disposition == Disposition.Vertical) {
-        //             this.primitives[8].move({ x: 0, y: dy });
-        //             this.primitives[9].move({ x: 0, y: dy });
-        //             this.primitives[10].move({ x: 0, y: dy });
-        //         }
-        //         else {
-        //             this.primitives[8].move({ x: dy, y: 0 });
-        //             this.primitives[9].move({ x: dy, y: 0 });
-        //             this.primitives[10].move({ x: dy, y: 0 });
-        //         }
-        //         return;
-        //     // case PumpState.revers:
-        //     //     this.primitives[14].rotate(angel);
-        //     //     this.primitives[15].rotate(angel);
-        //     //     this.primitives[16].rotate(angel);
-        //     //     if (this.animationFrame < 2) { dy = this.step; this.primitives[8].fill(''); this.animationFrame += 1; }
-        //     //     else { dy = - (2 * this.step); this.primitives[8].fill('#EDF6FC'); this.animationFrame = 0; }
-        //     //     if (this.disposition == Disposition.Vertical) {
-        //     //         this.primitives[8].move({ x: 0, y: -dy });
-        //     //         this.primitives[9].move({ x: 0, y: -dy });
-        //     //         this.primitives[10].move({ x: 0, y: -dy });
-        //     //     }
-        //     //     else {
-        //     //         this.primitives[8].move({ x: -dy, y: 0 });
-        //     //         this.primitives[9].move({ x: -dy, y: 0 });
-        //     //         this.primitives[10].move({ x: -dy, y: 0 });
-        //     //     }
-        //     //     return;
-        //     case PumpState.stop:
-        //         this.showFrame('#EFEFEF', '#FE668B', '#AEB4B4', '#AEB4B4', '#FE668B', '#EDF6FC', '', '', '',
-        //             '#CFCDCD', '#7E7D7D', '#AEB4B4', '#D99CAB', '#AAA6A6', '#AAA6A6', '#AAA6A6', '#AAA6A6',
-        //             '#AAA6A6', '#AAA6A6', 3);
-        //         return;
-        //     case PumpState.alarm:
-        //         if (this.animationFrame == 0) {
-        //             this.showFrame('#000000', '#DB0000', '#DB0000', '#DB0000', '#DB0000', '#EDF6FC', '', '', '',
-        //                 '#000000', '#FF0000', '#000000', '#000000', '#444343', '#444343', '#444343', '#444343',
-        //                 '#444343', '#444343', 3);
-        //             this.animationFrame = 1;
-        //         }
-        //         else {
-        //             this.showFrame('#DB0000', '#000000', '#000000', '#000000', '#000000', '#EDF6FC', '', '', '',
-        //                 '#000000', '#FF0000', '#000000', '#DB0000', '#000000', '#444343', '#444343', '#444343',
-        //                 '#444343', '#444343', 3);
-        //             this.animationFrame = 0;
-        //         }
-        //         return;
-        // }
+        switch (this.status) {
+            case PumpState.run: case PumpState.stopping: case PumpState.starting:
+                this.primitives[14].rotate(angel);
+                this.primitives[15].rotate(angel);
+                this.primitives[16].rotate(angel);
+                if (this.animationFrame < 2) { dy = this.step; this.primitives[10].fill(''); this.animationFrame += 1; }
+                else { dy = - (2 * this.step); this.primitives[10].fill('#EDF6FC'); this.animationFrame = 0; }
+                if (this.disposition == Disposition.Vertical) {
+                    this.primitives[8].move({ x: 0, y: dy });
+                    this.primitives[9].move({ x: 0, y: dy });
+                    this.primitives[10].move({ x: 0, y: dy });
+                }
+                else {
+                    this.primitives[8].move({ x: dy, y: 0 });
+                    this.primitives[9].move({ x: dy, y: 0 });
+                    this.primitives[10].move({ x: dy, y: 0 });
+                }
+                return;
+            case PumpState.revers:
+                this.primitives[14].rotate(angel);
+                this.primitives[15].rotate(angel);
+                this.primitives[16].rotate(angel);
+                if (this.animationFrame < 2) { dy = this.step; this.primitives[8].fill(''); this.animationFrame += 1; }
+                else { dy = - (2 * this.step); this.primitives[8].fill('#EDF6FC'); this.animationFrame = 0; }
+                if (this.disposition == Disposition.Vertical) {
+                    this.primitives[8].move({ x: 0, y: -dy });
+                    this.primitives[9].move({ x: 0, y: -dy });
+                    this.primitives[10].move({ x: 0, y: -dy });
+                }
+                else {
+                    this.primitives[8].move({ x: -dy, y: 0 });
+                    this.primitives[9].move({ x: -dy, y: 0 });
+                    this.primitives[10].move({ x: -dy, y: 0 });
+                }
+                return;
+            case PumpState.stop:
+                this.showFrame('#EFEFEF', '#FE668B', '#AEB4B4', '#AEB4B4', '#FE668B', '#EDF6FC', '', '', '',
+                    '#CFCDCD', '#7E7D7D', '#AEB4B4', '#D99CAB', '#AAA6A6', '#AAA6A6', '#AAA6A6', '#AAA6A6',
+                    '#AAA6A6', '#AAA6A6', 3);
+                return;
+            case PumpState.alarm:
+                if (this.animationFrame == 0) {
+                    this.showFrame('#000000', '#DB0000', '#DB0000', '#DB0000', '#DB0000', '#EDF6FC', '', '', '',
+                        '#000000', '#FF0000', '#000000', '#000000', '#444343', '#444343', '#444343', '#444343',
+                        '#444343', '#444343', 3);
+                    this.animationFrame = 1;
+                }
+                else {
+                    this.showFrame('#DB0000', '#000000', '#000000', '#000000', '#000000', '#EDF6FC', '', '', '',
+                        '#000000', '#FF0000', '#000000', '#DB0000', '#000000', '#444343', '#444343', '#444343',
+                        '#444343', '#444343', 3);
+                    this.animationFrame = 0;
+                }
+                return;
+        }
     }
 }
 
@@ -308,7 +343,15 @@ export class Pool extends BaseMineDraw {
 }
 
 export enum ValveState {
-    closed = 0, opened, opening, closing, alarm, stop
+    init = 0, closed, opening, opened, closing, calibration, alarm, stop,
+};
+
+export enum ValveError {
+    NoError = 0, CloseAndOpenValveInputs, OpeningTimeOut, ClosingTimeOut, AlarmValveInput
+};
+
+enum ValveMode {
+    HandDrive = 0, Auto, Service
 };
 
 enum ValvePrimitive {
@@ -333,6 +376,7 @@ export class Valve extends BaseMineDraw {
         this.primitives.push(this.createText(length, percentage));
         this.rect.p0.y -= 2;
         this.rect.p1.y += 2;
+        this.primitives = this.primitives.concat(CreateLabel(p0.newPointMoved(length * 0.5, length * 0.5), disposition, 'A'));
         this.nextFrame();
     }
     setState(newState: ValveState): void {
@@ -405,6 +449,9 @@ export class Valve extends BaseMineDraw {
 
     nextFrame(): void {
         switch (this.state) {
+            case ValveState.calibration: case ValveState.init:
+                this.showFrame('#AEB4B4', '#AEB4B4', '#E3093E', '#E3093E', '#E3093E');
+                break;
             case ValveState.closed:
                 this.showFrame('#FE668B', '#FE668B', '#E3093E', '#E3093E', '#E3093E');
                 break;
@@ -469,6 +516,7 @@ export class ValveCheck extends BaseMineDraw {
             p0.x + this.calcSize(length) - length * 0.16, p0.y + length * 0.09,
             p0.x + this.calcSize(length) * 0.5, p0.y + length * 0.5 - length * 0.16,
             '#000000', '', 0));
+        // this.primitives = this.primitives.concat(CreateLabel(p0.newPointMoved(length * 0.5, length * 0.5), Disposition.Vertical, 'A'));
     }
     private createTriangle(x1: number, y1: number, x2: number, y2: number, x3: number, y3: number, fill: string, stroke: string, strokeWidth: number): Konva.Line {
         return new Konva.Line({

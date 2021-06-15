@@ -49,12 +49,12 @@ var Cage = /** @class */ (function (_super) {
         _this.primitives.push(_this.createRectangle(p0.x - length * 0.16, p0.y + length * 0.67, length * 0.06, length * 0.42, '#977B7B', '', 0, 0));
         _this.primitives.push(_this.createRectangle(p0.x - length * 0.16, p0.y + length * 0.8, length * 0.06, length * 0.42, '#7D5A5A', '', 0, 0));
         // указатели уровней стволов шахт
-        _this.primitives.push(_this.createRectangle(p0.x + length * 0.13, p0.y + length * 0.61, length * 0.04, length * 0.11, '#FFFFFF', '#84AFB1', length * 0.003, 5));
-        _this.primitives.push(_this.createRectangle(p0.x + length * 0.13, p0.y + length * 0.71, length * 0.04, length * 0.11, '#FFFFFF', '#84AFB1', length * 0.003, 5));
-        _this.primitives.push(_this.createRectangle(p0.x + length * 0.13, p0.y + length * 0.84, length * 0.04, length * 0.11, '#FFFFFF', '#84AFB1', length * 0.003, 5));
-        _this.primitives.push(_this.createText(p0.x + length * 0.145, p0.y + length * 0.618, '228 m', length * 0.03));
-        _this.primitives.push(_this.createText(p0.x + length * 0.145, p0.y + length * 0.718, '246 m', length * 0.03));
-        _this.primitives.push(_this.createText(p0.x + length * 0.145, p0.y + length * 0.848, '270 m', length * 0.03));
+        _this.primitives.push(_this.createRectangle(p0.x + length * 0.13, p0.y + length * 0.61, length * 0.04, length * 0.12, '#FFFFFF', '#84AFB1', length * 0.003, 5));
+        _this.primitives.push(_this.createRectangle(p0.x + length * 0.13, p0.y + length * 0.71, length * 0.04, length * 0.12, '#FFFFFF', '#84AFB1', length * 0.003, 5));
+        _this.primitives.push(_this.createRectangle(p0.x + length * 0.13, p0.y + length * 0.84, length * 0.04, length * 0.12, '#FFFFFF', '#84AFB1', length * 0.003, 5));
+        _this.primitives.push(_this.createText(p0.x + length * 0.145, p0.y + length * 0.618, '-228 m', length * 0.03));
+        _this.primitives.push(_this.createText(p0.x + length * 0.145, p0.y + length * 0.718, '-246 m', length * 0.03));
+        _this.primitives.push(_this.createText(p0.x + length * 0.145, p0.y + length * 0.848, '-270 m', length * 0.03));
         // две подвижные платформы
         _this.primitives.push(_this.createRectangle(p0.x, p0.y, length * 0.02, length * 0.05, 'red', '', 0, 0));
         _this.primitives.push(_this.createRectangle(p0.x + length * 0.05, p0.y, length * 0.02, length * 0.05, 'red', '', 0, 0));
