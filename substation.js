@@ -19,6 +19,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Generator = exports.Incomers = exports.SubstationCell = exports.UndergroundSubstationCell = exports.Cell = exports.Trunk = void 0;
 var konva_1 = __importDefault(require("konva"));
 var mine_drawing_1 = require("./mine_drawing");
+var utils_1 = require("./utils");
 var Trunk = /** @class */ (function (_super) {
     __extends(Trunk, _super);
     function Trunk(p0, length) {
@@ -307,6 +308,16 @@ var Incomers = /** @class */ (function (_super) {
         _this.primitives.push(_this.createCircle(p0.x + length * 2.45, p0.y - length, length * 0.25, length * 0.02));
         _this.primitives.push(_this.createLine(p0.x - length * 3.07, p0.y - length, p0.x - length * 4.07, p0.y - length, p0.x - length * 4.07, p0.y - length, length * 0.02));
         _this.primitives.push(_this.createLine(p0.x + length * 4.02, p0.y - length, p0.x + length * 5.02, p0.y - length, p0.x + length * 5.02, p0.y - length, length * 0.02));
+        _this.primitives.push(_this.createCircle(p0.x + length * 0.15, p0.y, length * 0.01, length * 0.05));
+        _this.primitives.push(_this.createCircle(p0.x + length * 0.8, p0.y, length * 0.01, length * 0.05));
+        // label draw
+        _this.primitives = _this.primitives.concat(utils_1.CreateLabel(p0.newPointMoved(-length * 3, -length * 0.8), null, 'A1', 20, 27));
+        _this.primitives = _this.primitives.concat(utils_1.CreateLabel(p0.newPointMoved(-length * 2.3, -length * 0.8), null, 'A2', 20, 27));
+        _this.primitives = _this.primitives.concat(utils_1.CreateLabel(p0.newPointMoved(-length * 0.4, -length * 0.8), null, 'B3', 20, 27));
+        _this.primitives = _this.primitives.concat(utils_1.CreateLabel(p0.newPointMoved(length * 1, -length * 0.8), null, 'B1', 20, 27));
+        _this.primitives = _this.primitives.concat(utils_1.CreateLabel(p0.newPointMoved(length * 3, -length * 0.8), null, 'A4', 20, 27));
+        _this.primitives = _this.primitives.concat(utils_1.CreateLabel(p0.newPointMoved(length * 3.7, -length * 0.8), null, 'A5', 20, 27));
+        _this.primitives = _this.primitives.concat(utils_1.CreateLabel(p0.newPointMoved(length * 0.3, length * 0.1), null, 'B2', 20, 27));
         _this.buttonOn = [
             _this.primitives[0].attrs.points[5],
             _this.primitives[1].attrs.points[5],
@@ -325,8 +336,8 @@ var Incomers = /** @class */ (function (_super) {
             _this.primitives[5].attrs.points[5] - 20,
             _this.primitives[6].attrs.points[4] - 20
         ];
-        _this.setBaseProperty(null);
         return _this;
+        // this.setBaseProperty(null)
     }
     Incomers.prototype.createLine = function (x1, y1, x2, y2, x3, y3, strokeWidth) {
         return new konva_1.default.Line({
@@ -346,15 +357,15 @@ var Incomers = /** @class */ (function (_super) {
         });
     };
     Incomers.prototype.setBaseProperty = function (mes) {
-        mes = {
-            "A1": false,
-            "A2": false,
-            "A4": false,
-            "A5": false,
-            "B1": false,
-            "B2": false,
-            "B3": false,
-        };
+        // mes = {
+        //     "A1": false,
+        //     "A2": false,
+        //     "A4": false,
+        //     "A5": false,
+        //     "B1": false,
+        //     "B2": false,
+        //     "B3": false,
+        // }
         for (var n = 0; n < 7; n++) {
             this.incomer[n] = Object.values(mes)[n];
         }
@@ -384,6 +395,7 @@ var Generator = /** @class */ (function (_super) {
     function Generator(p0, length) {
         var _this = _super.call(this, p0, length) || this;
         _this.name = 'Generator';
+        _this.generators = new Array();
         _this.primitives.push(_this.createLine(p0.x - length, p0.y, p0.x + length, p0.y, '#005236', length * 0.04));
         _this.primitives.push(_this.createRectangle(p0.x - length * 0.5, p0.y - length * 0.195, length * 0.39, length));
         _this.primitives.push(_this.createCircle(p0.x, p0.y, length * 0.4, '#F2A5A5', length * 0.015, '#331A38'));
@@ -433,7 +445,32 @@ var Generator = /** @class */ (function (_super) {
             rotation: rotation
         });
     };
+    Generator.prototype.nextFrame = function () {
+        if (this.propBit) {
+            this.primitives[1].fill('#42732B');
+            this.primitives[2].fill('#CBDEDE');
+            this.primitives[3].fill('#C6FFAC');
+            this.primitives[4].stroke('#005236');
+            this.primitives[5].stroke('#005236');
+            this.primitives[6].stroke('#005236');
+            this.primitives[8].fill('#005236');
+            this.primitives[9].fill('#005236');
+            this.primitives[10].fill('#005236');
+        }
+        else {
+            this.primitives[1].fill('#923434');
+            this.primitives[2].fill('#F2A5A5');
+            this.primitives[3].fill('#E4C0C0');
+            this.primitives[4].stroke('#DB1010');
+            this.primitives[5].stroke('#DB1010');
+            this.primitives[6].stroke('#DB1010');
+            this.primitives[8].fill('#DB1010');
+            this.primitives[9].fill('#DB1010');
+            this.primitives[10].fill('#DB1010');
+        }
+    };
     return Generator;
 }(mine_drawing_1.BaseMineDraw));
 exports.Generator = Generator;
+;
 //# sourceMappingURL=substation.js.map

@@ -1,5 +1,6 @@
 import Konva from 'konva';
 import { BaseMineDraw, Point } from './mine_drawing';
+import { CreateLabel } from './utils'
 
 export class Trunk extends BaseMineDraw {
     constructor(p0: Point, length: number) {
@@ -351,6 +352,16 @@ export class Incomers extends BaseMineDraw {
             p0.x - length * 4.07, p0.y - length, length * 0.02));
         this.primitives.push(this.createLine(p0.x + length * 4.02, p0.y - length, p0.x + length * 5.02, p0.y - length,
             p0.x + length * 5.02, p0.y - length, length * 0.02));
+        this.primitives.push(this.createCircle(p0.x + length * 0.15, p0.y, length * 0.01, length * 0.05));
+        this.primitives.push(this.createCircle(p0.x + length * 0.8, p0.y, length * 0.01, length * 0.05));
+        // label draw
+        this.primitives = this.primitives.concat(CreateLabel(p0.newPointMoved(- length * 3, - length * 0.8), null, 'A1', 20, 27));
+        this.primitives = this.primitives.concat(CreateLabel(p0.newPointMoved(- length * 2.3, - length * 0.8), null, 'A2', 20, 27));
+        this.primitives = this.primitives.concat(CreateLabel(p0.newPointMoved(- length * 0.4, - length * 0.8), null, 'B3', 20, 27));
+        this.primitives = this.primitives.concat(CreateLabel(p0.newPointMoved(length * 1, - length * 0.8), null, 'B1', 20, 27));
+        this.primitives = this.primitives.concat(CreateLabel(p0.newPointMoved(length * 3, - length * 0.8), null, 'A4', 20, 27));
+        this.primitives = this.primitives.concat(CreateLabel(p0.newPointMoved(length * 3.7, - length * 0.8), null, 'A5', 20, 27));
+        this.primitives = this.primitives.concat(CreateLabel(p0.newPointMoved(length * 0.3, length * 0.1), null, 'B2', 20, 27));
         this.buttonOn = [
             this.primitives[0].attrs.points[5],
             this.primitives[1].attrs.points[5],
@@ -369,7 +380,7 @@ export class Incomers extends BaseMineDraw {
             this.primitives[5].attrs.points[5] - 20,
             this.primitives[6].attrs.points[4] - 20
         ];
-        this.setBaseProperty(null)
+        // this.setBaseProperty(null)
     }
     protected createLine(x1: number, y1: number, x2: number, y2: number, x3: number, y3: number, strokeWidth: number): Konva.Line {
         return new Konva.Line({
@@ -389,15 +400,15 @@ export class Incomers extends BaseMineDraw {
         });
     }
     setBaseProperty(mes: any) {
-        mes = {
-            "A1": false,
-            "A2": false,
-            "A4": false,
-            "A5": false,
-            "B1": false,
-            "B2": false,
-            "B3": false,
-        }
+        // mes = {
+        //     "A1": false,
+        //     "A2": false,
+        //     "A4": false,
+        //     "A5": false,
+        //     "B1": false,
+        //     "B2": false,
+        //     "B3": false,
+        // }
         for (let n = 0; n < 7; n++) {
             this.incomer[n] = Object.values(mes)[n];
         }
@@ -418,9 +429,11 @@ export class Incomers extends BaseMineDraw {
 }
 
 export class Generator extends BaseMineDraw {
+    public generators: any[]
     constructor(p0: Point, length: number) { //p0 - центр прямоугольника, length - большая сторона прямоугольника
         super(p0, length);
         this.name = 'Generator';
+        this.generators = new Array();
         this.primitives.push(this.createLine(p0.x - length, p0.y, p0.x + length, p0.y, '#005236', length * 0.04));
         this.primitives.push(this.createRectangle(p0.x - length * 0.5, p0.y - length * 0.195, length * 0.39, length));
         this.primitives.push(this.createCircle(p0.x, p0.y, length * 0.4, '#F2A5A5', length * 0.015, '#331A38'));
@@ -470,4 +483,28 @@ export class Generator extends BaseMineDraw {
             rotation: rotation
         });
     }
-}
+    nextFrame(): void {
+        if (this.propBit) {
+            this.primitives[1].fill('#42732B');
+            this.primitives[2].fill('#CBDEDE');
+            this.primitives[3].fill('#C6FFAC');
+            this.primitives[4].stroke('#005236');
+            this.primitives[5].stroke('#005236');
+            this.primitives[6].stroke('#005236');
+            this.primitives[8].fill('#005236');
+            this.primitives[9].fill('#005236');
+            this.primitives[10].fill('#005236');
+        }
+        else {
+            this.primitives[1].fill('#923434');
+            this.primitives[2].fill('#F2A5A5');
+            this.primitives[3].fill('#E4C0C0');
+            this.primitives[4].stroke('#DB1010');
+            this.primitives[5].stroke('#DB1010');
+            this.primitives[6].stroke('#DB1010');
+            this.primitives[8].fill('#DB1010');
+            this.primitives[9].fill('#DB1010');
+            this.primitives[10].fill('#DB1010');
+        }
+    }
+};

@@ -19,32 +19,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Compressor = exports.UndegraundPump = exports.ValveCheck = exports.Valve = exports.ValveError = exports.ValveState = exports.Pool = exports.Pump = exports.PumpState = void 0;
 var konva_1 = __importDefault(require("konva"));
 var mine_drawing_1 = require("./mine_drawing");
-function CreateLabel(p, position, text) {
-    if (position == 0)
-        p.y = p.y - 10;
-    else if (position == 1)
-        p.x = p.x - 10;
-    var r = new konva_1.default.Rect({
-        x: p.x,
-        y: p.y,
-        height: 20,
-        width: 20,
-        fill: '#FEFFBC',
-        stroke: '',
-        strokeWidth: 0,
-        cornerRadius: 5,
-    });
-    var t = new konva_1.default.Text({
-        x: p.x + 5,
-        y: p.y + 4,
-        text: text,
-        fontSize: 15,
-        fontStyle: 'bold',
-        fontFamily: 'Roboto',
-        fill: '',
-    });
-    return [r, t];
-}
+var utils_1 = require("./utils");
 var PumpState;
 (function (PumpState) {
     PumpState[PumpState["stop"] = 0] = "stop";
@@ -204,7 +179,7 @@ var Pump = /** @class */ (function (_super) {
         p1lx = p02.x + R * Math.sin(285);
         p1ly = p02.y + R * Math.cos(285);
         _this.primitives.push(_this.createLine(p0lx, p0ly, p1lx, p1ly, stroke, strokeWidth, p02));
-        _this.primitives = _this.primitives.concat(CreateLabel(p0.newPointMoved(length * 0.4, length * 0.3), null, 'A'));
+        _this.primitives = _this.primitives.concat(utils_1.CreateLabel(p0.newPointMoved(length * 0.4, length * 0.3), null, 'A'));
         return _this;
     }
     Pump.prototype.calcSize = function (length, factor) {
@@ -440,7 +415,7 @@ var Valve = /** @class */ (function (_super) {
         _this.primitives.push(_this.createText(length, percentage));
         _this.rect.p0.y -= 2;
         _this.rect.p1.y += 2;
-        _this.primitives = _this.primitives.concat(CreateLabel(p0.newPointMoved(length * 0.5, length * 0.5), disposition, 'A'));
+        _this.primitives = _this.primitives.concat(utils_1.CreateLabel(p0.newPointMoved(length * 0.5, length * 0.5), disposition, 'A'));
         _this.nextFrame();
         return _this;
     }
@@ -653,6 +628,12 @@ var Compressor = /** @class */ (function (_super) {
     function Compressor(p0, length) {
         var _this = _super.call(this, p0, length) || this;
         _this.name = 'Compressor';
+        _this.compressors = new Array();
+        // динамически меняющиеся объекты
+        for (var i = 0; i < 4; i++) {
+            _this.primitives.push(_this.createCircle(p0.x + length * 0.08 + i * length * 0.29, p0.y + length * 0.2558, length * 0.074, length * 0.0015, '#FDC858', '#000000'));
+            _this.primitives.push(_this.createRectangle(p0.x - length * 0.0116 + i * length * 0.29, p0.y + length * 0.4968, length * 0.2874, length * 0.1833, '#44B5A1'));
+        }
         // общая магистраль 
         _this.primitives.push(_this.createLine(p0.x, p0.y, p0.x + length, p0.y, '#84AFB1', length * 0.03));
         _this.primitives.push(_this.createLine(p0.x - length * 0.016, p0.y, p0.x, p0.y, '#055659', length * 0.046));
@@ -670,8 +651,6 @@ var Compressor = /** @class */ (function (_super) {
                 _this.primitives.push(_this.createLine(p0.x + length * 0.08 + n * length * 0.29, p0.y + length * 0.1715 + l, p0.x + length * 0.08 + n * length * 0.29, p0.y + length * 0.1815 + l, '#055659', length * 0.034));
                 l = l + length * 0.3153;
             }
-            _this.primitives.push(_this.createCircle(p0.x + length * 0.08 + n * length * 0.29, p0.y + length * 0.2558, length * 0.074, length * 0.0015));
-            _this.primitives.push(_this.createRectangle(p0.x - length * 0.0116 + n * length * 0.29, p0.y + length * 0.4968, length * 0.2874, length * 0.1833));
             for (var lv = 1; lv < 9; lv++) {
                 _this.primitives.push(_this.createLine(p0.x - length * 0.0116 + length * 0.0202 * lv + n * length * 0.29, p0.y + length * 0.4968, p0.x - length * 0.0116 + length * 0.0202 * lv + n * length * 0.29, p0.y + length * 0.7842, '#055659', length * 0.0037));
             }
@@ -682,13 +661,13 @@ var Compressor = /** @class */ (function (_super) {
         return _this;
     }
     ;
-    Compressor.prototype.createRectangle = function (x, y, height, width) {
+    Compressor.prototype.createRectangle = function (x, y, height, width, fill) {
         return new konva_1.default.Rect({
             x: x,
             y: y,
             height: height,
             width: width,
-            fill: '#44B5A1',
+            fill: fill,
         });
     };
     Compressor.prototype.createLine = function (x1, y1, x2, y2, stroke, strokeWidth) {
@@ -710,16 +689,36 @@ var Compressor = /** @class */ (function (_super) {
             strokeWidth: strokeWidth,
         });
     };
-    Compressor.prototype.createCircle = function (x, y, radius, strokeWidth) {
+    Compressor.prototype.createCircle = function (x, y, radius, strokeWidth, fill, stroke) {
         return new konva_1.default.Circle({
             x: x,
             y: y,
             radius: radius,
-            fill: '#FDC858',
-            stroke: '#000000',
+            fill: fill,
+            stroke: stroke,
             strokeWidth: strokeWidth,
         });
     };
+    Compressor.prototype.setBaseProperty = function (mes) {
+        for (var n = 0; n < 4; n++) {
+            this.compressors[n] = Object.values(mes)[n];
+        }
+    };
+    Compressor.prototype.nextFrame = function () {
+        for (var n = 0; n < 4; n++) {
+            if (this.compressors[n]) {
+                this.primitives[n * 2].stroke('#46802B');
+                this.primitives[n * 2].fill('#FDC858');
+                this.primitives[n * 2 + 1].fill('#44B5A1');
+            }
+            else {
+                this.primitives[n * 2].stroke('#C46B6B');
+                this.primitives[n * 2].fill('#EBE0CB');
+                this.primitives[n * 2 + 1].fill('#E5DDCC');
+            }
+        }
+    };
+    ;
     return Compressor;
 }(mine_drawing_1.BaseMineDraw));
 exports.Compressor = Compressor;

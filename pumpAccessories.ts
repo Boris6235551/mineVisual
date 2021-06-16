@@ -1,31 +1,6 @@
 import Konva from 'konva';
 import { BaseMineDraw, Point, Disposition, } from './mine_drawing';
-
-function CreateLabel(p: Point, position: Disposition, text: string): (Konva.Rect | Konva.Text)[] {
-    if (position == 0) p.y = p.y - 10;
-    else if (position == 1) p.x = p.x - 10;
-    let r = new Konva.Rect({
-        x: p.x,
-        y: p.y,
-        height: 20,
-        width: 20,
-        fill: '#FEFFBC',
-        stroke: '',
-        strokeWidth: 0,
-        cornerRadius: 5,
-    });
-    let t = new Konva.Text({
-        x: p.x + 5,
-        y: p.y + 4,
-        text: text,
-        fontSize: 15,
-        fontStyle: 'bold',
-        fontFamily: 'Roboto',
-        fill: '',
-    });
-    return [r, t]
-}
-
+import { CreateLabel } from './utils'
 
 export enum PumpState {
     stop = 0, starting, run, stopping, alarm, revers
@@ -593,13 +568,22 @@ export class UndegraundPump extends Pump {
 }
 
 export class Compressor extends BaseMineDraw {
+    private compressors: any[]
     constructor(p0: Point, length: number) {
         super(p0, length);
         this.name = 'Compressor';
+        this.compressors = new Array();
+        // динамически меняющиеся объекты
+        for (let i = 0; i < 4; i++) {
+            this.primitives.push(this.createCircle(p0.x + length * 0.08 + i * length * 0.29, p0.y + length * 0.2558,
+                length * 0.074, length * 0.0015, '#FDC858', '#000000'));
+
+            this.primitives.push(this.createRectangle(p0.x - length * 0.0116 + i * length * 0.29, p0.y + length * 0.4968,
+                length * 0.2874, length * 0.1833, '#44B5A1'));
+        }
         // общая магистраль 
         this.primitives.push(this.createLine(p0.x, p0.y, p0.x + length, p0.y, '#84AFB1', length * 0.03));
         this.primitives.push(this.createLine(p0.x - length * 0.016, p0.y, p0.x, p0.y, '#055659', length * 0.046));
-
         //  насосы
         for (let n = 0; n <= 3; n++) {
             let l = 0;
@@ -624,13 +608,6 @@ export class Compressor extends BaseMineDraw {
                     p0.x + length * 0.08 + n * length * 0.29, p0.y + length * 0.1815 + l, '#055659', length * 0.034));
                 l = l + length * 0.3153;
             }
-
-            this.primitives.push(this.createCircle(p0.x + length * 0.08 + n * length * 0.29, p0.y + length * 0.2558,
-                length * 0.074, length * 0.0015));
-
-            this.primitives.push(this.createRectangle(p0.x - length * 0.0116 + n * length * 0.29, p0.y + length * 0.4968,
-                length * 0.2874, length * 0.1833));
-
             for (let lv = 1; lv < 9; lv++) {
                 this.primitives.push(this.createLine(p0.x - length * 0.0116 + length * 0.0202 * lv + n * length * 0.29, p0.y + length * 0.4968,
                     p0.x - length * 0.0116 + length * 0.0202 * lv + n * length * 0.29, p0.y + length * 0.7842, '#055659', length * 0.0037));
@@ -641,13 +618,13 @@ export class Compressor extends BaseMineDraw {
             }
         }
     };
-    private createRectangle(x: number, y: number, height: number, width: number): Konva.Rect {
+    private createRectangle(x: number, y: number, height: number, width: number, fill: string): Konva.Rect {
         return new Konva.Rect({
             x: x,
             y: y,
             height: height,
             width: width,
-            fill: '#44B5A1',
+            fill: fill,
         });
     }
     private createLine(x1: number, y1: number, x2: number, y2: number,
@@ -670,14 +647,33 @@ export class Compressor extends BaseMineDraw {
             strokeWidth: strokeWidth,
         });
     }
-    private createCircle(x: number, y: number, radius: number, strokeWidth: number): Konva.Circle {
+    private createCircle(x: number, y: number, radius: number, strokeWidth: number, fill: string, stroke: string): Konva.Circle {
         return new Konva.Circle({
             x: x,
             y: y,
             radius: radius,
-            fill: '#FDC858',
-            stroke: '#000000',
+            fill: fill,
+            stroke: stroke,
             strokeWidth: strokeWidth,
         });
     }
+    setBaseProperty(mes: any) {
+        for (let n = 0; n < 4; n++) {
+            this.compressors[n] = Object.values(mes)[n];
+        }
+    }
+    nextFrame(): void {
+        for (let n = 0; n < 4; n++) {
+            if (this.compressors[n]) {
+                this.primitives[n * 2].stroke('#46802B')
+                this.primitives[n * 2].fill('#FDC858')
+                this.primitives[n * 2 + 1].fill('#44B5A1')
+            }
+            else {
+                this.primitives[n * 2].stroke('#C46B6B')
+                this.primitives[n * 2].fill('#EBE0CB')
+                this.primitives[n * 2 + 1].fill('#E5DDCC')
+            }
+        }
+    };
 };

@@ -2,39 +2,51 @@ import Konva from 'konva';
 import { BaseMineDraw, Point, PropParams } from './mine_drawing';
 
 export class Conveyor extends BaseMineDraw {
+    private length: number
     constructor(p0: Point, length: number, heightConveyor: number) {
         super(p0, length, heightConveyor);
         this.name = 'Conveyor';
-        this.primitives.push(this.createLine(p0.x, p0.y, length));  // primitive 0
-        this.primitives.push(this.createLine(p0.x, p0.y + heightConveyor, length)); // primitive 1
-        this.primitives.push(this.createCircle(p0.x, p0.y + heightConveyor / 2, heightConveyor / 2 + 1.5,
+        this.length = length;
+        this.primitives.push(this.createLine(p0.x, p0.y, p0.x + length, p0.y));  // primitive 0
+        this.primitives.push(this.createLine(p0.x, p0.y + heightConveyor, p0.x + length, p0.y + heightConveyor)); // primitive 1
+        this.primitives.push(this.createCircle(p0.x, p0.y + heightConveyor * 0.5, heightConveyor * 0.5 + 1.5,
             'white', 3, '#331A38'));    // primitive 2
-        this.primitives.push(this.createCircle(p0.x + length, p0.y + heightConveyor / 2, heightConveyor / 2 + 1.5,
+        this.primitives.push(this.createCircle(p0.x + length, p0.y + heightConveyor * 0.5, heightConveyor * 0.5 + 1.5,
             'white', 3, '#331A38'));    // primitive 3
-        this.primitives.push(this.createRectangle(p0.x, p0.y, heightConveyor, length,));    // primitive 4
-        this.primitives.push(this.createCircle(p0.x, p0.y + heightConveyor / 2, heightConveyor / 2,
-            '#481D88', length * 0.01, '#FDC858'));  // primitive 5
-        this.primitives.push(this.createCircle(p0.x + length, p0.y + heightConveyor / 2, heightConveyor / 2,
-            '#481D88', length * 0.01, '#FDC858'));  // primitive 6
-        this.primitives.push(this.createCircle(p0.x, p0.y + heightConveyor / 2, heightConveyor / 4.57,
-            '#8AC171', length * 0.01, '#FDC858'));  // primitive 7
-        this.primitives.push(this.createCircle(p0.x + length, p0.y + heightConveyor / 2, heightConveyor / 4.57,
-            '#8AC171', length * 0.01, '#FDC858'));  // primitive 8
+        this.primitives.push(this.createRectangle(p0.x, p0.y, heightConveyor, length, '#6BC4A6'));    // primitive 4
+        this.primitives.push(this.createCircle(p0.x, p0.y + heightConveyor * 0.5, heightConveyor * 0.5,
+            '#481D88', heightConveyor * 0.05, '#FDC858'));  // primitive 5
+        this.primitives.push(this.createCircle(p0.x + length, p0.y + heightConveyor * 0.5, heightConveyor * 0.5,
+            '#481D88', heightConveyor * 0.05, '#FDC858'));  // primitive 6
+        this.primitives.push(this.createCircle(p0.x, p0.y + heightConveyor * 0.5, heightConveyor * 0.22,
+            '#8AC171', heightConveyor * 0.05, '#FDC858'));  // primitive 7
+        this.primitives.push(this.createCircle(p0.x + length, p0.y + heightConveyor * 0.5, heightConveyor * 0.22,
+            '#8AC171', heightConveyor * 0.05, '#FDC858'));  // primitive 8
+        // for (let i = 0; i < length * 0.1; i++) {
+        //     this.primitives.push(this.createLineMove(p0.x + 10 * i, p0.y, p0.x + 10 * i + 10, p0.y, 'white'));
+        // }
     };
-    private createRectangle(x: number, y: number, height: number, width: number): Konva.Rect {
+    private createRectangle(x: number, y: number, height: number, width: number, fill: string): Konva.Rect {
         return new Konva.Rect({
             x: x,
             y: y,
             height: height,
             width: width,
-            fill: '#6BC4A6',
+            fill: fill,
         });
     }
-    private createLine(x: number, y: number, length: number): Konva.Line {
+    private createLine(x: number, y: number, x1: number, y1: number): Konva.Line {
         return new Konva.Line({
-            points: [x, y, length + x, y],
+            points: [x, y, x1, y1],
             stroke: '#331A38',
             strokeWidth: 6,
+        });
+    }
+    private createLineMove(x: number, y: number, x1: number, y1: number, stroke: string): Konva.Line {
+        return new Konva.Line({
+            points: [x, y, x1, y1],
+            stroke: stroke,
+            strokeWidth: 3,
         });
     }
     private createCircle(x: number, y: number, radius: number, fill: string, strokeWidth: number,
@@ -48,15 +60,24 @@ export class Conveyor extends BaseMineDraw {
             fill: fill,
         });
     }
-    setBaseProperty(mes: any) {
-        // mes = {
-        //     "upPositionA": false,
-
-        // }
-        // this.positionUp = mes.upPositionA;
-    }
     nextFrame(): void {
-        if (this.propBit) this.primitives[4].fill('#6BC4A6');
+        if (this.propBit) {
+            this.primitives[4].fill('#6BC4A6');
+            // switch (this.animationFrame) {
+            //     case 1:
+            //         for (let i = 0; i < this.length * 0.1; i = i + 2) {
+            //             this.primitives[i + 9].stroke('red')
+            //         }
+            //         this.animationFrame = 0
+            //         break;
+            //     case 0:
+            //         for (let i = 0; i < this.length * 0.1; i = i++) {
+            //             this.primitives[i + 9].stroke('white')
+            //         }
+            //         this.animationFrame = 1
+            //         break;
+            // }
+        }
         else this.primitives[4].fill('red');
     }
 };
@@ -461,16 +482,16 @@ export class BatcherLeft extends BaseMineDraw {
             closed: true,
         });
     }
-    // nextFrame(): void {
-    //     switch (this.propBit) {
-    //         case true:
-    //             this.primitives[0].fill('#46802B');
-    //             break;
-    //         case false:
-    //             this.primitives[0].fill('red');
-    //             break;
-    //     }
-    // }
+    nextFrame(): void {
+        switch (this.propBit) {
+            case true:
+                this.primitives[0].fill('#46802B');
+                break;
+            case false:
+                this.primitives[0].fill('red');
+                break;
+        }
+    }
 }
 
 export class BatcherRight extends BaseMineDraw {
@@ -490,16 +511,16 @@ export class BatcherRight extends BaseMineDraw {
             closed: true,
         });
     }
-    // nextFrame(): void {
-    //     switch (this.propBit) {
-    //         case true:
-    //             this.primitives[0].fill('#46802B');
-    //             break;
-    //         case false:
-    //             this.primitives[0].fill('red');
-    //             break;
-    //     }
-    // }
+    nextFrame(): void {
+        switch (this.propBit) {
+            case true:
+                this.primitives[0].fill('#46802B');
+                break;
+            case false:
+                this.primitives[0].fill('red');
+                break;
+        }
+    }
 }
 
 export class ReceivingHopper extends BaseMineDraw {

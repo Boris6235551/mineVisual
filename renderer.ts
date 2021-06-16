@@ -10,6 +10,7 @@ import { UNDEGROUNDPUMP } from './_undegroundPump'
 import { BATCHERLABLE } from './_batcherlable'
 import { RECEIVINGHOPPER } from './_receivinghopper'
 import { SUBSTATION } from './_substation'
+import { COMPRESSOR } from './_compressor';
 const { ipcRenderer }  = require('electron');
 const { BrowserWindow } = require('electron').remote
 
@@ -32,6 +33,7 @@ let substationUndeground = new UNDERGROUNDSUBSTATION('undergroundsubstation', wi
 let batcherlable = new BATCHERLABLE('batcherlable', window.innerWidth, window.innerHeight);
 let receivingHopper = new RECEIVINGHOPPER('receivinghopper', window.innerWidth, window.innerHeight);
 let substation = new SUBSTATION('substation', window.innerWidth, window.innerHeight);
+let compressor = new COMPRESSOR('compressor', window.innerWidth, window.innerHeight)
 
 // screenMain.addScheme(techWater);
 screenMain.addScheme(dsf);
@@ -44,6 +46,7 @@ screenMain.addScheme(batcherlable);
 screenMain.addScheme(receivingHopper);
 screenMain.addScheme(substation);
 // screenMain.addScheme(undegroundpump);
+screenMain.addScheme(compressor);
 
 import { startClients, stopConnection, _reCreate, _testConnect, _testSend, _sendReload, _step } from './tcpipConnector'
 
@@ -58,10 +61,11 @@ startClients(sendMes);
 // animateScheme(skip, 500);
 // animateScheme(cage, 500);
 // animateScheme(substationUndeground, 500);
-animateScheme(UndegroundPump1, 500);
-animateScheme(batcherlable, 500);
+// animateScheme(UndegroundPump1, 500);
+// animateScheme(batcherlable, 500);
 // animateScheme(receivingHopper, 500);
-animateScheme(substation, 500);
+// animateScheme(substation, 500);
+animateScheme(compressor, 500);
 
 // export default class MyComponent extends Vue {
 //   // Данные инициализации могут быть объявлены как свойства экземпляра
@@ -122,6 +126,7 @@ import { Cage } from './cage'
 import { OverheadSubstationTrunk, OverheadSubstationCell } from './overheadSubstation'
 
 import { GroundHorizontalLine, GroundVerticalLine } from './groundLines'
+import { Compressor } from './pumpAccessories';
 
 // let surfaceScheme = new Scheme('containerFirst', window.innerWidth * 0.4, window.innerHeight);
 

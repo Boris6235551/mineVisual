@@ -26,8 +26,6 @@ var SUBSTATION = /** @class */ (function (_super) {
         return _this;
     }
     SUBSTATION.prototype.addBatcher = function () {
-        // this.Generator1 = new Generator(new Point(200, 233), 100)
-        // this.addWidget(this.Generator1);
         this.Trunk1 = new substation_1.Trunk(new mine_drawing_1.Point(700, 860), 295);
         this.addWidget(this.Trunk1);
         this.Trunk2 = new substation_1.Trunk(new mine_drawing_1.Point(1200, 860), 335);
@@ -38,6 +36,14 @@ var SUBSTATION = /** @class */ (function (_super) {
         this.addWidget(this.SubstationCell2);
         this.Incomers1 = new substation_1.Incomers(new mine_drawing_1.Point(1115, 863), 85);
         this.addWidget(this.Incomers1);
+        this.Generator1 = new substation_1.Generator(new mine_drawing_1.Point(1550, 500), 80);
+        this.addWidget(this.Generator1);
+        this.Generator2 = new substation_1.Generator(new mine_drawing_1.Point(1800, 500), 80);
+        this.addWidget(this.Generator2);
+        this.Generator3 = new substation_1.Generator(new mine_drawing_1.Point(1550, 650), 80);
+        this.addWidget(this.Generator3);
+        this.Generator4 = new substation_1.Generator(new mine_drawing_1.Point(1800, 650), 80);
+        this.addWidget(this.Generator4);
     };
     return SUBSTATION;
 }(mine_drawing_1.Scheme));
