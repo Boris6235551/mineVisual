@@ -1,8 +1,10 @@
 import { Scheme, Disposition, animateScheme, Point, PropParams } from './mine_drawing';
 import {
     Conveyor, SeparatorRight, SeparatorLeft, ConeCrusher, Crush, Stone, BatcherLeft,
-    BatcherRight, ArrowPointer, InformationTable, Pile
+    BatcherRight, ArrowPointer, InformationTable, Pile,
 } from './dsf'
+
+import {PoolSurfaceIndustrialWater, PoolSurfacePureWater, WaterTower} from './pumpAccessories'
 
 export class DSF extends Scheme {
     public BatcherLeft1: BatcherLeft;
@@ -275,5 +277,14 @@ export class DSF extends Scheme {
 
         let Pile6 = new Pile(new Point(425, 850), 60);
         this.addWidget(Pile6);
+
+        let PoolSurfaceIndustrialWater1 = new PoolSurfaceIndustrialWater(new Point(700, 500), 200);
+        this.addWidget(PoolSurfaceIndustrialWater1);
+
+        let PoolSurfacePureWater1 = new PoolSurfacePureWater(new Point(1000, 500), 200);
+        this.addWidget(PoolSurfacePureWater1);
+
+        let WaterTower1 = new WaterTower(new Point(1200, 80), 200);
+        this.addWidget(WaterTower1);
     }
 }

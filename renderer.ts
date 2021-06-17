@@ -65,7 +65,7 @@ startClients(sendMes);
 // animateScheme(batcherlable, 500);
 // animateScheme(receivingHopper, 500);
 // animateScheme(substation, 500);
-animateScheme(compressor, 500);
+// animateScheme(compressor, 500);
 
 // export default class MyComponent extends Vue {
 //   // Данные инициализации могут быть объявлены как свойства экземпляра

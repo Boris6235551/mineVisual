@@ -283,27 +283,9 @@ export class Pump extends BaseMineDraw {
     }
 }
 
-export class Pool extends BaseMineDraw {
-    private step: number;
-    private a: number;
-    constructor(p0: Point, length: number) {
-        super(p0, length);
-        this.name = 'Pool';
-        this.primitives.push(this.createRectangle(p0.x, p0.y, length * 0.15, length, '#7D5A5A', '#C06B5A', length * 0.001, length * 0.001));
-        this.primitives.push(this.createRectangle(p0.x + length * 0.01, p0.y, length * 0.13, length * 0.98, '#E9EDEA', '#34E7E7', length * 0.0005, 0));
-        this.primitives.push(this.createRectangle(p0.x + length * 0.01, p0.y, length * 0.01372, length * 0.98, '#E6F4EF', '', 0, 0));
-        this.primitives.push(this.createRectangle(p0.x + length * 0.01, p0.y + length * 0.01372 * 1, length * 0.01372, length * 0.98, '#E1F4ED', '', 0, 0));
-        this.primitives.push(this.createRectangle(p0.x + length * 0.01, p0.y + length * 0.01372 * 2, length * 0.01372, length * 0.98, '#D1E9E0', '', 0, 0));
-        this.primitives.push(this.createRectangle(p0.x + length * 0.01, p0.y + length * 0.01372 * 3, length * 0.01372, length * 0.98, '#C1DBD1', '', 0, 0));
-        this.primitives.push(this.createRectangle(p0.x + length * 0.01, p0.y + length * 0.01372 * 4, length * 0.01372, length * 0.98, '#A7CABD', '', 0, 0));
-        this.primitives.push(this.createRectangle(p0.x + length * 0.01, p0.y + length * 0.01372 * 5, length * 0.01372, length * 0.98, '#97BFB0', '', 0, 0));
-        this.primitives.push(this.createRectangle(p0.x + length * 0.01, p0.y + length * 0.01372 * 6, length * 0.01372, length * 0.98, '#8DB5A6', '', 0, 0));
-        this.primitives.push(this.createRectangle(p0.x + length * 0.01, p0.y + length * 0.01372 * 7, length * 0.01372, length * 0.98, '#85AC9D', '', 0, 0));
-        this.primitives.push(this.createRectangle(p0.x + length * 0.01, p0.y + length * 0.01372 * 8, length * 0.01372, length * 0.98, '#789F90', '', 0, 0));
-        this.primitives.push(this.createRectangle(p0.x + length * 0.01, p0.y + length * 0.01372 * 9, length * 0.01372, length * 0.98, '#6F9385', '', 0, 0));
-    }
-    private createRectangle(x: number, y: number, height: number, width: number, fill: string, stroke?: string,
-        strokeWidth?: number, cornerRadius?: number): Konva.Rect {
+export class PoolBase extends BaseMineDraw {
+    protected createRectangle(x: number, y: number, height: number, width: number, fill: string, stroke: string,
+        strokeWidth: number, cornerRadius: number): Konva.Rect {
         return new Konva.Rect({
             x: x,
             y: y,
@@ -314,6 +296,155 @@ export class Pool extends BaseMineDraw {
             strokeWidth: strokeWidth,
             cornerRadius: cornerRadius,
         });
+    }
+    protected createCircle(x: number, y: number, radius: number, strokeWidth: number, fill: string, stroke: string): Konva.Circle {
+        return new Konva.Circle({
+            x: x,
+            y: y,
+            radius: radius,
+            fill: fill,
+            stroke: stroke,
+            strokeWidth: strokeWidth,
+        });
+    }
+    protected createText(x: number, y: number, text: string, fontSize: number): Konva.Text {
+        return new Konva.Text({
+            x: x,
+            y: y,
+            text: text,
+            fontSize: fontSize,
+            fontStyle: 'bold',
+            fontFamily: 'Roboto',
+        });
+    }
+}
+
+export class Pool extends PoolBase {
+    constructor(p0: Point, length: number) {
+        super(p0, length);
+        this.name = '';
+        this.primitives.push(this.createRectangle(p0.x, p0.y, length * 0.15, length, '#7D5A5A', '#C06B5A', length * 0.001, length * 0.001));
+        this.primitives.push(this.createRectangle(p0.x + length * 0.01, p0.y, length * 0.13, length * 0.98, '#E9EDEA', '#34E7E7', length * 0.0005, 0));
+        // десять уровней воды
+        this.primitives.push(this.createRectangle(p0.x + length * 0.01, p0.y, length * 0.013, length * 0.98, '#EFFAF5', '', 0, 0));
+        this.primitives.push(this.createRectangle(p0.x + length * 0.01, p0.y + length * 0.013 * 1, length * 0.013, length * 0.98, '#E1F4ED', '', 0, 0));
+        this.primitives.push(this.createRectangle(p0.x + length * 0.01, p0.y + length * 0.013 * 2, length * 0.013, length * 0.98, '#D1E9E0', '', 0, 0));
+        this.primitives.push(this.createRectangle(p0.x + length * 0.01, p0.y + length * 0.013 * 3, length * 0.013, length * 0.98, '#C1DBD1', '', 0, 0));
+        this.primitives.push(this.createRectangle(p0.x + length * 0.01, p0.y + length * 0.013 * 4, length * 0.013, length * 0.98, '#A7CABD', '', 0, 0));
+        this.primitives.push(this.createRectangle(p0.x + length * 0.01, p0.y + length * 0.013 * 5, length * 0.013, length * 0.98, '#97BFB0', '', 0, 0));
+        this.primitives.push(this.createRectangle(p0.x + length * 0.01, p0.y + length * 0.013 * 6, length * 0.013, length * 0.98, '#8DB5A6', '', 0, 0));
+        this.primitives.push(this.createRectangle(p0.x + length * 0.01, p0.y + length * 0.013 * 7, length * 0.013, length * 0.98, '#85AC9D', '', 0, 0));
+        this.primitives.push(this.createRectangle(p0.x + length * 0.01, p0.y + length * 0.013 * 8, length * 0.013, length * 0.98, '#789F90', '', 0, 0));
+        this.primitives.push(this.createRectangle(p0.x + length * 0.01, p0.y + length * 0.013 * 9, length * 0.013, length * 0.98, '#6F9385', '', 0, 0));
+        // label
+        this.primitives.push(this.createCircle(p0.x + length * 0.5, p0.y + length * 0.075, length * 0.03, length * 0.001, 'white', '#34E7E7'));
+        this.primitives.push(this.createText(p0.x + length * 0.478, p0.y + length * 0.066, '100' + '%', length * 0.02));
+    }
+    protected createRectangle(x: number, y: number, height: number, width: number, fill: string, stroke: string,
+        strokeWidth: number, cornerRadius: number): Konva.Rect {
+        return new Konva.Rect({
+            x: x,
+            y: y,
+            height: height,
+            width: width,
+            fill: fill,
+            stroke: stroke,
+            strokeWidth: strokeWidth,
+            cornerRadius: cornerRadius,
+        });
+    }
+    protected createCircle(x: number, y: number, radius: number, strokeWidth: number, fill: string, stroke: string): Konva.Circle {
+        return new Konva.Circle({
+            x: x,
+            y: y,
+            radius: radius,
+            fill: fill,
+            stroke: stroke,
+            strokeWidth: strokeWidth,
+        });
+    }
+    protected createText(x: number, y: number, text: string, fontSize: number): Konva.Text {
+        return new Konva.Text({
+            x: x,
+            y: y,
+            text: text,
+            fontSize: fontSize,
+            fontStyle: 'bold',
+            fontFamily: 'Roboto',
+        });
+    }
+}
+
+
+
+export class PoolSurfaceIndustrialWater extends PoolBase {
+    constructor(p0: Point, length: number) {
+        super(p0, length);
+        this.name = '';
+        this.primitives.push(this.createRectangle(p0.x, p0.y, length * 0.45, length, '#FE896F', '#D28878', length * 0.001, length * 0.001));
+        this.primitives.push(this.createRectangle(p0.x + length * 0.02, p0.y, length * 0.42, length * 0.96, '#E1FBE8', '#34E7E7', length * 0.0005, 0));
+        // десять уровней воды
+        this.primitives.push(this.createRectangle(p0.x + length * 0.02, p0.y,                      length * 0.042, length * 0.96, '#96FFDA', '', 0, 0));
+        this.primitives.push(this.createRectangle(p0.x + length * 0.02, p0.y + length * 0.042 * 1, length * 0.042, length * 0.96, '#73FFCD', '', 0, 0));
+        this.primitives.push(this.createRectangle(p0.x + length * 0.02, p0.y + length * 0.042 * 2, length * 0.042, length * 0.96, '#0BFFA8', '', 0, 0));
+        this.primitives.push(this.createRectangle(p0.x + length * 0.02, p0.y + length * 0.042 * 3, length * 0.042, length * 0.96, '#01EA97', '', 0, 0));
+        this.primitives.push(this.createRectangle(p0.x + length * 0.02, p0.y + length * 0.042 * 4, length * 0.042, length * 0.96, '#04CF87', '', 0, 0));
+        this.primitives.push(this.createRectangle(p0.x + length * 0.02, p0.y + length * 0.042 * 5, length * 0.042, length * 0.96, '#01BE7B', '', 0, 0));
+        this.primitives.push(this.createRectangle(p0.x + length * 0.02, p0.y + length * 0.042 * 6, length * 0.042, length * 0.96, '#00AB6E', '', 0, 0));
+        this.primitives.push(this.createRectangle(p0.x + length * 0.02, p0.y + length * 0.042 * 7, length * 0.042, length * 0.96, '#039863', '', 0, 0));
+        this.primitives.push(this.createRectangle(p0.x + length * 0.02, p0.y + length * 0.042 * 8, length * 0.042, length * 0.96, '#028758', '', 0, 0));
+        this.primitives.push(this.createRectangle(p0.x + length * 0.02, p0.y + length * 0.042 * 9, length * 0.042, length * 0.96, '#026D47', '', 0, 0));
+        // label
+        this.primitives.push(this.createCircle(p0.x + length * 0.5, p0.y + length * 0.22, length * 0.08, length * 0.001, 'white', '#34E7E7'));
+        this.primitives.push(this.createText(p0.x + length * 0.44, p0.y + length * 0.2, '100' + '%', length * 0.05));
+    }
+}
+
+export class PoolSurfacePureWater extends PoolBase {
+    constructor(p0: Point, length: number) {
+        super(p0, length);
+        this.name = '';
+        this.primitives.push(this.createRectangle(p0.x, p0.y, length * 0.45, length, '#FE896F', '#D28878', length * 0.001, length * 0.001));
+        this.primitives.push(this.createRectangle(p0.x + length * 0.02, p0.y, length * 0.42, length * 0.96, '#E1FBE8', '#34E7E7', length * 0.0005, 0));
+        // десять уровней воды
+        this.primitives.push(this.createRectangle(p0.x + length * 0.02, p0.y,                      length * 0.042, length * 0.96, '#AAD7FF', '', 0, 0));
+        this.primitives.push(this.createRectangle(p0.x + length * 0.02, p0.y + length * 0.042 * 1, length * 0.042, length * 0.96, '#8DC9FF', '', 0, 0));
+        this.primitives.push(this.createRectangle(p0.x + length * 0.02, p0.y + length * 0.042 * 2, length * 0.042, length * 0.96, '#5BB1FF', '', 0, 0));
+        this.primitives.push(this.createRectangle(p0.x + length * 0.02, p0.y + length * 0.042 * 3, length * 0.042, length * 0.96, '#359EFF', '', 0, 0));
+        this.primitives.push(this.createRectangle(p0.x + length * 0.02, p0.y + length * 0.042 * 4, length * 0.042, length * 0.96, '#1F94FF', '', 0, 0));
+        this.primitives.push(this.createRectangle(p0.x + length * 0.02, p0.y + length * 0.042 * 5, length * 0.042, length * 0.96, '#0085FF', '', 0, 0));
+        this.primitives.push(this.createRectangle(p0.x + length * 0.02, p0.y + length * 0.042 * 6, length * 0.042, length * 0.96, '#0071D9', '', 0, 0));
+        this.primitives.push(this.createRectangle(p0.x + length * 0.02, p0.y + length * 0.042 * 7, length * 0.042, length * 0.96, '#0061BA', '', 0, 0));
+        this.primitives.push(this.createRectangle(p0.x + length * 0.02, p0.y + length * 0.042 * 8, length * 0.042, length * 0.96, '#00519C', '', 0, 0));
+        this.primitives.push(this.createRectangle(p0.x + length * 0.02, p0.y + length * 0.042 * 9, length * 0.042, length * 0.96, '#02498B', '', 0, 0));
+        // label
+        this.primitives.push(this.createCircle(p0.x + length * 0.5, p0.y + length * 0.22, length * 0.08, length * 0.001, 'white', '#34E7E7'));
+        this.primitives.push(this.createText(p0.x + length * 0.44, p0.y + length * 0.2, '100' + '%', length * 0.05));
+    }
+}
+
+export class WaterTower extends PoolBase {
+    constructor(p0: Point, length: number) {
+        super(p0, length);
+        this.name = '';
+        this.primitives.push(this.createRectangle(p0.x, p0.y, length, length * 0.7, '#FE896F', '#D28878', length * 0.001, length * 0.001));
+        this.primitives.push(this.createRectangle(p0.x + length * 0.06, p0.y, length * 0.94, length * 0.58, '#E1FBE8', '#34E7E7', length * 0.0005, 0));
+        // десять уровней воды
+        this.primitives.push(this.createRectangle(p0.x + length * 0.06, p0.y,                      length * 0.094, length * 0.58, '#AAD7FF', '', 0, 0));
+        this.primitives.push(this.createRectangle(p0.x + length * 0.06, p0.y + length * 0.0945 * 1, length * 0.094, length * 0.58, '#8DC9FF', '', 0, 0));
+        this.primitives.push(this.createRectangle(p0.x + length * 0.06, p0.y + length * 0.0945 * 2, length * 0.094, length * 0.58, '#5BB1FF', '', 0, 0));
+        this.primitives.push(this.createRectangle(p0.x + length * 0.06, p0.y + length * 0.0945 * 3, length * 0.094, length * 0.58, '#359EFF', '', 0, 0));
+        this.primitives.push(this.createRectangle(p0.x + length * 0.06, p0.y + length * 0.0945 * 4, length * 0.094, length * 0.58, '#1F94FF', '', 0, 0));
+        this.primitives.push(this.createRectangle(p0.x + length * 0.06, p0.y + length * 0.0945 * 5, length * 0.094, length * 0.58, '#0085FF', '', 0, 0));
+        this.primitives.push(this.createRectangle(p0.x + length * 0.06, p0.y + length * 0.0945 * 6, length * 0.094, length * 0.58, '#0071D9', '', 0, 0));
+        this.primitives.push(this.createRectangle(p0.x + length * 0.06, p0.y + length * 0.0945 * 7, length * 0.094, length * 0.58, '#0061BA', '', 0, 0));
+        this.primitives.push(this.createRectangle(p0.x + length * 0.06, p0.y + length * 0.0945 * 8, length * 0.094, length * 0.58, '#00519C', '', 0, 0));
+        this.primitives.push(this.createRectangle(p0.x + length * 0.06, p0.y + length * 0.0945 * 9, length * 0.094, length * 0.58, '#02498B', '', 0, 0));
+        // label
+        this.primitives.push(this.createCircle(p0.x + length * 0.5, p0.y + length * 0.22, length * 0.08, length * 0.001, 'white', '#34E7E7'));
+        this.primitives.push(this.createText(p0.x + length * 0.44, p0.y + length * 0.2, '100' + '%', length * 0.05));
+
+        // this.primitives.push(this.createRectangle(p0.x + length * 0.2, p0.y + , length * 0.064, length * 0.88, '#8DC9FF', '', 0, 0));
     }
 }
 
