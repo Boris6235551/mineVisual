@@ -29,7 +29,7 @@ let UndegroundPump1 = new UNDEGROUNDPUMP('containerUndegroundPump1', window.inne
 let UndegroundPump2 = new UNDEGROUNDPUMP('containerUndegroundPump2', window.innerWidth, window.innerHeight,
                                     new Point(400, 100), 2);
 let SurfacePump1 = new SURFACEPUMP('containerSurfacePump1', window.innerWidth, window.innerHeight,
-                                    new Point(2545, 44), 1);
+                                    new Point(2545, 44));
 let dsf = new DSF('containerDSF', window.innerWidth, window.innerHeight);
 let skip = new SKIP('containerSkip', window.innerWidth, window.innerHeight);
 let batcher = new BATCHER('batcher', window.innerWidth, window.innerHeight);
