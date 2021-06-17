@@ -298,6 +298,7 @@ var Pool = /** @class */ (function (_super) {
     __extends(Pool, _super);
     function Pool(p0, length) {
         var _this = _super.call(this, p0, length) || this;
+        console.log("class Pool constructor " + JSON.stringify(_this.rect));
         _this.name = 'Pool';
         _this.primitives.push(_this.createRectangle(p0.x, p0.y, length * 0.15, length, '#7D5A5A', '#C06B5A', length * 0.001, length * 0.001));
         _this.primitives.push(_this.createRectangle(p0.x + length * 0.01, p0.y, length * 0.13, length * 0.98, '#E9EDEA', '#34E7E7', length * 0.0005, 0));
@@ -313,6 +314,12 @@ var Pool = /** @class */ (function (_super) {
         _this.primitives.push(_this.createRectangle(p0.x + length * 0.01, p0.y + length * 0.01372 * 9, length * 0.01372, length * 0.98, '#6F9385', '', 0, 0));
         return _this;
     }
+    Pool.prototype.calcSize = function (length, factor) {
+        if (factor === void 0) { factor = 2.2; }
+        console.log("class Pool calcSize " + factor);
+        return this.getOdd(length / factor);
+    };
+    ;
     Pool.prototype.createRectangle = function (x, y, height, width, fill, stroke, strokeWidth, cornerRadius) {
         return new konva_1.default.Rect({
             x: x,

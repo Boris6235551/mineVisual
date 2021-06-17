@@ -278,6 +278,7 @@ export class Pool extends BaseMineDraw {
     private a: number;
     constructor(p0: Point, length: number) {
         super(p0, length);
+        console.log(`class Pool constructor ${JSON.stringify(this.rect)}`)
         this.name = 'Pool';
         this.primitives.push(this.createRectangle(p0.x, p0.y, length * 0.15, length, '#7D5A5A', '#C06B5A', length * 0.001, length * 0.001));
         this.primitives.push(this.createRectangle(p0.x + length * 0.01, p0.y, length * 0.13, length * 0.98, '#E9EDEA', '#34E7E7', length * 0.0005, 0));
@@ -292,6 +293,11 @@ export class Pool extends BaseMineDraw {
         this.primitives.push(this.createRectangle(p0.x + length * 0.01, p0.y + length * 0.01372 * 8, length * 0.01372, length * 0.98, '#789F90', '', 0, 0));
         this.primitives.push(this.createRectangle(p0.x + length * 0.01, p0.y + length * 0.01372 * 9, length * 0.01372, length * 0.98, '#6F9385', '', 0, 0));
     }
+    protected calcSize(length: number, factor: number = 2.2): number {
+        console.log(`class Pool calcSize ${factor}`)
+        return this.getOdd(length / factor);
+    };
+
     private createRectangle(x: number, y: number, height: number, width: number, fill: string, stroke?: string,
         strokeWidth?: number, cornerRadius?: number): Konva.Rect {
         return new Konva.Rect({

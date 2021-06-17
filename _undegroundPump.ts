@@ -1,179 +1,172 @@
 import { Scheme, Disposition, animateScheme, Point, PropParams } from './mine_drawing';
 import { Pump, UndegraundPump, Pool, Valve, ValveCheck } from './pumpAccessories'
 
-let mes = {
-    Y11Status: 0,   // enum ValveStatus InitState = 0, Closed, Opening, Opened, Closing , Calibration
-    Y12Status: 1,
-    Y13Status: 3,
-    Y14Status: 4,
-    Y15Status: 5,
-    Y21Status: 2,
-    Y22Status: 4,
-    Y23Status: 5,
-    Y24Status: 0,
-    Y25Status: 1,
-    Y31Status: 2,
-    Y32Status: 3,
-    Y33Status: 4,
-    Y34Status: 5,
-    Y35Status: 4,
-    
-    Y11Mode: 0,     // enum ValveMode HandDrive = 0, Service, Auto
-    Y12Mode: 1,
-    Y13Mode: 2,
-    Y14Mode: 2,
-    Y15Mode: 1,
-    Y21Mode: 0,
-    Y22Mode: 1,
-    Y23Mode: 2,
-    Y24Mode: 0,
-    Y25Mode: 1,
-    Y31Mode: 2,
-    Y32Mode: 2,
-    Y33Mode: 1,
-    Y34Mode: 0,
-    Y35Mode: 1,
-    
-    Y11Error: 0,    // enum ValveError NoError = 0, CloseAndOpenVlaveInputs, OpeningTimeOut, ClosingTimeOut, AlarmValveInput 
-    Y12Error: 1,
-    Y13Error: 2,
-    Y14Error: 3,
-    Y15Error: 2,
-    Y21Error: 1,
-    Y22Error: 0,
-    Y23Error: 1,
-    Y24Error: 2,
-    Y25Error: 3,
-    Y31Error: 3,
-    Y32Error: 2,
-    Y33Error: 1,
-    Y34Error: 0,
-    Y35Error: 1,
-    
-    Pump1Status: 0, // enum PumpStatus Stopped = 0, Starting, Working, Stopping, Error
-    Pump2Status: 1,
-    Pump3Status: 4,
-    
-    Pump1Mode: 1,   // enum PumpMode Service = 1, Auto
-    Pump2Mode: 2,
-    Pump3Mode: 1,
-    
-    Pump1Error: 0,  // enum PumpError NoError = 0, StartingTimeOut, StoppingTimeOut, AccidentPressure
-    Pump2Error: 1,
-    Pump3Error: 3,
-    
-    posY11: 0,      // 0 - 100
-    posY12: 100,
-    posY13: 35,
-    posY14: 0,
-    posY15: 0,
-    posY21: 0,
-    posY22: 0,
-    posY23: 0,
-    posY24: 0,
-    posY25: 0,
-    posY31: 0,
-    posY32: 0,
-    posY33: 0,
-    posY34: 0,
-    posY35: 0,
-    reserve: null
-} 
 
 let vPoints = [ 
  /*  dxIndex    dyIndex dispositionIndex*/   
     [0,         0,      Disposition.Horizontal], 
     [92,        0,      Disposition.Horizontal], 
-    [43,        180,    Disposition.Vertical], 
+    [40,        180,    Disposition.Vertical],  //43 
     [135,       90,     Disposition.Vertical], 
     [85,        220,    Disposition.Horizontal], 
-    [43,        90,     null], 
+    [40,        90,     null], // 43
     [40,        380,    null] 
 ];
+
+let vsPoints = [
+    /***************     TECH PUMPS    ***************/
+    [167,	    689,    Disposition.Vertical],  // Y2
+    [166,	    311,    null],                  // XS1 back
+    /*-------------     TECH LINE 2    --------------*/
+    [140,	    567,    null],                  // XS2 back
+    [100,	    515,    Disposition.Vertical],  // Y2.2.0 zalivka
+    [140,	    525,    Disposition.Vertical],  // Y2.2.1
+    [140,	    379,    Disposition.Vertical],  // Y2.2.2
+    /*-------------     TECH LINE 2    --------------*/
+    [194,	    567,    null],                  // XS3 back before
+    [228,	    515,    Disposition.Vertical],  // Y2.1.0 zalivka
+    [194,	    379,    Disposition.Vertical],  // Y2.1.1
+    [194,	    525,    Disposition.Vertical],  // Y2.1.2
+    /****     CLEAR PUMPS    ****/
+    [334,	    689,    Disposition.Vertical],  // Y1
+    [333,	    311,    null],                  // XS4 back
+    [334,	    579,    null],                  // XS5 back
+    /*-------------     CLEAR LINE 2    --------------*/
+    [273,	    515,    Disposition.Vertical],  // Y1.2.0 zalivka	273	515		
+    [307,	    525,    Disposition.Vertical],  // Y1.2.1	307	525	
+    [307,	    379,    Disposition.Vertical],  // Y1.2.2	307	379
+
+    /*-------------     CLEAR LINE 1    --------------*/
+    [395,	    515,    Disposition.Vertical],  // Y1.2.1 zalivka	395	515
+    [361,	    525,    Disposition.Vertical],  // Y1.1.1	361	525
+    [361,	    379,    Disposition.Vertical]   // Y1.1.2	361	379
+];
+
+let psPoints = [
+    [1,     581], // M0 pump zalivka
+    [68,    742], // DP4 down pump
+    [132,	423], // M4 pump
+    [186,	423], // M3 pump
+    
+    [420,	742], // DP3 down pump	420	742
+    [299,	423], // M2 pump	299	423		
+    [353,	423], // M1 pump	353	423
+
+
+]
+
 const dxIndex = 0;   
 const dyIndex = 1;
 const dispIndex = 2;
 
-const LINES_COUNT: number   = 5;
+const LINES_COUNT1: number   = 3;
+const LINES_COUNT2: number   = 2;
 const DELTA_X: number       = 184;
 
 export class UNDEGROUNDPUMP extends Scheme {
-    private number: number;     // pump number by order
-    public Pump: Pump;
-    private items: (Valve | ValveCheck | Pump)[];
-    
-    // public Valve1: Valve;
-    // public Valve2: Valve;
-    // public Valve11: Valve;
-    // public Valve12: Valve;
-    // public Valve21: Valve;
-    // public ValveCheck1: ValveCheck;
-    // public ValveCheck6: ValveCheck;
-
-    // public Valve13: Valve;
-    // public Valve14: Valve;
-    // public Valve15: Valve;
-    // public Pump2: Pump;
-    // public Pump3: Pump;
-    // public Pump4: Pump;
-    // public Pump5: Pump;
-    // public Pool1: Pool;
-    // public Valve3: Valve;
-    // public Valve4: Valve;
-    // public Valve5: Valve;
-    // public Valve6: Valve;
-    // public Valve7: Valve;
-    // public Valve8: Valve;
-    // public Valve9: Valve;
-    // public Valve10: Valve;
-    // public Valve16: Valve;
-    // public Valve17: Valve;
-    // public Valve18: Valve;
-    // public Valve19: Valve;
-    // public Valve20: Valve;
-    
-    // public Valve22: Valve;
-    // public Valve23: Valve;
-    // public Valve24: Valve;
-    // public Valve25: Valve;
-    
-    // public ValveCheck2: ValveCheck;
-    // public ValveCheck3: ValveCheck;
-    // public ValveCheck4: ValveCheck;
-    // public ValveCheck5: ValveCheck;
-    // public ValveCheck7: ValveCheck;
-    // public ValveCheck8: ValveCheck;
-    // public ValveCheck9: ValveCheck;
-    // public ValveCheck10: ValveCheck;
-    // public UndegraundPump1: UndegraundPump;
+    private items: (Valve | ValveCheck | Pump | Pool)[];
     constructor(container: string, width: number, height: number, basePoint: Point, number: number) {
         super(container, width, height);
-        this.number = number;
-        this.name = (number > 0 && number < 4) ? ('drainageA') : ('drainageB');
         this.items = [];
-        for(let i = 0; i < LINES_COUNT; i++)
-            this.createWidgets(basePoint.newPointMoved(DELTA_X * i, 0), i + 1);
+        if(number == 1){
+            this.name = 'drainageA';
+            for(let i = 0; i < LINES_COUNT1; i++) 
+                this.createWidgets(basePoint.newPointMoved(DELTA_X * i, 0), i + 1);
+        }
+        else{
+            this.name = 'drainageB';
+            let pool = new Pool( basePoint.newPointMoved(0, 450) , 900);   // new Point(400, 550)
+            this.addWidget(pool);
+            this.items.push(pool);
+            for(let i = LINES_COUNT1; i < LINES_COUNT1 + LINES_COUNT2; i++) 
+                this.createWidgets(basePoint.newPointMoved(DELTA_X * i, 0), i + 1);
+        }
     }
     createWidgets(p: Point, number: number) {
         let pump = new Pump( p.newPointMoved(30,250), 100, 0);     // new Point(430, 350)
         pump.name = 'Pump' + number.toString();
-        console.log(`class UNDEGROUNDPUMP pump name=${pump.name}`);
+        //console.log(`class UNDEGROUNDPUMP pump name=${pump.name}`);
         this.items.push(pump)
         this.addWidget(pump);
         for(let i = 0; i < vPoints.length; i++){
             let v: (Valve | ValveCheck);
             if(vPoints[i][dispIndex] == null) 
                 v = new ValveCheck(p.newPointMoved(vPoints[i][dxIndex], vPoints[i][dyIndex]), 30) 
-            else v = new Valve(p.newPointMoved(vPoints[i][dxIndex], vPoints[i][dyIndex]), 
+            else {
+                v = new Valve(p.newPointMoved(vPoints[i][dxIndex], vPoints[i][dyIndex]), 
                                                             30, vPoints[i][dispIndex], 50);  
+                this.items.push( v );
+            }
             v.name = 'Y' + number.toString() + (i + 1).toString();
             this.addWidget( v );    
-            console.log(`class UNDEGROUNDPUMP valve name=${v.name}`)
-            this.items.push( v );
+            //console.log(`class UNDEGROUNDPUMP valve name=${v.name}`)
         }        
+    }
+    send(mes: any){
+//        console.log(`received message UNDEGROUNDPUMP name=${this.name}`);
+        let mesProps = Object.getOwnPropertyNames(mes);
+        for(const widget of this.items){
+            let wMes = {};
+            let delIndexes =[];
+            for(let i = 0; i < mesProps.length; i++){
+                if( mesProps[i].startsWith(widget.name) ) {
+                    wMes[mesProps[i]] = mes[mesProps[i]];
+                    delIndexes.push(i);
+                }
+            }
+//            console.log(`sended to ${widget.name}\n message  =${JSON.stringify(wMes)}`);    
+            for (let i = delIndexes.length - 1; i >= 0; i--) mesProps.splice(delIndexes[i],1);
+//            console.log(`del properies of ${widget.name}; mesProps length=${mesProps.length}`);
+            if(mesProps.length == 0) return;
+        }
+        
+        //console.log(`message properies=${mesProps}`);
+    }
 
-        this.Pool1 = new Pool(new Point(400, 550), 900)
-        this.addWidget(this.Pool1);
+}
+
+export class SURFACEPUMP extends Scheme {
+    private items: (Valve | ValveCheck | Pump | Pool)[];
+    private basePoint: Point;
+    constructor(container: string, width: number, height: number, basePoint: Point, number: number) {
+        super(container, width, height);
+        this.basePoint = basePoint;
+        this.items = [];
+        if(number == 1){
+
+        }
+        this.createWidgets(basePoint, number);
+    }
+    getP0(i, ar): Point {
+        return this.basePoint.newPointMoved(ar[i][dxIndex], ar[i][dyIndex]);
+    }
+    createWidgets(p: Point, number: number){
+        let pool = new Pool( p.newPointMoved(270,617), 150);   
+        this.addWidget(pool);
+        this.items.push(pool);
+
+        for(let i = 0; i < psPoints.length; i++){
+            let pump = new Pump( this.getP0(i, psPoints), 100, 0);   
+            this.items.push(pump);
+            this.addWidget(pump);    
+        }
+        for(let i = 0; i < vsPoints.length; i++){
+            let v: (Valve | ValveCheck);
+            if(vsPoints[i][dispIndex] == null) 
+                v = new ValveCheck( this.getP0(i,vsPoints), 30) 
+            else {
+                v = new Valve(this.getP0(i,vsPoints), 30, vsPoints[i][dispIndex], 50);  
+                this.items.push( v );
+            }
+            v.name = 'Y' + number.toString() + (i + 1).toString();
+            this.addWidget( v );    
+            //console.log(`class UNDEGROUNDPUMP valve name=${v.name}`)
+        }        
+    }
+    
+}
+
+
 
         // this.Valve1 = new Valve( p, 30, 1, 50)            // basePoint new Point(400, 100) => [0, 0]
         // this.addWidget(this.Valve1);
@@ -330,6 +323,3 @@ export class UNDEGROUNDPUMP extends Scheme {
 
         // this.UndegraundPump1 = new UndegraundPump(new Point(800, 300), 100, 0)
         // this.addWidget(this.UndegraundPump1);
-    }
-
-}
