@@ -14,6 +14,7 @@ var _undegroundPump_1 = require("./_undegroundPump");
 var _batcherlable_1 = require("./_batcherlable");
 var _receivinghopper_1 = require("./_receivinghopper");
 var _substation_1 = require("./_substation");
+var _compressor_1 = require("./_compressor");
 var ipcRenderer = require('electron').ipcRenderer;
 var BrowserWindow = require('electron').remote.BrowserWindow;
 ipcRenderer.on('resended', function (event, arr) {
@@ -32,6 +33,7 @@ var substationUndeground = new _undergroundsubstation_1.UNDERGROUNDSUBSTATION('u
 var batcherlable = new _batcherlable_1.BATCHERLABLE('batcherlable', window.innerWidth, window.innerHeight);
 var receivingHopper = new _receivinghopper_1.RECEIVINGHOPPER('receivinghopper', window.innerWidth, window.innerHeight);
 var substation = new _substation_1.SUBSTATION('substation', window.innerWidth, window.innerHeight);
+var compressor = new _compressor_1.COMPRESSOR('compressor', window.innerWidth, window.innerHeight);
 // screenMain.addScheme(techWater);
 screenMain.addScheme(dsf);
 screenMain.addScheme(skip);
@@ -45,20 +47,22 @@ screenMain.addScheme(batcherlable);
 screenMain.addScheme(receivingHopper);
 screenMain.addScheme(substation);
 // screenMain.addScheme(undegroundpump);
+screenMain.addScheme(compressor);
 var tcpipConnector_1 = require("./tcpipConnector");
 function sendMes(name, mes) {
     screenMain.resendMessage(name, mes);
 }
 tcpipConnector_1.startClients(sendMes);
 // animateScheme(dsf, 500);
-mine_drawing_1.animateScheme(batcher, 500);
-mine_drawing_1.animateScheme(skip, 500);
-mine_drawing_1.animateScheme(cage, 500);
-mine_drawing_1.animateScheme(substationUndeground, 500);
-mine_drawing_1.animateScheme(UndegroundPump1, 500);
-mine_drawing_1.animateScheme(batcherlable, 500);
-mine_drawing_1.animateScheme(receivingHopper, 500);
-mine_drawing_1.animateScheme(substation, 500);
+// animateScheme(batcher, 500);
+// animateScheme(skip, 500);
+// animateScheme(cage, 500);
+// animateScheme(substationUndeground, 500);
+// animateScheme(UndegroundPump1, 500);
+// animateScheme(batcherlable, 500);
+// animateScheme(receivingHopper, 500);
+// animateScheme(substation, 500);
+mine_drawing_1.animateScheme(compressor, 500);
 // export default class MyComponent extends Vue {
 //   // Данные инициализации могут быть объявлены как свойства экземпляра
 //   message: string = 'Hello!'

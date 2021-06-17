@@ -24,32 +24,43 @@ var Conveyor = /** @class */ (function (_super) {
     function Conveyor(p0, length, heightConveyor) {
         var _this = _super.call(this, p0, length, heightConveyor) || this;
         _this.name = 'Conveyor';
-        _this.primitives.push(_this.createLine(p0.x, p0.y, length)); // primitive 0
-        _this.primitives.push(_this.createLine(p0.x, p0.y + heightConveyor, length)); // primitive 1
-        _this.primitives.push(_this.createCircle(p0.x, p0.y + heightConveyor / 2, heightConveyor / 2 + 1.5, 'white', 3, '#331A38')); // primitive 2
-        _this.primitives.push(_this.createCircle(p0.x + length, p0.y + heightConveyor / 2, heightConveyor / 2 + 1.5, 'white', 3, '#331A38')); // primitive 3
-        _this.primitives.push(_this.createRectangle(p0.x, p0.y, heightConveyor, length)); // primitive 4
-        _this.primitives.push(_this.createCircle(p0.x, p0.y + heightConveyor / 2, heightConveyor / 2, '#481D88', length * 0.01, '#FDC858')); // primitive 5
-        _this.primitives.push(_this.createCircle(p0.x + length, p0.y + heightConveyor / 2, heightConveyor / 2, '#481D88', length * 0.01, '#FDC858')); // primitive 6
-        _this.primitives.push(_this.createCircle(p0.x, p0.y + heightConveyor / 2, heightConveyor / 4.57, '#8AC171', length * 0.01, '#FDC858')); // primitive 7
-        _this.primitives.push(_this.createCircle(p0.x + length, p0.y + heightConveyor / 2, heightConveyor / 4.57, '#8AC171', length * 0.01, '#FDC858')); // primitive 8
+        _this.length = length;
+        _this.primitives.push(_this.createLine(p0.x, p0.y, p0.x + length, p0.y)); // primitive 0
+        _this.primitives.push(_this.createLine(p0.x, p0.y + heightConveyor, p0.x + length, p0.y + heightConveyor)); // primitive 1
+        _this.primitives.push(_this.createCircle(p0.x, p0.y + heightConveyor * 0.5, heightConveyor * 0.5 + 1.5, 'white', 3, '#331A38')); // primitive 2
+        _this.primitives.push(_this.createCircle(p0.x + length, p0.y + heightConveyor * 0.5, heightConveyor * 0.5 + 1.5, 'white', 3, '#331A38')); // primitive 3
+        _this.primitives.push(_this.createRectangle(p0.x, p0.y, heightConveyor, length, '#6BC4A6')); // primitive 4
+        _this.primitives.push(_this.createCircle(p0.x, p0.y + heightConveyor * 0.5, heightConveyor * 0.5, '#481D88', heightConveyor * 0.05, '#FDC858')); // primitive 5
+        _this.primitives.push(_this.createCircle(p0.x + length, p0.y + heightConveyor * 0.5, heightConveyor * 0.5, '#481D88', heightConveyor * 0.05, '#FDC858')); // primitive 6
+        _this.primitives.push(_this.createCircle(p0.x, p0.y + heightConveyor * 0.5, heightConveyor * 0.22, '#8AC171', heightConveyor * 0.05, '#FDC858')); // primitive 7
+        _this.primitives.push(_this.createCircle(p0.x + length, p0.y + heightConveyor * 0.5, heightConveyor * 0.22, '#8AC171', heightConveyor * 0.05, '#FDC858')); // primitive 8
         return _this;
+        // for (let i = 0; i < length * 0.1; i++) {
+        //     this.primitives.push(this.createLineMove(p0.x + 10 * i, p0.y, p0.x + 10 * i + 10, p0.y, 'white'));
+        // }
     }
     ;
-    Conveyor.prototype.createRectangle = function (x, y, height, width) {
+    Conveyor.prototype.createRectangle = function (x, y, height, width, fill) {
         return new konva_1.default.Rect({
             x: x,
             y: y,
             height: height,
             width: width,
-            fill: '#6BC4A6',
+            fill: fill,
         });
     };
-    Conveyor.prototype.createLine = function (x, y, length) {
+    Conveyor.prototype.createLine = function (x, y, x1, y1) {
         return new konva_1.default.Line({
-            points: [x, y, length + x, y],
+            points: [x, y, x1, y1],
             stroke: '#331A38',
             strokeWidth: 6,
+        });
+    };
+    Conveyor.prototype.createLineMove = function (x, y, x1, y1, stroke) {
+        return new konva_1.default.Line({
+            points: [x, y, x1, y1],
+            stroke: stroke,
+            strokeWidth: 3,
         });
     };
     Conveyor.prototype.createCircle = function (x, y, radius, fill, strokeWidth, stroke) {
@@ -62,15 +73,24 @@ var Conveyor = /** @class */ (function (_super) {
             fill: fill,
         });
     };
-    Conveyor.prototype.setBaseProperty = function (mes) {
-        // mes = {
-        //     "upPositionA": false,
-        // }
-        // this.positionUp = mes.upPositionA;
-    };
     Conveyor.prototype.nextFrame = function () {
-        if (this.propBit)
+        if (this.propBit) {
             this.primitives[4].fill('#6BC4A6');
+            // switch (this.animationFrame) {
+            //     case 1:
+            //         for (let i = 0; i < this.length * 0.1; i = i + 2) {
+            //             this.primitives[i + 9].stroke('red')
+            //         }
+            //         this.animationFrame = 0
+            //         break;
+            //     case 0:
+            //         for (let i = 0; i < this.length * 0.1; i = i++) {
+            //             this.primitives[i + 9].stroke('white')
+            //         }
+            //         this.animationFrame = 1
+            //         break;
+            // }
+        }
         else
             this.primitives[4].fill('red');
     };
@@ -444,6 +464,16 @@ var BatcherLeft = /** @class */ (function (_super) {
             closed: true,
         });
     };
+    BatcherLeft.prototype.nextFrame = function () {
+        switch (this.propBit) {
+            case true:
+                this.primitives[0].fill('#46802B');
+                break;
+            case false:
+                this.primitives[0].fill('red');
+                break;
+        }
+    };
     return BatcherLeft;
 }(mine_drawing_1.BaseMineDraw));
 exports.BatcherLeft = BatcherLeft;
@@ -463,6 +493,16 @@ var BatcherRight = /** @class */ (function (_super) {
             strokeWidth: strokeWidth,
             closed: true,
         });
+    };
+    BatcherRight.prototype.nextFrame = function () {
+        switch (this.propBit) {
+            case true:
+                this.primitives[0].fill('#46802B');
+                break;
+            case false:
+                this.primitives[0].fill('red');
+                break;
+        }
     };
     return BatcherRight;
 }(mine_drawing_1.BaseMineDraw));
