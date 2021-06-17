@@ -278,9 +278,5 @@ export class DSF extends Scheme {
         let Pile6 = new Pile(new Point(425, 850), 60);
         this.addWidget(Pile6);
 
-        let Pool1 = new Pool(new Point(700, 500), 200);
-        this.addWidget(Pool1);
-
-
     }
 }

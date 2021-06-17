@@ -68,6 +68,7 @@ var dispIndex = 2;
 var LINES_COUNT1 = 3;
 var LINES_COUNT2 = 2;
 var DELTA_X = 184;
+var color = pumpAccessories_1.PureWater;
 var UNDEGROUNDPUMP = /** @class */ (function (_super) {
     __extends(UNDEGROUNDPUMP, _super);
     function UNDEGROUNDPUMP(container, width, height, basePoint, number) {
@@ -80,7 +81,7 @@ var UNDEGROUNDPUMP = /** @class */ (function (_super) {
         }
         else {
             _this.name = 'drainageB';
-            var pool = new pumpAccessories_1.Pool(basePoint.newPointMoved(0, 450), 900); // new Point(400, 550)
+            var pool = new pumpAccessories_1.Pool(basePoint.newPointMoved(0, 450), 900, color); // new Point(400, 550)
             _this.addWidget(pool);
             _this.items.push(pool);
             for (var i = LINES_COUNT1; i < LINES_COUNT1 + LINES_COUNT2; i++)
@@ -147,7 +148,7 @@ var SURFACEPUMP = /** @class */ (function (_super) {
         return this.basePoint.newPointMoved(ar[i][dxIndex], ar[i][dyIndex]);
     };
     SURFACEPUMP.prototype.createWidgets = function (p, number) {
-        var pool = new pumpAccessories_1.Pool(p.newPointMoved(270, 617), 150);
+        var pool = new pumpAccessories_1.Pool(p.newPointMoved(270, 617), 150, color);
         this.addWidget(pool);
         this.items.push(pool);
         for (var i = 0; i < psPoints.length; i++) {

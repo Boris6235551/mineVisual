@@ -1,5 +1,5 @@
 import { Scheme, Disposition, animateScheme, Point, PropParams } from './mine_drawing';
-import { Pump, UndegraundPump, Pool, Valve, ValveCheck } from './pumpAccessories'
+import { Pump, UndegraundPump, Pool, Valve, ValveCheck, UndergroundWater, IndustrialWater, PureWater } from './pumpAccessories'
 
 
 let vPoints = [ 
@@ -63,6 +63,9 @@ const LINES_COUNT1: number   = 3;
 const LINES_COUNT2: number   = 2;
 const DELTA_X: number       = 184;
 
+let color = PureWater
+
+
 export class UNDEGROUNDPUMP extends Scheme {
     private items: (Valve | ValveCheck | Pump | Pool)[];
     constructor(container: string, width: number, height: number, basePoint: Point, number: number) {
@@ -75,7 +78,7 @@ export class UNDEGROUNDPUMP extends Scheme {
         }
         else{
             this.name = 'drainageB';
-            let pool = new Pool( basePoint.newPointMoved(0, 450) , 900);   // new Point(400, 550)
+            let pool = new Pool( basePoint.newPointMoved(0, 450) , 900, color);   // new Point(400, 550)
             this.addWidget(pool);
             this.items.push(pool);
             for(let i = LINES_COUNT1; i < LINES_COUNT1 + LINES_COUNT2; i++) 
@@ -141,7 +144,7 @@ export class SURFACEPUMP extends Scheme {
         return this.basePoint.newPointMoved(ar[i][dxIndex], ar[i][dyIndex]);
     }
     createWidgets(p: Point, number: number){
-        let pool = new Pool( p.newPointMoved(270,617), 150);   
+        let pool = new Pool( p.newPointMoved(270,617), 150, color);   
         this.addWidget(pool);
         this.items.push(pool);
 

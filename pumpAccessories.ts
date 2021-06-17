@@ -321,43 +321,29 @@ export class Pump extends BaseMineDraw {
 //     }
 // }
 
-const UndergroundWater = ['#EFFAF5', '#E1F4ED', '#D1E9E0', '#C1DBD1', '#A7CABD', '#97BFB0', '#8DB5A6', '#85AC9D', '#789F90', '#6F9385']
-const IndustrialWater = ['#96FFDA', '#73FFCD', '#0BFFA8', '#01EA97', '#04CF87', '#01BE7B', '#00AB6E', '#039863', '#028758', '#026D47']
-const PureWater = ['#AAD7FF', '#8DC9FF', '#5BB1FF', '#359EFF', '#1F94FF', '#0085FF', '#0071D9', '#0061BA', '#00519C', '#02498B']
+// элементы массива 0-9 - цвета уровней воды, элементы 10 и 11 - цвета фона бассейна
+export const UndergroundWater = ['#EFFAF5', '#E1F4ED', '#D1E9E0', '#C1DBD1', '#A7CABD', '#97BFB0', '#8DB5A6', '#85AC9D', '#789F90', '#6F9385', '#7D5A5A', '#C06B5A']
+export const IndustrialWater = ['#96FFDA', '#73FFCD', '#0BFFA8', '#01EA97', '#04CF87', '#01BE7B', '#00AB6E', '#039863', '#028758', '#026D47', '#FE896F', '#D28878']
+export const PureWater = ['#AAD7FF', '#8DC9FF', '#5BB1FF', '#359EFF', '#1F94FF', '#0085FF', '#0071D9', '#0061BA', '#00519C', '#02498B', '#FE896F', '#D28878']
+
 
 export class Pool extends BaseMineDraw {
-    constructor(p0: Point, length: number) {
+    constructor(p0: Point, length: number, color: any, factor?: number) {
         super(p0, length);
         console.log(`class Pool constructor ${JSON.stringify(this.rect)}`)
         this.name = 'Pool';
         let p00: Point = this.rect.p0;
-        let height: number = this.calcSize(length);
+        let height: number = this.calcSize(length, factor);
         let width: number = length;
         let k: number = 0.96;
-        this.primitives.push(this.createRectangle(p00.x, p00.y, height, width, '#7D5A5A', '#C06B5A', length * 0.001, length * 0.001));
+        this.primitives.push(this.createRectangle(p00.x, p00.y, height, width, color[10], color[11], length * 0.001, length * 0.001));
         this.primitives.push(this.createRectangle(p00.x + length * 0.02, p00.y, height * k, width * k, '#E9EDEA', '#34E7E7', length * 0.0005, 0));
         for (let i = 0; i < 10; i++) {
-            this.primitives.push(this.createRectangle(p00.x + length * 0.02, p00.y + height * k * 0.1 * i, height * k * 0.1, width * k, UndergroundWater[i], '', 0, 0));
+            this.primitives.push(this.createRectangle(p00.x + length * 0.02, p00.y + height * k * 0.1 * i, height * k * 0.1, width * k, color[i], '', 0, 0));
         }
         this.primitives.push(this.createCircle(this.rect.getMiddlePoint().x, this.rect.getMiddlePoint().y, length * 0.07, length * 0.001, 'white', '#34E7E7'));
         this.primitives.push(this.createText(this.rect.getMiddlePoint().x - length * 0.06, this.rect.getMiddlePoint().y - length * 0.02, '100' + '%', length * 0.05));
 
-        // this.primitives.push(this.createRectangle(p0.x, p0.y, length * 0.15, length, '#7D5A5A', '#C06B5A', length * 0.001, length * 0.001));
-        // this.primitives.push(this.createRectangle(p0.x + length * 0.01, p0.y, length * 0.13, length * 0.98, '#E9EDEA', '#34E7E7', length * 0.0005, 0));
-        // // десять уровней воды
-        // this.primitives.push(this.createRectangle(p0.x + length * 0.01, p0.y, length * 0.013, length * 0.98, '#EFFAF5', '', 0, 0));
-        // this.primitives.push(this.createRectangle(p0.x + length * 0.01, p0.y + length * 0.013 * 1, length * 0.013, length * 0.98, '#E1F4ED', '', 0, 0));
-        // this.primitives.push(this.createRectangle(p0.x + length * 0.01, p0.y + length * 0.013 * 2, length * 0.013, length * 0.98, '#D1E9E0', '', 0, 0));
-        // this.primitives.push(this.createRectangle(p0.x + length * 0.01, p0.y + length * 0.013 * 3, length * 0.013, length * 0.98, '#C1DBD1', '', 0, 0));
-        // this.primitives.push(this.createRectangle(p0.x + length * 0.01, p0.y + length * 0.013 * 4, length * 0.013, length * 0.98, '#A7CABD', '', 0, 0));
-        // this.primitives.push(this.createRectangle(p0.x + length * 0.01, p0.y + length * 0.013 * 5, length * 0.013, length * 0.98, '#97BFB0', '', 0, 0));
-        // this.primitives.push(this.createRectangle(p0.x + length * 0.01, p0.y + length * 0.013 * 6, length * 0.013, length * 0.98, '#8DB5A6', '', 0, 0));
-        // this.primitives.push(this.createRectangle(p0.x + length * 0.01, p0.y + length * 0.013 * 7, length * 0.013, length * 0.98, '#85AC9D', '', 0, 0));
-        // this.primitives.push(this.createRectangle(p0.x + length * 0.01, p0.y + length * 0.013 * 8, length * 0.013, length * 0.98, '#789F90', '', 0, 0));
-        // this.primitives.push(this.createRectangle(p0.x + length * 0.01, p0.y + length * 0.013 * 9, length * 0.013, length * 0.98, '#6F9385', '', 0, 0));
-        // // label
-        // this.primitives.push(this.createCircle(p0.x + length * 0.5, p0.y + length * 0.075, length * 0.03, length * 0.001, 'white', '#34E7E7'));
-        // this.primitives.push(this.createText(p0.x + length * 0.478, p0.y + length * 0.066, '100' + '%', length * 0.02));
     }
     protected calcSize(length: number, factor: number = 2.2): number {
         console.log(`class Pool calcSize ${factor}`)

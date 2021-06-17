@@ -16,7 +16,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Compressor = exports.UndegraundPump = exports.ValveCheck = exports.Valve = exports.ValveError = exports.ValveState = exports.Pool = exports.Pump = exports.PumpState = void 0;
+exports.Compressor = exports.UndegraundPump = exports.ValveCheck = exports.Valve = exports.ValveError = exports.ValveState = exports.Pool = exports.PureWater = exports.IndustrialWater = exports.UndergroundWater = exports.Pump = exports.PumpState = void 0;
 var konva_1 = __importDefault(require("konva"));
 var mine_drawing_1 = require("./mine_drawing");
 var utils_1 = require("./utils");
@@ -363,43 +363,28 @@ exports.Pump = Pump;
 //         });
 //     }
 // }
-var UndergroundWater = ['#EFFAF5', '#E1F4ED', '#D1E9E0', '#C1DBD1', '#A7CABD', '#97BFB0', '#8DB5A6', '#85AC9D', '#789F90', '#6F9385'];
-var IndustrialWater = ['#96FFDA', '#73FFCD', '#0BFFA8', '#01EA97', '#04CF87', '#01BE7B', '#00AB6E', '#039863', '#028758', '#026D47'];
-var PureWater = ['#AAD7FF', '#8DC9FF', '#5BB1FF', '#359EFF', '#1F94FF', '#0085FF', '#0071D9', '#0061BA', '#00519C', '#02498B'];
+// элементы массива 0-9 - цвета уровней воды, элементы 10 и 11 - цвета фона бассейна
+exports.UndergroundWater = ['#EFFAF5', '#E1F4ED', '#D1E9E0', '#C1DBD1', '#A7CABD', '#97BFB0', '#8DB5A6', '#85AC9D', '#789F90', '#6F9385', '#7D5A5A', '#C06B5A'];
+exports.IndustrialWater = ['#96FFDA', '#73FFCD', '#0BFFA8', '#01EA97', '#04CF87', '#01BE7B', '#00AB6E', '#039863', '#028758', '#026D47', '#FE896F', '#D28878'];
+exports.PureWater = ['#AAD7FF', '#8DC9FF', '#5BB1FF', '#359EFF', '#1F94FF', '#0085FF', '#0071D9', '#0061BA', '#00519C', '#02498B', '#FE896F', '#D28878'];
 var Pool = /** @class */ (function (_super) {
     __extends(Pool, _super);
-    function Pool(p0, length) {
+    function Pool(p0, length, color, factor) {
         var _this = _super.call(this, p0, length) || this;
         console.log("class Pool constructor " + JSON.stringify(_this.rect));
         _this.name = 'Pool';
         var p00 = _this.rect.p0;
-        var height = _this.calcSize(length);
+        var height = _this.calcSize(length, factor);
         var width = length;
         var k = 0.96;
-        _this.primitives.push(_this.createRectangle(p00.x, p00.y, height, width, '#7D5A5A', '#C06B5A', length * 0.001, length * 0.001));
+        _this.primitives.push(_this.createRectangle(p00.x, p00.y, height, width, color[10], color[11], length * 0.001, length * 0.001));
         _this.primitives.push(_this.createRectangle(p00.x + length * 0.02, p00.y, height * k, width * k, '#E9EDEA', '#34E7E7', length * 0.0005, 0));
         for (var i = 0; i < 10; i++) {
-            _this.primitives.push(_this.createRectangle(p00.x + length * 0.02, p00.y + height * k * 0.1 * i, height * k * 0.1, width * k, UndergroundWater[i], '', 0, 0));
+            _this.primitives.push(_this.createRectangle(p00.x + length * 0.02, p00.y + height * k * 0.1 * i, height * k * 0.1, width * k, color[i], '', 0, 0));
         }
         _this.primitives.push(_this.createCircle(_this.rect.getMiddlePoint().x, _this.rect.getMiddlePoint().y, length * 0.07, length * 0.001, 'white', '#34E7E7'));
         _this.primitives.push(_this.createText(_this.rect.getMiddlePoint().x - length * 0.06, _this.rect.getMiddlePoint().y - length * 0.02, '100' + '%', length * 0.05));
         return _this;
-        // this.primitives.push(this.createRectangle(p0.x, p0.y, length * 0.15, length, '#7D5A5A', '#C06B5A', length * 0.001, length * 0.001));
-        // this.primitives.push(this.createRectangle(p0.x + length * 0.01, p0.y, length * 0.13, length * 0.98, '#E9EDEA', '#34E7E7', length * 0.0005, 0));
-        // // десять уровней воды
-        // this.primitives.push(this.createRectangle(p0.x + length * 0.01, p0.y, length * 0.013, length * 0.98, '#EFFAF5', '', 0, 0));
-        // this.primitives.push(this.createRectangle(p0.x + length * 0.01, p0.y + length * 0.013 * 1, length * 0.013, length * 0.98, '#E1F4ED', '', 0, 0));
-        // this.primitives.push(this.createRectangle(p0.x + length * 0.01, p0.y + length * 0.013 * 2, length * 0.013, length * 0.98, '#D1E9E0', '', 0, 0));
-        // this.primitives.push(this.createRectangle(p0.x + length * 0.01, p0.y + length * 0.013 * 3, length * 0.013, length * 0.98, '#C1DBD1', '', 0, 0));
-        // this.primitives.push(this.createRectangle(p0.x + length * 0.01, p0.y + length * 0.013 * 4, length * 0.013, length * 0.98, '#A7CABD', '', 0, 0));
-        // this.primitives.push(this.createRectangle(p0.x + length * 0.01, p0.y + length * 0.013 * 5, length * 0.013, length * 0.98, '#97BFB0', '', 0, 0));
-        // this.primitives.push(this.createRectangle(p0.x + length * 0.01, p0.y + length * 0.013 * 6, length * 0.013, length * 0.98, '#8DB5A6', '', 0, 0));
-        // this.primitives.push(this.createRectangle(p0.x + length * 0.01, p0.y + length * 0.013 * 7, length * 0.013, length * 0.98, '#85AC9D', '', 0, 0));
-        // this.primitives.push(this.createRectangle(p0.x + length * 0.01, p0.y + length * 0.013 * 8, length * 0.013, length * 0.98, '#789F90', '', 0, 0));
-        // this.primitives.push(this.createRectangle(p0.x + length * 0.01, p0.y + length * 0.013 * 9, length * 0.013, length * 0.98, '#6F9385', '', 0, 0));
-        // // label
-        // this.primitives.push(this.createCircle(p0.x + length * 0.5, p0.y + length * 0.075, length * 0.03, length * 0.001, 'white', '#34E7E7'));
-        // this.primitives.push(this.createText(p0.x + length * 0.478, p0.y + length * 0.066, '100' + '%', length * 0.02));
     }
     Pool.prototype.calcSize = function (length, factor) {
         if (factor === void 0) { factor = 2.2; }

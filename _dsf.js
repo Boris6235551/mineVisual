@@ -16,7 +16,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.DSF = void 0;
 var mine_drawing_1 = require("./mine_drawing");
 var dsf_1 = require("./dsf");
-var pumpAccessories_1 = require("./pumpAccessories");
 var DSF = /** @class */ (function (_super) {
     __extends(DSF, _super);
     function DSF(container, width, height) {
@@ -194,8 +193,6 @@ var DSF = /** @class */ (function (_super) {
         _this.addWidget(Pile5);
         var Pile6 = new dsf_1.Pile(new mine_drawing_1.Point(425, 850), 60);
         _this.addWidget(Pile6);
-        var Pool1 = new pumpAccessories_1.Pool(new mine_drawing_1.Point(700, 500), 200);
-        _this.addWidget(Pool1);
         return _this;
     }
     return DSF;
