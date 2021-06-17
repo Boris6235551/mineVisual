@@ -79,12 +79,13 @@ export class PropParams {
 export class BaseMineDraw {
     public name: string;
     public propBit: boolean = true;
-    readonly rect: Rectangle;
+    public rect: Rectangle;
     readonly disposition: Disposition;
     public state: any;
     protected animationFrame: number = 0;
     protected primitives: (Konva.Rect | Konva.Text | Konva.Circle | Konva.Line | Konva.Ellipse)[] = [];
     protected layer: Konva.Layer;
+    protected label: any;
     constructor(p0: Point, length: number, disposition?: Disposition, percentage?: number) {
         this.name = "Base";
         this.disposition = disposition;
@@ -99,6 +100,10 @@ export class BaseMineDraw {
             dy = this.calcSize(length);
         }
         this.rect = new Rectangle(p0, new Point(p0.x + dx, p0.y + dy));
+        this.label = null;
+    }
+    setLabel(text: string){
+        if(this.label != null) this.label.text(text);
     }
     protected getOdd(num: number): number {
         return Math.trunc(num / 2) * 2 + 1;

@@ -194,12 +194,8 @@ var DSF = /** @class */ (function (_super) {
         _this.addWidget(Pile5);
         var Pile6 = new dsf_1.Pile(new mine_drawing_1.Point(425, 850), 60);
         _this.addWidget(Pile6);
-        var PoolSurfaceIndustrialWater1 = new pumpAccessories_1.PoolSurfaceIndustrialWater(new mine_drawing_1.Point(700, 500), 200);
-        _this.addWidget(PoolSurfaceIndustrialWater1);
-        var PoolSurfacePureWater1 = new pumpAccessories_1.PoolSurfacePureWater(new mine_drawing_1.Point(1000, 500), 200);
-        _this.addWidget(PoolSurfacePureWater1);
-        var WaterTower1 = new pumpAccessories_1.WaterTower(new mine_drawing_1.Point(1200, 80), 200);
-        _this.addWidget(WaterTower1);
+        var Pool1 = new pumpAccessories_1.Pool(new mine_drawing_1.Point(700, 500), 200);
+        _this.addWidget(Pool1);
         return _this;
     }
     return DSF;

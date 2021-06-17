@@ -6,7 +6,7 @@ import { SKIP } from './_skip'
 import { BATCHER } from './_batcher'
 import { UNDERGROUNDSUBSTATION } from './_undergroundsubstation'
 import { CAGE } from './_cage'
-import { UNDEGROUNDPUMP } from './_undegroundPump'
+import { UNDEGROUNDPUMP, SURFACEPUMP } from './_undegroundPump'
 import { BATCHERLABLE } from './_batcherlable'
 import { RECEIVINGHOPPER } from './_receivinghopper'
 import { SUBSTATION } from './_substation'
@@ -24,8 +24,12 @@ ipcRenderer.on('resended', (event, arr) => {
 let screenMain = new Screen();
 // // let techWater = new TechWater('container', window.innerWidth, window.innerHeight);
 let cage = new CAGE('containerCage', window.innerWidth, window.innerHeight);
-let UndegroundPump1 = new UNDEGROUNDPUMP('containerUndegroundPump', window.innerWidth, window.innerHeight,
+let UndegroundPump1 = new UNDEGROUNDPUMP('containerUndegroundPump1', window.innerWidth, window.innerHeight,
                                     new Point(400, 100), 1);
+let UndegroundPump2 = new UNDEGROUNDPUMP('containerUndegroundPump2', window.innerWidth, window.innerHeight,
+                                    new Point(400, 100), 2);
+let SurfacePump1 = new SURFACEPUMP('containerSurfacePump1', window.innerWidth, window.innerHeight,
+                                    new Point(2545, 44), 1);
 let dsf = new DSF('containerDSF', window.innerWidth, window.innerHeight);
 let skip = new SKIP('containerSkip', window.innerWidth, window.innerHeight);
 let batcher = new BATCHER('batcher', window.innerWidth, window.innerHeight);
@@ -42,6 +46,8 @@ screenMain.addScheme(batcher);
 screenMain.addScheme(cage);
 screenMain.addScheme(substationUndeground);
 screenMain.addScheme(UndegroundPump1);
+screenMain.addScheme(UndegroundPump2);
+screenMain.addScheme(SurfacePump1);
 screenMain.addScheme(batcherlable);
 screenMain.addScheme(receivingHopper);
 screenMain.addScheme(substation);
@@ -373,3 +379,211 @@ function testClear() {
 }
 
 function step() { _step(); }
+
+
+
+
+let mes = {
+    Y11Status: 0,   // enum ValveStatus InitState = 0, Closed, Opening, Opened, Closing , Calibration
+    Y12Status: 1,
+    Y13Status: 3,
+    Y14Status: 4,
+    Y15Status: 5,
+    Y21Status: 2,
+    Y22Status: 4,
+    Y23Status: 5,
+    Y24Status: 0,
+    Y25Status: 1,
+    Y31Status: 2,
+    Y32Status: 3,
+    Y33Status: 4,
+    Y34Status: 5,
+    Y35Status: 4,
+    
+    Y11Mode: 0,     // enum ValveMode HandDrive = 0, Auto, Service
+    Y12Mode: 1,
+    Y13Mode: 2,
+    Y14Mode: 2,
+    Y15Mode: 1,
+    Y21Mode: 0,
+    Y22Mode: 1,
+    Y23Mode: 2,
+    Y24Mode: 0,
+    Y25Mode: 1,
+    Y31Mode: 2,
+    Y32Mode: 2,
+    Y33Mode: 1,
+    Y34Mode: 0,
+    Y35Mode: 1,
+    
+    Y11Error: 0,    // enum ValveError NoError = 0, CloseAndOpenVlaveInputs, OpeningTimeOut, ClosingTimeOut, AlarmValveInput 
+    Y12Error: 1,
+    Y13Error: 2,
+    Y14Error: 3,
+    Y15Error: 2,
+    Y21Error: 1,
+    Y22Error: 0,
+    Y23Error: 1,
+    Y24Error: 2,
+    Y25Error: 3,
+    Y31Error: 3,
+    Y32Error: 2,
+    Y33Error: 1,
+    Y34Error: 0,
+    Y35Error: 1,
+    
+    Pump1Status: 0, // enum PumpStatus Stopped = 0, Starting, Working, Stopping, Error
+    Pump2Status: 1,
+    Pump3Status: 4,
+    
+    Pump1Mode: 1,   // enum PumpMode Auto = 1, Service 
+    Pump2Mode: 2,
+    Pump3Mode: 1,
+    
+    Pump1Error: 0,  // enum PumpError NoError = 0, StartingTimeOut, StoppingTimeOut, AccidentPressure
+    Pump2Error: 1,
+    Pump3Error: 3,
+    
+    Y11pos: 0,      // 0 - 100
+    Y12pos: 100,
+    Y13pos: 35,
+    Y14pos: 0,
+    Y15pos: 0,
+    Y21pos: 0,
+    Y22pos: 0,
+    Y23pos: 0,
+    Y24pos: 0,
+    Y25pos: 0,
+    Y31pos: 0,
+    Y32pos: 0,
+    Y33pos: 0,
+    Y34pos: 0,
+    Y35pos: 0,
+    reserve: null
+} 
+
+let mes1 = {
+    "Y11Status": 3,
+    "Y12Status": 3,
+    "Y13Status": 1,
+    "Y14Status": 1,
+    "Y15Status": 1,
+    "Y21Status": 3,
+    "Y22Status": 3,
+    "Y23Status": 1,
+    "Y24Status": 1,
+    "Y25Status": 1,
+    "Y31Status": 3,
+    "Y32Status": 0,
+    "Y33Status": 1,
+    "Y34Status": 1,
+    "Y35Status": 1,
+    "Y11Mode": 0,
+    "Y12Mode": 0,
+    "Y13Mode": 0,
+    "Y14Mode": 0,
+    "Y15Mode": 0,
+    "Y21Mode": 0,
+    "Y22Mode": 0,
+    "Y23Mode": 0,
+    "Y24Mode": 0,
+    "Y25Mode": 0,
+    "Y31Mode": 0,
+    "Y32Mode": 0,
+    "Y33Mode": 0,
+    "Y34Mode": 0,
+    "Y35Mode": 0,
+    "Y11Err": 0,
+    "Y12Err": 0,
+    "Y13Err": 0,
+    "Y14Err": 0,
+    "Y15Err": 0,
+    "Y21Err": 0,
+    "Y22Err": 0,
+    "Y23Err": 0,
+    "Y24Err": 0,
+    "Y25Err": 0,
+    "Y31Err": 0,
+    "Y32Err": 0,
+    "Y33Err": 0,
+    "Y34Err": 0,
+    "Y35Err": 0,
+    "Pump1Status": 0,
+    "Pump2Status": 0,
+    "Pump3Status": 0,
+    "Pump1Mode": 1,
+    "Pump2Mode": 1,
+    "Pump3Mode": 1,
+    "Pump1Err": 0,
+    "Pump2Err": 0,
+    "Pump3Err": 0,
+    "posY11": 100,
+    "posY12": 100,
+    "posY13": 0,
+    "posY14": 0,
+    "posY15": 0,
+    "posY21": 100,
+    "posY22": 100,
+    "posY23": 0,
+    "posY24": 0,
+    "posY25": 0,
+    "posY31": 100,
+    "posY32": 100,
+    "posY33": 0,
+    "posY34": 0,
+    "posY35": 0,
+    "res": 0
+};
+
+let mes2 = {
+    "Y41Status": 3,
+    "Y42Status": 3,
+    "Y43Status": 1,
+    "Y44Status": 1,
+    "Y45Status": 1,
+    "Y51Status": 1,
+    "Y52Status": 3,
+    "Y53Status": 1,
+    "Y54Status": 1,
+    "Y55Status": 1,
+    "Y41Mode": 0,
+    "Y42Mode": 0,
+    "Y43Mode": 0,
+    "Y44Mode": 0,
+    "Y45Mode": 0,
+    "Y51Mode": 0,
+    "Y52Mode": 0,
+    "Y53Mode": 0,
+    "Y54Mode": 0,
+    "Y55Mode": 0,
+    "Y41Err": 0,
+    "Y42Err": 0,
+    "Y43Err": 0,
+    "Y44Err": 0,
+    "Y45Err": 0,
+    "Y51Err": 0,
+    "Y52Err": 0,
+    "Y53Err": 0,
+    "Y54Err": 0,
+    "Y55Err": 0,
+    "Pump4Status": 0,
+    "Pump5Status": 0,
+    "Pump4Mode": 1,
+    "Pump5Mode": 1,
+    "Pump4Err": 0,
+    "Pump5Err": 0,
+    "Y41pos": 100,
+    "Y42pos": 100,
+    "Y43pos": 0,
+    "Y44pos": 0,
+    "Y45pos": 0,
+    "Y51pos": 0,
+    "Y52pos": 100,
+    "Y53pos": 0,
+    "Y54pos": 0,
+    "Y55pos": 0,
+    "PoolMSBLevel": 0,
+    "PoolLSBlevel": 32
+}
+
+sendMes('drainageA', mes);

@@ -97,7 +97,12 @@ var BaseMineDraw = /** @class */ (function () {
             dy = this.calcSize(length);
         }
         this.rect = new Rectangle(p0, new Point(p0.x + dx, p0.y + dy));
+        this.label = null;
     }
+    BaseMineDraw.prototype.setLabel = function (text) {
+        if (this.label != null)
+            this.label.text(text);
+    };
     BaseMineDraw.prototype.getOdd = function (num) {
         return Math.trunc(num / 2) * 2 + 1;
     };
