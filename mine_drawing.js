@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Screen = exports.animateScheme = exports.Scheme = exports.BaseMineDraw = exports.PropParams = exports.Rectangle = exports.Point = exports.Disposition = void 0;
+exports.animateScreen = exports.Screen = exports.Scheme = exports.BaseMineDraw = exports.PropParams = exports.Rectangle = exports.Point = exports.Disposition = void 0;
 var konva_1 = __importDefault(require("konva"));
 //const Konva = require('konva');
 // https://www.typescriptlang.org/docs/handbook/classes.html
@@ -199,11 +199,6 @@ var Scheme = /** @class */ (function () {
     return Scheme;
 }());
 exports.Scheme = Scheme;
-var interval;
-function animateScheme(scheme, timeOut) {
-    interval = setInterval(function () { scheme.update(); }, timeOut);
-}
-exports.animateScheme = animateScheme;
 var Screen = /** @class */ (function () {
     function Screen() {
         this.schemes = [];
@@ -221,7 +216,17 @@ var Screen = /** @class */ (function () {
             }
         });
     };
+    Screen.prototype.animate = function () {
+        this.schemes.forEach(function (scheme) {
+            scheme.update();
+        });
+    };
     return Screen;
 }());
 exports.Screen = Screen;
+var interval;
+function animateScreen(screen, timeOut) {
+    interval = setInterval(function () { screen.animate(); }, timeOut);
+}
+exports.animateScreen = animateScreen;
 //# sourceMappingURL=mine_drawing.js.map

@@ -1,5 +1,5 @@
 import Vue from 'vue/dist/vue.js'; // вместо import Vue from 'vue'
-import { Screen, Point, animateScheme } from './mine_drawing'
+import { Screen, Point, animateScreen } from './mine_drawing'
 import { TechWater } from './_techWater'
 import { DSF } from './_dsf'
 import { SKIP } from './_skip'
@@ -61,14 +61,16 @@ function sendMes(name, mes) {
 
 startClients(sendMes);
 
-animateScheme(dsf, 500);
+animateScreen(screenMain, 500);
+
+// animateScheme(dsf, 500);
 // animateScheme(batcher, 500);
 // animateScheme(skip, 500);
 // animateScheme(cage, 500);
 // animateScheme(substationUndeground, 500);
- animateScheme(UndegroundPump1, 500);
- animateScheme(UndegroundPump2, 500);
- animateScheme(SurfacePump, 500);
+//  animateScheme(UndegroundPump1, 500);
+//  animateScheme(UndegroundPump2, 500);
+//  animateScheme(SurfacePump, 500);
 // animateScheme(batcherlable, 500);
 // animateScheme(receivingHopper, 500);
 // animateScheme(substation, 500);

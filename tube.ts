@@ -1,5 +1,5 @@
 import Konva from 'konva';
-import {BaseMineDraw, Scheme, Disposition, animateScheme, Point} from './mine_drawing';
+import {BaseMineDraw, Scheme, Disposition, Point} from './mine_drawing';
 
 const DeltaPoint = 20;
 const StdQuantity = 4;

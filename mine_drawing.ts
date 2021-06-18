@@ -194,12 +194,6 @@ export class Scheme {
         this.layer.draw();
     }
 }
-let interval: NodeJS.Timeout;
-
-export function animateScheme(scheme: Scheme, timeOut: number) {
-    interval = setInterval(() => { scheme.update(); }, timeOut);
-}
-
 
 export class Screen {
     schemes: Scheme [];
@@ -219,6 +213,17 @@ export class Screen {
             }
         });
     }
+    animate(){
+        this.schemes.forEach(function(scheme) { 
+            scheme.update(); 
+        });
+    }
+
 }
 
+let interval: NodeJS.Timeout;
+
+export function animateScreen(screen: Screen, timeOut: number) {
+    interval = setInterval(() => { screen.animate(); }, timeOut);
+}
 

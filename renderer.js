@@ -51,14 +51,15 @@ function sendMes(name, mes) {
     screenMain.resendMessage(name, mes);
 }
 tcpipConnector_1.startClients(sendMes);
-mine_drawing_1.animateScheme(dsf, 500);
+mine_drawing_1.animateScreen(screenMain, 500);
+// animateScheme(dsf, 500);
 // animateScheme(batcher, 500);
 // animateScheme(skip, 500);
 // animateScheme(cage, 500);
 // animateScheme(substationUndeground, 500);
-mine_drawing_1.animateScheme(UndegroundPump1, 500);
-mine_drawing_1.animateScheme(UndegroundPump2, 500);
-mine_drawing_1.animateScheme(SurfacePump, 500);
+//  animateScheme(UndegroundPump1, 500);
+//  animateScheme(UndegroundPump2, 500);
+//  animateScheme(SurfacePump, 500);
 // animateScheme(batcherlable, 500);
 // animateScheme(receivingHopper, 500);
 // animateScheme(substation, 500);

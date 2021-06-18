@@ -1,4 +1,4 @@
-import { Scheme, Disposition, animateScheme, Point, PropParams } from './mine_drawing';
+import { Scheme, Disposition, Point, PropParams } from './mine_drawing';
 import {
     Conveyor, SeparatorRight, SeparatorLeft, ConeCrusher, Crush, Stone, BatcherLeft,
     BatcherRight, ArrowPointer, InformationTable, Pile,

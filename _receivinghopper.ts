@@ -1,4 +1,4 @@
-import { Scheme, Disposition, animateScheme, Point, PropParams } from './mine_drawing';
+import { Scheme, Disposition, Point, PropParams } from './mine_drawing';
 import { ReceivingHopper } from './dsf'
 
 export class RECEIVINGHOPPER extends Scheme {

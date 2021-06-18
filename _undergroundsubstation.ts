@@ -1,4 +1,4 @@
-import { Scheme, Disposition, animateScheme, Point, PropParams } from './mine_drawing';
+import { Scheme, Disposition, Point, PropParams } from './mine_drawing';
 import { Trunk, UndergroundSubstationCell, Generator } from './substation'
 
 export class UNDERGROUNDSUBSTATION extends Scheme {
