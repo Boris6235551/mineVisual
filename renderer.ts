@@ -40,17 +40,17 @@ let substation = new SUBSTATION('substation', window.innerWidth, window.innerHei
 let compressor = new COMPRESSOR('compressor', window.innerWidth, window.innerHeight)
 
 // screenMain.addScheme(techWater);
-screenMain.addScheme(dsf);
-screenMain.addScheme(skip);
-screenMain.addScheme(batcher);
-screenMain.addScheme(cage);
-screenMain.addScheme(substationUndeground);
+// screenMain.addScheme(dsf);
+// screenMain.addScheme(skip);
+// screenMain.addScheme(batcher);
+// screenMain.addScheme(cage);
+// screenMain.addScheme(substationUndeground);
 screenMain.addScheme(UndegroundPump1);
 screenMain.addScheme(UndegroundPump2);
 screenMain.addScheme(SurfacePump1);
-screenMain.addScheme(batcherlable);
-screenMain.addScheme(receivingHopper);
-screenMain.addScheme(substation);
+// screenMain.addScheme(batcherlable);
+// screenMain.addScheme(receivingHopper);
+// screenMain.addScheme(substation);
 // screenMain.addScheme(undegroundpump);
 screenMain.addScheme(compressor);
 
@@ -62,7 +62,7 @@ function sendMes(name, mes) {
 
 startClients(sendMes);
 
-// animateScheme(dsf, 500);
+animateScheme(dsf, 500);
 // animateScheme(batcher, 500);
 // animateScheme(skip, 500);
 // animateScheme(cage, 500);

@@ -16,7 +16,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Compressor = exports.UndegraundPump = exports.ValveCheck = exports.Valve = exports.ValveError = exports.ValveState = exports.Pool = exports.PureWater = exports.IndustrialWater = exports.UndergroundWater = exports.Pump = exports.PumpState = void 0;
+exports.Compressor = exports.UndegraundPump = exports.ValveCheck = exports.Valve = exports.ValveError = exports.ValveState = exports.WaterTower = exports.Pool = exports.PureWater = exports.IndustrialWater = exports.UndergroundWater = exports.Pump = exports.PumpState = void 0;
 var konva_1 = __importDefault(require("konva"));
 var mine_drawing_1 = require("./mine_drawing");
 var utils_1 = require("./utils");
@@ -179,7 +179,7 @@ var Pump = /** @class */ (function (_super) {
         p1lx = p02.x + R * Math.sin(285);
         p1ly = p02.y + R * Math.cos(285);
         _this.primitives.push(_this.createLine(p0lx, p0ly, p1lx, p1ly, stroke, strokeWidth, p02));
-        var _a = utils_1.CreateLabel(p0.newPointMoved(length * 0.4, length * 0.3), null, 'A'), lr = _a[0], lt = _a[1];
+        var _a = utils_1.CreateLabel(p0.newPointMoved(length * 0.4, length * 0.3), null, ''), lr = _a[0], lt = _a[1];
         _this.primitives = _this.primitives.concat([lr, lt]);
         _this.label = lt;
         return _this;
@@ -257,6 +257,7 @@ var Pump = /** @class */ (function (_super) {
     Pump.prototype.nextFrame = function (angel) {
         if (angel === void 0) { angel = 30; }
         var dy = this.step;
+        this.setLabel('A');
         switch (this.status) {
             case PumpState.run:
             case PumpState.stopping:
@@ -328,62 +329,30 @@ var Pump = /** @class */ (function (_super) {
     return Pump;
 }(mine_drawing_1.BaseMineDraw));
 exports.Pump = Pump;
-// export class PoolBase extends BaseMineDraw {
-//     protected createRectangle(x: number, y: number, height: number, width: number, fill: string, stroke: string,
-//         strokeWidth: number, cornerRadius: number): Konva.Rect {
-//         return new Konva.Rect({
-//             x: x,
-//             y: y,
-//             height: height,
-//             width: width,
-//             fill: fill,
-//             stroke: stroke,
-//             strokeWidth: strokeWidth,
-//             cornerRadius: cornerRadius,
-//         });
-//     }
-//     protected createCircle(x: number, y: number, radius: number, strokeWidth: number, fill: string, stroke: string): Konva.Circle {
-//         return new Konva.Circle({
-//             x: x,
-//             y: y,
-//             radius: radius,
-//             fill: fill,
-//             stroke: stroke,
-//             strokeWidth: strokeWidth,
-//         });
-//     }
-//     protected createText(x: number, y: number, text: string, fontSize: number): Konva.Text {
-//         return new Konva.Text({
-//             x: x,
-//             y: y,
-//             text: text,
-//             fontSize: fontSize,
-//             fontStyle: 'bold',
-//             fontFamily: 'Roboto',
-//         });
-//     }
-// }
 // элементы массива 0-9 - цвета уровней воды, элементы 10 и 11 - цвета фона бассейна
 exports.UndergroundWater = ['#EFFAF5', '#E1F4ED', '#D1E9E0', '#C1DBD1', '#A7CABD', '#97BFB0', '#8DB5A6', '#85AC9D', '#789F90', '#6F9385', '#7D5A5A', '#C06B5A'];
 exports.IndustrialWater = ['#96FFDA', '#73FFCD', '#0BFFA8', '#01EA97', '#04CF87', '#01BE7B', '#00AB6E', '#039863', '#028758', '#026D47', '#FE896F', '#D28878'];
 exports.PureWater = ['#AAD7FF', '#8DC9FF', '#5BB1FF', '#359EFF', '#1F94FF', '#0085FF', '#0071D9', '#0061BA', '#00519C', '#02498B', '#FE896F', '#D28878'];
 var Pool = /** @class */ (function (_super) {
     __extends(Pool, _super);
-    function Pool(p0, length, color, factor) {
+    function Pool(p0, length, color, factor, n) {
+        if (n === void 0) { n = 0.04; }
         var _this = _super.call(this, p0, length) || this;
         console.log("class Pool constructor " + JSON.stringify(_this.rect));
         _this.name = 'Pool';
-        var p00 = _this.rect.p0;
-        var height = _this.calcSize(length, factor);
-        var width = length;
-        var k = 0.96;
-        _this.primitives.push(_this.createRectangle(p00.x, p00.y, height, width, color[10], color[11], length * 0.001, length * 0.001));
-        _this.primitives.push(_this.createRectangle(p00.x + length * 0.02, p00.y, height * k, width * k, '#E9EDEA', '#34E7E7', length * 0.0005, 0));
+        _this.p00 = _this.rect.p0;
+        _this.p02 = _this.rect.getMiddlePoint();
+        _this.height = _this.calcSize(length, factor);
+        _this.width = length;
+        var k = _this.width * n;
+        _this.primitives.push(utils_1.createRectangle(_this.p00.x, _this.p00.y, _this.height, _this.width, color[10], color[11], length * 0.001, length * 0.001));
+        _this.primitives.push(utils_1.createRectangle(_this.p00.x + k, _this.p00.y, _this.height - k, _this.width - k * 2, '#E9EDEA', '#34E7E7', length * 0.0005, 0));
         for (var i = 0; i < 10; i++) {
-            _this.primitives.push(_this.createRectangle(p00.x + length * 0.02, p00.y + height * k * 0.1 * i, height * k * 0.1, width * k, color[i], '', 0, 0));
+            _this.primitives.push(utils_1.createRectangle(_this.p00.x + k, _this.p00.y + (_this.height - k) * 0.1 * i, (_this.height - k) * 0.1, _this.width - k * 2, color[i], '', 0, 0));
         }
-        _this.primitives.push(_this.createCircle(_this.rect.getMiddlePoint().x, _this.rect.getMiddlePoint().y, length * 0.07, length * 0.001, 'white', '#34E7E7'));
-        _this.primitives.push(_this.createText(_this.rect.getMiddlePoint().x - length * 0.06, _this.rect.getMiddlePoint().y - length * 0.02, '100' + '%', length * 0.05));
+        _this.primitives.push(utils_1.createCircle(_this.p02.x, _this.p00.y + _this.height * 0.5, length * 0.07, length * 0.001, 'white', '#34E7E7'));
+        _this.label = utils_1.createText(_this.p02.x - _this.width * 0.06, _this.p00.y + _this.height * 0.46, '100%', length * 0.05);
+        _this.primitives.push(_this.label);
         return _this;
     }
     Pool.prototype.calcSize = function (length, factor) {
@@ -392,108 +361,35 @@ var Pool = /** @class */ (function (_super) {
         return this.getOdd(length / factor);
     };
     ;
-    Pool.prototype.createRectangle = function (x, y, height, width, fill, stroke, strokeWidth, cornerRadius) {
-        return new konva_1.default.Rect({
-            x: x,
-            y: y,
-            height: height,
-            width: width,
-            fill: fill,
-            stroke: stroke,
-            strokeWidth: strokeWidth,
-            cornerRadius: cornerRadius,
-        });
-    };
-    Pool.prototype.createCircle = function (x, y, radius, strokeWidth, fill, stroke) {
-        return new konva_1.default.Circle({
-            x: x,
-            y: y,
-            radius: radius,
-            fill: fill,
-            stroke: stroke,
-            strokeWidth: strokeWidth,
-        });
-    };
-    Pool.prototype.createText = function (x, y, text, fontSize) {
-        return new konva_1.default.Text({
-            x: x,
-            y: y,
-            text: text,
-            fontSize: fontSize,
-            fontStyle: 'bold',
-            fontFamily: 'Roboto',
-        });
+    Pool.prototype.nextFrame = function () {
+        this.setLabel('100');
     };
     return Pool;
 }(mine_drawing_1.BaseMineDraw));
 exports.Pool = Pool;
-// export class PoolSurfaceIndustrialWater extends PoolBase {
-//     constructor(p0: Point, length: number) {
-//         super(p0, length);
-//         this.name = '';
-//         this.primitives.push(this.createRectangle(p0.x, p0.y, length * 0.45, length, '#FE896F', '#D28878', length * 0.001, length * 0.001));
-//         this.primitives.push(this.createRectangle(p0.x + length * 0.02, p0.y, length * 0.42, length * 0.96, '#E1FBE8', '#34E7E7', length * 0.0005, 0));
-//         // десять уровней воды
-//         this.primitives.push(this.createRectangle(p0.x + length * 0.02, p0.y,                      length * 0.042, length * 0.96, '#96FFDA', '', 0, 0));
-//         this.primitives.push(this.createRectangle(p0.x + length * 0.02, p0.y + length * 0.042 * 1, length * 0.042, length * 0.96, '#73FFCD', '', 0, 0));
-//         this.primitives.push(this.createRectangle(p0.x + length * 0.02, p0.y + length * 0.042 * 2, length * 0.042, length * 0.96, '#0BFFA8', '', 0, 0));
-//         this.primitives.push(this.createRectangle(p0.x + length * 0.02, p0.y + length * 0.042 * 3, length * 0.042, length * 0.96, '#01EA97', '', 0, 0));
-//         this.primitives.push(this.createRectangle(p0.x + length * 0.02, p0.y + length * 0.042 * 4, length * 0.042, length * 0.96, '#04CF87', '', 0, 0));
-//         this.primitives.push(this.createRectangle(p0.x + length * 0.02, p0.y + length * 0.042 * 5, length * 0.042, length * 0.96, '#01BE7B', '', 0, 0));
-//         this.primitives.push(this.createRectangle(p0.x + length * 0.02, p0.y + length * 0.042 * 6, length * 0.042, length * 0.96, '#00AB6E', '', 0, 0));
-//         this.primitives.push(this.createRectangle(p0.x + length * 0.02, p0.y + length * 0.042 * 7, length * 0.042, length * 0.96, '#039863', '', 0, 0));
-//         this.primitives.push(this.createRectangle(p0.x + length * 0.02, p0.y + length * 0.042 * 8, length * 0.042, length * 0.96, '#028758', '', 0, 0));
-//         this.primitives.push(this.createRectangle(p0.x + length * 0.02, p0.y + length * 0.042 * 9, length * 0.042, length * 0.96, '#026D47', '', 0, 0));
-//         // label
-//         this.primitives.push(this.createCircle(p0.x + length * 0.5, p0.y + length * 0.22, length * 0.08, length * 0.001, 'white', '#34E7E7'));
-//         this.primitives.push(this.createText(p0.x + length * 0.44, p0.y + length * 0.2, '100' + '%', length * 0.05));
-//     }
-// }
-// export class PoolSurfacePureWater extends PoolBase {
-//     constructor(p0: Point, length: number) {
-//         super(p0, length);
-//         this.name = '';
-//         this.primitives.push(this.createRectangle(p0.x, p0.y, length * 0.45, length, '#FE896F', '#D28878', length * 0.001, length * 0.001));
-//         this.primitives.push(this.createRectangle(p0.x + length * 0.02, p0.y, length * 0.42, length * 0.96, '#E1FBE8', '#34E7E7', length * 0.0005, 0));
-//         // десять уровней воды
-//         this.primitives.push(this.createRectangle(p0.x + length * 0.02, p0.y,                      length * 0.042, length * 0.96, '#AAD7FF', '', 0, 0));
-//         this.primitives.push(this.createRectangle(p0.x + length * 0.02, p0.y + length * 0.042 * 1, length * 0.042, length * 0.96, '#8DC9FF', '', 0, 0));
-//         this.primitives.push(this.createRectangle(p0.x + length * 0.02, p0.y + length * 0.042 * 2, length * 0.042, length * 0.96, '#5BB1FF', '', 0, 0));
-//         this.primitives.push(this.createRectangle(p0.x + length * 0.02, p0.y + length * 0.042 * 3, length * 0.042, length * 0.96, '#359EFF', '', 0, 0));
-//         this.primitives.push(this.createRectangle(p0.x + length * 0.02, p0.y + length * 0.042 * 4, length * 0.042, length * 0.96, '#1F94FF', '', 0, 0));
-//         this.primitives.push(this.createRectangle(p0.x + length * 0.02, p0.y + length * 0.042 * 5, length * 0.042, length * 0.96, '#0085FF', '', 0, 0));
-//         this.primitives.push(this.createRectangle(p0.x + length * 0.02, p0.y + length * 0.042 * 6, length * 0.042, length * 0.96, '#0071D9', '', 0, 0));
-//         this.primitives.push(this.createRectangle(p0.x + length * 0.02, p0.y + length * 0.042 * 7, length * 0.042, length * 0.96, '#0061BA', '', 0, 0));
-//         this.primitives.push(this.createRectangle(p0.x + length * 0.02, p0.y + length * 0.042 * 8, length * 0.042, length * 0.96, '#00519C', '', 0, 0));
-//         this.primitives.push(this.createRectangle(p0.x + length * 0.02, p0.y + length * 0.042 * 9, length * 0.042, length * 0.96, '#02498B', '', 0, 0));
-//         // label
-//         this.primitives.push(this.createCircle(p0.x + length * 0.5, p0.y + length * 0.22, length * 0.08, length * 0.001, 'white', '#34E7E7'));
-//         this.primitives.push(this.createText(p0.x + length * 0.44, p0.y + length * 0.2, '100' + '%', length * 0.05));
-//     }
-// }
-// export class WaterTower extends PoolBase {
-//     constructor(p0: Point, length: number) {
-//         super(p0, length);
-//         this.name = '';
-//         this.primitives.push(this.createRectangle(p0.x, p0.y, length, length * 0.7, '#FE896F', '#D28878', length * 0.001, length * 0.001));
-//         this.primitives.push(this.createRectangle(p0.x + length * 0.06, p0.y, length * 0.94, length * 0.58, '#E1FBE8', '#34E7E7', length * 0.0005, 0));
-//         // десять уровней воды
-//         this.primitives.push(this.createRectangle(p0.x + length * 0.06, p0.y,                      length * 0.094, length * 0.58, '#AAD7FF', '', 0, 0));
-//         this.primitives.push(this.createRectangle(p0.x + length * 0.06, p0.y + length * 0.0945 * 1, length * 0.094, length * 0.58, '#8DC9FF', '', 0, 0));
-//         this.primitives.push(this.createRectangle(p0.x + length * 0.06, p0.y + length * 0.0945 * 2, length * 0.094, length * 0.58, '#5BB1FF', '', 0, 0));
-//         this.primitives.push(this.createRectangle(p0.x + length * 0.06, p0.y + length * 0.0945 * 3, length * 0.094, length * 0.58, '#359EFF', '', 0, 0));
-//         this.primitives.push(this.createRectangle(p0.x + length * 0.06, p0.y + length * 0.0945 * 4, length * 0.094, length * 0.58, '#1F94FF', '', 0, 0));
-//         this.primitives.push(this.createRectangle(p0.x + length * 0.06, p0.y + length * 0.0945 * 5, length * 0.094, length * 0.58, '#0085FF', '', 0, 0));
-//         this.primitives.push(this.createRectangle(p0.x + length * 0.06, p0.y + length * 0.0945 * 6, length * 0.094, length * 0.58, '#0071D9', '', 0, 0));
-//         this.primitives.push(this.createRectangle(p0.x + length * 0.06, p0.y + length * 0.0945 * 7, length * 0.094, length * 0.58, '#0061BA', '', 0, 0));
-//         this.primitives.push(this.createRectangle(p0.x + length * 0.06, p0.y + length * 0.0945 * 8, length * 0.094, length * 0.58, '#00519C', '', 0, 0));
-//         this.primitives.push(this.createRectangle(p0.x + length * 0.06, p0.y + length * 0.0945 * 9, length * 0.094, length * 0.58, '#02498B', '', 0, 0));
-//         // label
-//         this.primitives.push(this.createCircle(p0.x + length * 0.5, p0.y + length * 0.22, length * 0.08, length * 0.001, 'white', '#34E7E7'));
-//         this.primitives.push(this.createText(p0.x + length * 0.44, p0.y + length * 0.2, '100' + '%', length * 0.05));
-//         // this.primitives.push(this.createRectangle(p0.x + length * 0.2, p0.y + , length * 0.064, length * 0.88, '#8DC9FF', '', 0, 0));
-//     }
-// }
+var WaterTower = /** @class */ (function (_super) {
+    __extends(WaterTower, _super);
+    function WaterTower(p0, length, color, factor, n) {
+        if (n === void 0) { n = 0.08; }
+        var _this = _super.call(this, p0, length, color, factor, n) || this;
+        console.log("class Pool constructor " + JSON.stringify(_this.rect));
+        _this.name = 'WaterTower';
+        _this.primitives.push(utils_1.createRectangle(_this.p00.x + _this.width * 0.17, _this.p00.y + _this.height, _this.width * 1.35, _this.width * 0.65, '#DCDBDB', '#B9C3C3', length * 0.001, 0));
+        _this.primitives.push(utils_1.createRectangle(_this.p00.x + _this.width * 0.425, _this.p00.y + _this.height, _this.width * 1.35, _this.width * 0.12, '#B7B4B4', '', 0, 0));
+        return _this;
+    }
+    WaterTower.prototype.calcSize = function (length, factor) {
+        if (factor === void 0) { factor = 4; }
+        console.log("class Pool calcSize " + factor);
+        return this.getOdd(length / factor);
+    };
+    ;
+    WaterTower.prototype.nextFrame = function () {
+        this.setLabel('100');
+    };
+    return WaterTower;
+}(Pool));
+exports.WaterTower = WaterTower;
 var ValveState;
 (function (ValveState) {
     ValveState[ValveState["init"] = 0] = "init";

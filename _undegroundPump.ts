@@ -1,5 +1,5 @@
 import { Scheme, Disposition, animateScheme, Point, PropParams } from './mine_drawing';
-import { Pump, UndegraundPump, Pool, Valve, ValveCheck, UndergroundWater, IndustrialWater, PureWater } from './pumpAccessories'
+import { Pump, UndegraundPump, Pool, Valve, ValveCheck, UndergroundWater, IndustrialWater, PureWater, WaterTower } from './pumpAccessories'
 
 
 const dxIndex = 0;   
@@ -64,7 +64,7 @@ export class UNDEGROUNDPUMP extends BASEPUMP {
         }
         else{
             this.name = 'drainageB';
-            let pool = new Pool( basePoint.newPointMoved(0, 450) , 900, UndergroundWater);   // new Point(400, 550)
+            let pool = new Pool( basePoint.newPointMoved(0, 450) , 900, UndergroundWater, 4.5, 0.01);   // new Point(400, 550)
             this.addWidget(pool);
             this.items.push(pool);
             for(let i = LINES_COUNT1; i < LINES_COUNT1 + LINES_COUNT2; i++) 
@@ -149,6 +149,9 @@ export class SURFACEPUMP extends BASEPUMP {
         let pool = new Pool( p.newPointMoved(270,617), 150, PureWater);   
         this.addWidget(pool);
         this.items.push(pool);
+        let waterTower = new WaterTower( p.newPointMoved(530,100), 200, PureWater, 1.5);   
+        this.addWidget(waterTower);
+        this.items.push(waterTower);
         for(let i = 0; i < surfacePumpsData.length; i++){
             let pump = new Pump(this.getPoint(surfacePumpsData[i].dXY), 100, 0);
             pump.name = surfacePumpsData[i].name
