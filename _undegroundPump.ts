@@ -22,7 +22,10 @@ class BASEPUMP extends Scheme {
             let delIndexes = [];
             for (let i = 0; i < mesProps.length; i++) {
                 if (mesProps[i].startsWith(widget.name)) {
-                    wMes[mesProps[i]] = mes[mesProps[i]];
+                    let beginCount = widget.name.length;
+                    let newPropName = mesProps[i].substring(beginCount);
+                    wMes[newPropName] = mes[mesProps[i]];
+                    //wMes[mesProps[i]] = mes[mesProps[i]];
                     delIndexes.push(i);
                 }
             }

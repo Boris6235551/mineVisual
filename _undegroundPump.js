@@ -36,7 +36,10 @@ var BASEPUMP = /** @class */ (function (_super) {
             var delIndexes = [];
             for (var i = 0; i < mesProps.length; i++) {
                 if (mesProps[i].startsWith(widget.name)) {
-                    wMes[mesProps[i]] = mes[mesProps[i]];
+                    var beginCount = widget.name.length;
+                    var newPropName = mesProps[i].substring(beginCount);
+                    wMes[newPropName] = mes[mesProps[i]];
+                    //wMes[mesProps[i]] = mes[mesProps[i]];
                     delIndexes.push(i);
                 }
             }
