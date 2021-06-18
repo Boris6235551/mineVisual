@@ -35,17 +35,17 @@ var receivingHopper = new _receivinghopper_1.RECEIVINGHOPPER('receivinghopper', 
 var substation = new _substation_1.SUBSTATION('substation', window.innerWidth, window.innerHeight);
 var compressor = new _compressor_1.COMPRESSOR('compressor', window.innerWidth, window.innerHeight);
 // screenMain.addScheme(techWater);
-screenMain.addScheme(dsf);
-screenMain.addScheme(skip);
-screenMain.addScheme(batcher);
-screenMain.addScheme(cage);
-screenMain.addScheme(substationUndeground);
+// screenMain.addScheme(dsf);
+// screenMain.addScheme(skip);
+// screenMain.addScheme(batcher);
+// screenMain.addScheme(cage);
+// screenMain.addScheme(substationUndeground);
 screenMain.addScheme(UndegroundPump1);
 screenMain.addScheme(UndegroundPump2);
 screenMain.addScheme(SurfacePump1);
-screenMain.addScheme(batcherlable);
-screenMain.addScheme(receivingHopper);
-screenMain.addScheme(substation);
+// screenMain.addScheme(batcherlable);
+// screenMain.addScheme(receivingHopper);
+// screenMain.addScheme(substation);
 // screenMain.addScheme(undegroundpump);
 screenMain.addScheme(compressor);
 var tcpipConnector_1 = require("./tcpipConnector");
@@ -53,7 +53,7 @@ function sendMes(name, mes) {
     screenMain.resendMessage(name, mes);
 }
 tcpipConnector_1.startClients(sendMes);
-// animateScheme(dsf, 500);
+mine_drawing_1.animateScheme(dsf, 500);
 // animateScheme(batcher, 500);
 // animateScheme(skip, 500);
 // animateScheme(cage, 500);

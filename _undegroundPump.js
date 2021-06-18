@@ -81,7 +81,7 @@ var UNDEGROUNDPUMP = /** @class */ (function (_super) {
         }
         else {
             _this.name = 'drainageB';
-            var pool = new pumpAccessories_1.Pool(basePoint.newPointMoved(0, 450), 900, pumpAccessories_1.UndergroundWater); // new Point(400, 550)
+            var pool = new pumpAccessories_1.Pool(basePoint.newPointMoved(0, 450), 900, pumpAccessories_1.UndergroundWater, 4.5, 0.01); // new Point(400, 550)
             _this.addWidget(pool);
             _this.items.push(pool);
             for (var i = LINES_COUNT1; i < LINES_COUNT1 + LINES_COUNT2; i++)
@@ -164,6 +164,9 @@ var SURFACEPUMP = /** @class */ (function (_super) {
         var pool = new pumpAccessories_1.Pool(p.newPointMoved(270, 617), 150, pumpAccessories_1.PureWater);
         this.addWidget(pool);
         this.items.push(pool);
+        var waterTower = new pumpAccessories_1.WaterTower(p.newPointMoved(530, 100), 200, pumpAccessories_1.PureWater, 1.5);
+        this.addWidget(waterTower);
+        this.items.push(waterTower);
         for (var i = 0; i < surfacePumpsData.length; i++) {
             var pump = new pumpAccessories_1.Pump(this.getPoint(surfacePumpsData[i].dXY), 100, 0);
             pump.name = surfacePumpsData[i].name;
