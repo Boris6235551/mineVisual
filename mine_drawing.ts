@@ -86,7 +86,7 @@ export class BaseMineDraw {
     protected primitives: (Konva.Rect | Konva.Text | Konva.Circle | Konva.Line | Konva.Ellipse)[] = [];
     protected layer: Konva.Layer;
     protected label: any;
-    constructor(p0: Point, length: number, disposition?: Disposition, percentage?: number) {
+    constructor(p0: Point, length: number, disposition: Disposition = Disposition.Horizontal, percentage?: number) {
         this.name = "Base";
         this.disposition = disposition;
         let dx: number;
@@ -96,8 +96,8 @@ export class BaseMineDraw {
             dx = this.calcSize(length);
         }
         else {
-            dx = this.getOdd(length);
-            dy = this.calcSize(length);
+            dx = this.getOdd(length);   // coordinate x of the csreen
+            dy = this.calcSize(length); // coordinate y of the csreen
         }
         this.rect = new Rectangle(p0, new Point(p0.x + dx, p0.y + dy));
         this.label = null;
@@ -139,6 +139,7 @@ export class BaseMineDraw {
 
 export class Scheme {
     name: string;
+    secondName: string;
     private stop: boolean;
     widgets: BaseMineDraw[];
     stage: Konva.Stage;
@@ -155,7 +156,8 @@ export class Scheme {
         });
         this.layer = new Konva.Layer();
         this.stage.add(this.layer);
-        if (this.widgets.length) this.interval = setInterval(this.update, 100);
+        this.secondName = '';
+        //if (this.widgets.length) this.interval = setInterval(this.update, 100);
     }
     send(mes: any){
         // let props = Object.getOwnPropertyNames(mes);
@@ -210,7 +212,7 @@ export class Screen {
     resendMessage(/*scheme name*/objName: string, mes: any){
         // console.log(objName)
         this.schemes.forEach(function(scheme) {
-            if(scheme.name == objName) {
+            if(scheme.name == objName || scheme.secondName == objName) {
                 // console.log(scheme.name)
                 scheme.send(mes);
                 return;

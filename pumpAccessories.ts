@@ -18,7 +18,7 @@ export class Pump extends BaseMineDraw {
     private step: number;
     private a: number;
     public status: PumpState;
-    public mode: string;
+    public mode: PumpMode;
     public error: string;
     constructor(p0: Point, length: number, disposition: Disposition) {
         super(p0, length, disposition);
@@ -220,9 +220,12 @@ export class Pump extends BaseMineDraw {
     }
 
     setBaseProperty(mes: any) {
-        this.status = mes.StatusPump;
-        this.mode = mes.ModePump;
-        this.error = mes.ErrorPump
+        this.status = mes.Status;
+        this.mode = mes.Mode;
+        if(this.mode == PumpMode.Auto) this.setLabel('A');
+        else if(this.mode == PumpMode.Service) this.setLabel('S');
+        else this.setLabel('E')
+        this.error = mes.Error;
 
     }
 
@@ -288,57 +291,107 @@ export class Pump extends BaseMineDraw {
 }
 
 // элементы массива 0-9 - цвета уровней воды, элементы 10 и 11 - цвета фона бассейна
+const WaveCount = 10;
+const BackColorIndex = 10;
+const LineColorIndex = 11;
 export const UndergroundWater = ['#EFFAF5', '#E1F4ED', '#D1E9E0', '#C1DBD1', '#A7CABD', '#97BFB0', '#8DB5A6', '#85AC9D', '#789F90', '#6F9385', '#7D5A5A', '#C06B5A']
 export const IndustrialWater = ['#96FFDA', '#73FFCD', '#0BFFA8', '#01EA97', '#04CF87', '#01BE7B', '#00AB6E', '#039863', '#028758', '#026D47', '#FE896F', '#D28878']
 export const PureWater = ['#AAD7FF', '#8DC9FF', '#5BB1FF', '#359EFF', '#1F94FF', '#0085FF', '#0071D9', '#0061BA', '#00519C', '#02498B', '#FE896F', '#D28878']
 
 
 export class Pool extends BaseMineDraw {
-        p00: Point;
-        p02: Point;
-        height: number;
-        width: number;
-    constructor(p0: Point, length: number, color?: any, factor?: number, n: number = 0.04) { // n - толщина стен бассейна
+    protected p00: Point;
+    protected p02: Point;
+    protected height: number;
+    protected width: number;
+    private level: number;
+    private waves: (Konva.Rect | Konva.Text | Konva.Circle | Konva.Line | Konva.Ellipse)[] = [];
+    constructor(p0: Point, length: number, color?: any) { 
         super(p0, length);
         console.log(`class Pool constructor ${JSON.stringify(this.rect)}`)
+        this.waves = [];
         this.name = 'Pool';
         this.p00 = this.rect.p0;
         this.p02 = this.rect.getMiddlePoint();
-        this.height = this.calcSize(length, factor);
+        this.height = this.rect.p1.y - this.rect.p0.y;
         this.width = length;
-        let k = this.width * n;
-        this.primitives.push(createRectangle(this.p00.x, this.p00.y, this.height, this.width, color[10], color[11], length * 0.001, length * 0.001));
-        this.primitives.push(createRectangle(this.p00.x + k, this.p00.y, this.height - k, this.width - k * 2, '#E9EDEA', '#34E7E7', length * 0.0005, 0));
-        for (let i = 0; i < 10; i++) {
-            this.primitives.push(createRectangle(this.p00.x + k, this.p00.y + (this.height - k) * 0.1 * i, 
-            (this.height - k) * 0.1, this.width - k * 2, color[i], '', 0, 0));
+        let sickness = this.getWallThickness(); 
+        let waveX0 = this.p00.x + sickness;
+        let waveHeigh = (this.height - sickness) * 0.1;
+        let waveWidth = this.width - sickness * 2;
+        this.primitives.push(createRectangle(this.p00.x, this.p00.y, this.height, this.width, color[BackColorIndex], color[LineColorIndex], 
+                                length * 0.001, length * 0.001));
+        this.primitives.push(createRectangle( waveX0, this.p00.y, this.height - sickness, waveWidth, '#E9EDEA', '#34E7E7', 
+                                length * 0.0005, 0));
+        
+        for (let i = 0; i < WaveCount; i++) {
+            let r = createRectangle(waveX0, this.p00.y + waveHeigh * i, waveHeigh, waveWidth, color[i], '', 0, 0);
+            this.primitives.push(r);
+            this.waves.push(r);
         }
         this.primitives.push(createCircle(this.p02.x, this.p00.y + this.height * 0.5, length * 0.07, length * 0.001, 'white', '#34E7E7'));
-
         this.label = createText(this.p02.x - this.width * 0.06, this.p00.y + this.height * 0.46, '100%', length * 0.05)
         this.primitives.push(this.label);
+        this.showLevel(100);
     }
     protected calcSize(length: number, factor: number = 2.2): number {
         console.log(`class Pool calcSize ${factor}`)
         return this.getOdd(length / factor);
     };
-    nextFrame(): void {
-        this.setLabel('100')
+    protected getWallThickness(): number{
+        return this.width * 0.04;
+    }
+    private showLevel(level){
+        console.log(`#######################################Pump showLevel level=${level}`)
+        this.level = level;
+        this.setLabel( this.level.toString() + '%');
+        let val = Math.round(this.level / 10);  // 0, 1, 2, ...  10
+        let lastUnvisibleIndex = WaveCount - val - 1; 
+        for(let i = 0; i < WaveCount; i++){
+            if(i <= lastUnvisibleIndex) this.waves[i].visible(false);
+            else this.waves[i].visible(true);
+        }
+        //this.layer.draw();
+    }
+    // nextFrame(): void {
+    //     this.setLabel('90')
+    // }
+    setBaseProperty(mes: any){
+        this.showLevel(mes.Level) // Level - %
+        // HLevel
+        // LLevel    
     }
 }
 
+export class MinePool extends Pool{
+    constructor(p0: Point, length: number){
+        super(p0, length, UndergroundWater);
+    }
+    protected calcSize(length: number, factor: number = 3.5): number {
+        console.log(`class Pool calcSize ${factor}`)
+        return this.getOdd(length / factor);
+    };
+    protected getWallThickness(): number{
+        return this.width * 0.02;
+    }
+
+}
+
 export class WaterTower extends Pool {
-    constructor(p0: Point, length: number, color?: any, factor?: number, n: number = 0.08) {
-        super(p0, length, color, factor, n);
+    constructor(p0: Point, length: number) {
+        super(p0, length, PureWater);
         console.log(`class Pool constructor ${JSON.stringify(this.rect)}`)
         this.name = 'WaterTower';
         this.primitives.push(createRectangle(this.p00.x + this.width * 0.17, this.p00.y + this.height, this.width * 1.35, this.width * 0.65, '#DCDBDB', '#B9C3C3', length * 0.001, 0));
         this.primitives.push(createRectangle(this.p00.x + this.width * 0.425, this.p00.y + this.height, this.width * 1.35, this.width * 0.12, '#B7B4B4', '', 0, 0));
     }
-    protected calcSize(length: number, factor: number = 4): number {
+    protected calcSize(length: number, factor: number = 0.71): number {
         console.log(`class Pool calcSize ${factor}`)
         return this.getOdd(length / factor);
     };
+    protected getWallThickness(): number{
+        return this.width * 0.08;
+    }
     nextFrame(): void {
         this.setLabel('100')
     }

@@ -1,5 +1,5 @@
 import { Scheme, Disposition, animateScheme, Point, PropParams } from './mine_drawing';
-import { Pump, UndegraundPump, Pool, Valve, ValveCheck, UndergroundWater, IndustrialWater, PureWater, WaterTower } from './pumpAccessories'
+import { Pump, MinePool, UndegraundPump, Pool, Valve, ValveCheck, UndergroundWater, IndustrialWater, PureWater, WaterTower } from './pumpAccessories'
 
 
 const dxIndex = 0;   
@@ -19,22 +19,26 @@ class BASEPUMP extends Scheme {
         let mesProps = Object.getOwnPropertyNames(mes);
         for (const widget of this.items) {
             let wMes = {};
+            let sendToWidget = false;
             let delIndexes = [];
             for (let i = 0; i < mesProps.length; i++) {
                 if (mesProps[i].startsWith(widget.name)) {
                     let beginCount = widget.name.length;
                     let newPropName = mesProps[i].substring(beginCount);
                     wMes[newPropName] = mes[mesProps[i]];
+                    sendToWidget = true;
                     //wMes[mesProps[i]] = mes[mesProps[i]];
                     delIndexes.push(i);
                 }
             }
             console.log(`sended to ${widget.name}\n message  =${JSON.stringify(wMes)}`);
+            if(sendToWidget) widget.setBaseProperty(wMes);
             for (let i = delIndexes.length - 1; i >= 0; i--) mesProps.splice(delIndexes[i], 1);
             console.log(`del properies of ${widget.name}; mesProps length=${mesProps.length}`);
             if (mesProps.length == 0) return;
         }
         console.log(`message properies=${mesProps}`);
+        this.update();
     }
 }
 
@@ -67,7 +71,7 @@ export class UNDEGROUNDPUMP extends BASEPUMP {
         }
         else{
             this.name = 'drainageB';
-            let pool = new Pool( basePoint.newPointMoved(0, 450) , 900, UndergroundWater, 4.5, 0.01);   // new Point(400, 550)
+            let pool = new MinePool( basePoint.newPointMoved(0, 450) , 950);   // new Point(400, 550)
             this.addWidget(pool);
             this.items.push(pool);
             for(let i = LINES_COUNT1; i < LINES_COUNT1 + LINES_COUNT2; i++) 
@@ -143,24 +147,24 @@ let surfacePumpsData = [
 export class SURFACEPUMP extends BASEPUMP {
     constructor(container: string, width: number, height: number, basePoint: Point) {
         super(container, width, height, basePoint);
+        this.name = 'clearPump';
+        this.secondName = 'techPump';
         this.createWidgets(basePoint);
     }
     protected getPoint(dXY: number[]){
         return this.basePoint.newPointMoved(dXY[dxIndex], dXY[dyIndex]);
     }
+    private addItem(item: (Valve | Pump | Pool), name: string){
+        item.name = name;
+        this.items.push(item);
+        this.addWidget(item);
+    }
     createWidgets(p: Point){
-        let pool = new Pool( p.newPointMoved(270,617), 150, PureWater);   
-        this.addWidget(pool);
-        this.items.push(pool);
-        let waterTower = new WaterTower( p.newPointMoved(530,100), 200, PureWater, 1.5);   
-        this.addWidget(waterTower);
-        this.items.push(waterTower);
-        for(let i = 0; i < surfacePumpsData.length; i++){
-            let pump = new Pump(this.getPoint(surfacePumpsData[i].dXY), 100, 0);
-            pump.name = surfacePumpsData[i].name
-            this.items.push(pump);
-            this.addWidget(pump);    
-        }
+        this.addItem(new Pool( p.newPointMoved(103,617), 150, IndustrialWater), 'Tech');
+        this.addItem(new Pool( p.newPointMoved(270,617), 150, PureWater), 'Clear');
+        this.addItem(new WaterTower( p.newPointMoved(530,100), 200), 'Tower');
+        for(let i = 0; i < surfacePumpsData.length; i++)
+            this.addItem( new Pump(this.getPoint(surfacePumpsData[i].dXY), 100, 0), surfacePumpsData[i].name);
         for(let i = 0; i < surfaceValvesData.length; i++){
             let obj = surfaceValvesData[i];
             let v: (Valve | ValveCheck);

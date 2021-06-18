@@ -22,15 +22,15 @@ var UNDERGROUNDSUBSTATION = /** @class */ (function (_super) {
     function UNDERGROUNDSUBSTATION(container, width, height) {
         var _this = _super.call(this, container, width, height) || this;
         _this.name = 'UndegroundStation';
-        _this.addBatcher();
+        _this.addItems();
         return _this;
     }
-    UNDERGROUNDSUBSTATION.prototype.addBatcher = function () {
+    UNDERGROUNDSUBSTATION.prototype.addItems = function () {
         // this.Generator1 = new Generator(new Point(200, 233), 100)
         // this.addWidget(this.Generator1);
-        this.Trunk1 = new substation_1.Trunk(new mine_drawing_1.Point(250, 800), 670);
+        this.Trunk1 = new substation_1.Trunk(new mine_drawing_1.Point(250, 900), 670);
         this.addWidget(this.Trunk1);
-        this.UndergroundSubstationCell1 = new substation_1.UndergroundSubstationCell(new mine_drawing_1.Point(250, 800), 1000);
+        this.UndergroundSubstationCell1 = new substation_1.UndergroundSubstationCell(new mine_drawing_1.Point(250, 900), 1000);
         this.addWidget(this.UndergroundSubstationCell1);
     };
     return UNDERGROUNDSUBSTATION;

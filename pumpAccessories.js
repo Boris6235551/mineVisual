@@ -16,7 +16,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Compressor = exports.UndegraundPump = exports.ValveCheck = exports.Valve = exports.ValveError = exports.ValveState = exports.WaterTower = exports.Pool = exports.PureWater = exports.IndustrialWater = exports.UndergroundWater = exports.Pump = exports.PumpState = void 0;
+exports.Compressor = exports.UndegraundPump = exports.ValveCheck = exports.Valve = exports.ValveError = exports.ValveState = exports.WaterTower = exports.MinePool = exports.Pool = exports.PureWater = exports.IndustrialWater = exports.UndergroundWater = exports.Pump = exports.PumpState = void 0;
 var konva_1 = __importDefault(require("konva"));
 var mine_drawing_1 = require("./mine_drawing");
 var utils_1 = require("./utils");
@@ -250,9 +250,15 @@ var Pump = /** @class */ (function (_super) {
         this.primitives[7].strokeWidth(strokeWidth7);
     };
     Pump.prototype.setBaseProperty = function (mes) {
-        this.status = mes.StatusPump;
-        this.mode = mes.ModePump;
-        this.error = mes.ErrorPump;
+        this.status = mes.Status;
+        this.mode = mes.Mode;
+        if (this.mode == PumpMode.Auto)
+            this.setLabel('A');
+        else if (this.mode == PumpMode.Service)
+            this.setLabel('S');
+        else
+            this.setLabel('E');
+        this.error = mes.Error;
     };
     Pump.prototype.nextFrame = function (angel) {
         if (angel === void 0) { angel = 30; }
@@ -330,29 +336,39 @@ var Pump = /** @class */ (function (_super) {
 }(mine_drawing_1.BaseMineDraw));
 exports.Pump = Pump;
 // элементы массива 0-9 - цвета уровней воды, элементы 10 и 11 - цвета фона бассейна
+var WaveCount = 10;
+var BackColorIndex = 10;
+var LineColorIndex = 11;
 exports.UndergroundWater = ['#EFFAF5', '#E1F4ED', '#D1E9E0', '#C1DBD1', '#A7CABD', '#97BFB0', '#8DB5A6', '#85AC9D', '#789F90', '#6F9385', '#7D5A5A', '#C06B5A'];
 exports.IndustrialWater = ['#96FFDA', '#73FFCD', '#0BFFA8', '#01EA97', '#04CF87', '#01BE7B', '#00AB6E', '#039863', '#028758', '#026D47', '#FE896F', '#D28878'];
 exports.PureWater = ['#AAD7FF', '#8DC9FF', '#5BB1FF', '#359EFF', '#1F94FF', '#0085FF', '#0071D9', '#0061BA', '#00519C', '#02498B', '#FE896F', '#D28878'];
 var Pool = /** @class */ (function (_super) {
     __extends(Pool, _super);
-    function Pool(p0, length, color, factor, n) {
-        if (n === void 0) { n = 0.04; }
+    function Pool(p0, length, color) {
         var _this = _super.call(this, p0, length) || this;
+        _this.waves = [];
         console.log("class Pool constructor " + JSON.stringify(_this.rect));
+        _this.waves = [];
         _this.name = 'Pool';
         _this.p00 = _this.rect.p0;
         _this.p02 = _this.rect.getMiddlePoint();
-        _this.height = _this.calcSize(length, factor);
+        _this.height = _this.rect.p1.y - _this.rect.p0.y;
         _this.width = length;
-        var k = _this.width * n;
-        _this.primitives.push(utils_1.createRectangle(_this.p00.x, _this.p00.y, _this.height, _this.width, color[10], color[11], length * 0.001, length * 0.001));
-        _this.primitives.push(utils_1.createRectangle(_this.p00.x + k, _this.p00.y, _this.height - k, _this.width - k * 2, '#E9EDEA', '#34E7E7', length * 0.0005, 0));
-        for (var i = 0; i < 10; i++) {
-            _this.primitives.push(utils_1.createRectangle(_this.p00.x + k, _this.p00.y + (_this.height - k) * 0.1 * i, (_this.height - k) * 0.1, _this.width - k * 2, color[i], '', 0, 0));
+        var sickness = _this.getWallThickness();
+        var waveX0 = _this.p00.x + sickness;
+        var waveHeigh = (_this.height - sickness) * 0.1;
+        var waveWidth = _this.width - sickness * 2;
+        _this.primitives.push(utils_1.createRectangle(_this.p00.x, _this.p00.y, _this.height, _this.width, color[BackColorIndex], color[LineColorIndex], length * 0.001, length * 0.001));
+        _this.primitives.push(utils_1.createRectangle(waveX0, _this.p00.y, _this.height - sickness, waveWidth, '#E9EDEA', '#34E7E7', length * 0.0005, 0));
+        for (var i = 0; i < WaveCount; i++) {
+            var r = utils_1.createRectangle(waveX0, _this.p00.y + waveHeigh * i, waveHeigh, waveWidth, color[i], '', 0, 0);
+            _this.primitives.push(r);
+            _this.waves.push(r);
         }
         _this.primitives.push(utils_1.createCircle(_this.p02.x, _this.p00.y + _this.height * 0.5, length * 0.07, length * 0.001, 'white', '#34E7E7'));
         _this.label = utils_1.createText(_this.p02.x - _this.width * 0.06, _this.p00.y + _this.height * 0.46, '100%', length * 0.05);
         _this.primitives.push(_this.label);
+        _this.showLevel(100);
         return _this;
     }
     Pool.prototype.calcSize = function (length, factor) {
@@ -361,17 +377,55 @@ var Pool = /** @class */ (function (_super) {
         return this.getOdd(length / factor);
     };
     ;
-    Pool.prototype.nextFrame = function () {
-        this.setLabel('100');
+    Pool.prototype.getWallThickness = function () {
+        return this.width * 0.04;
+    };
+    Pool.prototype.showLevel = function (level) {
+        console.log("#######################################Pump showLevel level=" + level);
+        this.level = level;
+        this.setLabel(this.level.toString() + '%');
+        var val = Math.round(this.level / 10); // 0, 1, 2, ...  10
+        var lastUnvisibleIndex = WaveCount - val - 1;
+        for (var i = 0; i < WaveCount; i++) {
+            if (i <= lastUnvisibleIndex)
+                this.waves[i].visible(false);
+            else
+                this.waves[i].visible(true);
+        }
+        //this.layer.draw();
+    };
+    // nextFrame(): void {
+    //     this.setLabel('90')
+    // }
+    Pool.prototype.setBaseProperty = function (mes) {
+        this.showLevel(mes.Level); // Level - %
+        // HLevel
+        // LLevel    
     };
     return Pool;
 }(mine_drawing_1.BaseMineDraw));
 exports.Pool = Pool;
+var MinePool = /** @class */ (function (_super) {
+    __extends(MinePool, _super);
+    function MinePool(p0, length) {
+        return _super.call(this, p0, length, exports.UndergroundWater) || this;
+    }
+    MinePool.prototype.calcSize = function (length, factor) {
+        if (factor === void 0) { factor = 3.5; }
+        console.log("class Pool calcSize " + factor);
+        return this.getOdd(length / factor);
+    };
+    ;
+    MinePool.prototype.getWallThickness = function () {
+        return this.width * 0.02;
+    };
+    return MinePool;
+}(Pool));
+exports.MinePool = MinePool;
 var WaterTower = /** @class */ (function (_super) {
     __extends(WaterTower, _super);
-    function WaterTower(p0, length, color, factor, n) {
-        if (n === void 0) { n = 0.08; }
-        var _this = _super.call(this, p0, length, color, factor, n) || this;
+    function WaterTower(p0, length) {
+        var _this = _super.call(this, p0, length, exports.PureWater) || this;
         console.log("class Pool constructor " + JSON.stringify(_this.rect));
         _this.name = 'WaterTower';
         _this.primitives.push(utils_1.createRectangle(_this.p00.x + _this.width * 0.17, _this.p00.y + _this.height, _this.width * 1.35, _this.width * 0.65, '#DCDBDB', '#B9C3C3', length * 0.001, 0));
@@ -379,11 +433,14 @@ var WaterTower = /** @class */ (function (_super) {
         return _this;
     }
     WaterTower.prototype.calcSize = function (length, factor) {
-        if (factor === void 0) { factor = 4; }
+        if (factor === void 0) { factor = 0.71; }
         console.log("class Pool calcSize " + factor);
         return this.getOdd(length / factor);
     };
     ;
+    WaterTower.prototype.getWallThickness = function () {
+        return this.width * 0.08;
+    };
     WaterTower.prototype.nextFrame = function () {
         this.setLabel('100');
     };

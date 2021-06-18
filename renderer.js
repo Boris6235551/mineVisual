@@ -23,9 +23,9 @@ ipcRenderer.on('resended', function (event, arr) {
 var screenMain = new mine_drawing_1.Screen();
 // // let techWater = new TechWater('container', window.innerWidth, window.innerHeight);
 var cage = new _cage_1.CAGE('containerCage', window.innerWidth, window.innerHeight);
-var UndegroundPump1 = new _undegroundPump_1.UNDEGROUNDPUMP('containerUndegroundPump1', window.innerWidth, window.innerHeight, new mine_drawing_1.Point(400, 100), 1);
-var UndegroundPump2 = new _undegroundPump_1.UNDEGROUNDPUMP('containerUndegroundPump2', window.innerWidth, window.innerHeight, new mine_drawing_1.Point(400, 100), 2);
-var SurfacePump1 = new _undegroundPump_1.SURFACEPUMP('containerSurfacePump1', window.innerWidth, window.innerHeight, new mine_drawing_1.Point(2545, 44));
+var UndegroundPump1 = new _undegroundPump_1.UNDEGROUNDPUMP('containerUndegroundPump1', window.innerWidth, window.innerHeight, new mine_drawing_1.Point(350, 90), 1);
+var UndegroundPump2 = new _undegroundPump_1.UNDEGROUNDPUMP('containerUndegroundPump2', window.innerWidth, window.innerHeight, new mine_drawing_1.Point(350, 90), 2);
+var SurfacePump = new _undegroundPump_1.SURFACEPUMP('containerSurfacePump1', window.innerWidth, window.innerHeight, new mine_drawing_1.Point(2545, 44));
 var dsf = new _dsf_1.DSF('containerDSF', window.innerWidth, window.innerHeight);
 var skip = new _skip_1.SKIP('containerSkip', window.innerWidth, window.innerHeight);
 var batcher = new _batcher_1.BATCHER('batcher', window.innerWidth, window.innerHeight);
@@ -34,19 +34,17 @@ var batcherlable = new _batcherlable_1.BATCHERLABLE('batcherlable', window.inner
 var receivingHopper = new _receivinghopper_1.RECEIVINGHOPPER('receivinghopper', window.innerWidth, window.innerHeight);
 var substation = new _substation_1.SUBSTATION('substation', window.innerWidth, window.innerHeight);
 var compressor = new _compressor_1.COMPRESSOR('compressor', window.innerWidth, window.innerHeight);
-// screenMain.addScheme(techWater);
-// screenMain.addScheme(dsf);
-// screenMain.addScheme(skip);
-// screenMain.addScheme(batcher);
-// screenMain.addScheme(cage);
-// screenMain.addScheme(substationUndeground);
+screenMain.addScheme(dsf);
+screenMain.addScheme(skip);
+screenMain.addScheme(batcher);
+screenMain.addScheme(cage);
+screenMain.addScheme(substationUndeground);
 screenMain.addScheme(UndegroundPump1);
 screenMain.addScheme(UndegroundPump2);
-screenMain.addScheme(SurfacePump1);
-// screenMain.addScheme(batcherlable);
-// screenMain.addScheme(receivingHopper);
-// screenMain.addScheme(substation);
-// screenMain.addScheme(undegroundpump);
+screenMain.addScheme(SurfacePump);
+screenMain.addScheme(batcherlable);
+screenMain.addScheme(receivingHopper);
+screenMain.addScheme(substation);
 screenMain.addScheme(compressor);
 var tcpipConnector_1 = require("./tcpipConnector");
 function sendMes(name, mes) {
@@ -58,7 +56,9 @@ mine_drawing_1.animateScheme(dsf, 500);
 // animateScheme(skip, 500);
 // animateScheme(cage, 500);
 // animateScheme(substationUndeground, 500);
-// animateScheme(UndegroundPump1, 500);
+mine_drawing_1.animateScheme(UndegroundPump1, 500);
+mine_drawing_1.animateScheme(UndegroundPump2, 500);
+mine_drawing_1.animateScheme(SurfacePump, 500);
 // animateScheme(batcherlable, 500);
 // animateScheme(receivingHopper, 500);
 // animateScheme(substation, 500);
@@ -446,8 +446,7 @@ var mes2 = {
     "Y53pos": 0,
     "Y54pos": 0,
     "Y55pos": 0,
-    "PoolMSBLevel": 0,
-    "PoolLSBlevel": 32
+    "PoolLevel": 73,
 };
 // Clear Pump message
 var mesClear = {
@@ -523,7 +522,7 @@ var mesTech = {
     M4Mode: 25,
     M3Err: 26,
     M4Err: 27,
-    TechLevel: 28,
+    TechLevel: 78,
     Press3: 29,
     Press4: 30,
     TechHLevel: 31,
@@ -539,6 +538,7 @@ var mesTech = {
     DP4Err: 41,
 };
 sendMes('drainageA', mes);
+sendMes('drainageB', mes2);
 sendMes('clearPump', mesClear);
 sendMes('techPump', mesTech);
 //# sourceMappingURL=renderer.js.map

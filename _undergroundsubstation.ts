@@ -9,16 +9,16 @@ export class UNDERGROUNDSUBSTATION extends Scheme {
     constructor(container: string, width: number, height: number) {
         super(container, width, height);
         this.name = 'UndegroundStation';
-        this.addBatcher();
+        this.addItems();
     }
-    addBatcher() {
+    addItems() {
         // this.Generator1 = new Generator(new Point(200, 233), 100)
         // this.addWidget(this.Generator1);
 
-        this.Trunk1 = new Trunk(new Point(250, 800), 670)
+        this.Trunk1 = new Trunk(new Point(250, 900), 670)
         this.addWidget(this.Trunk1);
         
-        this.UndergroundSubstationCell1 = new UndergroundSubstationCell(new Point(250, 800), 1000)
+        this.UndergroundSubstationCell1 = new UndergroundSubstationCell(new Point(250, 900), 1000)
         this.addWidget(this.UndergroundSubstationCell1);
 
     }

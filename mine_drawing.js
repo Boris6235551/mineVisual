@@ -81,6 +81,7 @@ var PropParams = /** @class */ (function () {
 exports.PropParams = PropParams;
 var BaseMineDraw = /** @class */ (function () {
     function BaseMineDraw(p0, length, disposition, percentage) {
+        if (disposition === void 0) { disposition = Disposition.Horizontal; }
         this.propBit = true;
         this.animationFrame = 0;
         this.primitives = [];
@@ -93,8 +94,8 @@ var BaseMineDraw = /** @class */ (function () {
             dx = this.calcSize(length);
         }
         else {
-            dx = this.getOdd(length);
-            dy = this.calcSize(length);
+            dx = this.getOdd(length); // coordinate x of the csreen
+            dy = this.calcSize(length); // coordinate y of the csreen
         }
         this.rect = new Rectangle(p0, new Point(p0.x + dx, p0.y + dy));
         this.label = null;
@@ -155,8 +156,8 @@ var Scheme = /** @class */ (function () {
         });
         this.layer = new konva_1.default.Layer();
         this.stage.add(this.layer);
-        if (this.widgets.length)
-            this.interval = setInterval(this.update, 100);
+        this.secondName = '';
+        //if (this.widgets.length) this.interval = setInterval(this.update, 100);
     }
     Scheme.prototype.send = function (mes) {
         // let props = Object.getOwnPropertyNames(mes);
@@ -213,7 +214,7 @@ var Screen = /** @class */ (function () {
     Screen.prototype.resendMessage = function (/*scheme name*/ objName, mes) {
         // console.log(objName)
         this.schemes.forEach(function (scheme) {
-            if (scheme.name == objName) {
+            if (scheme.name == objName || scheme.secondName == objName) {
                 // console.log(scheme.name)
                 scheme.send(mes);
                 return;

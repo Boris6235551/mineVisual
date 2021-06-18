@@ -33,17 +33,21 @@ var BASEPUMP = /** @class */ (function (_super) {
         for (var _i = 0, _a = this.items; _i < _a.length; _i++) {
             var widget = _a[_i];
             var wMes = {};
+            var sendToWidget = false;
             var delIndexes = [];
             for (var i = 0; i < mesProps.length; i++) {
                 if (mesProps[i].startsWith(widget.name)) {
                     var beginCount = widget.name.length;
                     var newPropName = mesProps[i].substring(beginCount);
                     wMes[newPropName] = mes[mesProps[i]];
+                    sendToWidget = true;
                     //wMes[mesProps[i]] = mes[mesProps[i]];
                     delIndexes.push(i);
                 }
             }
             console.log("sended to " + widget.name + "\n message  =" + JSON.stringify(wMes));
+            if (sendToWidget)
+                widget.setBaseProperty(wMes);
             for (var i = delIndexes.length - 1; i >= 0; i--)
                 mesProps.splice(delIndexes[i], 1);
             console.log("del properies of " + widget.name + "; mesProps length=" + mesProps.length);
@@ -51,6 +55,7 @@ var BASEPUMP = /** @class */ (function (_super) {
                 return;
         }
         console.log("message properies=" + mesProps);
+        this.update();
     };
     return BASEPUMP;
 }(mine_drawing_1.Scheme));
@@ -81,7 +86,7 @@ var UNDEGROUNDPUMP = /** @class */ (function (_super) {
         }
         else {
             _this.name = 'drainageB';
-            var pool = new pumpAccessories_1.Pool(basePoint.newPointMoved(0, 450), 900, pumpAccessories_1.UndergroundWater, 4.5, 0.01); // new Point(400, 550)
+            var pool = new pumpAccessories_1.MinePool(basePoint.newPointMoved(0, 450), 950); // new Point(400, 550)
             _this.addWidget(pool);
             _this.items.push(pool);
             for (var i = LINES_COUNT1; i < LINES_COUNT1 + LINES_COUNT2; i++)
@@ -154,25 +159,25 @@ var SURFACEPUMP = /** @class */ (function (_super) {
     __extends(SURFACEPUMP, _super);
     function SURFACEPUMP(container, width, height, basePoint) {
         var _this = _super.call(this, container, width, height, basePoint) || this;
+        _this.name = 'clearPump';
+        _this.secondName = 'techPump';
         _this.createWidgets(basePoint);
         return _this;
     }
     SURFACEPUMP.prototype.getPoint = function (dXY) {
         return this.basePoint.newPointMoved(dXY[dxIndex], dXY[dyIndex]);
     };
+    SURFACEPUMP.prototype.addItem = function (item, name) {
+        item.name = name;
+        this.items.push(item);
+        this.addWidget(item);
+    };
     SURFACEPUMP.prototype.createWidgets = function (p) {
-        var pool = new pumpAccessories_1.Pool(p.newPointMoved(270, 617), 150, pumpAccessories_1.PureWater);
-        this.addWidget(pool);
-        this.items.push(pool);
-        var waterTower = new pumpAccessories_1.WaterTower(p.newPointMoved(530, 100), 200, pumpAccessories_1.PureWater, 1.5);
-        this.addWidget(waterTower);
-        this.items.push(waterTower);
-        for (var i = 0; i < surfacePumpsData.length; i++) {
-            var pump = new pumpAccessories_1.Pump(this.getPoint(surfacePumpsData[i].dXY), 100, 0);
-            pump.name = surfacePumpsData[i].name;
-            this.items.push(pump);
-            this.addWidget(pump);
-        }
+        this.addItem(new pumpAccessories_1.Pool(p.newPointMoved(103, 617), 150, pumpAccessories_1.IndustrialWater), 'Tech');
+        this.addItem(new pumpAccessories_1.Pool(p.newPointMoved(270, 617), 150, pumpAccessories_1.PureWater), 'Clear');
+        this.addItem(new pumpAccessories_1.WaterTower(p.newPointMoved(530, 100), 200), 'Tower');
+        for (var i = 0; i < surfacePumpsData.length; i++)
+            this.addItem(new pumpAccessories_1.Pump(this.getPoint(surfacePumpsData[i].dXY), 100, 0), surfacePumpsData[i].name);
         for (var i = 0; i < surfaceValvesData.length; i++) {
             var obj = surfaceValvesData[i];
             var v = void 0;

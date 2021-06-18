@@ -25,10 +25,10 @@ let screenMain = new Screen();
 // // let techWater = new TechWater('container', window.innerWidth, window.innerHeight);
 let cage = new CAGE('containerCage', window.innerWidth, window.innerHeight);
 let UndegroundPump1 = new UNDEGROUNDPUMP('containerUndegroundPump1', window.innerWidth, window.innerHeight,
-                                    new Point(400, 100), 1);
+                                    new Point(350, 90), 1);
 let UndegroundPump2 = new UNDEGROUNDPUMP('containerUndegroundPump2', window.innerWidth, window.innerHeight,
-                                    new Point(400, 100), 2);
-let SurfacePump1 = new SURFACEPUMP('containerSurfacePump1', window.innerWidth, window.innerHeight,
+                                    new Point(350, 90), 2);
+let SurfacePump = new SURFACEPUMP('containerSurfacePump1', window.innerWidth, window.innerHeight,
                                     new Point(2545, 44));
 let dsf = new DSF('containerDSF', window.innerWidth, window.innerHeight);
 let skip = new SKIP('containerSkip', window.innerWidth, window.innerHeight);
@@ -39,19 +39,18 @@ let receivingHopper = new RECEIVINGHOPPER('receivinghopper', window.innerWidth, 
 let substation = new SUBSTATION('substation', window.innerWidth, window.innerHeight);
 let compressor = new COMPRESSOR('compressor', window.innerWidth, window.innerHeight)
 
-// screenMain.addScheme(techWater);
-// screenMain.addScheme(dsf);
-// screenMain.addScheme(skip);
-// screenMain.addScheme(batcher);
-// screenMain.addScheme(cage);
-// screenMain.addScheme(substationUndeground);
+
+screenMain.addScheme(dsf);
+screenMain.addScheme(skip);
+screenMain.addScheme(batcher);
+screenMain.addScheme(cage);
+screenMain.addScheme(substationUndeground);
 screenMain.addScheme(UndegroundPump1);
 screenMain.addScheme(UndegroundPump2);
-screenMain.addScheme(SurfacePump1);
-// screenMain.addScheme(batcherlable);
-// screenMain.addScheme(receivingHopper);
-// screenMain.addScheme(substation);
-// screenMain.addScheme(undegroundpump);
+screenMain.addScheme(SurfacePump);
+screenMain.addScheme(batcherlable);
+screenMain.addScheme(receivingHopper);
+screenMain.addScheme(substation);
 screenMain.addScheme(compressor);
 
 import { startClients, stopConnection, _reCreate, _testConnect, _testSend, _sendReload, _step } from './tcpipConnector'
@@ -67,7 +66,9 @@ animateScheme(dsf, 500);
 // animateScheme(skip, 500);
 // animateScheme(cage, 500);
 // animateScheme(substationUndeground, 500);
-// animateScheme(UndegroundPump1, 500);
+ animateScheme(UndegroundPump1, 500);
+ animateScheme(UndegroundPump2, 500);
+ animateScheme(SurfacePump, 500);
 // animateScheme(batcherlable, 500);
 // animateScheme(receivingHopper, 500);
 // animateScheme(substation, 500);
@@ -582,8 +583,7 @@ let mes2 = {
     "Y53pos": 0,
     "Y54pos": 0,
     "Y55pos": 0,
-    "PoolMSBLevel": 0,
-    "PoolLSBlevel": 32
+    "PoolLevel": 73,
 }
 
 // Clear Pump message
@@ -661,7 +661,7 @@ let mesTech = {
     M4Mode	:	25	,
     M3Err	:	26	,
     M4Err	:	27	,
-    TechLevel	:	28	,
+    TechLevel	:	78	,
     Press3	:	29	,
     Press4	:	30	,
     TechHLevel	:	31	,
@@ -679,5 +679,6 @@ let mesTech = {
 }
 
 sendMes('drainageA', mes);
+sendMes('drainageB', mes2);
 sendMes('clearPump', mesClear);
 sendMes('techPump', mesTech);
