@@ -1,5 +1,4 @@
-@media print
-{    
+@media print {    
     button {
         display: none;
     }
@@ -9,13 +8,66 @@
     select {
         display: none;
     }
-    .reportBlock {
-        height: 900px;
-    }
     .footer  {
-		display: block;
+        bottom: 0px;
+        position: fixed;
+        display: flex;
     }
+    .operator {
+        bottom: 0px;
+        position: fixed;
+        left: 450px;
+    }
+    tr:nth-child(15) {
+        page-break-after: always;
+    }
+    tr:nth-child(37) {
+        page-break-after: always;
+    }
+    tr:nth-child(59) {
+        page-break-after: always;
+    }
+    tr:nth-child(81) {
+        page-break-after: always;
+    }
+    tr:nth-child(103) {
+        page-break-after: always;
+    }
+    tr {
+        display: block;
+    }
+    td:nth-child(1) {
+        width: 35%;
+    }   
+    td:nth-child(2) {
+        width: 25%;
+    }
+    td:nth-child(3) {
+        width: 15%;
+    }
+    td:nth-child(4) {
+        width: 150px;
+    }
+    th:nth-child(1) {
+        width: 35%;
+    }   
+    th:nth-child(2) {
+        width: 25%;
+    }
+    th:nth-child(3) {
+        width: 15%;
+    }
+    th:nth-child(4) {
+        width: 150px;
+    }
+    table {
+        border-collapse: collapse;
+        border:0;
+    }
+}
 
+body {
+    overflow: hidden;
 }
 
 td {
@@ -30,27 +82,6 @@ table {
     border-collapse: collapse;
 }
 
-tbody tr {
-    background: white;
-    outline: none;
-}
-
-.table {
-    flex-grow: 1;
-    margin-right: 14px;
-    overflow-y: auto;
-    overflow-x: hidden;
-
-}
-
-thead th {
-    top: 0;
-    position: sticky;
-    z-index: 1;
-    background-color: #EEECEF;
-    height: 35px;
-}
-
 .date {
     display: flex;
     justify-content: space-around;
@@ -61,13 +92,47 @@ thead th {
     justify-content: space-around;
 }
 
-.footer {
-    display: flex;
-    justify-content: space-between; 
-}
-
 @media screen { 
 	.footer  {
         display: none;
     } 
+    .scroll-table-body {
+        height: 200px;
+    }
+    .reportBlock {
+        height: 400px;
+        margin-bottom: 100px;
+    }
 }
+
+.scroll-table-body {
+	overflow-x: auto;
+	margin-top: 0px;
+	margin-bottom: 20px;
+	border-bottom: 1px solid #eee;
+}
+.scroll-table table {
+	width:100%;
+	table-layout: fixed;
+	border: none;
+}
+.scroll-table thead th {
+	font-weight: bold;
+	text-align: center;
+	border: none;
+	padding: 10px 15px;
+	background: #d8d8d8;
+	font-size: 14px;
+}
+.scroll-table tbody td {
+	text-align: center;
+	border-left: 1px solid #ddd;
+	border-right: 1px solid #ddd;
+	padding: 10px 15px;
+	font-size: 14px;
+	vertical-align: top;
+}
+.scroll-table tbody tr:nth-child(even){
+	background: #f3f3f3;
+}
+
