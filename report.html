@@ -35,31 +35,37 @@
             <p>Total skips:&emsp;{{objectShift.skips}}&emsp;pcs</p>
             <p>Total weight:&emsp;{{objectShift.weight}}&emsp;t</p>
             <br>
-            <div class="table">
+            <div class="scroll-table">
                 <table>
                     <thead>
-                        <tr class="table_header">
+                        <tr>
                             <th>Time & Date</th>
                             <th>Skip</th>
                             <th>Skip No</th>
                             <th>Wheight</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr v-for="data in objectShift.datas">
-                            <td>{{ data.time }}</td>
-                            <td>{{ data.batcher }}</td>
-                            <td>{{ data.number }}</td>
-                            <td>{{ data.gross }} - {{ data.tare }} = {{ data.net }}</td>
-                        </tr>
-                    </tbody>
                 </table>
+                <div class="scroll-table-body">
+                    <table>
+                        <tbody>
+                            <tr v-for="data in objectShift.datas">
+                                <td>{{ data.time }}</td>
+                                <td>{{ data.batcher }}</td>
+                                <td>{{ data.number }}</td>
+                                <td>{{ data.gross }} - {{ data.tare }} = {{ data.net }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
-        <div class="footer">
-            <div>Date:&emsp;{{ datePrintingReport.month }}/{{ datePrintingReport.day }}/{{ datePrintingReport.year }}</div>
-            <div>Operator______________________</div>
-        </div>
+            <div class="footer" id="footer">
+                <div>Date:&emsp;{{ datePrintingReport.month }}/{{ datePrintingReport.day }}/{{ datePrintingReport.year
+                    }}
+                </div>
+                <div class="operator">Operator______________________</div>
+            </div>
     </div>
 </body>
 <!-- <script>let exports = module.exports;</script> -->
