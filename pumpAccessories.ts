@@ -308,7 +308,7 @@ export class Pool extends BaseMineDraw {
     private waves: (Konva.Rect | Konva.Text | Konva.Circle | Konva.Line | Konva.Ellipse)[] = [];
     constructor(p0: Point, length: number, color?: any) { 
         super(p0, length);
-        console.log(`class Pool constructor ${JSON.stringify(this.rect)}`)
+        // console.log(`class Pool constructor ${JSON.stringify(this.rect)}`)
         this.waves = [];
         this.name = 'Pool';
         this.p00 = this.rect.p0;
@@ -335,14 +335,14 @@ export class Pool extends BaseMineDraw {
         this.showLevel(100);
     }
     protected calcSize(length: number, factor: number = 2.2): number {
-        console.log(`class Pool calcSize ${factor}`)
+        // console.log(`class Pool calcSize ${factor}`)
         return this.getOdd(length / factor);
     };
     protected getWallThickness(): number{
         return this.width * 0.04;
     }
     private showLevel(level){
-        console.log(`#######################################Pump showLevel level=${level}`)
+        // console.log(`#######################################Pump showLevel level=${level}`)
         this.level = level;
         this.setLabel( this.level.toString() + '%');
         let val = Math.round(this.level / 10);  // 0, 1, 2, ...  10
@@ -368,7 +368,7 @@ export class MinePool extends Pool{
         super(p0, length, UndergroundWater);
     }
     protected calcSize(length: number, factor: number = 3.5): number {
-        console.log(`class Pool calcSize ${factor}`)
+        // console.log(`class Pool calcSize ${factor}`)
         return this.getOdd(length / factor);
     };
     protected getWallThickness(): number{
@@ -380,13 +380,13 @@ export class MinePool extends Pool{
 export class WaterTower extends Pool {
     constructor(p0: Point, length: number) {
         super(p0, length, PureWater);
-        console.log(`class Pool constructor ${JSON.stringify(this.rect)}`)
+        // console.log(`class Pool constructor ${JSON.stringify(this.rect)}`)
         this.name = 'WaterTower';
         this.primitives.push(createRectangle(this.p00.x + this.width * 0.17, this.p00.y + this.height, this.width * 1.35, this.width * 0.65, '#DCDBDB', '#B9C3C3', length * 0.001, 0));
         this.primitives.push(createRectangle(this.p00.x + this.width * 0.425, this.p00.y + this.height, this.width * 1.35, this.width * 0.12, '#B7B4B4', '', 0, 0));
     }
     protected calcSize(length: number, factor: number = 0.71): number {
-        console.log(`class Pool calcSize ${factor}`)
+        // console.log(`class Pool calcSize ${factor}`)
         return this.getOdd(length / factor);
     };
     protected getWallThickness(): number{

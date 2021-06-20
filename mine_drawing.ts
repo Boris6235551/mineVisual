@@ -111,7 +111,11 @@ export class BaseMineDraw {
     protected calcSize(length: number, factor: number = 1): number {
         return this.getOdd(length / factor);
     };
-
+    printRect(){
+        console.log(`\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!`)
+        console.log(`Widget name=${this.name};  rect=${JSON.stringify(this.rect)}`)
+        console.log(`!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n`)
+    }
     move(delta: { x: number, y: number }) {
         if (this.primitives.length == 0) return;
         for (let i = 0; i < this.primitives.length; i++) this.primitives[i].move(delta);

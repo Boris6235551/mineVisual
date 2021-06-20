@@ -347,7 +347,7 @@ var Pool = /** @class */ (function (_super) {
     function Pool(p0, length, color) {
         var _this = _super.call(this, p0, length) || this;
         _this.waves = [];
-        console.log("class Pool constructor " + JSON.stringify(_this.rect));
+        // console.log(`class Pool constructor ${JSON.stringify(this.rect)}`)
         _this.waves = [];
         _this.name = 'Pool';
         _this.p00 = _this.rect.p0;
@@ -373,7 +373,7 @@ var Pool = /** @class */ (function (_super) {
     }
     Pool.prototype.calcSize = function (length, factor) {
         if (factor === void 0) { factor = 2.2; }
-        console.log("class Pool calcSize " + factor);
+        // console.log(`class Pool calcSize ${factor}`)
         return this.getOdd(length / factor);
     };
     ;
@@ -381,7 +381,7 @@ var Pool = /** @class */ (function (_super) {
         return this.width * 0.04;
     };
     Pool.prototype.showLevel = function (level) {
-        console.log("#######################################Pump showLevel level=" + level);
+        // console.log(`#######################################Pump showLevel level=${level}`)
         this.level = level;
         this.setLabel(this.level.toString() + '%');
         var val = Math.round(this.level / 10); // 0, 1, 2, ...  10
@@ -412,7 +412,7 @@ var MinePool = /** @class */ (function (_super) {
     }
     MinePool.prototype.calcSize = function (length, factor) {
         if (factor === void 0) { factor = 3.5; }
-        console.log("class Pool calcSize " + factor);
+        // console.log(`class Pool calcSize ${factor}`)
         return this.getOdd(length / factor);
     };
     ;
@@ -426,7 +426,7 @@ var WaterTower = /** @class */ (function (_super) {
     __extends(WaterTower, _super);
     function WaterTower(p0, length) {
         var _this = _super.call(this, p0, length, exports.PureWater) || this;
-        console.log("class Pool constructor " + JSON.stringify(_this.rect));
+        // console.log(`class Pool constructor ${JSON.stringify(this.rect)}`)
         _this.name = 'WaterTower';
         _this.primitives.push(utils_1.createRectangle(_this.p00.x + _this.width * 0.17, _this.p00.y + _this.height, _this.width * 1.35, _this.width * 0.65, '#DCDBDB', '#B9C3C3', length * 0.001, 0));
         _this.primitives.push(utils_1.createRectangle(_this.p00.x + _this.width * 0.425, _this.p00.y + _this.height, _this.width * 1.35, _this.width * 0.12, '#B7B4B4', '', 0, 0));
@@ -434,7 +434,7 @@ var WaterTower = /** @class */ (function (_super) {
     }
     WaterTower.prototype.calcSize = function (length, factor) {
         if (factor === void 0) { factor = 0.71; }
-        console.log("class Pool calcSize " + factor);
+        // console.log(`class Pool calcSize ${factor}`)
         return this.getOdd(length / factor);
     };
     ;
