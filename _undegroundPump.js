@@ -105,7 +105,7 @@ var UNDEGROUNDPUMP = /** @class */ (function (_super) {
             if (vPoints[i][dispIndex] == null)
                 v = new pumpAccessories_1.ValveCheck(p.newPointMoved(vPoints[i][dxIndex], vPoints[i][dyIndex]), 30);
             else {
-                v = new pumpAccessories_1.Valve(p.newPointMoved(vPoints[i][dxIndex], vPoints[i][dyIndex]), 30, vPoints[i][dispIndex], 50);
+                v = new pumpAccessories_1.Valve(p.newPointMoved(vPoints[i][dxIndex], vPoints[i][dyIndex]), 30, vPoints[i][dispIndex]);
                 this.items.push(v);
             }
             v.name = 'Y' + number.toString() + (i + 1).toString();
@@ -184,7 +184,7 @@ var SURFACEPUMP = /** @class */ (function (_super) {
             if (obj.disp == null)
                 v = new pumpAccessories_1.ValveCheck(this.getPoint(obj.dXY), 30);
             else {
-                v = new pumpAccessories_1.Valve(this.getPoint(obj.dXY), 30, obj.disp, 50);
+                v = new pumpAccessories_1.Valve(this.getPoint(obj.dXY), 30, obj.disp);
                 v.name = obj.name;
                 this.items.push(v);
             }

@@ -16,10 +16,10 @@ enum PumpMode {
 
 export class Pump extends BaseMineDraw {
     private step: number;
-    private a: number;
+    // private a: number;
     public status: PumpState;
     public mode: PumpMode;
-    public error: string;
+    public error: PumpError;
     constructor(p0: Point, length: number, disposition: Disposition) {
         super(p0, length, disposition);
         this.name = 'Pump';
@@ -222,8 +222,8 @@ export class Pump extends BaseMineDraw {
     setBaseProperty(mes: any) {
         this.status = mes.Status;
         this.mode = mes.Mode;
-        if(this.mode == PumpMode.Auto) this.setLabel('A');
-        else if(this.mode == PumpMode.Service) this.setLabel('S');
+        if (this.mode == PumpMode.Auto) this.setLabel('A');
+        else if (this.mode == PumpMode.Service) this.setLabel('S');
         else this.setLabel('E')
         this.error = mes.Error;
 
@@ -231,7 +231,6 @@ export class Pump extends BaseMineDraw {
 
     nextFrame(angel: number = 30): void {
         let dy: number = this.step;
-        this.setLabel('A')
         switch (this.status) {
             case PumpState.run: case PumpState.stopping: case PumpState.starting:
                 this.primitives[14].rotate(angel);
@@ -306,7 +305,7 @@ export class Pool extends BaseMineDraw {
     protected width: number;
     private level: number;
     private waves: (Konva.Rect | Konva.Text | Konva.Circle | Konva.Line | Konva.Ellipse)[] = [];
-    constructor(p0: Point, length: number, color?: any) { 
+    constructor(p0: Point, length: number, color?: any) {
         super(p0, length);
         console.log(`class Pool constructor ${JSON.stringify(this.rect)}`)
         this.waves = [];
@@ -315,15 +314,15 @@ export class Pool extends BaseMineDraw {
         this.p02 = this.rect.getMiddlePoint();
         this.height = this.rect.p1.y - this.rect.p0.y;
         this.width = length;
-        let sickness = this.getWallThickness(); 
+        let sickness = this.getWallThickness();
         let waveX0 = this.p00.x + sickness;
         let waveHeigh = (this.height - sickness) * 0.1;
         let waveWidth = this.width - sickness * 2;
-        this.primitives.push(createRectangle(this.p00.x, this.p00.y, this.height, this.width, color[BackColorIndex], color[LineColorIndex], 
-                                length * 0.001, length * 0.001));
-        this.primitives.push(createRectangle( waveX0, this.p00.y, this.height - sickness, waveWidth, '#E9EDEA', '#34E7E7', 
-                                length * 0.0005, 0));
-        
+        this.primitives.push(createRectangle(this.p00.x, this.p00.y, this.height, this.width, color[BackColorIndex], color[LineColorIndex],
+            length * 0.001, length * 0.001));
+        this.primitives.push(createRectangle(waveX0, this.p00.y, this.height - sickness, waveWidth, '#E9EDEA', '#34E7E7',
+            length * 0.0005, 0));
+
         for (let i = 0; i < WaveCount; i++) {
             let r = createRectangle(waveX0, this.p00.y + waveHeigh * i, waveHeigh, waveWidth, color[i], '', 0, 0);
             this.primitives.push(r);
@@ -338,17 +337,17 @@ export class Pool extends BaseMineDraw {
         console.log(`class Pool calcSize ${factor}`)
         return this.getOdd(length / factor);
     };
-    protected getWallThickness(): number{
+    protected getWallThickness(): number {
         return this.width * 0.04;
     }
-    private showLevel(level){
+    private showLevel(level) {
         console.log(`#######################################Pump showLevel level=${level}`)
         this.level = level;
-        this.setLabel( this.level.toString() + '%');
+        this.setLabel(this.level.toString() + '%');
         let val = Math.round(this.level / 10);  // 0, 1, 2, ...  10
-        let lastUnvisibleIndex = WaveCount - val - 1; 
-        for(let i = 0; i < WaveCount; i++){
-            if(i <= lastUnvisibleIndex) this.waves[i].visible(false);
+        let lastUnvisibleIndex = WaveCount - val - 1;
+        for (let i = 0; i < WaveCount; i++) {
+            if (i <= lastUnvisibleIndex) this.waves[i].visible(false);
             else this.waves[i].visible(true);
         }
         //this.layer.draw();
@@ -356,25 +355,24 @@ export class Pool extends BaseMineDraw {
     // nextFrame(): void {
     //     this.setLabel('90')
     // }
-    setBaseProperty(mes: any){
+    setBaseProperty(mes: any) {
         this.showLevel(mes.Level) // Level - %
         // HLevel
         // LLevel    
     }
 }
 
-export class MinePool extends Pool{
-    constructor(p0: Point, length: number){
+export class MinePool extends Pool {
+    constructor(p0: Point, length: number) {
         super(p0, length, UndergroundWater);
     }
     protected calcSize(length: number, factor: number = 3.5): number {
         console.log(`class Pool calcSize ${factor}`)
         return this.getOdd(length / factor);
     };
-    protected getWallThickness(): number{
+    protected getWallThickness(): number {
         return this.width * 0.02;
     }
-
 }
 
 export class WaterTower extends Pool {
@@ -389,11 +387,8 @@ export class WaterTower extends Pool {
         console.log(`class Pool calcSize ${factor}`)
         return this.getOdd(length / factor);
     };
-    protected getWallThickness(): number{
+    protected getWallThickness(): number {
         return this.width * 0.08;
-    }
-    nextFrame(): void {
-        this.setLabel('100')
     }
 }
 
@@ -414,7 +409,11 @@ enum ValvePrimitive {
 }
 
 export class Valve extends BaseMineDraw {
-    constructor(p0: Point, length: number, disposition: Disposition, percentage: number) {
+    public state: ValveState;
+    public mode: ValveMode;
+    public error: ValveError;
+    protected labelsetPercentage: any;
+    constructor(p0: Point, length: number, disposition: Disposition) {
         super(p0, length, disposition);
         this.name = 'Valve';
         this.state = ValveState.opened;
@@ -428,17 +427,19 @@ export class Valve extends BaseMineDraw {
         this.primitives.push(this.createTriangle(p10, p11, p12, length));
         this.primitives.push(this.createRectangle(length));
         this.primitives.push(this.createCircle(length));
-        this.primitives.push(this.createText(length, percentage));
+        this.labelsetPercentage = this.createText(length, '');
+        this.primitives.push(this.labelsetPercentage);
+        console.log(this.labelsetPercentage)
         this.rect.p0.y -= 2;
         this.rect.p1.y += 2;
-        this.primitives = this.primitives.concat(CreateLabel(p0.newPointMoved(length * 0.5, length * 0.5), disposition, 'A'));
+        let [lr, lt] = CreateLabel(p0.newPointMoved(length * 0.5, length * 0.5), disposition, '');
+        this.primitives = this.primitives.concat([lr, lt]);
+        this.label = lt;
+
         this.nextFrame();
     }
     setState(newState: ValveState): void {
         this.state = newState;
-    }
-    setPercentage(percentage: number) {
-        return percentage + '%'
     }
     private createTriangle(p0: Point, p1: Point, p2: Point, length: number): Konva.Line {
         return new Konva.Line({
@@ -476,13 +477,13 @@ export class Valve extends BaseMineDraw {
         });
     }
 
-    private createText(length: number, percentage): Konva.Text {
+    private createText(length: number, text): Konva.Text {
         let dxC = (this.disposition == Disposition.Horizontal) ? Math.trunc(0.28 * length) : Math.trunc(0.8 * length);
         let dyC = (this.disposition == Disposition.Horizontal) ? Math.trunc(0.65 * length) : Math.trunc(0.1 * length);
         return new Konva.Text({
             x: this.rect.getMiddlePoint().x - dxC,
             y: this.rect.getMiddlePoint().y - dyC,
-            text: this.setPercentage(percentage),
+            text: text,
             fontSize: length / 4,
             fontStyle: 'bold',
             fontFamily: 'Roboto',
@@ -500,6 +501,21 @@ export class Valve extends BaseMineDraw {
         this.primitives[ValvePrimitive.triangle1].fill(fill1);
         this.primitives[ValvePrimitive.rectangleCentr].fill(rectFill);
         this.primitives[ValvePrimitive.circle].stroke(circleStroke);
+    }
+
+    setPercentage(text: string){
+        if(this.labelsetPercentage != null) this.labelsetPercentage.text(text + '%');
+    }
+
+    setBaseProperty(mes: any) {
+        this.state = mes.Status;
+        this.mode = mes.Mode;
+        if (this.mode == ValveMode.Auto) this.setLabel('A');
+        else if (this.mode == ValveMode.Service) this.setLabel('S');
+        else if (this.mode == ValveMode.HandDrive) this.setLabel('H');
+        else this.setLabel('E') 
+        this.error = mes.Error;
+        this.setPercentage(mes.pos)
     }
 
     nextFrame(): void {

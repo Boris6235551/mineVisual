@@ -263,7 +263,6 @@ var Pump = /** @class */ (function (_super) {
     Pump.prototype.nextFrame = function (angel) {
         if (angel === void 0) { angel = 30; }
         var dy = this.step;
-        this.setLabel('A');
         switch (this.status) {
             case PumpState.run:
             case PumpState.stopping:
@@ -441,9 +440,6 @@ var WaterTower = /** @class */ (function (_super) {
     WaterTower.prototype.getWallThickness = function () {
         return this.width * 0.08;
     };
-    WaterTower.prototype.nextFrame = function () {
-        this.setLabel('100');
-    };
     return WaterTower;
 }(Pool));
 exports.WaterTower = WaterTower;
@@ -485,7 +481,7 @@ var ValvePrimitive;
 })(ValvePrimitive || (ValvePrimitive = {}));
 var Valve = /** @class */ (function (_super) {
     __extends(Valve, _super);
-    function Valve(p0, length, disposition, percentage) {
+    function Valve(p0, length, disposition) {
         var _this = _super.call(this, p0, length, disposition) || this;
         _this.name = 'Valve';
         _this.state = ValveState.opened;
@@ -499,18 +495,19 @@ var Valve = /** @class */ (function (_super) {
         _this.primitives.push(_this.createTriangle(p10, p11, p12, length));
         _this.primitives.push(_this.createRectangle(length));
         _this.primitives.push(_this.createCircle(length));
-        _this.primitives.push(_this.createText(length, percentage));
+        _this.labelsetPercentage = _this.createText(length, '');
+        _this.primitives.push(_this.labelsetPercentage);
+        console.log(_this.labelsetPercentage);
         _this.rect.p0.y -= 2;
         _this.rect.p1.y += 2;
-        _this.primitives = _this.primitives.concat(utils_1.CreateLabel(p0.newPointMoved(length * 0.5, length * 0.5), disposition, 'A'));
+        var _a = utils_1.CreateLabel(p0.newPointMoved(length * 0.5, length * 0.5), disposition, ''), lr = _a[0], lt = _a[1];
+        _this.primitives = _this.primitives.concat([lr, lt]);
+        _this.label = lt;
         _this.nextFrame();
         return _this;
     }
     Valve.prototype.setState = function (newState) {
         this.state = newState;
-    };
-    Valve.prototype.setPercentage = function (percentage) {
-        return percentage + '%';
     };
     Valve.prototype.createTriangle = function (p0, p1, p2, length) {
         return new konva_1.default.Line({
@@ -546,13 +543,13 @@ var Valve = /** @class */ (function (_super) {
             strokeWidth: 1,
         });
     };
-    Valve.prototype.createText = function (length, percentage) {
+    Valve.prototype.createText = function (length, text) {
         var dxC = (this.disposition == mine_drawing_1.Disposition.Horizontal) ? Math.trunc(0.28 * length) : Math.trunc(0.8 * length);
         var dyC = (this.disposition == mine_drawing_1.Disposition.Horizontal) ? Math.trunc(0.65 * length) : Math.trunc(0.1 * length);
         return new konva_1.default.Text({
             x: this.rect.getMiddlePoint().x - dxC,
             y: this.rect.getMiddlePoint().y - dyC,
-            text: this.setPercentage(percentage),
+            text: text,
             fontSize: length / 4,
             fontStyle: 'bold',
             fontFamily: 'Roboto',
@@ -571,6 +568,24 @@ var Valve = /** @class */ (function (_super) {
         this.primitives[ValvePrimitive.triangle1].fill(fill1);
         this.primitives[ValvePrimitive.rectangleCentr].fill(rectFill);
         this.primitives[ValvePrimitive.circle].stroke(circleStroke);
+    };
+    Valve.prototype.setPercentage = function (text) {
+        if (this.labelsetPercentage != null)
+            this.labelsetPercentage.text(text + '%');
+    };
+    Valve.prototype.setBaseProperty = function (mes) {
+        this.state = mes.Status;
+        this.mode = mes.Mode;
+        if (this.mode == ValveMode.Auto)
+            this.setLabel('A');
+        else if (this.mode == ValveMode.Service)
+            this.setLabel('S');
+        else if (this.mode == ValveMode.HandDrive)
+            this.setLabel('H');
+        else
+            this.setLabel('E');
+        this.error = mes.Error;
+        this.setPercentage(mes.pos);
     };
     Valve.prototype.nextFrame = function () {
         switch (this.state) {

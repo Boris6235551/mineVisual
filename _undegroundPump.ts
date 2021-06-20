@@ -90,7 +90,7 @@ export class UNDEGROUNDPUMP extends BASEPUMP {
                 v = new ValveCheck(p.newPointMoved(vPoints[i][dxIndex], vPoints[i][dyIndex]), 30) 
             else {
                 v = new Valve(p.newPointMoved(vPoints[i][dxIndex], vPoints[i][dyIndex]), 
-                                                            30, vPoints[i][dispIndex], 50);  
+                                                            30, vPoints[i][dispIndex]);  
                 this.items.push( v );
             }
             v.name = 'Y' + number.toString() + (i + 1).toString();
@@ -170,7 +170,7 @@ export class SURFACEPUMP extends BASEPUMP {
             let v: (Valve | ValveCheck);
             if(obj.disp == null) v = new ValveCheck(this.getPoint(obj.dXY), 30) 
             else {
-                v = new Valve(this.getPoint(obj.dXY), 30, obj.disp, 50);  
+                v = new Valve(this.getPoint(obj.dXY), 30, obj.disp);  
                 v.name = obj.name;
                 this.items.push( v );
             }
