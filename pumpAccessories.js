@@ -346,7 +346,7 @@ var Pool = /** @class */ (function (_super) {
     function Pool(p0, length, color) {
         var _this = _super.call(this, p0, length) || this;
         _this.waves = [];
-        console.log("class Pool constructor " + JSON.stringify(_this.rect));
+        // console.log(`class Pool constructor ${JSON.stringify(this.rect)}`)
         _this.waves = [];
         _this.name = 'Pool';
         _this.p00 = _this.rect.p0;
@@ -364,15 +364,16 @@ var Pool = /** @class */ (function (_super) {
             _this.primitives.push(r);
             _this.waves.push(r);
         }
-        _this.primitives.push(utils_1.createCircle(_this.p02.x, _this.p00.y + _this.height * 0.5, length * 0.07, length * 0.001, 'white', '#34E7E7'));
-        _this.label = utils_1.createText(_this.p02.x - _this.width * 0.06, _this.p00.y + _this.height * 0.46, '100%', length * 0.05);
+        // label
+        _this.primitives.push(utils_1.createCircle(_this.p02.x, _this.p02.y, length * 0.07, length * 0.001, 'white', '#34E7E7'));
+        _this.label = utils_1.createText(_this.p02.x - length * 0.058, _this.p02.y - length * 0.02, '', length * 0.05);
         _this.primitives.push(_this.label);
         _this.showLevel(100);
         return _this;
     }
     Pool.prototype.calcSize = function (length, factor) {
         if (factor === void 0) { factor = 2.2; }
-        console.log("class Pool calcSize " + factor);
+        // console.log(`class Pool calcSize ${factor}`)
         return this.getOdd(length / factor);
     };
     ;
@@ -380,7 +381,7 @@ var Pool = /** @class */ (function (_super) {
         return this.width * 0.04;
     };
     Pool.prototype.showLevel = function (level) {
-        console.log("#######################################Pump showLevel level=" + level);
+        // console.log(`#######################################Pump showLevel level=${level}`)
         this.level = level;
         this.setLabel(this.level.toString() + '%');
         var val = Math.round(this.level / 10); // 0, 1, 2, ...  10
@@ -411,7 +412,7 @@ var MinePool = /** @class */ (function (_super) {
     }
     MinePool.prototype.calcSize = function (length, factor) {
         if (factor === void 0) { factor = 3.5; }
-        console.log("class Pool calcSize " + factor);
+        // console.log(`class Pool calcSize ${factor}`)
         return this.getOdd(length / factor);
     };
     ;
@@ -425,7 +426,7 @@ var WaterTower = /** @class */ (function (_super) {
     __extends(WaterTower, _super);
     function WaterTower(p0, length) {
         var _this = _super.call(this, p0, length, exports.PureWater) || this;
-        console.log("class Pool constructor " + JSON.stringify(_this.rect));
+        // console.log(`class Pool constructor ${JSON.stringify(this.rect)}`)
         _this.name = 'WaterTower';
         _this.primitives.push(utils_1.createRectangle(_this.p00.x + _this.width * 0.17, _this.p00.y + _this.height, _this.width * 1.35, _this.width * 0.65, '#DCDBDB', '#B9C3C3', length * 0.001, 0));
         _this.primitives.push(utils_1.createRectangle(_this.p00.x + _this.width * 0.425, _this.p00.y + _this.height, _this.width * 1.35, _this.width * 0.12, '#B7B4B4', '', 0, 0));
@@ -433,7 +434,7 @@ var WaterTower = /** @class */ (function (_super) {
     }
     WaterTower.prototype.calcSize = function (length, factor) {
         if (factor === void 0) { factor = 0.71; }
-        console.log("class Pool calcSize " + factor);
+        // console.log(`class Pool calcSize ${factor}`)
         return this.getOdd(length / factor);
     };
     ;
@@ -647,21 +648,30 @@ var Valve = /** @class */ (function (_super) {
 exports.Valve = Valve;
 var ValveCheck = /** @class */ (function (_super) {
     __extends(ValveCheck, _super);
-    function ValveCheck(p0, length) {
-        var _this = _super.call(this, p0, length) || this;
+    function ValveCheck(p0, length, disposition) {
+        if (disposition === void 0) { disposition = mine_drawing_1.Disposition.Vertical; }
+        var _this = _super.call(this, p0, length, disposition) || this;
         _this.name = 'Valvecheck';
-        _this.primitives.push(_this.createTriangle(p0.x, p0.y, p0.x + _this.calcSize(length), p0.y, p0.x + _this.calcSize(length) * 0.5, p0.y + length * 0.5, '#E1F1FB', '#000000', length * 0.02));
-        _this.primitives.push(_this.createTriangle(p0.x, p0.y + length, p0.x + _this.calcSize(length) * 0.5, p0.y + length * 0.5, p0.x + _this.calcSize(length), p0.y + length, '#1D8EEA', '#00C734', length * 0.02));
-        _this.primitives.push(_this.createTriangle(p0.x + length * 0.16, p0.y + length * 0.09, p0.x + _this.calcSize(length) - length * 0.16, p0.y + length * 0.09, p0.x + _this.calcSize(length) * 0.5, p0.y + length * 0.5 - length * 0.16, '#000000', '', 0));
+        var p00 = _this.rect.p0;
+        var p01 = (disposition == mine_drawing_1.Disposition.Vertical) ? _this.rect.rightTop() : _this.rect.getMiddlePoint();
+        var p02 = (disposition == mine_drawing_1.Disposition.Vertical) ? _this.rect.getMiddlePoint() : _this.rect.leftButtom();
+        _this.primitives.push(_this.createTriangle(p00, p01, p02, length, '#E1F1FB', '#000000'));
+        var p10 = _this.rect.p1;
+        var p11 = (disposition == mine_drawing_1.Disposition.Vertical) ? _this.rect.leftButtom() : _this.rect.getMiddlePoint();
+        var p12 = (disposition == mine_drawing_1.Disposition.Vertical) ? _this.rect.getMiddlePoint() : _this.rect.rightTop();
+        _this.primitives.push(_this.createTriangle(p10, p11, p12, length, '#1D8EEA', '#00C734'));
+        var p03 = p00.newPointMoved(length * 0.16, length * 0.08);
+        var p04 = p01.newPointMoved(-length * 0.16, length * 0.08);
+        var p05 = p02.newPointMoved(0, -length * 0.16);
+        _this.primitives.push(_this.createTriangle(p03, p04, p05, length, '#000000', ''));
         return _this;
-        // this.primitives = this.primitives.concat(CreateLabel(p0.newPointMoved(length * 0.5, length * 0.5), Disposition.Vertical, 'A'));
     }
-    ValveCheck.prototype.createTriangle = function (x1, y1, x2, y2, x3, y3, fill, stroke, strokeWidth) {
+    ValveCheck.prototype.createTriangle = function (p0, p1, p2, length, fill, stroke) {
         return new konva_1.default.Line({
-            points: [x1, y1, x2, y2, x3, y3],
+            points: [p0.x, p0.y, p1.x, p1.y, p2.x, p2.y],
             fill: fill,
             stroke: stroke,
-            strokeWidth: strokeWidth,
+            strokeWidth: Math.trunc(length * 0.035),
             closed: true,
         });
     };

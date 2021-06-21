@@ -14,7 +14,7 @@ interface TubeSetup {
 }
 export class Tube extends BaseMineDraw{
     private quantity: number = 4;
-    private atomSize: number = 13;
+    private atomSize: number = 5;
     private flow: boolean = true;
     private length: number;
     private periodLength: number;       // full periods length
@@ -106,49 +106,78 @@ export class Tube extends BaseMineDraw{
     }
 }
 
+
 export class Connection extends BaseMineDraw{
+    private width: number;
+    private dir: boolean = true;
     private period: number;
     private step: number;
     //whitePlaces: Point[] 
     constructor(p0: Point, length: number, disposition: Disposition) {
         super(p0,length, disposition);
+        this.width = this.getOdd(length);
         if(disposition == Disposition.Vertical){
-            this.rect.p1.x = this.rect.p0.x + 14;
+            this.rect.p1.x = this.rect.p0.x + this.width;
             this.rect.p1.y = this.rect.p0.y + 100;
         }
-        this.period = 14 * 4;
+        this.period = this.width * 4;       // length of the one full element with white rect moving
     }
-    connectVertical(upObj: BaseMineDraw, downObj: BaseMineDraw): boolean{
+    positionByMidPoints(beginP: Point, endP: Point){
+        let half = (this.width - 1) / 2;
+        if(this.disposition == Disposition.Vertical){
+            this.rect.p0.x = beginP.x - half;
+            this.rect.p0.y = beginP.y;
+            this.rect.p1.x = endP.x + half;
+            this.rect.p1.y = endP.y;
+        }
+        else{
+            this.rect.p0.x = beginP.x;
+            this.rect.p0.y = beginP.y - half;
+            this.rect.p1.x = endP.x;
+            this.rect.p1.y = endP.y + half;
+        }
+    }
+    connectVertical(upObj: BaseMineDraw, downObj: BaseMineDraw, upword: boolean = true): boolean{
+        this.dir = upword;
         let up = upObj.rect.getMiddleDownPoint();
         let dn = downObj.rect.getMiddleUpPoint(); 
+        this.positionByMidPoints(up, dn);
+        console.log('-------------  up   ------>', JSON.stringify(up))
+        //this.printRect()
+        console.log('-------------  dn   ------>', JSON.stringify(dn))
         if(Math.abs(up.x - dn.x) > DeltaPoint) return false;
-        let distance = /*distance*/(dn.y - up.y);
-        let count = Math.trunc(distance/this.period);
-        this.step = Math.trunc(distance/count/4);
-        console.log(`connectVertical count = ${count}; and step = ${this.step}`)
+        let distance = /*distance*/(dn.y - up.y);   
+        let count = Math.trunc(distance/this.period);   // count of elements 
+        this.step = Math.trunc(distance/count/4);       // lenght of white rect movment 
+        console.log(`c count = ${count}; and step = ${this.step}`)
         let r = new Konva.Rect({
-            //x: up.x - 7, y: up.y, height: count * 14 * 4, width: 14, fill: '#1D8EEA'
-            x: up.x - 7, y: up.y, height: distance, width: 14, fill: '#1D8EEA'
+            x: this.rect.p0.x, y: this.rect.p0.y, height: distance, width: this.width, fill: '#1D8EEA'
+            //x: up.x - 7, y: up.y, height: distance, width: 14, fill: '#1D8EEA'
         });
         this.primitives.push(r);
-        for(let i = 0; i < count; i++){
-            this.primitives.push(new Konva.Rect({
-                //x: r.x(), y: up.y + (this.period * i), height: 14, width: 14, fill: '#E1F1FB'
-                x: r.x(), y: up.y + (this.step * 4 * i), height: 14, width: 14, fill: '#E1F1FB'
-            }));
-        }
+        // for(let i = 0; i < count; i++){
+        //     let nextY = this.step * 4 * i;
+        //     if(upword){
+        //         nextY += this.step * 3;
+        //         this.primitives.push(new Konva.Rect({
+        //             x: r.x(), y: up.y + nextY, height: this.width, width: this.width, fill: '#E1F1FB'
+        //         }));
+        //     }
+        //     else
+        //         this.primitives.push(new Konva.Rect({
+        //             x: r.x(), y: up.y + nextY, height: this.width, width: this.width, fill: '#E1F1FB'
+        //         }));
+        // }
         return true;
     }
-    // draw(layer: Konva.Layer): void{
-    //     super.draw(layer);
-    // }
     private moveWhite(): void{
         let dy: number;
-        if(this.animationFrame < 3) dy = this.step;
-        else dy = -(3*this.step);
+        if(this.animationFrame < 3) dy = this.dir ? -this.step : this.step;
+        else dy = this.dir ? (3 * this.step) : -(3*this.step);
         for(let i = 1; i < this.primitives.length; i++) this.primitives[i].move({x:0, y: dy});
     }
-    nextFrame(): void { 
+    nextFrame(): void {
+return;
         this.moveWhite();
         if(this.animationFrame < 3) this.animationFrame +=1;
         else this.animationFrame = 0;

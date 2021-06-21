@@ -26,7 +26,7 @@ var Tube = /** @class */ (function (_super) {
     function Tube(setup) {
         var _this = _super.call(this, setup.p0, setup.length, setup.disposition) || this;
         _this.quantity = 4;
-        _this.atomSize = 13;
+        _this.atomSize = 5;
         _this.flow = true;
         _this.lastShort = false;
         _this.quantity = setup.quantity;
@@ -113,48 +113,76 @@ var Connection = /** @class */ (function (_super) {
     //whitePlaces: Point[] 
     function Connection(p0, length, disposition) {
         var _this = _super.call(this, p0, length, disposition) || this;
+        _this.dir = true;
+        _this.width = _this.getOdd(length);
         if (disposition == mine_drawing_1.Disposition.Vertical) {
-            _this.rect.p1.x = _this.rect.p0.x + 14;
+            _this.rect.p1.x = _this.rect.p0.x + _this.width;
             _this.rect.p1.y = _this.rect.p0.y + 100;
         }
-        _this.period = 14 * 4;
+        _this.period = _this.width * 4; // length of the one full element with white rect moving
         return _this;
     }
-    Connection.prototype.connectVertical = function (upObj, downObj) {
+    Connection.prototype.positionByMidPoints = function (beginP, endP) {
+        var half = (this.width - 1) / 2;
+        if (this.disposition == mine_drawing_1.Disposition.Vertical) {
+            this.rect.p0.x = beginP.x - half;
+            this.rect.p0.y = beginP.y;
+            this.rect.p1.x = endP.x + half;
+            this.rect.p1.y = endP.y;
+        }
+        else {
+            this.rect.p0.x = beginP.x;
+            this.rect.p0.y = beginP.y - half;
+            this.rect.p1.x = endP.x;
+            this.rect.p1.y = endP.y + half;
+        }
+    };
+    Connection.prototype.connectVertical = function (upObj, downObj, upword) {
+        if (upword === void 0) { upword = true; }
+        this.dir = upword;
         var up = upObj.rect.getMiddleDownPoint();
         var dn = downObj.rect.getMiddleUpPoint();
+        this.positionByMidPoints(up, dn);
+        console.log('-------------  up   ------>', JSON.stringify(up));
+        //this.printRect()
+        console.log('-------------  dn   ------>', JSON.stringify(dn));
         if (Math.abs(up.x - dn.x) > DeltaPoint)
             return false;
         var distance = /*distance*/ (dn.y - up.y);
-        var count = Math.trunc(distance / this.period);
-        this.step = Math.trunc(distance / count / 4);
-        console.log("connectVertical count = " + count + "; and step = " + this.step);
+        var count = Math.trunc(distance / this.period); // count of elements 
+        this.step = Math.trunc(distance / count / 4); // lenght of white rect movment 
+        console.log("c count = " + count + "; and step = " + this.step);
         var r = new konva_1.default.Rect({
-            //x: up.x - 7, y: up.y, height: count * 14 * 4, width: 14, fill: '#1D8EEA'
-            x: up.x - 7, y: up.y, height: distance, width: 14, fill: '#1D8EEA'
+            x: this.rect.p0.x, y: this.rect.p0.y, height: distance, width: this.width, fill: '#1D8EEA'
+            //x: up.x - 7, y: up.y, height: distance, width: 14, fill: '#1D8EEA'
         });
         this.primitives.push(r);
-        for (var i = 0; i < count; i++) {
-            this.primitives.push(new konva_1.default.Rect({
-                //x: r.x(), y: up.y + (this.period * i), height: 14, width: 14, fill: '#E1F1FB'
-                x: r.x(), y: up.y + (this.step * 4 * i), height: 14, width: 14, fill: '#E1F1FB'
-            }));
-        }
+        // for(let i = 0; i < count; i++){
+        //     let nextY = this.step * 4 * i;
+        //     if(upword){
+        //         nextY += this.step * 3;
+        //         this.primitives.push(new Konva.Rect({
+        //             x: r.x(), y: up.y + nextY, height: this.width, width: this.width, fill: '#E1F1FB'
+        //         }));
+        //     }
+        //     else
+        //         this.primitives.push(new Konva.Rect({
+        //             x: r.x(), y: up.y + nextY, height: this.width, width: this.width, fill: '#E1F1FB'
+        //         }));
+        // }
         return true;
     };
-    // draw(layer: Konva.Layer): void{
-    //     super.draw(layer);
-    // }
     Connection.prototype.moveWhite = function () {
         var dy;
         if (this.animationFrame < 3)
-            dy = this.step;
+            dy = this.dir ? -this.step : this.step;
         else
-            dy = -(3 * this.step);
+            dy = this.dir ? (3 * this.step) : -(3 * this.step);
         for (var i = 1; i < this.primitives.length; i++)
             this.primitives[i].move({ x: 0, y: dy });
     };
     Connection.prototype.nextFrame = function () {
+        return;
         this.moveWhite();
         if (this.animationFrame < 3)
             this.animationFrame += 1;

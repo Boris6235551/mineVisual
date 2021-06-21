@@ -37,7 +37,7 @@
         display: block;
     }
     td:nth-child(1) {
-        width: 35%;
+        width: 30%;
     }   
     td:nth-child(2) {
         width: 25%;
@@ -46,10 +46,10 @@
         width: 15%;
     }
     td:nth-child(4) {
-        width: 150px;
+        width: 250px;
     }
     th:nth-child(1) {
-        width: 35%;
+        width: 30%;
     }   
     th:nth-child(2) {
         width: 25%;
@@ -58,11 +58,14 @@
         width: 15%;
     }
     th:nth-child(4) {
-        width: 150px;
+        width: 250px;
     }
     table {
         border-collapse: collapse;
         border:0;
+    }
+    td {
+        border: 1px solid black;
     }
 }
 
@@ -70,17 +73,17 @@ body {
     overflow: hidden;
 }
 
-td {
+/* td {
     border: 3px solid #E8E9EF;
     text-align: center;
-    height: 19px;    
-}
+    /* height: 10px;     */
+/* } */
 
-table {
+/* table {
     width: 100%;
     padding: 0 11px 13px 11px;
     border-collapse: collapse;
-}
+} */
 
 .date {
     display: flex;
@@ -97,19 +100,27 @@ table {
         display: none;
     } 
     .scroll-table-body {
-        height: 200px;
+        height: 290px;
     }
     .reportBlock {
         height: 400px;
         margin-bottom: 100px;
+    }
+    td {
+        border: 3px solid #E8E9EF;
+        text-align: center;
+        /* height: 10px;     */
+    }
+    table {
+        width: 100%;
+        padding: 0 11px 13px 11px;
+        border-collapse: collapse;
     }
 }
 
 .scroll-table-body {
 	overflow-x: auto;
 	margin-top: 0px;
-	margin-bottom: 20px;
-	border-bottom: 1px solid #eee;
 }
 .scroll-table table {
 	width:100%;
@@ -128,7 +139,7 @@ table {
 	text-align: center;
 	border-left: 1px solid #ddd;
 	border-right: 1px solid #ddd;
-	padding: 10px 15px;
+	padding: 5px 0px 5px 0px;
 	font-size: 14px;
 	vertical-align: top;
 }

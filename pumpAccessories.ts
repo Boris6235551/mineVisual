@@ -307,7 +307,7 @@ export class Pool extends BaseMineDraw {
     private waves: (Konva.Rect | Konva.Text | Konva.Circle | Konva.Line | Konva.Ellipse)[] = [];
     constructor(p0: Point, length: number, color?: any) {
         super(p0, length);
-        console.log(`class Pool constructor ${JSON.stringify(this.rect)}`)
+        // console.log(`class Pool constructor ${JSON.stringify(this.rect)}`)
         this.waves = [];
         this.name = 'Pool';
         this.p00 = this.rect.p0;
@@ -328,20 +328,21 @@ export class Pool extends BaseMineDraw {
             this.primitives.push(r);
             this.waves.push(r);
         }
-        this.primitives.push(createCircle(this.p02.x, this.p00.y + this.height * 0.5, length * 0.07, length * 0.001, 'white', '#34E7E7'));
-        this.label = createText(this.p02.x - this.width * 0.06, this.p00.y + this.height * 0.46, '100%', length * 0.05)
+        // label
+        this.primitives.push(createCircle(this.p02.x, this.p02.y, length * 0.07, length * 0.001, 'white', '#34E7E7'));
+        this.label = createText(this.p02.x - length * 0.058, this.p02.y - length * 0.02, '', length * 0.05)
         this.primitives.push(this.label);
         this.showLevel(100);
     }
     protected calcSize(length: number, factor: number = 2.2): number {
-        console.log(`class Pool calcSize ${factor}`)
+        // console.log(`class Pool calcSize ${factor}`)
         return this.getOdd(length / factor);
     };
     protected getWallThickness(): number {
         return this.width * 0.04;
     }
-    private showLevel(level) {
-        console.log(`#######################################Pump showLevel level=${level}`)
+    private showLevel(level){
+        // console.log(`#######################################Pump showLevel level=${level}`)
         this.level = level;
         this.setLabel(this.level.toString() + '%');
         let val = Math.round(this.level / 10);  // 0, 1, 2, ...  10
@@ -367,7 +368,7 @@ export class MinePool extends Pool {
         super(p0, length, UndergroundWater);
     }
     protected calcSize(length: number, factor: number = 3.5): number {
-        console.log(`class Pool calcSize ${factor}`)
+        // console.log(`class Pool calcSize ${factor}`)
         return this.getOdd(length / factor);
     };
     protected getWallThickness(): number {
@@ -378,13 +379,13 @@ export class MinePool extends Pool {
 export class WaterTower extends Pool {
     constructor(p0: Point, length: number) {
         super(p0, length, PureWater);
-        console.log(`class Pool constructor ${JSON.stringify(this.rect)}`)
+        // console.log(`class Pool constructor ${JSON.stringify(this.rect)}`)
         this.name = 'WaterTower';
         this.primitives.push(createRectangle(this.p00.x + this.width * 0.17, this.p00.y + this.height, this.width * 1.35, this.width * 0.65, '#DCDBDB', '#B9C3C3', length * 0.001, 0));
         this.primitives.push(createRectangle(this.p00.x + this.width * 0.425, this.p00.y + this.height, this.width * 1.35, this.width * 0.12, '#B7B4B4', '', 0, 0));
     }
     protected calcSize(length: number, factor: number = 0.71): number {
-        console.log(`class Pool calcSize ${factor}`)
+        // console.log(`class Pool calcSize ${factor}`)
         return this.getOdd(length / factor);
     };
     protected getWallThickness(): number {
@@ -575,26 +576,28 @@ export class Valve extends BaseMineDraw {
 }
 
 export class ValveCheck extends BaseMineDraw {
-    constructor(p0: Point, length: number) {
-        super(p0, length);
+    constructor(p0: Point, length: number, disposition: Disposition = Disposition.Vertical) {
+        super(p0, length, disposition);
         this.name = 'Valvecheck';
-        this.primitives.push(this.createTriangle(p0.x, p0.y, p0.x + this.calcSize(length), p0.y, p0.x + this.calcSize(length) * 0.5, p0.y + length * 0.5,
-            '#E1F1FB', '#000000', length * 0.02));
-        this.primitives.push(this.createTriangle(p0.x, p0.y + length, p0.x + this.calcSize(length) * 0.5, p0.y + length * 0.5, p0.x + this.calcSize(length), p0.y + length,
-            '#1D8EEA', '#00C734', length * 0.02));
-        this.primitives.push(this.createTriangle(
-            p0.x + length * 0.16, p0.y + length * 0.09,
-            p0.x + this.calcSize(length) - length * 0.16, p0.y + length * 0.09,
-            p0.x + this.calcSize(length) * 0.5, p0.y + length * 0.5 - length * 0.16,
-            '#000000', '', 0));
-        // this.primitives = this.primitives.concat(CreateLabel(p0.newPointMoved(length * 0.5, length * 0.5), Disposition.Vertical, 'A'));
+        let p00: Point = this.rect.p0;
+        let p01: Point = (disposition == Disposition.Vertical) ? this.rect.rightTop() : this.rect.getMiddlePoint();
+        let p02: Point = (disposition == Disposition.Vertical) ? this.rect.getMiddlePoint() : this.rect.leftButtom();
+        this.primitives.push(this.createTriangle(p00, p01, p02, length, '#E1F1FB', '#000000'));
+        let p10: Point = this.rect.p1;
+        let p11: Point = (disposition == Disposition.Vertical) ? this.rect.leftButtom() : this.rect.getMiddlePoint();
+        let p12: Point = (disposition == Disposition.Vertical) ? this.rect.getMiddlePoint() : this.rect.rightTop();
+        this.primitives.push(this.createTriangle(p10, p11, p12, length, '#1D8EEA', '#00C734'));
+        let p03: Point = p00.newPointMoved(length * 0.16, length * 0.08)
+        let p04: Point = p01.newPointMoved(-length * 0.16, length * 0.08)
+        let p05: Point = p02.newPointMoved(0, -length * 0.16)
+        this.primitives.push(this.createTriangle(p03, p04, p05, length, '#000000', ''));
     }
-    private createTriangle(x1: number, y1: number, x2: number, y2: number, x3: number, y3: number, fill: string, stroke: string, strokeWidth: number): Konva.Line {
+    private createTriangle(p0: Point, p1: Point, p2: Point, length: number, fill: string, stroke: string): Konva.Line {
         return new Konva.Line({
-            points: [x1, y1, x2, y2, x3, y3],
+            points: [p0.x, p0.y, p1.x, p1.y, p2.x, p2.y],
             fill: fill,
             stroke: stroke,
-            strokeWidth: strokeWidth,
+            strokeWidth: Math.trunc(length * 0.035),
             closed: true,
         });
     }

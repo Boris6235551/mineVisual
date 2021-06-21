@@ -20,21 +20,28 @@
             <br>
             <div class="date">
                 <input type="date" name="" id="" v-on:change="fromDateChange" v-model="startDate">
+                <div class="shift">
+                    <select name="" id="" v-model="selectShifts" @change="selectShiftChange">
+                        <option v-for="shift in shifts">
+                            {{shift}}
+                        </option>
+                    </select>
+                </div>
                 <input type="date" name="" id="" v-on:change="tillDateChange" v-model="endDate">
             </div>
-            <br>
-            <div class="shift">
+            <!-- <br> -->
+            <!-- <div class="shift">
                 <select name="" id="" v-model="selectShifts" @change="selectShiftChange">
                     <option v-for="shift in shifts">
                         {{shift}}
                     </option>
                 </select>
-            </div>
-            <br>
+            </div> -->
+            <!-- <br> -->
             <p>Static Date:&emsp;{{objectShift.beginDate}}&emsp;&emsp;&emsp;{{objectShift.endDate}}</p>
             <p>Total skips:&emsp;{{objectShift.skips}}&emsp;pcs</p>
             <p>Total weight:&emsp;{{objectShift.weight}}&emsp;t</p>
-            <br>
+            <!-- <br> -->
             <div class="scroll-table">
                 <table>
                     <thead>

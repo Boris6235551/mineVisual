@@ -112,6 +112,11 @@ var BaseMineDraw = /** @class */ (function () {
         return this.getOdd(length / factor);
     };
     ;
+    BaseMineDraw.prototype.printRect = function () {
+        console.log("\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        console.log("Widget name=" + this.name + ";  rect=" + JSON.stringify(this.rect));
+        console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
+    };
     BaseMineDraw.prototype.move = function (delta) {
         if (this.primitives.length == 0)
             return;
