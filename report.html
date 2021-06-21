@@ -14,10 +14,8 @@
         <div class="reportBlock">
             <button style="position: absolute; left: 760px; top: 15px;" v-on:click="close">X</button>
             <button style="position: absolute; left: 15px; top: 15px;" v-on:click="print">Print</button>
-            <h3 style="text-align: center;">Protocol issued by measuring the weigth of the rock mass through <br> the
-                weigh
-                scale installed for measurement of total hoisted stones</h3>
-            <br>
+            <h3 style="text-align: center;">Protocol issued by measuring the weigth of the rock mass through <br> 
+                the weigh scale installed for measurement of total hoisted stones</h3>
             <div class="date">
                 <input type="date" name="" id="" v-on:change="fromDateChange" v-model="startDate">
                 <div class="shift">
@@ -29,19 +27,9 @@
                 </div>
                 <input type="date" name="" id="" v-on:change="tillDateChange" v-model="endDate">
             </div>
-            <!-- <br> -->
-            <!-- <div class="shift">
-                <select name="" id="" v-model="selectShifts" @change="selectShiftChange">
-                    <option v-for="shift in shifts">
-                        {{shift}}
-                    </option>
-                </select>
-            </div> -->
-            <!-- <br> -->
             <p>Static Date:&emsp;{{objectShift.beginDate}}&emsp;&emsp;&emsp;{{objectShift.endDate}}</p>
-            <p>Total skips:&emsp;{{objectShift.skips}}&emsp;pcs</p>
+            <p>Total skips:&emsp;&emsp;{{objectShift.skips}}&emsp;pcs</p>
             <p>Total weight:&emsp;{{objectShift.weight}}&emsp;t</p>
-            <!-- <br> -->
             <div class="scroll-table">
                 <table>
                     <thead>
@@ -49,7 +37,7 @@
                             <th>Time & Date</th>
                             <th>Skip</th>
                             <th>Skip No</th>
-                            <th>Wheight</th>
+                            <th>Weight</th>
                         </tr>
                     </thead>
                 </table>

@@ -9,28 +9,35 @@
         display: none;
     }
     .footer  {
-        bottom: 0px;
+        left: 50px;
+        bottom: 60px;
         position: fixed;
         display: flex;
     }
     .operator {
-        bottom: 0px;
+        bottom: 60px;
         position: fixed;
-        left: 450px;
+        left: 400px;
     }
-    tr:nth-child(15) {
+    tr:nth-child(35) {
         page-break-after: always;
     }
-    tr:nth-child(37) {
+    tr:nth-child(82) {
         page-break-after: always;
     }
-    tr:nth-child(59) {
+    tr:nth-child(129) {
         page-break-after: always;
     }
-    tr:nth-child(81) {
+    tr:nth-child(176) {
         page-break-after: always;
     }
-    tr:nth-child(103) {
+    tr:nth-child(223) {
+        page-break-after: always;
+    }
+    tr:nth-child(270) {
+        page-break-after: always;
+    }
+    tr:nth-child(317) {
         page-break-after: always;
     }
     tr {
@@ -65,25 +72,15 @@
         border:0;
     }
     td {
-        border: 1px solid black;
+        border: none;
+        font-size: 14px;
+        text-align: center;
     }
 }
 
 body {
     overflow: hidden;
 }
-
-/* td {
-    border: 3px solid #E8E9EF;
-    text-align: center;
-    /* height: 10px;     */
-/* } */
-
-/* table {
-    width: 100%;
-    padding: 0 11px 13px 11px;
-    border-collapse: collapse;
-} */
 
 .date {
     display: flex;
@@ -100,7 +97,7 @@ body {
         display: none;
     } 
     .scroll-table-body {
-        height: 290px;
+        height: 300px;
     }
     .reportBlock {
         height: 400px;
@@ -115,6 +112,14 @@ body {
         width: 100%;
         padding: 0 11px 13px 11px;
         border-collapse: collapse;
+    }
+    .scroll-table tbody td {
+        text-align: center;
+        border-left: 1px solid #ddd;
+        border-right: 1px solid #ddd;
+        padding: 5px 0px 5px 0px;
+        font-size: 14px;
+        vertical-align: top;
     }
 }
 
@@ -134,14 +139,6 @@ body {
 	padding: 10px 15px;
 	background: #d8d8d8;
 	font-size: 14px;
-}
-.scroll-table tbody td {
-	text-align: center;
-	border-left: 1px solid #ddd;
-	border-right: 1px solid #ddd;
-	padding: 5px 0px 5px 0px;
-	font-size: 14px;
-	vertical-align: top;
 }
 .scroll-table tbody tr:nth-child(even){
 	background: #f3f3f3;

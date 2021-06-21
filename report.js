@@ -23,12 +23,16 @@ var options = {
     copies: 1,
 };
 
+function numberWithSpaces(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+  }
+
 function getEmptyShift() {
     return {
         beginDate: '',
         endDate: '',
         skips: 0,
-        weight: 0,
+        weight: '',
         datas: []
     };
 }
@@ -41,31 +45,7 @@ function getEmptyShift() {
 let report = new Vue({
     el: '#report',
     data: {
-        // objectShift: getEmptyShift(),
-        objectShift: {
-            datas: [
-                { batcher: "L Skip", number: "3", gross: "10310", tare: "350", net: 9960, time: "2021-06-02 10:44:08" },
-                { batcher: "L Skip", number: "3", gross: "10310", tare: "350", net: 9960, time: "2021-06-02 10:44:08" },
-                { batcher: "L Skip", number: "3", gross: "10310", tare: "350", net: 9960, time: "2021-06-02 10:44:08" },
-                { batcher: "L Skip", number: "3", gross: "10310", tare: "350", net: 9960, time: "2021-06-02 10:44:08" },
-                { batcher: "L Skip", number: "3", gross: "10310", tare: "350", net: 9960, time: "2021-06-02 10:44:08" },
-                { batcher: "L Skip", number: "3", gross: "10310", tare: "350", net: 9960, time: "2021-06-02 10:44:08" },
-                { batcher: "L Skip", number: "3", gross: "10310", tare: "350", net: 9960, time: "2021-06-02 10:44:08" },
-                { batcher: "L Skip", number: "3", gross: "10310", tare: "350", net: 9960, time: "2021-06-02 10:44:08" },
-                { batcher: "L Skip", number: "3", gross: "10310", tare: "350", net: 9960, time: "2021-06-02 10:44:08" },
-                { batcher: "L Skip", number: "3", gross: "10310", tare: "350", net: 9960, time: "2021-06-02 10:44:08" },
-                { batcher: "L Skip", number: "3", gross: "10310", tare: "350", net: 9960, time: "2021-06-02 10:44:08" },
-                { batcher: "L Skip", number: "3", gross: "10310", tare: "350", net: 9960, time: "2021-06-02 10:44:08" },
-                { batcher: "L Skip", number: "3", gross: "10310", tare: "350", net: 9960, time: "2021-06-02 10:44:08" },
-                { batcher: "L Skip", number: "3", gross: "10310", tare: "350", net: 9960, time: "2021-06-02 10:44:08" },
-                { batcher: "L Skip", number: "3", gross: "10310", tare: "350", net: 9960, time: "2021-06-02 10:44:08" },
-                { batcher: "L Skip", number: "3", gross: "10310", tare: "350", net: 9960, time: "2021-06-02 10:44:08" },
-                { batcher: "L Skip", number: "3", gross: "10310", tare: "350", net: 9960, time: "2021-06-02 10:44:08" },
-                { batcher: "L Skip", number: "3", gross: "10310", tare: "350", net: 9960, time: "2021-06-02 10:44:08" },
-                { batcher: "L Skip", number: "3", gross: "10310", tare: "350", net: 9960, time: "2021-06-02 10:44:08" },
-                { batcher: "L Skip", number: "3", gross: "10310", tare: "350", net: 9960, time: "2021-06-02 10:44:08" },
-            ],
-        },
+        objectShift: getEmptyShift(),
         startDate: new moment().format('YYYY-MM-DD'),    //"2021-06-16"
         endDate: new moment().format('YYYY-MM-DD'),
         shifts: ['no shifts found'],    // all shifts from period
@@ -106,6 +86,7 @@ let report = new Vue({
         },
         setShiftParams: async function (sBeginDate, shift = null) {
             this.objectShift = getEmptyShift();
+            this.objectShift.weight = numberWithSpaces(getEmptyShift().weight);
             if (shift == null) {
                 shift = await getShift(sBeginDate);
             }
