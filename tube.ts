@@ -108,11 +108,12 @@ export class Tube extends BaseMineDraw{
 
 
 export class Connection extends BaseMineDraw{
-    private width: number;
-    private dir: boolean = true;
-    private period: number;
-    private step: number;
-    //whitePlaces: Point[] 
+    private width: number;          // width of white square
+    private period: number;         // length of the one full element with white rect moving
+    private step: number;           // white square moving length
+    private count: number;          // elements (parts) count 
+    private dir: boolean = true;    // direction of flow
+    private frameCnt: number;       // count of annimation frames
     constructor(p0: Point, length: number, disposition: Disposition) {
         super(p0,length, disposition);
         this.width = this.getOdd(length);
@@ -120,9 +121,10 @@ export class Connection extends BaseMineDraw{
             this.rect.p1.x = this.rect.p0.x + this.width;
             this.rect.p1.y = this.rect.p0.y + 100;
         }
-        this.period = this.width * 4;       // length of the one full element with white rect moving
+        this.frameCnt = 4;
+        this.period = this.width * this.frameCnt;   // length of the one full element with white rect moving
     }
-    positionByMidPoints(beginP: Point, endP: Point){
+    positionByPoints(beginP: Point, endP: Point){
         let half = (this.width - 1) / 2;
         if(this.disposition == Disposition.Vertical){
             this.rect.p0.x = beginP.x - half;
@@ -137,47 +139,79 @@ export class Connection extends BaseMineDraw{
             this.rect.p1.y = endP.y + half;
         }
     }
-    connectVertical(upObj: BaseMineDraw, downObj: BaseMineDraw, upword: boolean = true): boolean{
-        this.dir = upword;
-        let up = upObj.rect.getMiddleDownPoint();
-        let dn = downObj.rect.getMiddleUpPoint(); 
-        this.positionByMidPoints(up, dn);
-        console.log('-------------  up   ------>', JSON.stringify(up))
-        //this.printRect()
-        console.log('-------------  dn   ------>', JSON.stringify(dn))
-        if(Math.abs(up.x - dn.x) > DeltaPoint) return false;
-        let distance = /*distance*/(dn.y - up.y);   
-        let count = Math.trunc(distance/this.period);   // count of elements 
-        this.step = Math.trunc(distance/count/4);       // lenght of white rect movment 
-        console.log(`c count = ${count}; and step = ${this.step}`)
-        let r = new Konva.Rect({
-            x: this.rect.p0.x, y: this.rect.p0.y, height: distance, width: this.width, fill: '#1D8EEA'
-            //x: up.x - 7, y: up.y, height: distance, width: 14, fill: '#1D8EEA'
-        });
-        this.primitives.push(r);
-        // for(let i = 0; i < count; i++){
-        //     let nextY = this.step * 4 * i;
-        //     if(upword){
-        //         nextY += this.step * 3;
+    calcParamsAndCreateBase(distance: number){
+        this.count = Math.trunc(distance/this.period);   // count of elements 
+        this.step = Math.trunc(distance/this.count/this.frameCnt);       // lenght of white rect movment 
+        this.primitives.push( new Konva.Rect({ x: this.rect.p0.x, y: this.rect.p0.y, fill: '#1D8EEA',
+            height: distance,  width: this.width}) );
+        // for(let i = 0; i < this.count; i++){
+        //     let dElementPos = this.period * i;
+        //     let nextY = this.disposition == Disposition.Vertical ?  : 0;
+        //     let nextX = this.disposition == Disposition.Vertical ? 0 : this.step * 4 * i;
+        //     if(this.dir){
+        //         nextY += this.step * (this.frameCnt - 1);
         //         this.primitives.push(new Konva.Rect({
-        //             x: r.x(), y: up.y + nextY, height: this.width, width: this.width, fill: '#E1F1FB'
+        //             //x: r.x(), y: up.y + nextY, height: this.width, width: this.width, fill: '#E1F1FB'
+        //             x: this.rect.p0.x, y: this.rect.p0.y + nextY, height: this.width, width: this.width, fill: '#E1F1FB'
         //         }));
         //     }
         //     else
         //         this.primitives.push(new Konva.Rect({
-        //             x: r.x(), y: up.y + nextY, height: this.width, width: this.width, fill: '#E1F1FB'
+        //             // x: r.x(), y: up.y + nextY, height: this.width, width: this.width, fill: '#E1F1FB'
+        //             x: this.rect.p0.x, y: this.rect.p0.y + nextY, height: this.width, width: this.width, fill: '#E1F1FB'
         //         }));
+
+        //     this.primitives.push(new Konva.Rect({x: this.rect.p0.x + nextX, y: this.rect.p0.y + nextY,
+        //              height: this.width, width: this.width, fill: '#E1F1FB'}));
+
         // }
+
+    }
+    connectVertical(upObj: BaseMineDraw, downObj: BaseMineDraw, upword: boolean = true): boolean{
+        this.dir = upword;
+        let up = upObj.rect.getMiddleDownPoint();
+        let dn = downObj.rect.getMiddleUpPoint(); 
+        // console.log('-------------  up   ------>', JSON.stringify(up))
+        // //this.printRect()
+        // console.log('-------------  dn   ------>', JSON.stringify(dn))
+        if(Math.abs(up.x - dn.x) > DeltaPoint) return false;
+        this.positionByPoints(up, dn);
+        this.calcParamsAndCreateBase(dn.y - up.y);
+        for(let i = 0; i < this.count; i++){
+            let nextY = this.step * 4 * i;
+            if(upword){
+                nextY += this.step * 3;
+                this.primitives.push(new Konva.Rect({
+                    //x: r.x(), y: up.y + nextY, height: this.width, width: this.width, fill: '#E1F1FB'
+                    x: this.rect.p0.x, y: this.rect.p0.y + nextY, height: this.width, width: this.width, fill: '#E1F1FB'
+                }));
+            }
+            else
+                this.primitives.push(new Konva.Rect({
+                    // x: r.x(), y: up.y + nextY, height: this.width, width: this.width, fill: '#E1F1FB'
+                    x: this.rect.p0.x, y: this.rect.p0.y + nextY, height: this.width, width: this.width, fill: '#E1F1FB'
+                }));
+        }
         return true;
     }
+    connectHoriszontal(leftObj: BaseMineDraw, rightObj: BaseMineDraw){
+
+    }
     private moveWhite(): void{
-        let dy: number;
-        if(this.animationFrame < 3) dy = this.dir ? -this.step : this.step;
-        else dy = this.dir ? (3 * this.step) : -(3*this.step);
-        for(let i = 1; i < this.primitives.length; i++) this.primitives[i].move({x:0, y: dy});
+        let dy: number = 0;
+        let dx: number = 0;
+        if(this.disposition == Disposition.Vertical){
+            if(this.animationFrame < 3) dy = this.dir ? -this.step : this.step;
+            else dy = this.dir ? (3 * this.step) : -(3*this.step);
+        }
+        else {
+            if(this.animationFrame < 3) dx = this.dir ? -this.step : this.step;
+            else dx = this.dir ? (3 * this.step) : -(3*this.step);
+        }
+        for(let i = 1; i < this.primitives.length; i++) this.primitives[i].move({x: dx, y: dy});
     }
     nextFrame(): void {
-return;
+// return;
         this.moveWhite();
         if(this.animationFrame < 3) this.animationFrame +=1;
         else this.animationFrame = 0;

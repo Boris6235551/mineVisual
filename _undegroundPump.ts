@@ -35,9 +35,9 @@ class BASEPUMP extends Scheme {
         let line =  new Connection(new Point(0,0), 5, Disposition.Vertical);
         line.connectVertical(upWidget, downWidget);
         this.addWidget(line);
- if(upWidget.name == 'Y16' && downWidget.name == 'Y13') 
-    console.log(`@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ Y16 rect=${upWidget.printRect()}; 
-                Y13 rect=${downWidget.printRect()}; line rect =${line.printRect()}`);
+//  if(upWidget.name == 'Y16' && downWidget.name == 'Y13') 
+//     console.log(`@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ Y16 rect=${upWidget.printRect()}; 
+//                 Y13 rect=${downWidget.printRect()}; line rect =${line.printRect()}`);
 
     }
     send(mes: any) {
@@ -84,17 +84,21 @@ let vPoints = [
 ];
 
 let mineConnections = [
+    /*-------------       LINE 1       --------------*/
     {begin: 'Y16', end: 'Y13', dir: true, disp: Disposition.Vertical},
-    // {begin: 'Y13', end: 'Pump1', dir: true, disp: Disposition.Vertical},
-    // {begin: 'Pump1', end: 'Y17', dir: true, disp: Disposition.Vertical},
+    {begin: 'Y13', end: 'Pump1', dir: true, disp: Disposition.Vertical},
+    {begin: 'Pump1', end: 'Y17', dir: true, disp: Disposition.Vertical},
 
-    // {begin: 'Y26', end: 'Y23', dir: true, disp: Disposition.Vertical},
-    // {begin: 'Y23', end: 'Pump2', dir: true, disp: Disposition.Vertical},
-    // {begin: 'Pump2', end: 'Y27', dir: true, disp: Disposition.Vertical},
+    {begin: 'Y11', end: 'Y12', dir: true, disp: Disposition.Horizontal},
+    /*-----------------------------------------------*/
 
-    // {begin: 'Y36', end: 'Y33', dir: true, disp: Disposition.Vertical},
-    // {begin: 'Y33', end: 'Pump3', dir: true, disp: Disposition.Vertical},
-    // {begin: 'Pump3', end: 'Y37', dir: true, disp: Disposition.Vertical},
+    {begin: 'Y26', end: 'Y23', dir: true, disp: Disposition.Vertical},
+    {begin: 'Y23', end: 'Pump2', dir: true, disp: Disposition.Vertical},
+    {begin: 'Pump2', end: 'Y27', dir: true, disp: Disposition.Vertical},
+
+    {begin: 'Y36', end: 'Y33', dir: true, disp: Disposition.Vertical},
+    {begin: 'Y33', end: 'Pump3', dir: true, disp: Disposition.Vertical},
+    {begin: 'Pump3', end: 'Y37', dir: true, disp: Disposition.Vertical},
 
 
 

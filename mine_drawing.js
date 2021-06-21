@@ -113,6 +113,7 @@ var BaseMineDraw = /** @class */ (function () {
     };
     ;
     BaseMineDraw.prototype.printRect = function () {
+        return JSON.stringify(this.rect);
         console.log("\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         console.log("Widget name=" + this.name + ";  rect=" + JSON.stringify(this.rect));
         console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");

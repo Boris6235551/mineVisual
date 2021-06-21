@@ -110,19 +110,19 @@ var Tube = /** @class */ (function (_super) {
 exports.Tube = Tube;
 var Connection = /** @class */ (function (_super) {
     __extends(Connection, _super);
-    //whitePlaces: Point[] 
     function Connection(p0, length, disposition) {
         var _this = _super.call(this, p0, length, disposition) || this;
-        _this.dir = true;
+        _this.dir = true; // direction of flow
         _this.width = _this.getOdd(length);
         if (disposition == mine_drawing_1.Disposition.Vertical) {
             _this.rect.p1.x = _this.rect.p0.x + _this.width;
             _this.rect.p1.y = _this.rect.p0.y + 100;
         }
-        _this.period = _this.width * 4; // length of the one full element with white rect moving
+        _this.frameCnt = 4;
+        _this.period = _this.width * _this.frameCnt; // length of the one full element with white rect moving
         return _this;
     }
-    Connection.prototype.positionByMidPoints = function (beginP, endP) {
+    Connection.prototype.positionByPoints = function (beginP, endP) {
         var half = (this.width - 1) / 2;
         if (this.disposition == mine_drawing_1.Disposition.Vertical) {
             this.rect.p0.x = beginP.x - half;
@@ -137,52 +137,82 @@ var Connection = /** @class */ (function (_super) {
             this.rect.p1.y = endP.y + half;
         }
     };
+    Connection.prototype.calcParamsAndCreateBase = function (distance) {
+        this.count = Math.trunc(distance / this.period); // count of elements 
+        this.step = Math.trunc(distance / this.count / this.frameCnt); // lenght of white rect movment 
+        this.primitives.push(new konva_1.default.Rect({ x: this.rect.p0.x, y: this.rect.p0.y, fill: '#1D8EEA',
+            height: distance, width: this.width }));
+        // for(let i = 0; i < this.count; i++){
+        //     let dElementPos = this.period * i;
+        //     let nextY = this.disposition == Disposition.Vertical ?  : 0;
+        //     let nextX = this.disposition == Disposition.Vertical ? 0 : this.step * 4 * i;
+        //     if(this.dir){
+        //         nextY += this.step * (this.frameCnt - 1);
+        //         this.primitives.push(new Konva.Rect({
+        //             //x: r.x(), y: up.y + nextY, height: this.width, width: this.width, fill: '#E1F1FB'
+        //             x: this.rect.p0.x, y: this.rect.p0.y + nextY, height: this.width, width: this.width, fill: '#E1F1FB'
+        //         }));
+        //     }
+        //     else
+        //         this.primitives.push(new Konva.Rect({
+        //             // x: r.x(), y: up.y + nextY, height: this.width, width: this.width, fill: '#E1F1FB'
+        //             x: this.rect.p0.x, y: this.rect.p0.y + nextY, height: this.width, width: this.width, fill: '#E1F1FB'
+        //         }));
+        //     this.primitives.push(new Konva.Rect({x: this.rect.p0.x + nextX, y: this.rect.p0.y + nextY,
+        //              height: this.width, width: this.width, fill: '#E1F1FB'}));
+        // }
+    };
     Connection.prototype.connectVertical = function (upObj, downObj, upword) {
         if (upword === void 0) { upword = true; }
         this.dir = upword;
         var up = upObj.rect.getMiddleDownPoint();
         var dn = downObj.rect.getMiddleUpPoint();
-        this.positionByMidPoints(up, dn);
-        console.log('-------------  up   ------>', JSON.stringify(up));
-        //this.printRect()
-        console.log('-------------  dn   ------>', JSON.stringify(dn));
+        // console.log('-------------  up   ------>', JSON.stringify(up))
+        // //this.printRect()
+        // console.log('-------------  dn   ------>', JSON.stringify(dn))
         if (Math.abs(up.x - dn.x) > DeltaPoint)
             return false;
-        var distance = /*distance*/ (dn.y - up.y);
-        var count = Math.trunc(distance / this.period); // count of elements 
-        this.step = Math.trunc(distance / count / 4); // lenght of white rect movment 
-        console.log("c count = " + count + "; and step = " + this.step);
-        var r = new konva_1.default.Rect({
-            x: this.rect.p0.x, y: this.rect.p0.y, height: distance, width: this.width, fill: '#1D8EEA'
-            //x: up.x - 7, y: up.y, height: distance, width: 14, fill: '#1D8EEA'
-        });
-        this.primitives.push(r);
-        // for(let i = 0; i < count; i++){
-        //     let nextY = this.step * 4 * i;
-        //     if(upword){
-        //         nextY += this.step * 3;
-        //         this.primitives.push(new Konva.Rect({
-        //             x: r.x(), y: up.y + nextY, height: this.width, width: this.width, fill: '#E1F1FB'
-        //         }));
-        //     }
-        //     else
-        //         this.primitives.push(new Konva.Rect({
-        //             x: r.x(), y: up.y + nextY, height: this.width, width: this.width, fill: '#E1F1FB'
-        //         }));
-        // }
+        this.positionByPoints(up, dn);
+        this.calcParamsAndCreateBase(dn.y - up.y);
+        for (var i = 0; i < this.count; i++) {
+            var nextY = this.step * 4 * i;
+            if (upword) {
+                nextY += this.step * 3;
+                this.primitives.push(new konva_1.default.Rect({
+                    //x: r.x(), y: up.y + nextY, height: this.width, width: this.width, fill: '#E1F1FB'
+                    x: this.rect.p0.x, y: this.rect.p0.y + nextY, height: this.width, width: this.width, fill: '#E1F1FB'
+                }));
+            }
+            else
+                this.primitives.push(new konva_1.default.Rect({
+                    // x: r.x(), y: up.y + nextY, height: this.width, width: this.width, fill: '#E1F1FB'
+                    x: this.rect.p0.x, y: this.rect.p0.y + nextY, height: this.width, width: this.width, fill: '#E1F1FB'
+                }));
+        }
         return true;
     };
+    Connection.prototype.connectHoriszontal = function (leftObj, rightObj) {
+    };
     Connection.prototype.moveWhite = function () {
-        var dy;
-        if (this.animationFrame < 3)
-            dy = this.dir ? -this.step : this.step;
-        else
-            dy = this.dir ? (3 * this.step) : -(3 * this.step);
+        var dy = 0;
+        var dx = 0;
+        if (this.disposition == mine_drawing_1.Disposition.Vertical) {
+            if (this.animationFrame < 3)
+                dy = this.dir ? -this.step : this.step;
+            else
+                dy = this.dir ? (3 * this.step) : -(3 * this.step);
+        }
+        else {
+            if (this.animationFrame < 3)
+                dx = this.dir ? -this.step : this.step;
+            else
+                dx = this.dir ? (3 * this.step) : -(3 * this.step);
+        }
         for (var i = 1; i < this.primitives.length; i++)
-            this.primitives[i].move({ x: 0, y: dy });
+            this.primitives[i].move({ x: dx, y: dy });
     };
     Connection.prototype.nextFrame = function () {
-        return;
+        // return;
         this.moveWhite();
         if (this.animationFrame < 3)
             this.animationFrame += 1;

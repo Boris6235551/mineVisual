@@ -52,7 +52,7 @@ function sendMes(name, mes) {
     screenMain.resendMessage(name, mes);
 }
 tcpipConnector_1.startClients(sendMes);
-// animateScreen(screenMain, 500);
+mine_drawing_1.animateScreen(screenMain, 500);
 // animateScheme(dsf, 500);
 // animateScheme(batcher, 500);
 // animateScheme(skip, 500);

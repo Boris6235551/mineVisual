@@ -57,8 +57,9 @@ var BASEPUMP = /** @class */ (function (_super) {
         var line = new tube_1.Connection(new mine_drawing_1.Point(0, 0), 5, mine_drawing_1.Disposition.Vertical);
         line.connectVertical(upWidget, downWidget);
         this.addWidget(line);
-        if (upWidget.name == 'Y16' && downWidget.name == 'Y13')
-            console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ Y16 rect=" + upWidget.printRect() + "; \n                Y13 rect=" + downWidget.printRect() + "; line rect =" + line.printRect());
+        //  if(upWidget.name == 'Y16' && downWidget.name == 'Y13') 
+        //     console.log(`@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ Y16 rect=${upWidget.printRect()}; 
+        //                 Y13 rect=${downWidget.printRect()}; line rect =${line.printRect()}`);
     };
     BASEPUMP.prototype.send = function (mes) {
         console.log("received message UNDEGROUNDPUMP name=" + this.name);
@@ -106,7 +107,18 @@ var vPoints = [
     [40, 380, null] // Yx7  back closed valve
 ];
 var mineConnections = [
+    /*-------------       LINE 1       --------------*/
     { begin: 'Y16', end: 'Y13', dir: true, disp: mine_drawing_1.Disposition.Vertical },
+    { begin: 'Y13', end: 'Pump1', dir: true, disp: mine_drawing_1.Disposition.Vertical },
+    { begin: 'Pump1', end: 'Y17', dir: true, disp: mine_drawing_1.Disposition.Vertical },
+    { begin: 'Y11', end: 'Y12', dir: true, disp: mine_drawing_1.Disposition.Horizontal },
+    /*-----------------------------------------------*/
+    { begin: 'Y26', end: 'Y23', dir: true, disp: mine_drawing_1.Disposition.Vertical },
+    { begin: 'Y23', end: 'Pump2', dir: true, disp: mine_drawing_1.Disposition.Vertical },
+    { begin: 'Pump2', end: 'Y27', dir: true, disp: mine_drawing_1.Disposition.Vertical },
+    { begin: 'Y36', end: 'Y33', dir: true, disp: mine_drawing_1.Disposition.Vertical },
+    { begin: 'Y33', end: 'Pump3', dir: true, disp: mine_drawing_1.Disposition.Vertical },
+    { begin: 'Pump3', end: 'Y37', dir: true, disp: mine_drawing_1.Disposition.Vertical },
 ];
 var LINES_COUNT1 = 3;
 var LINES_COUNT2 = 2;

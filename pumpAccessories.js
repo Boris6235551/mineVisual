@@ -498,7 +498,7 @@ var Valve = /** @class */ (function (_super) {
         _this.primitives.push(_this.createCircle(length));
         _this.labelsetPercentage = _this.createText(length, '');
         _this.primitives.push(_this.labelsetPercentage);
-        console.log(_this.labelsetPercentage);
+        //console.log(this.labelsetPercentage)
         _this.rect.p0.y -= 2;
         _this.rect.p1.y += 2;
         var _a = utils_1.CreateLabel(p0.newPointMoved(length * 0.5, length * 0.5), disposition, ''), lr = _a[0], lt = _a[1];

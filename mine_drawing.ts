@@ -112,6 +112,7 @@ export class BaseMineDraw {
         return this.getOdd(length / factor);
     };
     printRect(){
+        return JSON.stringify(this.rect); 
         console.log(`\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!`)
         console.log(`Widget name=${this.name};  rect=${JSON.stringify(this.rect)}`)
         console.log(`!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n`)
