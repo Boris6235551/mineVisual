@@ -17,7 +17,7 @@ var _receivinghopper_1 = require("./_receivinghopper");
 var _substation_1 = require("./_substation");
 var _compressor_1 = require("./_compressor");
 var ipcRenderer = require('electron').ipcRenderer;
-var BrowserWindow = require('electron').remote.BrowserWindow;
+var _a = require('electron').remote, BrowserWindow = _a.BrowserWindow, getCurrentWindow = _a.getCurrentWindow;
 ipcRenderer.on('resended', function (event, arr) {
     console.log('resended');
 });

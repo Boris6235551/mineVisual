@@ -17,8 +17,13 @@ export class Point {
         this.x = p.x;
         this.y = p.y;
     }
-    newPointMoved(dx: number, dy: number){
+    newPointMoved(dx: number, dy: number): Point{
         return new Point(this.x + dx, this.y + dy);
+    }
+    movePoint(dx: number, dy: number): Point{
+        this.x += dx;
+        this.y += dy;
+        return this;
     }
 };
 
@@ -53,10 +58,10 @@ export class Rectangle {
         return new Point(this.getMiddlePoint().x, this.p1.y);
     }
     getMiddleRightPoint(): Point {
-        return new Point(this.p0.x, this.getMiddlePoint().y);
+        return new Point(this.p1.x, this.getMiddlePoint().y);
     }
     getMiddleLeftPoint(): Point {
-        return new Point(this.p1.x, this.getMiddlePoint().y);
+        return new Point(this.p0.x, this.getMiddlePoint().y);
     }
     copyRect(source: Rectangle): void {
         this.p0.copyPoint(source.p0);

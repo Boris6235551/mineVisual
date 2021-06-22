@@ -12,7 +12,7 @@ import { RECEIVINGHOPPER } from './_receivinghopper'
 import { SUBSTATION } from './_substation'
 import { COMPRESSOR } from './_compressor';
 const { ipcRenderer } = require('electron');
-const { BrowserWindow } = require('electron').remote
+const { BrowserWindow, getCurrentWindow } = require('electron').remote
 
 
 ipcRenderer.on('resended', (event, arr) => {

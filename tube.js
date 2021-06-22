@@ -112,7 +112,7 @@ var Connection = /** @class */ (function (_super) {
     __extends(Connection, _super);
     function Connection(p0, length, disposition) {
         var _this = _super.call(this, p0, length, disposition) || this;
-        _this.dir = true; // direction of flow
+        _this.dir = true; // direction of flow upWord or rightWord == true
         _this.width = _this.getOdd(length);
         if (disposition == mine_drawing_1.Disposition.Vertical) {
             _this.rect.p1.x = _this.rect.p0.x + _this.width;
@@ -122,8 +122,11 @@ var Connection = /** @class */ (function (_super) {
         _this.period = _this.width * _this.frameCnt; // length of the one full element with white rect moving
         return _this;
     }
+    Connection.prototype.getHalf = function () {
+        return (this.width - 1) / 2;
+    };
     Connection.prototype.positionByPoints = function (beginP, endP) {
-        var half = (this.width - 1) / 2;
+        var half = this.getHalf();
         if (this.disposition == mine_drawing_1.Disposition.Vertical) {
             this.rect.p0.x = beginP.x - half;
             this.rect.p0.y = beginP.y;
@@ -137,30 +140,21 @@ var Connection = /** @class */ (function (_super) {
             this.rect.p1.y = endP.y + half;
         }
     };
-    Connection.prototype.calcParamsAndCreateBase = function (distance) {
+    Connection.prototype.calcParamsAndCreateElements = function (distance) {
         this.count = Math.trunc(distance / this.period); // count of elements 
         this.step = Math.trunc(distance / this.count / this.frameCnt); // lenght of white rect movment 
         this.primitives.push(new konva_1.default.Rect({ x: this.rect.p0.x, y: this.rect.p0.y, fill: '#1D8EEA',
-            height: distance, width: this.width }));
-        // for(let i = 0; i < this.count; i++){
-        //     let dElementPos = this.period * i;
-        //     let nextY = this.disposition == Disposition.Vertical ?  : 0;
-        //     let nextX = this.disposition == Disposition.Vertical ? 0 : this.step * 4 * i;
-        //     if(this.dir){
-        //         nextY += this.step * (this.frameCnt - 1);
-        //         this.primitives.push(new Konva.Rect({
-        //             //x: r.x(), y: up.y + nextY, height: this.width, width: this.width, fill: '#E1F1FB'
-        //             x: this.rect.p0.x, y: this.rect.p0.y + nextY, height: this.width, width: this.width, fill: '#E1F1FB'
-        //         }));
-        //     }
-        //     else
-        //         this.primitives.push(new Konva.Rect({
-        //             // x: r.x(), y: up.y + nextY, height: this.width, width: this.width, fill: '#E1F1FB'
-        //             x: this.rect.p0.x, y: this.rect.p0.y + nextY, height: this.width, width: this.width, fill: '#E1F1FB'
-        //         }));
-        //     this.primitives.push(new Konva.Rect({x: this.rect.p0.x + nextX, y: this.rect.p0.y + nextY,
-        //              height: this.width, width: this.width, fill: '#E1F1FB'}));
-        // }
+            height: this.disposition == mine_drawing_1.Disposition.Vertical ? distance : this.width,
+            width: this.disposition == mine_drawing_1.Disposition.Vertical ? this.width : distance }));
+        for (var i = 0; i < this.count; i++) {
+            var dElementPos = this.step * this.frameCnt * i;
+            if (this.dir)
+                dElementPos += this.step * (this.frameCnt - 1);
+            var dx = this.disposition == mine_drawing_1.Disposition.Vertical ? 0 : dElementPos;
+            var dy = this.disposition == mine_drawing_1.Disposition.Vertical ? dElementPos : 0;
+            this.primitives.push(new konva_1.default.Rect({ x: this.rect.p0.x + dx, y: this.rect.p0.y + dy,
+                height: this.width, width: this.width, fill: '#E1F1FB' }));
+        }
     };
     Connection.prototype.connectVertical = function (upObj, downObj, upword) {
         if (upword === void 0) { upword = true; }
@@ -173,26 +167,66 @@ var Connection = /** @class */ (function (_super) {
         if (Math.abs(up.x - dn.x) > DeltaPoint)
             return false;
         this.positionByPoints(up, dn);
-        this.calcParamsAndCreateBase(dn.y - up.y);
-        for (var i = 0; i < this.count; i++) {
-            var nextY = this.step * 4 * i;
-            if (upword) {
-                nextY += this.step * 3;
-                this.primitives.push(new konva_1.default.Rect({
-                    //x: r.x(), y: up.y + nextY, height: this.width, width: this.width, fill: '#E1F1FB'
-                    x: this.rect.p0.x, y: this.rect.p0.y + nextY, height: this.width, width: this.width, fill: '#E1F1FB'
-                }));
-            }
-            else
-                this.primitives.push(new konva_1.default.Rect({
-                    // x: r.x(), y: up.y + nextY, height: this.width, width: this.width, fill: '#E1F1FB'
-                    x: this.rect.p0.x, y: this.rect.p0.y + nextY, height: this.width, width: this.width, fill: '#E1F1FB'
-                }));
-        }
+        this.calcParamsAndCreateElements(dn.y - up.y);
         return true;
     };
-    Connection.prototype.connectHoriszontal = function (leftObj, rightObj) {
+    Connection.prototype.connectHoriszontal = function (leftObj, rightObj, rightWord) {
+        if (rightWord === void 0) { rightWord = true; }
+        this.dir = rightWord;
+        var right = rightObj.rect.getMiddleLeftPoint();
+        var left = leftObj.rect.getMiddleRightPoint();
+        if (Math.abs(right.y - left.y) > DeltaPoint)
+            return false;
+        this.positionByPoints(left, right);
+        this.calcParamsAndCreateElements(right.x - left.x);
+        return true;
     };
+    Connection.prototype.connectObjCoordinate = function (obj, coo, dir) {
+        var p0;
+        var p1;
+        var distance;
+        this.dir = dir;
+        if (this.disposition == mine_drawing_1.Disposition.Vertical) {
+            p0 = obj.rect.getMiddleDownPoint();
+            p1 = new mine_drawing_1.Point(p0.x, coo);
+            distance = p1.y - p0.y;
+        }
+        else {
+            p0 = obj.rect.getMiddleRightPoint();
+            p1 = new mine_drawing_1.Point(coo, p0.y);
+            distance = p1.x - p0.x;
+        }
+        this.positionByPoints(p0, p1);
+        this.calcParamsAndCreateElements(distance);
+    };
+    Connection.prototype.getOverlapedPoint = function (p, overlap) {
+        var dL = 0;
+        var dx = 0;
+        var dy = 0;
+        if (overlap > 0)
+            dL = -this.width;
+        else if (overlap < 0)
+            dL = this.width;
+        this.disposition == mine_drawing_1.Disposition.Vertical ? dy += dL : dx += dL;
+        return p.movePoint(dx, dy);
+    };
+    Connection.prototype.connectPointPoint = function (p0, overlap0, p1, overlap1) {
+        p0 = this.getOverlapedPoint(p0, overlap0);
+        p1 = this.getOverlapedPoint(p1, -overlap1);
+        this.positionByPoints(p0, p1);
+        this.calcParamsAndCreateElements(this.disposition == mine_drawing_1.Disposition.Vertical ? (p1.y - p0.y) : (p1.x - p0.x));
+    };
+    Connection.prototype.getBegin = function (overlap) {
+        if (overlap === void 0) { overlap = 0; }
+        var half = this.getHalf();
+        return this.disposition == mine_drawing_1.Disposition.Vertical ? new mine_drawing_1.Point(this.rect.p0.x + this.width, this.rect.p0.y + half) :
+            new mine_drawing_1.Point(this.rect.p0.x + half, this.rect.p0.y);
+    };
+    // getEnd(): Point{
+    //     let half = this.getHalf();
+    //     return this.disposition==Disposition.Vertical ? new Point(this.rect.p0.x + this.width, this.rect.p0.y + half) :
+    //                                                     new Point(this.rect.p0.x + half, this.rect.p0.y);
+    // }
     Connection.prototype.moveWhite = function () {
         var dy = 0;
         var dx = 0;
@@ -223,6 +257,21 @@ var Connection = /** @class */ (function (_super) {
     return Connection;
 }(mine_drawing_1.BaseMineDraw));
 exports.Connection = Connection;
+// for(let i = 0; i < this.count; i++){
+//     let nextY = this.step * 4 * i;
+//     if(upword){
+//         nextY += this.step * 3;
+//         this.primitives.push(new Konva.Rect({
+//             //x: r.x(), y: up.y + nextY, height: this.width, width: this.width, fill: '#E1F1FB'
+//             x: this.rect.p0.x, y: this.rect.p0.y + nextY, height: this.width, width: this.width, fill: '#E1F1FB'
+//         }));
+//     }
+//     else
+//         this.primitives.push(new Konva.Rect({
+//             // x: r.x(), y: up.y + nextY, height: this.width, width: this.width, fill: '#E1F1FB'
+//             x: this.rect.p0.x, y: this.rect.p0.y + nextY, height: this.width, width: this.width, fill: '#E1F1FB'
+//         }));
+// }
 var CornerCenterSize = 49;
 var CornerOrientation;
 (function (CornerOrientation) {

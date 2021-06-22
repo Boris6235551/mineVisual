@@ -8,7 +8,7 @@
 
 const moment = require('moment');
 const ipcAdmin = require('electron').ipcRenderer;
-// const { connectDB, getShift, getShifts, getShiftBatchers } = require('../BatcherWatcher/DB/db')
+const { connectDB, getShift, getShifts, getShiftBatchers } = require('../BatcherWatcher/DB/db')
 
 var options = {
     silent: false,
@@ -92,8 +92,9 @@ let report = new Vue({
             }
             if (shift != null) {
                 let datas = await getShiftBatchers(sBeginDate);
+                let i = 1; 
                 datas = datas.map((d) => {
-                    return { ...d, time: new moment(d.time).format("YYYY-MM-DD HH:mm:ss") };
+                    return { ...d, time: new moment(d.time).format("YYYY-MM-DD HH:mm:ss"), index: i++ };
                 });
                 let endDate = (shift.endDate != null) ? (new moment(shift.endDate).format("YYYY-MM-DD HH:mm:ss")) : ('');
                 this.objectShift = { ...shift, beginDate: sBeginDate, endDate: endDate, datas: datas };
@@ -103,6 +104,10 @@ let report = new Vue({
             window.close();
         },
         print: function () {
+            let win = getCurrentWindow();
+            console.log(`&&&&&&&&&&&&&& ${JSON.stringify(win.getSize())}`)
+            return;
+
             window.print();
         },
         fromDateChange: function (e) {    // startDate = "2021-06-16"; type string

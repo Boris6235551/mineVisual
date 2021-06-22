@@ -109,10 +109,11 @@ export class Tube extends BaseMineDraw{
 
 export class Connection extends BaseMineDraw{
     private width: number;          // width of white square
-    private period: number;         // length of the one full element with white rect moving
+    private period: number;         // ideal??? length of the one full element with one white rect moving
+                                    // real length = step * frameCnt;
     private step: number;           // white square moving length
     private count: number;          // elements (parts) count 
-    private dir: boolean = true;    // direction of flow
+    private dir: boolean = true;    // direction of flow upWord or rightWord == true
     private frameCnt: number;       // count of annimation frames
     constructor(p0: Point, length: number, disposition: Disposition) {
         super(p0,length, disposition);
@@ -124,8 +125,11 @@ export class Connection extends BaseMineDraw{
         this.frameCnt = 4;
         this.period = this.width * this.frameCnt;   // length of the one full element with white rect moving
     }
+    getHalf(): number{
+        return (this.width - 1) / 2;
+    }
     positionByPoints(beginP: Point, endP: Point){
-        let half = (this.width - 1) / 2;
+        let half = this.getHalf();
         if(this.disposition == Disposition.Vertical){
             this.rect.p0.x = beginP.x - half;
             this.rect.p0.y = beginP.y;
@@ -139,33 +143,20 @@ export class Connection extends BaseMineDraw{
             this.rect.p1.y = endP.y + half;
         }
     }
-    calcParamsAndCreateBase(distance: number){
+    calcParamsAndCreateElements(distance: number){
         this.count = Math.trunc(distance/this.period);   // count of elements 
         this.step = Math.trunc(distance/this.count/this.frameCnt);       // lenght of white rect movment 
         this.primitives.push( new Konva.Rect({ x: this.rect.p0.x, y: this.rect.p0.y, fill: '#1D8EEA',
-            height: distance,  width: this.width}) );
-        // for(let i = 0; i < this.count; i++){
-        //     let dElementPos = this.period * i;
-        //     let nextY = this.disposition == Disposition.Vertical ?  : 0;
-        //     let nextX = this.disposition == Disposition.Vertical ? 0 : this.step * 4 * i;
-        //     if(this.dir){
-        //         nextY += this.step * (this.frameCnt - 1);
-        //         this.primitives.push(new Konva.Rect({
-        //             //x: r.x(), y: up.y + nextY, height: this.width, width: this.width, fill: '#E1F1FB'
-        //             x: this.rect.p0.x, y: this.rect.p0.y + nextY, height: this.width, width: this.width, fill: '#E1F1FB'
-        //         }));
-        //     }
-        //     else
-        //         this.primitives.push(new Konva.Rect({
-        //             // x: r.x(), y: up.y + nextY, height: this.width, width: this.width, fill: '#E1F1FB'
-        //             x: this.rect.p0.x, y: this.rect.p0.y + nextY, height: this.width, width: this.width, fill: '#E1F1FB'
-        //         }));
-
-        //     this.primitives.push(new Konva.Rect({x: this.rect.p0.x + nextX, y: this.rect.p0.y + nextY,
-        //              height: this.width, width: this.width, fill: '#E1F1FB'}));
-
-        // }
-
+            height: this.disposition == Disposition.Vertical ? distance : this.width,  
+            width: this.disposition == Disposition.Vertical ? this.width : distance}) );
+        for(let i = 0; i < this.count; i++){
+            let dElementPos = this.step * this.frameCnt * i;
+            if(this.dir) dElementPos += this.step * (this.frameCnt - 1);
+            let dx = this.disposition == Disposition.Vertical ? 0 : dElementPos;
+            let dy = this.disposition == Disposition.Vertical ? dElementPos : 0;   
+            this.primitives.push(new Konva.Rect({x: this.rect.p0.x + dx, y: this.rect.p0.y + dy,
+                     height: this.width, width: this.width, fill: '#E1F1FB'}));
+        }
     }
     connectVertical(upObj: BaseMineDraw, downObj: BaseMineDraw, upword: boolean = true): boolean{
         this.dir = upword;
@@ -176,27 +167,61 @@ export class Connection extends BaseMineDraw{
         // console.log('-------------  dn   ------>', JSON.stringify(dn))
         if(Math.abs(up.x - dn.x) > DeltaPoint) return false;
         this.positionByPoints(up, dn);
-        this.calcParamsAndCreateBase(dn.y - up.y);
-        for(let i = 0; i < this.count; i++){
-            let nextY = this.step * 4 * i;
-            if(upword){
-                nextY += this.step * 3;
-                this.primitives.push(new Konva.Rect({
-                    //x: r.x(), y: up.y + nextY, height: this.width, width: this.width, fill: '#E1F1FB'
-                    x: this.rect.p0.x, y: this.rect.p0.y + nextY, height: this.width, width: this.width, fill: '#E1F1FB'
-                }));
-            }
-            else
-                this.primitives.push(new Konva.Rect({
-                    // x: r.x(), y: up.y + nextY, height: this.width, width: this.width, fill: '#E1F1FB'
-                    x: this.rect.p0.x, y: this.rect.p0.y + nextY, height: this.width, width: this.width, fill: '#E1F1FB'
-                }));
-        }
+        this.calcParamsAndCreateElements(dn.y - up.y);
         return true;
     }
-    connectHoriszontal(leftObj: BaseMineDraw, rightObj: BaseMineDraw){
-
+    connectHoriszontal(leftObj: BaseMineDraw, rightObj: BaseMineDraw, rightWord = true ): boolean{
+        this.dir = rightWord;
+        let right = rightObj.rect.getMiddleLeftPoint();
+        let left = leftObj.rect.getMiddleRightPoint();
+        if(Math.abs(right.y - left.y) > DeltaPoint) return false;
+        this.positionByPoints(left, right);
+        this.calcParamsAndCreateElements(right.x - left.x);
+        return true;
     }
+    connectObjCoordinate(obj: BaseMineDraw, coo: number, dir: boolean){
+        let p0: Point;
+        let p1: Point;
+        let distance: number;
+        this.dir = dir;
+        if(this.disposition == Disposition.Vertical) {
+            p0 = obj.rect.getMiddleDownPoint();
+            p1 = new Point(p0.x, coo);
+            distance = p1.y - p0.y;
+        }
+        else {
+            p0 = obj.rect.getMiddleRightPoint();
+            p1 = new Point(coo, p0.y)
+            distance = p1.x - p0.x;
+        }
+        this.positionByPoints(p0, p1)
+        this.calcParamsAndCreateElements(distance);
+    }
+    getOverlapedPoint(p: Point, overlap: number): Point{
+        let dL: number = 0;
+        let dx: number = 0;
+        let dy: number = 0; 
+        if(overlap > 0) dL = -this.width;
+        else if(overlap < 0) dL = this.width;
+        this.disposition == Disposition.Vertical ? dy += dL : dx += dL;
+        return p.movePoint(dx, dy);
+    }
+    connectPointPoint(p0: Point, overlap0: number, p1: Point, overlap1: number){
+        p0 = this.getOverlapedPoint(p0, overlap0);
+        p1 = this.getOverlapedPoint(p1, -overlap1);
+        this.positionByPoints(p0, p1);
+        this.calcParamsAndCreateElements(this.disposition==Disposition.Vertical ? (p1.y - p0.y) : (p1.x - p0.x)); 
+    }
+    getBegin(overlap: number = 0): Point{
+        let half = this.getHalf();
+        return this.disposition==Disposition.Vertical ? new Point(this.rect.p0.x + this.width, this.rect.p0.y + half) :
+                                                        new Point(this.rect.p0.x + half, this.rect.p0.y);
+    }
+    // getEnd(): Point{
+    //     let half = this.getHalf();
+    //     return this.disposition==Disposition.Vertical ? new Point(this.rect.p0.x + this.width, this.rect.p0.y + half) :
+    //                                                     new Point(this.rect.p0.x + half, this.rect.p0.y);
+    // }
     private moveWhite(): void{
         let dy: number = 0;
         let dx: number = 0;
@@ -217,6 +242,24 @@ export class Connection extends BaseMineDraw{
         else this.animationFrame = 0;
     };
 }
+
+        // for(let i = 0; i < this.count; i++){
+        //     let nextY = this.step * 4 * i;
+        //     if(upword){
+        //         nextY += this.step * 3;
+        //         this.primitives.push(new Konva.Rect({
+        //             //x: r.x(), y: up.y + nextY, height: this.width, width: this.width, fill: '#E1F1FB'
+        //             x: this.rect.p0.x, y: this.rect.p0.y + nextY, height: this.width, width: this.width, fill: '#E1F1FB'
+        //         }));
+        //     }
+        //     else
+        //         this.primitives.push(new Konva.Rect({
+        //             // x: r.x(), y: up.y + nextY, height: this.width, width: this.width, fill: '#E1F1FB'
+        //             x: this.rect.p0.x, y: this.rect.p0.y + nextY, height: this.width, width: this.width, fill: '#E1F1FB'
+        //         }));
+        // }
+
+
 
 const CornerCenterSize = 49
 export enum CornerOrientation {
