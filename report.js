@@ -1,31 +1,21 @@
-
-// https://qna.habr.com/q/761201
-
 // const datepicker = require('vuejs-datepicker');
 // import datepicker from 'vuejs-datepicker/dist/vuejs-datepicker.js';
-//import Vue from 'vue/dist/vue.js';
-//var Vue = require("vue/dist/vue.js");
+// import Vue from 'vue/dist/vue.js';
 
+//var Vue = require("vue/dist/vue.js");
+// const electron = require('electron');
 const moment = require('moment');
-const ipcAdmin = require('electron').ipcRenderer;
+const { remote, ipcRenderer, electron } = require("electron");
+
+const numeral = require('numeral');
+// const { BrowserWindow } = remote
+
 // const { connectDB, getShift, getShifts, getShiftBatchers } = require('../BatcherWatcher/DB/db')
 
-var options = {
-    silent: false,
-    printBackground: true,
-    color: false,
-    margin: {
-        marginType: 'printableArea'
-    },
-    landscape: false,
-    pagesPerSheet: 1,
-    collate: false,
-    copies: 1,
-};
-
-function numberWithSpaces(x) {
-    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-  }
+function numberWithSpaces(number) {
+    let numberString = numeral(number).format('10 000.12');
+    return numberString.toString().replace(/(\d)(?=(\d\d\d)+([^\d]|$))/g, '$1 ')
+}
 
 function getEmptyShift() {
     return {
@@ -36,6 +26,7 @@ function getEmptyShift() {
         datas: []
     };
 }
+
 /*{beginDate: '06/03/2021 12:34:12 PM', endDate: '06/03/2021 12:40:12 PM',
     skips: '10', weight: '498',
     datas: [{ batcher: "L Skip", number: "3", gross: "10310", tare: "350", 
@@ -45,12 +36,106 @@ function getEmptyShift() {
 let report = new Vue({
     el: '#report',
     data: {
-        objectShift: getEmptyShift(),
+        // objectShift: getEmptyShift(),
+        objectShift: {
+            datas: [
+                { batcher: "L Skip", number: "3", gross: "10310", tare: "350", net: 9960, time: "2021-06-02 10:44:08" },
+                { batcher: "L Skip", number: "3", gross: "10310", tare: "350", net: 9960, time: "2021-06-02 10:44:08" },
+                { batcher: "L Skip", number: "3", gross: "1010", tare: "350", net: 9960, time: "2021-06-02 10:44:08" },
+                { batcher: "L Skip", number: "3", gross: "10310", tare: "350", net: 9960, time: "2021-06-02 10:44:08" },
+                { batcher: "L Skip", number: "3", gross: "10310", tare: "350", net: 9960, time: "2021-06-02 10:44:08" },
+                { batcher: "L Skip", number: "3", gross: "10310", tare: "350", net: 9960, time: "2021-06-02 10:44:08" },
+                { batcher: "L Skip", number: "3", gross: "10310", tare: "350", net: 9960, time: "2021-06-02 10:44:08" },
+                { batcher: "L Skip", number: "3", gross: "0310", tare: "350", net: 9960, time: "2021-06-02 10:44:08" },
+                { batcher: "L Skip", number: "3", gross: "10310", tare: "350", net: 9960, time: "2021-06-02 10:44:08" },
+                { batcher: "L Skip", number: "3", gross: "10310", tare: "350", net: 9960, time: "2021-06-02 10:44:08" },
+                { batcher: "L Skip", number: "3", gross: "10310", tare: "350", net: 9960, time: "2021-06-02 10:44:08" },
+                { batcher: "L Skip", number: "3", gross: "10310", tare: "350", net: 9960, time: "2021-06-02 10:44:08" },
+                { batcher: "L Skip", number: "3", gross: "10310", tare: "350", net: 9960, time: "2021-06-02 10:44:08" },
+                { batcher: "L Skip", number: "3", gross: "10310", tare: "350", net: 9960, time: "2021-06-02 10:44:08" },
+                { batcher: "L Skip", number: "3", gross: "10310", tare: "350", net: 9960, time: "2021-06-02 10:44:08" },
+                { batcher: "L Skip", number: "3", gross: "10310", tare: "350", net: 9960, time: "2021-06-02 10:44:08" },
+                { batcher: "L Skip", number: "3", gross: "10310", tare: "350", net: 9960, time: "2021-06-02 10:44:08" },
+                { batcher: "L Skip", number: "3", gross: "10310", tare: "350", net: 9960, time: "2021-06-02 10:44:08" },
+                { batcher: "L Skip", number: "3", gross: "0310", tare: "350", net: 9960, time: "2021-06-02 10:44:08" },
+                { batcher: "L Skip", number: "3", gross: "10310", tare: "350", net: 9960, time: "2021-06-02 10:44:08" },
+                { batcher: "L Skip", number: "3", gross: "10310", tare: "350", net: 9960, time: "2021-06-02 10:44:08" },
+                { batcher: "L Skip", number: "3", gross: "1031", tare: "350", net: 9960, time: "2021-06-02 10:44:08" },
+                { batcher: "L Skip", number: "3", gross: "10310", tare: "350", net: 9960, time: "2021-06-02 10:44:08" },
+                { batcher: "L Skip", number: "3", gross: "10310", tare: "350", net: 9960, time: "2021-06-02 10:44:08" },
+                { batcher: "L Skip", number: "3", gross: "10310", tare: "350", net: 9960, time: "2021-06-02 10:44:08" },
+                { batcher: "L Skip", number: "3", gross: "10310", tare: "350", net: 9960, time: "2021-06-02 10:44:08" },
+                { batcher: "L Skip", number: "3", gross: "10310", tare: "350", net: 9960, time: "2021-06-02 10:44:08" },
+                { batcher: "L Skip", number: "3", gross: "10310", tare: "350", net: 9960, time: "2021-06-02 10:44:08" },
+                { batcher: "L Skip", number: "3", gross: "10310", tare: "350", net: 9960, time: "2021-06-02 10:44:08" },
+                { batcher: "L Skip", number: "3", gross: "10310", tare: "350", net: 9960, time: "2021-06-02 10:44:08" },
+                { batcher: "L Skip", number: "3", gross: "10310", tare: "350", net: 9960, time: "2021-06-02 10:44:08" },
+                { batcher: "L Skip", number: "3", gross: "10310", tare: "350", net: 9960, time: "2021-06-02 10:44:08" },
+                { batcher: "L Skip", number: "3", gross: "10310", tare: "350", net: 9960, time: "2021-06-02 10:44:08" },
+                { batcher: "L Skip", number: "3", gross: "10310", tare: "350", net: 9960, time: "2021-06-02 10:44:08" },
+                { batcher: "L Skip", number: "3", gross: "10310", tare: "350", net: 9960, time: "2021-06-02 10:44:08" },
+                { batcher: "L Skip", number: "3", gross: "10310", tare: "350", net: 9960, time: "2021-06-02 10:44:08" },
+                { batcher: "L Skip", number: "3", gross: "10310", tare: "350", net: 9960, time: "2021-06-02 10:44:08" },
+                { batcher: "L Skip", number: "3", gross: "10310", tare: "350", net: 9960, time: "2021-06-02 10:44:08" },
+                { batcher: "L Skip", number: "3", gross: "10310", tare: "350", net: 9960, time: "2021-06-02 10:44:08" },
+                { batcher: "L Skip", number: "3", gross: "100", tare: "350", net: 9960, time: "2021-06-02 10:44:08" },
+                { batcher: "L Skip", number: "3", gross: "10310", tare: "350", net: 9960, time: "2021-06-02 10:44:08" },
+                { batcher: "L Skip", number: "3", gross: "310", tare: "350", net: 9960, time: "2021-06-02 10:44:08" },
+                { batcher: "L Skip", number: "3", gross: "10310", tare: "350", net: 9960, time: "2021-06-02 10:44:08" },
+                { batcher: "L Skip", number: "3", gross: "10310", tare: "350", net: 9960, time: "2021-06-02 10:44:08" },
+                { batcher: "L Skip", number: "3", gross: "10310", tare: "350", net: 9960, time: "2021-06-02 10:44:08" },
+                { batcher: "L Skip", number: "3", gross: "10310", tare: "350", net: 9960, time: "2021-06-02 10:44:08" },
+                { batcher: "L Skip", number: "3", gross: "10310", tare: "350", net: 9960, time: "2021-06-02 10:44:08" },
+                { batcher: "L Skip", number: "3", gross: "10310", tare: "350", net: 9960, time: "2021-06-02 10:44:08" },
+                { batcher: "L Skip", number: "3", gross: "10310", tare: "350", net: 9960, time: "2021-06-02 10:44:08" },
+                { batcher: "L Skip", number: "3", gross: "10310", tare: "350", net: 9960, time: "2021-06-02 10:44:08" },
+                { batcher: "L Skip", number: "3", gross: "10310", tare: "350", net: 9960, time: "2021-06-02 10:44:08" },
+                { batcher: "L Skip", number: "3", gross: "10310", tare: "350", net: 9960, time: "2021-06-02 10:44:08" },
+                { batcher: "L Skip", number: "3", gross: "1310", tare: "350", net: 9960, time: "2021-06-02 10:44:08" },
+                { batcher: "L Skip", number: "3", gross: "10310", tare: "350", net: 9960, time: "2021-06-02 10:44:08" },
+                { batcher: "L Skip", number: "3", gross: "10310", tare: "350", net: 9960, time: "2021-06-02 10:44:08" },
+                { batcher: "L Skip", number: "3", gross: "10310", tare: "350", net: 9960, time: "2021-06-02 10:44:08" },
+                { batcher: "L Skip", number: "3", gross: "10310", tare: "350", net: 9960, time: "2021-06-02 10:44:08" },
+                { batcher: "L Skip", number: "3", gross: "10310", tare: "350", net: 9960, time: "2021-06-02 10:44:08" },
+                { batcher: "L Skip", number: "3", gross: "10310", tare: "350", net: 9960, time: "2021-06-02 10:44:08" },
+                { batcher: "L Skip", number: "3", gross: "10310", tare: "350", net: 9960, time: "2021-06-02 10:44:08" },
+                { batcher: "L Skip", number: "3", gross: "1010", tare: "350", net: 9960, time: "2021-06-02 10:44:08" },
+                { batcher: "L Skip", number: "3", gross: "10310", tare: "350", net: 9960, time: "2021-06-02 10:44:08" },
+                { batcher: "L Skip", number: "3", gross: "10310", tare: "350", net: 9960, time: "2021-06-02 10:44:08" },
+                { batcher: "L Skip", number: "3", gross: "10310", tare: "350", net: 9960, time: "2021-06-02 10:44:08" },
+                { batcher: "L Skip", number: "3", gross: "10310", tare: "350", net: 9960, time: "2021-06-02 10:44:08" },
+                { batcher: "L Skip", number: "3", gross: "10310", tare: "350", net: 9960, time: "2021-06-02 10:44:08" },
+                { batcher: "L Skip", number: "3", gross: "10310", tare: "350", net: 9960, time: "2021-06-02 10:44:08" },
+                { batcher: "L Skip", number: "3", gross: "10310", tare: "350", net: 9960, time: "2021-06-02 10:44:08" },
+                { batcher: "L Skip", number: "3", gross: "10310", tare: "350", net: 9960, time: "2021-06-02 10:44:08" },
+                { batcher: "L Skip", number: "3", gross: "0310", tare: "350", net: 9960, time: "2021-06-02 10:44:08" },
+                { batcher: "L Skip", number: "3", gross: "10310", tare: "350", net: 9960, time: "2021-06-02 10:44:08" },
+                { batcher: "L Skip", number: "3", gross: "10310", tare: "350", net: 9960, time: "2021-06-02 10:44:08" },
+                { batcher: "L Skip", number: "3", gross: "10310", tare: "350", net: 9960, time: "2021-06-02 10:44:08" },
+                { batcher: "L Skip", number: "3", gross: "10310", tare: "350", net: 9960, time: "2021-06-02 10:44:08" },
+                { batcher: "L Skip", number: "3", gross: "10310", tare: "350", net: 9960, time: "2021-06-02 10:44:08" },
+                { batcher: "L Skip", number: "3", gross: "103", tare: "350", net: 9960, time: "2021-06-02 10:44:08" },
+                { batcher: "L Skip", number: "3", gross: "10310", tare: "350", net: 9960, time: "2021-06-02 10:44:08" },
+                { batcher: "L Skip", number: "3", gross: "10310", tare: "350", net: 9960, time: "2021-06-02 10:44:08" },
+                { batcher: "L Skip", number: "3", gross: "10310", tare: "350", net: 9960, time: "2021-06-02 10:44:08" },
+                { batcher: "L Skip", number: "3", gross: "10310", tare: "350", net: 9960, time: "2021-06-02 10:44:08" },
+                { batcher: "L Skip", number: "3", gross: "10310", tare: "350", net: 9960, time: "2021-06-02 10:44:08" },
+                { batcher: "L Skip", number: "3", gross: "10310", tare: "350", net: 9960, time: "2021-06-02 10:44:08" },
+                { batcher: "L Skip", number: "3", gross: "10310", tare: "350", net: 9960, time: "2021-06-02 10:44:08" },
+                { batcher: "L Skip", number: "3", gross: "10310", tare: "350", net: 9960, time: "2021-06-02 10:44:08" },
+
+
+            ]
+        },
         startDate: new moment().format('YYYY-MM-DD'),    //"2021-06-16"
         endDate: new moment().format('YYYY-MM-DD'),
         shifts: ['no shifts found'],    // all shifts from period
         selectShifts: 'no shifts found',
-        datePrintingReport: { year: new Date().getFullYear(), day: new Date().getDate(), month: new Date().getMonth() + 1 }
+        datePrintingReport: { year: new Date().getFullYear(), day: new Date().getDate(), month: new Date().getMonth() + 1 },
+        count: 3,
+        report: {
+            height: '272mm',
+        },
     },
     methods: {
         selectShiftChange: async function () {
@@ -86,7 +171,7 @@ let report = new Vue({
         },
         setShiftParams: async function (sBeginDate, shift = null) {
             this.objectShift = getEmptyShift();
-            this.objectShift.weight = numberWithSpaces(getEmptyShift().weight);
+            this.objectShift.weight = numberWithSpaces(this.objectShift.weight);
             if (shift == null) {
                 shift = await getShift(sBeginDate);
             }
@@ -97,6 +182,14 @@ let report = new Vue({
                 });
                 let endDate = (shift.endDate != null) ? (new moment(shift.endDate).format("YYYY-MM-DD HH:mm:ss")) : ('');
                 this.objectShift = { ...shift, beginDate: sBeginDate, endDate: endDate, datas: datas };
+            }
+            // счётчик количества страниц
+            this.count = objectShift.datas.length;
+            if (this.count == 35 || this.count == 82 || this.count == 129 || this.count == 176 || this.count == 223 || this.count == 270 || this.count == 317)
+                this.count = ''
+            else {
+                this.count = Math.trunc((this.count - 35) / 47) + 2;
+                this.report.height = this.count * 272 + 'mm'
             }
         },
         close: function () {
@@ -114,5 +207,4 @@ let report = new Vue({
         }
     },
 });
-//# sourceMappingURL=report.js.map
 

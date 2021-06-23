@@ -572,9 +572,15 @@ var Valve = /** @class */ (function (_super) {
     };
     Valve.prototype.setPercentage = function (text) {
         if (this.labelsetPercentage != null)
-            this.labelsetPercentage.text(text + '%');
+            this.labelsetPercentage.text(text);
     };
     Valve.prototype.setBaseProperty = function (mes) {
+        if (mes.pos === undefined) {
+            this.setPercentage('');
+            this.primitives[3].visible(false);
+        }
+        else
+            this.setPercentage(mes.pos + '%');
         this.state = mes.Status;
         this.mode = mes.Mode;
         if (this.mode == ValveMode.Auto)
@@ -586,7 +592,6 @@ var Valve = /** @class */ (function (_super) {
         else
             this.setLabel('E');
         this.error = mes.Error;
-        this.setPercentage(mes.pos);
     };
     Valve.prototype.nextFrame = function () {
         switch (this.state) {

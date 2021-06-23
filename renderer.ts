@@ -11,13 +11,21 @@ import { BATCHERLABLE } from './_batcherlable'
 import { RECEIVINGHOPPER } from './_receivinghopper'
 import { SUBSTATION } from './_substation'
 import { COMPRESSOR } from './_compressor';
-const { ipcRenderer } = require('electron');
+const { remote, ipcRenderer, electron } = require("electron");
 const { BrowserWindow } = require('electron').remote
-
+const moment = require('moment');
 
 ipcRenderer.on('resended', (event, arr) => {
     console.log('resended');
 });
+
+import { Previewer } from 'pagedjs';
+let paged = new Previewer();
+// let flow = paged.preview(DOMContent, ["path/to/css/file.css"], document.body).then((flow) => {
+// 	console.log("Rendered", flow.total, "pages.");
+// })
+
+
 
 
 
@@ -86,7 +94,7 @@ startClients(sendMes);
 //   }
 // }
 
-new Vue({
+let main = new Vue({
     el: '#index_body',
     methods: {
         printReport: function () {
@@ -94,15 +102,18 @@ new Vue({
                 width: 800,
                 height: 600,
                 frame: false,
+                parent: remote.getCurrentWindow(),
                 webPreferences: {
                     nodeIntegration: true
                 }
             });
             reportWin.loadFile('report.html');
+            // reportWin.print()
             // reportWin.webContents.openDevTools();
         }
     }
 })
+
 
 /*
 batcher.BunkerLeft.propBit = true

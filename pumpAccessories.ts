@@ -341,7 +341,7 @@ export class Pool extends BaseMineDraw {
     protected getWallThickness(): number {
         return this.width * 0.04;
     }
-    private showLevel(level){
+    private showLevel(level) {
         // console.log(`#######################################Pump showLevel level=${level}`)
         this.level = level;
         this.setLabel(this.level.toString() + '%');
@@ -504,19 +504,23 @@ export class Valve extends BaseMineDraw {
         this.primitives[ValvePrimitive.circle].stroke(circleStroke);
     }
 
-    setPercentage(text: string){
-        if(this.labelsetPercentage != null) this.labelsetPercentage.text(text + '%');
+    setPercentage(text: string) {
+        if (this.labelsetPercentage != null) this.labelsetPercentage.text(text);
     }
 
     setBaseProperty(mes: any) {
+        if (mes.pos === undefined) {
+            this.setPercentage('')
+            this.primitives[3].visible(false)
+        }
+        else this.setPercentage(mes.pos + '%')
         this.state = mes.Status;
         this.mode = mes.Mode;
         if (this.mode == ValveMode.Auto) this.setLabel('A');
         else if (this.mode == ValveMode.Service) this.setLabel('S');
         else if (this.mode == ValveMode.HandDrive) this.setLabel('H');
-        else this.setLabel('E') 
+        else this.setLabel('E')
         this.error = mes.Error;
-        this.setPercentage(mes.pos)
     }
 
     nextFrame(): void {

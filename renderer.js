@@ -16,11 +16,17 @@ var _batcherlable_1 = require("./_batcherlable");
 var _receivinghopper_1 = require("./_receivinghopper");
 var _substation_1 = require("./_substation");
 var _compressor_1 = require("./_compressor");
-var ipcRenderer = require('electron').ipcRenderer;
+var _a = require("electron"), remote = _a.remote, ipcRenderer = _a.ipcRenderer, electron = _a.electron;
 var BrowserWindow = require('electron').remote.BrowserWindow;
+var moment = require('moment');
 ipcRenderer.on('resended', function (event, arr) {
     console.log('resended');
 });
+var pagedjs_1 = require("pagedjs");
+var paged = new pagedjs_1.Previewer();
+// let flow = paged.preview(DOMContent, ["path/to/css/file.css"], document.body).then((flow) => {
+// 	console.log("Rendered", flow.total, "pages.");
+// })
 var screenMain = new mine_drawing_1.Screen();
 // // let techWater = new TechWater('container', window.innerWidth, window.innerHeight);
 var cage = new _cage_1.CAGE('containerCage', window.innerWidth, window.innerHeight);
@@ -73,7 +79,7 @@ tcpipConnector_1.startClients(sendMes);
 //     window.alert(this.message)
 //   }
 // }
-new vue_js_1.default({
+var main = new vue_js_1.default({
     el: '#index_body',
     methods: {
         printReport: function () {
@@ -81,11 +87,13 @@ new vue_js_1.default({
                 width: 800,
                 height: 600,
                 frame: false,
+                parent: remote.getCurrentWindow(),
                 webPreferences: {
                     nodeIntegration: true
                 }
             });
             reportWin.loadFile('report.html');
+            // reportWin.print()
             // reportWin.webContents.openDevTools();
         }
     }

@@ -12,61 +12,115 @@
         left: 50px;
         bottom: 60px;
         position: fixed;
-        display: flex;
     }
     .operator {
         bottom: 60px;
         position: fixed;
-        left: 400px;
+        left: 350px;
     }
     tr:nth-child(35) {
         page-break-after: always;
     }
+    tr:nth-child(35)::after {
+        position: relative;
+        top: 110px;
+        left: 630px;
+        counter-increment: page 1;
+        content: counter(page);
+    }
     tr:nth-child(82) {
         page-break-after: always;
+    }
+    tr:nth-child(82)::after {
+        position: relative;
+        top: 110px;
+        left: 630px;
+        counter-increment: page 2;
+        content: counter(page);
     }
     tr:nth-child(129) {
         page-break-after: always;
     }
+    tr:nth-child(129)::after {
+        position: relative;
+        top: 110px;
+        left: 630px;
+        counter-increment: page 3;
+        content: counter(page);
+    }
     tr:nth-child(176) {
         page-break-after: always;
+    }
+    tr:nth-child(176)::after {
+        position: relative;
+        top: 110px;
+        left: 630px;
+        counter-increment: page 4;
+        content: counter(page);
     }
     tr:nth-child(223) {
         page-break-after: always;
     }
+    tr:nth-child(223)::after {
+        position: relative;
+        top: 110px;
+        left: 630px;
+        counter-increment: page 5;
+        content: counter(page);
+    }
     tr:nth-child(270) {
         page-break-after: always;
     }
+    tr:nth-child(270)::after {
+        position: relative;
+        top: 110px;
+        left: 630px;
+        counter-increment: page 6;
+        content: counter(page);
+    }
     tr:nth-child(317) {
         page-break-after: always;
+    }
+    tr:nth-child(317)::after {
+        position: relative;
+        top: 110px;
+        left: 630px;
+        counter-increment: page 7;
+        content: counter(page);
     }
     tr {
         display: block;
     }
     td:nth-child(1) {
+        width: 5%;
+    } 
+    td:nth-child(2) {
         width: 30%;
     }   
-    td:nth-child(2) {
+    td:nth-child(3) {
         width: 25%;
     }
-    td:nth-child(3) {
-        width: 15%;
-    }
     td:nth-child(4) {
+        width: 10%;
+    }
+    td:nth-child(5) {
         width: 250px;
     }
     th:nth-child(1) {
-        width: 30%;
-    }   
+        width: 4%;
+    } 
     th:nth-child(2) {
+        width: 29%;
+    }   
+    th:nth-child(3) {
         width: 25%;
     }
-    th:nth-child(3) {
-        width: 15%;
-    }
     th:nth-child(4) {
-        width: 250px;
+        width: 12%;
     }
+    /* th:nth-child(5) {
+        width: 250px;
+    } */
     table {
         border-collapse: collapse;
         border:0;
@@ -76,9 +130,30 @@
         font-size: 14px;
         text-align: center;
     }
+    .counter {
+        display: block;
+        height: 10px;
+        text-align: end;
+        padding-right: 60px;
+        /* top: 100px;
+        position: relative;
+        left: 630px; */
+    } 
+    /* tr:nth-child(129)::after {
+        position: fixed;
+        top: 100px;
+        left: 100px;
+        counter-increment: page;
+        content: "{{count}}";
+    } */
+    .reportBlock {
+        height: 100%;
+    }
+
 }
 
-body {
+html, body {
+    height: auto;
     overflow: hidden;
 }
 
@@ -106,7 +181,6 @@ body {
     td {
         border: 3px solid #E8E9EF;
         text-align: center;
-        /* height: 10px;     */
     }
     table {
         width: 100%;
@@ -121,6 +195,25 @@ body {
         font-size: 14px;
         vertical-align: top;
     }
+    td:nth-child(1) {
+        width: 5%;
+    }   
+    th:nth-child(1) {
+        width: 5%;
+    } 
+    td:nth-child(4) {
+        width: 10%;
+    }   
+    th:nth-child(4) {
+        width: 10%;
+    }
+    .counter {
+        display: none;
+    }
+    /* html, body {
+        height: 100%;
+        overflow: hidden;
+    } */
 }
 
 .scroll-table-body {
@@ -144,3 +237,14 @@ body {
 	background: #f3f3f3;
 }
 
+#weight {
+    text-align: start;
+    padding-left: 50px;
+}
+
+#report {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 100%;
+}
