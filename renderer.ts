@@ -11,9 +11,9 @@ import { BATCHERLABLE } from './_batcherlable'
 import { RECEIVINGHOPPER } from './_receivinghopper'
 import { SUBSTATION } from './_substation'
 import { COMPRESSOR } from './_compressor';
-const { remote, ipcRenderer, electron } = require("electron");
+const { ipcRenderer } = require('electron');
 const { BrowserWindow } = require('electron').remote
-const moment = require('moment');
+
 
 ipcRenderer.on('resended', (event, arr) => {
     console.log('resended');
@@ -69,7 +69,7 @@ function sendMes(name, mes) {
 
 startClients(sendMes);
 
-// animateScreen(screenMain, 500);
+animateScreen(screenMain, 500);
 
 // animateScheme(dsf, 500);
 // animateScheme(batcher, 500);
@@ -102,13 +102,11 @@ let main = new Vue({
                 width: 800,
                 height: 600,
                 frame: false,
-                parent: remote.getCurrentWindow(),
                 webPreferences: {
                     nodeIntegration: true
                 }
             });
             reportWin.loadFile('report.html');
-            // reportWin.print()
             // reportWin.webContents.openDevTools();
         }
     }

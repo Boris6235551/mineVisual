@@ -108,11 +108,13 @@ export class Tube extends BaseMineDraw{
 
 
 export class Connection extends BaseMineDraw{
-    private width: number;
-    private dir: boolean = true;
-    private period: number;
-    private step: number;
-    //whitePlaces: Point[] 
+    private width: number;          // width of white square
+    private period: number;         // ideal??? length of the one full element with one white rect moving
+                                    // real length = step * frameCnt;
+    private step: number;           // white square moving length
+    private count: number;          // elements (parts) count 
+    private dir: boolean = true;    // direction of flow upWord or rightWord == true
+    private frameCnt: number;       // count of annimation frames
     constructor(p0: Point, length: number, disposition: Disposition) {
         super(p0,length, disposition);
         this.width = this.getOdd(length);
@@ -120,10 +122,14 @@ export class Connection extends BaseMineDraw{
             this.rect.p1.x = this.rect.p0.x + this.width;
             this.rect.p1.y = this.rect.p0.y + 100;
         }
-        this.period = this.width * 4;       // length of the one full element with white rect moving
+        this.frameCnt = 4;
+        this.period = this.width * this.frameCnt;   // length of the one full element with white rect moving
     }
-    positionByMidPoints(beginP: Point, endP: Point){
-        let half = (this.width - 1) / 2;
+    getHalf(): number{
+        return (this.width - 1) / 2;
+    }
+    positionByPoints(beginP: Point, endP: Point){
+        let half = this.getHalf();
         if(this.disposition == Disposition.Vertical){
             this.rect.p0.x = beginP.x - half;
             this.rect.p0.y = beginP.y;
@@ -137,52 +143,123 @@ export class Connection extends BaseMineDraw{
             this.rect.p1.y = endP.y + half;
         }
     }
+    calcParamsAndCreateElements(distance: number){
+        this.count = Math.trunc(distance/this.period);   // count of elements 
+        this.step = Math.trunc(distance/this.count/this.frameCnt);       // lenght of white rect movment 
+        this.primitives.push( new Konva.Rect({ x: this.rect.p0.x, y: this.rect.p0.y, fill: '#1D8EEA',
+            height: this.disposition == Disposition.Vertical ? distance : this.width,  
+            width: this.disposition == Disposition.Vertical ? this.width : distance}) );
+        for(let i = 0; i < this.count; i++){
+            let dElementPos = this.step * this.frameCnt * i;
+            if(this.dir) dElementPos += this.step * (this.frameCnt - 1);
+            let dx = this.disposition == Disposition.Vertical ? 0 : dElementPos;
+            let dy = this.disposition == Disposition.Vertical ? dElementPos : 0;   
+            this.primitives.push(new Konva.Rect({x: this.rect.p0.x + dx, y: this.rect.p0.y + dy,
+                     height: this.width, width: this.width, fill: '#E1F1FB'}));
+        }
+    }
     connectVertical(upObj: BaseMineDraw, downObj: BaseMineDraw, upword: boolean = true): boolean{
         this.dir = upword;
         let up = upObj.rect.getMiddleDownPoint();
         let dn = downObj.rect.getMiddleUpPoint(); 
-        this.positionByMidPoints(up, dn);
-        console.log('-------------  up   ------>', JSON.stringify(up))
-        //this.printRect()
-        console.log('-------------  dn   ------>', JSON.stringify(dn))
+        // console.log('-------------  up   ------>', JSON.stringify(up))
+        // //this.printRect()
+        // console.log('-------------  dn   ------>', JSON.stringify(dn))
         if(Math.abs(up.x - dn.x) > DeltaPoint) return false;
-        let distance = /*distance*/(dn.y - up.y);   
-        let count = Math.trunc(distance/this.period);   // count of elements 
-        this.step = Math.trunc(distance/count/4);       // lenght of white rect movment 
-        console.log(`c count = ${count}; and step = ${this.step}`)
-        let r = new Konva.Rect({
-            x: this.rect.p0.x, y: this.rect.p0.y, height: distance, width: this.width, fill: '#1D8EEA'
-            //x: up.x - 7, y: up.y, height: distance, width: 14, fill: '#1D8EEA'
-        });
-        this.primitives.push(r);
-        // for(let i = 0; i < count; i++){
-        //     let nextY = this.step * 4 * i;
-        //     if(upword){
-        //         nextY += this.step * 3;
-        //         this.primitives.push(new Konva.Rect({
-        //             x: r.x(), y: up.y + nextY, height: this.width, width: this.width, fill: '#E1F1FB'
-        //         }));
-        //     }
-        //     else
-        //         this.primitives.push(new Konva.Rect({
-        //             x: r.x(), y: up.y + nextY, height: this.width, width: this.width, fill: '#E1F1FB'
-        //         }));
-        // }
+        this.positionByPoints(up, dn);
+        this.calcParamsAndCreateElements(dn.y - up.y);
         return true;
     }
+    connectHoriszontal(leftObj: BaseMineDraw, rightObj: BaseMineDraw, rightWord = true ): boolean{
+        this.dir = rightWord;
+        let right = rightObj.rect.getMiddleLeftPoint();
+        let left = leftObj.rect.getMiddleRightPoint();
+        if(Math.abs(right.y - left.y) > DeltaPoint) return false;
+        this.positionByPoints(left, right);
+        this.calcParamsAndCreateElements(right.x - left.x);
+        return true;
+    }
+    connectObjCoordinate(obj: BaseMineDraw, coo: number, dir: boolean){
+        let p0: Point;
+        let p1: Point;
+        let distance: number;
+        this.dir = dir;
+        if(this.disposition == Disposition.Vertical) {
+            p0 = obj.rect.getMiddleDownPoint();
+            p1 = new Point(p0.x, coo);
+            distance = p1.y - p0.y;
+        }
+        else {
+            p0 = obj.rect.getMiddleRightPoint();
+            p1 = new Point(coo, p0.y)
+            distance = p1.x - p0.x;
+        }
+        this.positionByPoints(p0, p1)
+        this.calcParamsAndCreateElements(distance);
+    }
+    getOverlapedPoint(p: Point, overlap: number): Point{
+        let dL: number = 0;
+        let dx: number = 0;
+        let dy: number = 0; 
+        if(overlap > 0) dL = -this.width;
+        else if(overlap < 0) dL = this.width;
+        this.disposition == Disposition.Vertical ? dy += dL : dx += dL;
+        return p.movePoint(dx, dy);
+    }
+    connectPointPoint(p0: Point, overlap0: number, p1: Point, overlap1: number){
+        p0 = this.getOverlapedPoint(p0, overlap0);
+        p1 = this.getOverlapedPoint(p1, -overlap1);
+        this.positionByPoints(p0, p1);
+        this.calcParamsAndCreateElements(this.disposition==Disposition.Vertical ? (p1.y - p0.y) : (p1.x - p0.x)); 
+    }
+    getBegin(overlap: number = 0): Point{
+        let half = this.getHalf();
+        return this.disposition==Disposition.Vertical ? new Point(this.rect.p0.x + this.width, this.rect.p0.y + half) :
+                                                        new Point(this.rect.p0.x + half, this.rect.p0.y);
+    }
+    // getEnd(): Point{
+    //     let half = this.getHalf();
+    //     return this.disposition==Disposition.Vertical ? new Point(this.rect.p0.x + this.width, this.rect.p0.y + half) :
+    //                                                     new Point(this.rect.p0.x + half, this.rect.p0.y);
+    // }
     private moveWhite(): void{
-        let dy: number;
-        if(this.animationFrame < 3) dy = this.dir ? -this.step : this.step;
-        else dy = this.dir ? (3 * this.step) : -(3*this.step);
-        for(let i = 1; i < this.primitives.length; i++) this.primitives[i].move({x:0, y: dy});
+        let dy: number = 0;
+        let dx: number = 0;
+        if(this.disposition == Disposition.Vertical){
+            if(this.animationFrame < 3) dy = this.dir ? -this.step : this.step;
+            else dy = this.dir ? (3 * this.step) : -(3*this.step);
+        }
+        else {
+            if(this.animationFrame < 3) dx = this.dir ? -this.step : this.step;
+            else dx = this.dir ? (3 * this.step) : -(3*this.step);
+        }
+        for(let i = 1; i < this.primitives.length; i++) this.primitives[i].move({x: dx, y: dy});
     }
     nextFrame(): void {
-return;
+// return;
         this.moveWhite();
         if(this.animationFrame < 3) this.animationFrame +=1;
         else this.animationFrame = 0;
     };
 }
+
+        // for(let i = 0; i < this.count; i++){
+        //     let nextY = this.step * 4 * i;
+        //     if(upword){
+        //         nextY += this.step * 3;
+        //         this.primitives.push(new Konva.Rect({
+        //             //x: r.x(), y: up.y + nextY, height: this.width, width: this.width, fill: '#E1F1FB'
+        //             x: this.rect.p0.x, y: this.rect.p0.y + nextY, height: this.width, width: this.width, fill: '#E1F1FB'
+        //         }));
+        //     }
+        //     else
+        //         this.primitives.push(new Konva.Rect({
+        //             // x: r.x(), y: up.y + nextY, height: this.width, width: this.width, fill: '#E1F1FB'
+        //             x: this.rect.p0.x, y: this.rect.p0.y + nextY, height: this.width, width: this.width, fill: '#E1F1FB'
+        //         }));
+        // }
+
+
 
 const CornerCenterSize = 49
 export enum CornerOrientation {

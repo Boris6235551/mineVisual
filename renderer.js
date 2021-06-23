@@ -16,9 +16,8 @@ var _batcherlable_1 = require("./_batcherlable");
 var _receivinghopper_1 = require("./_receivinghopper");
 var _substation_1 = require("./_substation");
 var _compressor_1 = require("./_compressor");
-var _a = require("electron"), remote = _a.remote, ipcRenderer = _a.ipcRenderer, electron = _a.electron;
+var ipcRenderer = require('electron').ipcRenderer;
 var BrowserWindow = require('electron').remote.BrowserWindow;
-var moment = require('moment');
 ipcRenderer.on('resended', function (event, arr) {
     console.log('resended');
 });
@@ -58,7 +57,7 @@ function sendMes(name, mes) {
     screenMain.resendMessage(name, mes);
 }
 tcpipConnector_1.startClients(sendMes);
-// animateScreen(screenMain, 500);
+mine_drawing_1.animateScreen(screenMain, 500);
 // animateScheme(dsf, 500);
 // animateScheme(batcher, 500);
 // animateScheme(skip, 500);
@@ -87,13 +86,11 @@ var main = new vue_js_1.default({
                 width: 800,
                 height: 600,
                 frame: false,
-                parent: remote.getCurrentWindow(),
                 webPreferences: {
                     nodeIntegration: true
                 }
             });
             reportWin.loadFile('report.html');
-            // reportWin.print()
             // reportWin.webContents.openDevTools();
         }
     }

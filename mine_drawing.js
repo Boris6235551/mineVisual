@@ -26,6 +26,11 @@ var Point = /** @class */ (function () {
     Point.prototype.newPointMoved = function (dx, dy) {
         return new Point(this.x + dx, this.y + dy);
     };
+    Point.prototype.movePoint = function (dx, dy) {
+        this.x += dx;
+        this.y += dy;
+        return this;
+    };
     return Point;
 }());
 exports.Point = Point;
@@ -60,10 +65,10 @@ var Rectangle = /** @class */ (function () {
         return new Point(this.getMiddlePoint().x, this.p1.y);
     };
     Rectangle.prototype.getMiddleRightPoint = function () {
-        return new Point(this.p0.x, this.getMiddlePoint().y);
+        return new Point(this.p1.x, this.getMiddlePoint().y);
     };
     Rectangle.prototype.getMiddleLeftPoint = function () {
-        return new Point(this.p1.x, this.getMiddlePoint().y);
+        return new Point(this.p0.x, this.getMiddlePoint().y);
     };
     Rectangle.prototype.copyRect = function (source) {
         this.p0.copyPoint(source.p0);
@@ -113,6 +118,7 @@ var BaseMineDraw = /** @class */ (function () {
     };
     ;
     BaseMineDraw.prototype.printRect = function () {
+        return JSON.stringify(this.rect);
         console.log("\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         console.log("Widget name=" + this.name + ";  rect=" + JSON.stringify(this.rect));
         console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");

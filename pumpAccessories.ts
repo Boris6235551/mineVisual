@@ -430,7 +430,7 @@ export class Valve extends BaseMineDraw {
         this.primitives.push(this.createCircle(length));
         this.labelsetPercentage = this.createText(length, '');
         this.primitives.push(this.labelsetPercentage);
-        console.log(this.labelsetPercentage)
+        //console.log(this.labelsetPercentage)
         this.rect.p0.y -= 2;
         this.rect.p1.y += 2;
         let [lr, lt] = CreateLabel(p0.newPointMoved(length * 0.5, length * 0.5), disposition, '');

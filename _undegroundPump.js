@@ -26,6 +26,7 @@ var BASEPUMP = /** @class */ (function (_super) {
         var _this = _super.call(this, container, width, height) || this;
         _this.basePoint = basePoint;
         _this.items = [];
+        _this.lines = [];
         return _this;
     }
     BASEPUMP.prototype.addItem = function (item, name, recieveMessage) {
@@ -43,22 +44,114 @@ var BASEPUMP = /** @class */ (function (_super) {
         }
         return null;
     };
+    BASEPUMP.prototype.findLineByName = function (name) {
+        if (name == '')
+            return null;
+        for (var _i = 0, _a = this.lines; _i < _a.length; _i++) {
+            var l = _a[_i];
+            if (l.name == name)
+                return l;
+        }
+        return null;
+    };
+    /*********      'M'   widget middle side point   *********/
+    BASEPUMP.prototype.getMiddle = function (name, disp, first) {
+        if (first === void 0) { first = true; }
+        var w = this.findByName(name);
+        if (w == null)
+            return null;
+        return disp == mine_drawing_1.Disposition.Vertical ? (first ? w.rect.getMiddleDownPoint() : w.rect.getMiddleUpPoint()) :
+            (first ? w.rect.getMiddleRightPoint() : w.rect.getMiddleLeftPoint());
+    };
+    /*********      'B'   line begin side point   *********/
+    BASEPUMP.prototype.getLineBegin = function (name) {
+        var l = this.findLineByName(name);
+        if (l == null)
+            return null;
+        return l.getBegin();
+    };
+    /*********      's'      *********/
+    BASEPUMP.prototype.getSurface = function (name, disp, p, first) {
+        if (first === void 0) { first = true; }
+        var w = this.findByName(name);
+        if (w == null)
+            return null;
+        return disp == mine_drawing_1.Disposition.Vertical ? (first ? new mine_drawing_1.Point(p.x, w.rect.p1.y) : new mine_drawing_1.Point(p.x, w.rect.p0.y)) :
+            (first ? new mine_drawing_1.Point(w.rect.p1.x, p.y) : new mine_drawing_1.Point(w.rect.p0.x, p.y));
+    };
+    /*********      'm'      *********/
+    BASEPUMP.prototype.getMiddleCross = function (name, disp, bP, first) {
+        if (first === void 0) { first = true; }
+        var w = this.findByName(name);
+        if (w == null)
+            return null;
+        var mhp = w.rect.getMiddlePoint();
+        var mvp = first ? w.rect.getMiddleDownPoint() : w.rect.getMiddleUpPoint();
+        return disp == mine_drawing_1.Disposition.Vertical ? new mine_drawing_1.Point(bP.x, mvp.y) : new mine_drawing_1.Point(mhp.x, bP.y);
+    };
+    /*********      'd'      *********/
+    BASEPUMP.prototype.getDelta = function (delta, disp, p, first) {
+        if (first === void 0) { first = true; }
+        if (isNaN(delta))
+            return null;
+        return disp == mine_drawing_1.Disposition.Vertical ? (first ? new mine_drawing_1.Point(p.x, p.y - delta) : new mine_drawing_1.Point(p.x, p.y + delta)) :
+            (first ? new mine_drawing_1.Point(p.x - delta, p.y) : new mine_drawing_1.Point(p.x + delta, p.y));
+    };
+    /*********      'l'      *********/
+    BASEPUMP.prototype.getLineCross = function (name, disp, p, first) {
+        if (first === void 0) { first = true; }
+        if (name == '')
+            return null;
+        var l = this.findLineByName(name);
+        if (l == null)
+            return null;
+        return disp == mine_drawing_1.Disposition.Vertical ? (first ? new mine_drawing_1.Point(p.x, l.rect.p1.y) : new mine_drawing_1.Point(p.x, l.rect.p0.y)) :
+            (first ? new mine_drawing_1.Point(l.rect.p1.x, p.y) : new mine_drawing_1.Point(l.rect.p0.x, p.y));
+    };
     BASEPUMP.prototype.createConnections = function (datas) {
         for (var _i = 0, datas_1 = datas; _i < datas_1.length; _i++) {
             var obj = datas_1[_i];
-            this.connect(obj.begin, obj.end);
+            this.connect(obj.begin, obj.end, obj.disp, obj.type, obj.hasOwnProperty('name') ? obj.name : '');
         }
     };
-    BASEPUMP.prototype.connect = function (upName, downName) {
-        var upWidget = this.findByName(upName);
-        var downWidget = this.findByName(downName);
-        if (upWidget == null || downWidget == null)
-            return;
-        var line = new tube_1.Connection(new mine_drawing_1.Point(0, 0), 5, mine_drawing_1.Disposition.Vertical);
-        line.connectVertical(upWidget, downWidget);
+    BASEPUMP.prototype.connect = function (firstName, secondName, disp, type, name) {
+        var p0;
+        var p1;
+        if (type[0] == 'M' || type[0] == 'B') {
+            p0 = type[0] == 'M' ? this.getMiddle(firstName, disp) : this.getLineBegin(firstName);
+            if (p0 == null)
+                return;
+            if (type[1] == 's')
+                p1 = this.getSurface(secondName, disp, p0, false);
+            else if (type[1] == 'm')
+                p1 = this.getMiddleCross(secondName, disp, p0, false);
+            else if (type[1] == 'd')
+                p1 = this.getDelta(parseInt(secondName), disp, p0, false);
+            else if (type[1] == 'l')
+                p1 = this.getLineCross(secondName, disp, p0, false);
+            if (p1 == null)
+                return;
+        }
+        else if (type[1] == 'M' || type[1] == 'B') {
+            p1 = type[1] == 'M' ? this.getMiddle(secondName, disp, false) : this.getLineBegin(secondName);
+            if (p1 == null)
+                return;
+            if (type[0] == 's')
+                p0 = this.getSurface(firstName, disp, p1);
+            else if (type[0] == 'm')
+                p0 = this.getMiddleCross(firstName, disp, p1);
+            else if (type[0] == 'd')
+                p0 = this.getDelta(parseInt(firstName), disp, p1);
+            else if (type[0] == 'l')
+                p0 = this.getLineCross(firstName, disp, p1);
+            if (p0 == null)
+                return;
+        }
+        var line = new tube_1.Connection(new mine_drawing_1.Point(0, 0), 5, disp);
+        line.connectPointPoint(p0, 0, p1, 0);
+        line.name = name;
+        this.lines.push(line);
         this.addWidget(line);
-        if (upWidget.name == 'Y16' && downWidget.name == 'Y13')
-            console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ Y16 rect=" + upWidget.printRect() + "; \n                Y13 rect=" + downWidget.printRect() + "; line rect =" + line.printRect());
     };
     BASEPUMP.prototype.send = function (mes) {
         console.log("received message UNDEGROUNDPUMP name=" + this.name);
@@ -106,7 +199,18 @@ var vPoints = [
     [40, 380, null] // Yx7  back closed valve
 ];
 var mineConnections = [
-    { begin: 'Y16', end: 'Y13', dir: true, disp: mine_drawing_1.Disposition.Vertical },
+// /*-------------       LINE 1       --------------*/
+// {begin: 'Y16', end: 'Y13', dir: true, disp: Disposition.Vertical, type: 'HV'},
+// {begin: 'Y13', end: 'Pump1', dir: true, disp: Disposition.Vertical, type: 'HV'},
+// {begin: 'Pump1', end: 'Y17', dir: true, disp: Disposition.Vertical, type: 'HV'},
+// {begin: 'Y11', end: 'Y12', dir: true, disp: Disposition.Horizontal, type: 'HV'},
+// /*-----------------------------------------------*/
+// {begin: 'Y26', end: 'Y23', dir: true, disp: Disposition.Vertical, type: 'HV'},
+// {begin: 'Y23', end: 'Pump2', dir: true, disp: Disposition.Vertical, type: 'HV'},
+// {begin: 'Pump2', end: 'Y27', dir: true, disp: Disposition.Vertical, type: 'HV'},
+// {begin: 'Y36', end: 'Y33', dir: true, disp: Disposition.Vertical, type: 'HV'},
+// {begin: 'Y33', end: 'Pump3', dir: true, disp: Disposition.Vertical, type: 'HV'},
+// {begin: 'Pump3', end: 'Y37', dir: true, disp: Disposition.Vertical, type: 'HV'},
 ];
 var LINES_COUNT1 = 3;
 var LINES_COUNT2 = 2;
@@ -119,7 +223,7 @@ var UNDEGROUNDPUMP = /** @class */ (function (_super) {
             _this.name = 'drainageA';
             for (var i = 0; i < LINES_COUNT1; i++)
                 _this.createWidgets(basePoint.newPointMoved(DELTA_X * i, 0), i + 1);
-            _this.createConnections(mineConnections);
+            // this.createConnections(mineConnections);
         }
         else {
             _this.name = 'drainageB';
@@ -190,17 +294,60 @@ var surfacePumpsData = [
     { dXY: [451, 383], name: 'M1' },
 ];
 var surfaceConnections = [
-    { begin: 'Y222', end: 'M4', dir: true, disp: mine_drawing_1.Disposition.Vertical },
-    { begin: 'M4', end: 'Y221', dir: true, disp: mine_drawing_1.Disposition.Vertical },
-    { begin: 'Y221', end: 'XS2', dir: true, disp: mine_drawing_1.Disposition.Vertical },
-    { begin: 'Y212', end: 'M3', dir: true, disp: mine_drawing_1.Disposition.Vertical },
-    { begin: 'M3', end: 'Y211', dir: true, disp: mine_drawing_1.Disposition.Vertical },
-    { begin: 'Y211', end: 'XS3', dir: true, disp: mine_drawing_1.Disposition.Vertical },
-    { begin: 'Y122', end: 'M2', dir: true, disp: mine_drawing_1.Disposition.Vertical },
-    { begin: 'M2', end: 'Y121', dir: true, disp: mine_drawing_1.Disposition.Vertical },
-    // {begin: 'Y121', end: 'XS2', dir: true, disp: Disposition.Vertical},
-    { begin: 'Y112', end: 'M1', dir: true, disp: mine_drawing_1.Disposition.Vertical },
-    { begin: 'M1', end: 'Y111', dir: true, disp: mine_drawing_1.Disposition.Vertical },
+    /***************     TECH PUMPS    ***************/
+    { begin: 'Y222', end: 'M4', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'Ms' },
+    { begin: 'M4', end: 'Y221', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'Ms' },
+    { begin: 'Y221', end: 'XS2', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'Ms' },
+    { begin: 'XS2', end: 'Tech', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'Ms' },
+    { begin: 'Y212', end: 'M3', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'Ms' },
+    { begin: 'M3', end: 'Y211', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'Ms' },
+    { begin: 'Y211', end: 'XS3', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'Ms' },
+    { begin: 'XS3', end: 'Tech', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'Ms' },
+    { begin: 'Tech', end: 'Y2_', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'sM' },
+    { begin: '15', end: 'Y222', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'dM', name: 'Y222line' },
+    { begin: 'Y222line', end: 'XS1', dir: true, disp: mine_drawing_1.Disposition.Horizontal, type: 'Bm' },
+    { begin: '15', end: 'Y212', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'dM', name: 'Y212line' },
+    { begin: 'XS1', end: 'Y212line', dir: true, disp: mine_drawing_1.Disposition.Horizontal, type: 'mB' },
+    { begin: 'XS1', end: 'Y212line', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'Ml' },
+    { begin: '30', end: 'XS1', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'dM' },
+    /*------------------  M0  -----------------------------*/
+    { begin: '30', end: 'M0', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'dM', name: 'M0line' },
+    { begin: 'M0line', end: 'Y110', dir: false, disp: mine_drawing_1.Disposition.Horizontal, type: 'Bm', name: 'M0Yline' },
+    { begin: 'Y220', end: 'M0Yline', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'Ml' },
+    { begin: 'Y210', end: 'M0Yline', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'Ml' },
+    { begin: 'Y120', end: 'M0Yline', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'Ml' },
+    { begin: 'Y110', end: 'M0Yline', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'Ml' },
+    { begin: '60', end: 'Y220', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'dM', name: 'Y220Pumpline' },
+    { begin: 'Y220Pumpline', end: 'M4', dir: true, disp: mine_drawing_1.Disposition.Horizontal, type: 'Bs' },
+    { begin: '60', end: 'Y210', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'dM', name: 'Y210Pumpline' },
+    { begin: 'M3', end: 'Y210Pumpline', dir: true, disp: mine_drawing_1.Disposition.Horizontal, type: 'sB' },
+    { begin: '60', end: 'Y120', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'dM', name: 'Y120Pumpline' },
+    { begin: 'Y120Pumpline', end: 'M2', dir: true, disp: mine_drawing_1.Disposition.Horizontal, type: 'Bs' },
+    { begin: '60', end: 'Y110', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'dM', name: 'Y110Pumpline' },
+    { begin: 'M1', end: 'Y110Pumpline', dir: true, disp: mine_drawing_1.Disposition.Horizontal, type: 'sB' },
+    /****************     CLEAR PUMPS    ****************/
+    { begin: 'Y122', end: 'M2', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'Ms' },
+    { begin: 'M2', end: 'Y121', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'Ms' },
+    { begin: 'Y112', end: 'M1', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'Ms' },
+    { begin: 'M1', end: 'Y111', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'Ms' },
+    { begin: 'XS5', end: 'Clear', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'Ms' },
+    { begin: 'Clear', end: 'Y1_', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'sM' },
+    { begin: '15', end: 'Y122', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'dM', name: 'Y122line' },
+    { begin: 'Y122line', end: 'XS4', dir: true, disp: mine_drawing_1.Disposition.Horizontal, type: 'Bm' },
+    { begin: '15', end: 'Y112', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'dM', name: 'Y112line' },
+    { begin: 'XS4', end: 'Y112line', dir: true, disp: mine_drawing_1.Disposition.Horizontal, type: 'mB' },
+    { begin: 'XS4', end: 'Y112line', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'Ml' },
+    { begin: '30', end: 'XS4', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'dM' },
+    { begin: '50', end: 'XS5', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'dM', name: 'XS5line' },
+    { begin: 'XS5line', end: 'Y111', dir: true, disp: mine_drawing_1.Disposition.Horizontal, type: 'Bm', name: 'XS5Rline' },
+    { begin: 'Y111', end: 'XS5Rline', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'Ml' },
+    { begin: 'Y121', end: 'XS5line', dir: true, disp: mine_drawing_1.Disposition.Horizontal, type: 'mB', name: 'XS5Lline' },
+    { begin: 'Y121', end: 'XS5Lline', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'mB' },
+    { begin: '10', end: 'DP4', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'dM', name: 'DP4line' },
+    { begin: '10', end: 'DP3', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'dM', name: 'DP3line' },
+    { begin: 'DP4line', end: 'DP3line', dir: true, disp: mine_drawing_1.Disposition.Horizontal, type: 'Bl', name: 'DP43line' },
+    { begin: 'Y2_', end: 'DP43line', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'Ml' },
+    { begin: 'Y1_', end: 'DP43line', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'Ml' },
 ];
 var dYYY = -210;
 var kX = 1;
