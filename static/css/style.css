@@ -23,7 +23,7 @@
     }
     tr:nth-child(35)::after {
         position: relative;
-        top: 110px;
+        top: 40px;
         left: 630px;
         counter-increment: page 1;
         content: counter(page);
@@ -33,7 +33,7 @@
     }
     tr:nth-child(82)::after {
         position: relative;
-        top: 110px;
+        top: 40px;
         left: 630px;
         counter-increment: page 2;
         content: counter(page);
@@ -43,7 +43,7 @@
     }
     tr:nth-child(129)::after {
         position: relative;
-        top: 110px;
+        top: 40px;
         left: 630px;
         counter-increment: page 3;
         content: counter(page);
@@ -53,7 +53,7 @@
     }
     tr:nth-child(176)::after {
         position: relative;
-        top: 110px;
+        top: 40px;
         left: 630px;
         counter-increment: page 4;
         content: counter(page);
@@ -63,7 +63,7 @@
     }
     tr:nth-child(223)::after {
         position: relative;
-        top: 110px;
+        top: 40px;
         left: 630px;
         counter-increment: page 5;
         content: counter(page);
@@ -73,7 +73,7 @@
     }
     tr:nth-child(270)::after {
         position: relative;
-        top: 110px;
+        top: 40px;
         left: 630px;
         counter-increment: page 6;
         content: counter(page);
@@ -83,7 +83,7 @@
     }
     tr:nth-child(317)::after {
         position: relative;
-        top: 110px;
+        top: 40px;
         left: 630px;
         counter-increment: page 7;
         content: counter(page);

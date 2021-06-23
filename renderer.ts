@@ -19,14 +19,6 @@ ipcRenderer.on('resended', (event, arr) => {
     console.log('resended');
 });
 
-import { Previewer } from 'pagedjs';
-let paged = new Previewer();
-// let flow = paged.preview(DOMContent, ["path/to/css/file.css"], document.body).then((flow) => {
-// 	console.log("Rendered", flow.total, "pages.");
-// })
-
-
-
 
 
 let screenMain = new Screen();

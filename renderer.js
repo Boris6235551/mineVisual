@@ -21,11 +21,6 @@ var BrowserWindow = require('electron').remote.BrowserWindow;
 ipcRenderer.on('resended', function (event, arr) {
     console.log('resended');
 });
-var pagedjs_1 = require("pagedjs");
-var paged = new pagedjs_1.Previewer();
-// let flow = paged.preview(DOMContent, ["path/to/css/file.css"], document.body).then((flow) => {
-// 	console.log("Rendered", flow.total, "pages.");
-// })
 var screenMain = new mine_drawing_1.Screen();
 // // let techWater = new TechWater('container', window.innerWidth, window.innerHeight);
 var cage = new _cage_1.CAGE('containerCage', window.innerWidth, window.innerHeight);
