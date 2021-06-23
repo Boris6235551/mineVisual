@@ -113,9 +113,10 @@ export class Connection extends BaseMineDraw{
                                     // real length = step * frameCnt;
     private step: number;           // white square moving length
     private count: number;          // elements (parts) count 
-    private dir: boolean = true;    // direction of flow upWord or rightWord == true
+    private dir: boolean = true;    // direction of flow upWord or leftWord == true decreases coordinate
     private frameCnt: number;       // count of annimation frames
-    constructor(p0: Point, length: number, disposition: Disposition) {
+    private running: boolean;
+    constructor(p0: Point, length: number, disposition: Disposition, dir: boolean = true) {
         super(p0,length, disposition);
         this.width = this.getOdd(length);
         if(disposition == Disposition.Vertical){
@@ -123,6 +124,8 @@ export class Connection extends BaseMineDraw{
             this.rect.p1.y = this.rect.p0.y + 100;
         }
         this.frameCnt = 4;
+        this.dir = dir;
+        this.running = true;
         this.period = this.width * this.frameCnt;   // length of the one full element with white rect moving
     }
     getHalf(): number{
@@ -225,20 +228,18 @@ export class Connection extends BaseMineDraw{
     private moveWhite(): void{
         let dy: number = 0;
         let dx: number = 0;
-        if(this.disposition == Disposition.Vertical){
-            if(this.animationFrame < 3) dy = this.dir ? -this.step : this.step;
-            else dy = this.dir ? (3 * this.step) : -(3*this.step);
-        }
-        else {
-            if(this.animationFrame < 3) dx = this.dir ? -this.step : this.step;
-            else dx = this.dir ? (3 * this.step) : -(3*this.step);
-        }
+        
+        let maxFrameIndex = this.frameCnt - 1;
+        let dStep = (this.animationFrame < maxFrameIndex) ? this.step : -(maxFrameIndex * this.step);
+        if(this.dir) dStep = - dStep;
+        if(this.disposition == Disposition.Vertical) dy = dStep;
+        else dx = dStep;
         for(let i = 1; i < this.primitives.length; i++) this.primitives[i].move({x: dx, y: dy});
     }
     nextFrame(): void {
 // return;
         this.moveWhite();
-        if(this.animationFrame < 3) this.animationFrame +=1;
+        if(this.animationFrame < this.frameCnt - 1) this.animationFrame +=1;
         else this.animationFrame = 0;
     };
 }

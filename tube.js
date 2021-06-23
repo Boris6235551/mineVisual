@@ -110,15 +110,18 @@ var Tube = /** @class */ (function (_super) {
 exports.Tube = Tube;
 var Connection = /** @class */ (function (_super) {
     __extends(Connection, _super);
-    function Connection(p0, length, disposition) {
+    function Connection(p0, length, disposition, dir) {
+        if (dir === void 0) { dir = true; }
         var _this = _super.call(this, p0, length, disposition) || this;
-        _this.dir = true; // direction of flow upWord or rightWord == true
+        _this.dir = true; // direction of flow upWord or leftWord == true decreases coordinate
         _this.width = _this.getOdd(length);
         if (disposition == mine_drawing_1.Disposition.Vertical) {
             _this.rect.p1.x = _this.rect.p0.x + _this.width;
             _this.rect.p1.y = _this.rect.p0.y + 100;
         }
         _this.frameCnt = 4;
+        _this.dir = dir;
+        _this.running = true;
         _this.period = _this.width * _this.frameCnt; // length of the one full element with white rect moving
         return _this;
     }
@@ -230,25 +233,21 @@ var Connection = /** @class */ (function (_super) {
     Connection.prototype.moveWhite = function () {
         var dy = 0;
         var dx = 0;
-        if (this.disposition == mine_drawing_1.Disposition.Vertical) {
-            if (this.animationFrame < 3)
-                dy = this.dir ? -this.step : this.step;
-            else
-                dy = this.dir ? (3 * this.step) : -(3 * this.step);
-        }
-        else {
-            if (this.animationFrame < 3)
-                dx = this.dir ? -this.step : this.step;
-            else
-                dx = this.dir ? (3 * this.step) : -(3 * this.step);
-        }
+        var maxFrameIndex = this.frameCnt - 1;
+        var dStep = (this.animationFrame < maxFrameIndex) ? this.step : -(maxFrameIndex * this.step);
+        if (this.dir)
+            dStep = -dStep;
+        if (this.disposition == mine_drawing_1.Disposition.Vertical)
+            dy = dStep;
+        else
+            dx = dStep;
         for (var i = 1; i < this.primitives.length; i++)
             this.primitives[i].move({ x: dx, y: dy });
     };
     Connection.prototype.nextFrame = function () {
         // return;
         this.moveWhite();
-        if (this.animationFrame < 3)
+        if (this.animationFrame < this.frameCnt - 1)
             this.animationFrame += 1;
         else
             this.animationFrame = 0;

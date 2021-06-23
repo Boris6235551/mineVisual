@@ -111,10 +111,10 @@ var BASEPUMP = /** @class */ (function (_super) {
     BASEPUMP.prototype.createConnections = function (datas) {
         for (var _i = 0, datas_1 = datas; _i < datas_1.length; _i++) {
             var obj = datas_1[_i];
-            this.connect(obj.begin, obj.end, obj.disp, obj.type, obj.hasOwnProperty('name') ? obj.name : '');
+            this.connect(obj.begin, obj.end, obj.disp, obj.type, obj.dir, obj.hasOwnProperty('name') ? obj.name : '');
         }
     };
-    BASEPUMP.prototype.connect = function (firstName, secondName, disp, type, name) {
+    BASEPUMP.prototype.connect = function (firstName, secondName, disp, type, dir, name) {
         var p0;
         var p1;
         if (type[0] == 'M' || type[0] == 'B') {
@@ -147,7 +147,7 @@ var BASEPUMP = /** @class */ (function (_super) {
             if (p0 == null)
                 return;
         }
-        var line = new tube_1.Connection(new mine_drawing_1.Point(0, 0), 5, disp);
+        var line = new tube_1.Connection(new mine_drawing_1.Point(0, 0), 5, disp, dir);
         line.connectPointPoint(p0, 0, p1, 0);
         line.name = name;
         this.lines.push(line);
@@ -305,7 +305,7 @@ var surfaceConnections = [
     { begin: 'XS3', end: 'Tech', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'Ms' },
     { begin: 'Tech', end: 'Y2_', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'sM' },
     { begin: '15', end: 'Y222', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'dM', name: 'Y222line' },
-    { begin: 'Y222line', end: 'XS1', dir: true, disp: mine_drawing_1.Disposition.Horizontal, type: 'Bm' },
+    { begin: 'Y222line', end: 'XS1', dir: false, disp: mine_drawing_1.Disposition.Horizontal, type: 'Bm' },
     { begin: '15', end: 'Y212', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'dM', name: 'Y212line' },
     { begin: 'XS1', end: 'Y212line', dir: true, disp: mine_drawing_1.Disposition.Horizontal, type: 'mB' },
     { begin: 'XS1', end: 'Y212line', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'Ml' },
@@ -333,13 +333,13 @@ var surfaceConnections = [
     { begin: 'XS5', end: 'Clear', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'Ms' },
     { begin: 'Clear', end: 'Y1_', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'sM' },
     { begin: '15', end: 'Y122', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'dM', name: 'Y122line' },
-    { begin: 'Y122line', end: 'XS4', dir: true, disp: mine_drawing_1.Disposition.Horizontal, type: 'Bm' },
+    { begin: 'Y122line', end: 'XS4', dir: false, disp: mine_drawing_1.Disposition.Horizontal, type: 'Bm' },
     { begin: '15', end: 'Y112', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'dM', name: 'Y112line' },
     { begin: 'XS4', end: 'Y112line', dir: true, disp: mine_drawing_1.Disposition.Horizontal, type: 'mB' },
     { begin: 'XS4', end: 'Y112line', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'Ml' },
     { begin: '30', end: 'XS4', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'dM' },
     { begin: '50', end: 'XS5', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'dM', name: 'XS5line' },
-    { begin: 'XS5line', end: 'Y111', dir: true, disp: mine_drawing_1.Disposition.Horizontal, type: 'Bm', name: 'XS5Rline' },
+    { begin: 'XS5line', end: 'Y111', dir: false, disp: mine_drawing_1.Disposition.Horizontal, type: 'Bm', name: 'XS5Rline' },
     { begin: 'Y111', end: 'XS5Rline', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'Ml' },
     { begin: 'Y121', end: 'XS5line', dir: true, disp: mine_drawing_1.Disposition.Horizontal, type: 'mB', name: 'XS5Lline' },
     { begin: 'Y121', end: 'XS5Lline', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'mB' },

@@ -78,9 +78,9 @@ class BASEPUMP extends Scheme {
     }
     createConnections(datas){ 
         for ( let obj of datas) 
-            this.connect(obj.begin, obj.end, obj.disp, obj.type, obj.hasOwnProperty('name') ? obj.name : '');
+            this.connect(obj.begin, obj.end, obj.disp, obj.type, obj.dir, obj.hasOwnProperty('name') ? obj.name : '');
     }
-    connect(firstName: string, secondName: string, disp: Disposition, type: string, name:string){  
+    connect(firstName: string, secondName: string, disp: Disposition, type: string, dir: boolean, name:string){  
         let p0: Point;
         let p1: Point;
         if(type[0] == 'M' || type[0] == 'B') {
@@ -101,7 +101,7 @@ class BASEPUMP extends Scheme {
             else if(type[0] == 'l') p0 = this.getLineCross(firstName, disp, p1);
             if(p0 == null) return;
         }
-        let line =  new Connection(new Point(0,0), 5, disp);
+        let line =  new Connection(new Point(0,0), 5, disp, dir);
         line.connectPointPoint(p0, 0, p1, 0);
         line.name = name;
         this.lines.push(line);
@@ -269,7 +269,7 @@ let surfaceConnections = [
     {begin: 'Tech', end: 'Y2_', dir: true, disp: Disposition.Vertical, type: 'sM'},
 
     {begin: '15', end: 'Y222', dir: true, disp: Disposition.Vertical, type: 'dM', name: 'Y222line'},
-    {begin: 'Y222line', end: 'XS1', dir: true, disp: Disposition.Horizontal, type: 'Bm'},
+    {begin: 'Y222line', end: 'XS1', dir: false, disp: Disposition.Horizontal, type: 'Bm'},
     {begin: '15', end: 'Y212', dir: true, disp: Disposition.Vertical, type: 'dM', name: 'Y212line'},
     {begin: 'XS1', end: 'Y212line', dir: true, disp: Disposition.Horizontal, type: 'mB'},
     {begin: 'XS1', end: 'Y212line', dir: true, disp: Disposition.Vertical, type: 'Ml'},
@@ -304,7 +304,7 @@ let surfaceConnections = [
 
     
     {begin: '15', end: 'Y122', dir: true, disp: Disposition.Vertical, type: 'dM', name: 'Y122line'},
-    {begin: 'Y122line', end: 'XS4', dir: true, disp: Disposition.Horizontal, type: 'Bm'},
+    {begin: 'Y122line', end: 'XS4', dir: false, disp: Disposition.Horizontal, type: 'Bm'},
     {begin: '15', end: 'Y112', dir: true, disp: Disposition.Vertical, type: 'dM', name: 'Y112line'},
     {begin: 'XS4', end: 'Y112line', dir: true, disp: Disposition.Horizontal, type: 'mB'},
     {begin: 'XS4', end: 'Y112line', dir: true, disp: Disposition.Vertical, type: 'Ml'},
@@ -314,7 +314,7 @@ let surfaceConnections = [
 
 
     {begin: '50', end: 'XS5', dir: true, disp: Disposition.Vertical, type: 'dM', name: 'XS5line'},
-    {begin: 'XS5line', end: 'Y111', dir: true, disp: Disposition.Horizontal, type: 'Bm', name: 'XS5Rline'},
+    {begin: 'XS5line', end: 'Y111', dir: false, disp: Disposition.Horizontal, type: 'Bm', name: 'XS5Rline'},
     {begin: 'Y111', end: 'XS5Rline', dir: true, disp: Disposition.Vertical, type: 'Ml'},
     {begin: 'Y121', end: 'XS5line', dir: true, disp: Disposition.Horizontal, type: 'mB', name: 'XS5Lline'},
     {begin: 'Y121', end: 'XS5Lline', dir: true, disp: Disposition.Vertical, type: 'mB'},
