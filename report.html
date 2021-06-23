@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="en">
 
 <head>
@@ -10,11 +11,11 @@
 </head>
 
 <body style="background-color: #F2F7FD;">
-    <div id="report">
+    <div id="report" v-bind:style="report">
         <div class="reportBlock">
             <button style="position: absolute; left: 760px; top: 15px;" v-on:click="close">X</button>
             <button style="position: absolute; left: 15px; top: 15px;" v-on:click="print">Print</button>
-            <h3 style="text-align: center;">Protocol issued by measuring the weigth of the rock mass through <br> 
+            <h3 style="text-align: center;">Protocol issued by measuring the weigth of the rock mass through <br>
                 the weigh scale installed for measurement of total hoisted stones</h3>
             <div class="date">
                 <input type="date" name="" id="" v-on:change="fromDateChange" v-model="startDate">
@@ -34,6 +35,7 @@
                 <table>
                     <thead>
                         <tr>
+                            <th>No</th>
                             <th>Time & Date</th>
                             <th>Skip</th>
                             <th>Skip No</th>
@@ -44,23 +46,25 @@
                 <div class="scroll-table-body">
                     <table>
                         <tbody>
-                            <tr v-for="data in objectShift.datas">
+                            <tr v-for="(data, index) in objectShift.datas">
+                                <td>{{index + 1}}</td>
                                 <td>{{ data.time }}</td>
                                 <td>{{ data.batcher }}</td>
                                 <td>{{ data.number }}</td>
-                                <td>{{ data.gross }} - {{ data.tare }} = {{ data.net }}</td>
+                                <td id="weight">{{ data.gross }} - {{ data.tare }} = {{ data.net }}</td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
-            <div class="footer" id="footer">
-                <div>Date:&emsp;{{ datePrintingReport.month }}/{{ datePrintingReport.day }}/{{ datePrintingReport.year
-                    }}
-                </div>
-                <div class="operator">Operator______________________</div>
+        <div class="counter">{{count}}</div>
+        <div class="footer">
+            <div>Date:&emsp;{{ datePrintingReport.month }}/{{ datePrintingReport.day }}/{{ datePrintingReport.year
+                }}
             </div>
+            <div class="operator">Operator______________________</div>
+        </div>
     </div>
 </body>
 <!-- <script>let exports = module.exports;</script> -->

@@ -19,10 +19,11 @@
     "exceljs": "^4.2.0",
     "konva": "^7.2.1",
     "moment": "^2.29.1",
+    "numeral": "^2.0.6",
+    "pagedjs": "^0.2.0",
     "vue": "^2.6.13",
     "vue-template-loader": "^1.1.0",
     "vuejs-datepicker": "^1.6.2",
     "webpack-stream": "^6.1.2"
   }
 }
-
