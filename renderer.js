@@ -24,8 +24,9 @@ ipcRenderer.on('resended', function (event, arr) {
 var screenMain = new mine_drawing_1.Screen();
 // // let techWater = new TechWater('container', window.innerWidth, window.innerHeight);
 var cage = new _cage_1.CAGE('containerCage', window.innerWidth, window.innerHeight);
-var UndegroundPump1 = new _undegroundPump_1.UNDEGROUNDPUMP('containerUndegroundPump1', window.innerWidth, window.innerHeight, new mine_drawing_1.Point(350, 90), 1);
-var UndegroundPump2 = new _undegroundPump_1.UNDEGROUNDPUMP('containerUndegroundPump2', window.innerWidth, window.innerHeight, new mine_drawing_1.Point(350, 90), 2);
+var UndegroundPump = new _undegroundPump_1.UNDEGROUNDPUMP('containerUndegroundPump', window.innerWidth, window.innerHeight, new mine_drawing_1.Point(350 + 30, 90 + 30));
+// let UndegroundPump2 = new UNDEGROUNDPUMP('containerUndegroundPump2', window.innerWidth, window.innerHeight,
+//     new Point(350, 90), 2);
 var SurfacePump = new _undegroundPump_1.SURFACEPUMP('containerSurfacePump1', window.innerWidth, window.innerHeight, new mine_drawing_1.Point(2545, 44));
 var dsf = new _dsf_1.DSF('containerDSF', window.innerWidth, window.innerHeight);
 var skip = new _skip_1.SKIP('containerSkip', window.innerWidth, window.innerHeight);
@@ -40,8 +41,8 @@ screenMain.addScheme(skip);
 screenMain.addScheme(batcher);
 screenMain.addScheme(cage);
 screenMain.addScheme(substationUndeground);
-screenMain.addScheme(UndegroundPump1);
-screenMain.addScheme(UndegroundPump2);
+screenMain.addScheme(UndegroundPump);
+// screenMain.addScheme(UndegroundPump2);
 screenMain.addScheme(SurfacePump);
 screenMain.addScheme(batcherlable);
 screenMain.addScheme(receivingHopper);

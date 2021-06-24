@@ -24,10 +24,10 @@ ipcRenderer.on('resended', (event, arr) => {
 let screenMain = new Screen();
 // // let techWater = new TechWater('container', window.innerWidth, window.innerHeight);
 let cage = new CAGE('containerCage', window.innerWidth, window.innerHeight);
-let UndegroundPump1 = new UNDEGROUNDPUMP('containerUndegroundPump1', window.innerWidth, window.innerHeight,
-    new Point(350, 90), 1);
-let UndegroundPump2 = new UNDEGROUNDPUMP('containerUndegroundPump2', window.innerWidth, window.innerHeight,
-    new Point(350, 90), 2);
+let UndegroundPump = new UNDEGROUNDPUMP('containerUndegroundPump', window.innerWidth, window.innerHeight,
+    new Point(350+30, 90+30));
+// let UndegroundPump2 = new UNDEGROUNDPUMP('containerUndegroundPump2', window.innerWidth, window.innerHeight,
+//     new Point(350, 90), 2);
 let SurfacePump = new SURFACEPUMP('containerSurfacePump1', window.innerWidth, window.innerHeight,
     new Point(2545, 44));
 let dsf = new DSF('containerDSF', window.innerWidth, window.innerHeight);
@@ -45,8 +45,8 @@ screenMain.addScheme(skip);
 screenMain.addScheme(batcher);
 screenMain.addScheme(cage);
 screenMain.addScheme(substationUndeground);
-screenMain.addScheme(UndegroundPump1);
-screenMain.addScheme(UndegroundPump2);
+screenMain.addScheme(UndegroundPump);
+// screenMain.addScheme(UndegroundPump2);
 screenMain.addScheme(SurfacePump);
 screenMain.addScheme(batcherlable);
 screenMain.addScheme(receivingHopper);

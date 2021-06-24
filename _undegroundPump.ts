@@ -41,11 +41,11 @@ class BASEPUMP extends Scheme {
         return disp==Disposition.Vertical ? ( first ? w.rect.getMiddleDownPoint() : w.rect.getMiddleUpPoint() ) : 
                                     ( first ? w.rect.getMiddleRightPoint() : w.rect.getMiddleLeftPoint() );
     }
-    /*********      'B'   line begin side point   *********/
-    getLineBegin(name: string): Point{
+    /*********      'B or E'   line begin or end side point   *********/
+    getLineBeginEnd(name: string, begin: boolean = true): Point{
         let l = this.findLineByName(name);
         if(l == null) return null;
-        return l.getBegin();
+        return begin ? l.getBegin() : l.getEnd();
     }
     /*********      's'      *********/
     getSurface(name: string, disp: Disposition, p: Point, first: boolean = true ){
@@ -58,9 +58,11 @@ class BASEPUMP extends Scheme {
     getMiddleCross(name: string, disp: Disposition, bP: Point, first: boolean = true){
         let w = this.findByName(name);
         if(w == null) return null;
-        let mhp = w.rect.getMiddlePoint();
-        let mvp = first ? w.rect.getMiddleDownPoint() : w.rect.getMiddleUpPoint();
-        return disp==Disposition.Vertical ? new Point( bP.x, mvp.y) : new Point( mhp.x, bP.y);
+        // let mhp = w.rect.getMiddlePoint();
+        // let mvp = first ? w.rect.getMiddleDownPoint() : w.rect.getMiddleUpPoint();
+        // return disp==Disposition.Vertical ? new Point( bP.x, mvp.y) : new Point( mhp.x, bP.y);
+        let mp = w.rect.getMiddlePoint();
+        return disp==Disposition.Vertical ? new Point( bP.x, mp.y) : new Point( mp.x, bP.y);
     }
     /*********      'd'      *********/
     getDelta(delta: number, disp: Disposition, p: Point, first: boolean = true){
@@ -83,8 +85,8 @@ class BASEPUMP extends Scheme {
     connect(firstName: string, secondName: string, disp: Disposition, type: string, dir: boolean, name:string){  
         let p0: Point;
         let p1: Point;
-        if(type[0] == 'M' || type[0] == 'B') {
-            p0 = type[0] == 'M' ? this.getMiddle(firstName, disp) : this.getLineBegin(firstName);
+        if(type[0] == 'M' || type[0] == 'B' || type[0] == 'E') {
+            p0 = type[0] == 'M' ? this.getMiddle(firstName, disp) : this.getLineBeginEnd(firstName, type[0] == 'B');
             if(p0 == null) return;
             if(type[1] == 's') p1 = this.getSurface(secondName, disp, p0, false);
             else if(type[1] == 'm') p1 = this.getMiddleCross( secondName, disp, p0, false);
@@ -92,8 +94,8 @@ class BASEPUMP extends Scheme {
             else if(type[1] == 'l') p1 = this.getLineCross(secondName, disp, p0, false);
             if(p1 == null) return;
         }
-        else if(type[1] == 'M' || type[1] == 'B'){
-            p1 = type[1] == 'M' ? this.getMiddle(secondName, disp, false) : this.getLineBegin(secondName);
+        else if(type[1] == 'M' || type[1] == 'B' || type[1] == 'E'){
+            p1 = type[1] == 'M' ? this.getMiddle(secondName, disp, false) : this.getLineBeginEnd(secondName, type[1] == 'B');
             if(p1 == null) return;
             if(type[0] == 's') p0 = this.getSurface(firstName, disp, p1);
             else if(type[0] == 'm') p0 = this.getMiddleCross( firstName, disp, p1);
@@ -152,45 +154,95 @@ let vPoints = [
 
 let mineConnections = [
     // /*-------------       LINE 1       --------------*/
-    // {begin: 'Y16', end: 'Y13', dir: true, disp: Disposition.Vertical, type: 'HV'},
-    // {begin: 'Y13', end: 'Pump1', dir: true, disp: Disposition.Vertical, type: 'HV'},
-    // {begin: 'Pump1', end: 'Y17', dir: true, disp: Disposition.Vertical, type: 'HV'},
-
-    // {begin: 'Y11', end: 'Y12', dir: true, disp: Disposition.Horizontal, type: 'HV'},
+    // {begin: 'Y11', end: 'Y16', dir: true, disp: Disposition.Vertical, type: 'mM', name: 'Y16u'},
+    // {begin: 'Y11', end: 'Y16u', dir: true, disp: Disposition.Horizontal, type: 'Ml', name: 'Y11r'},
+    // {begin: 'Y16u', end: 'Y12', dir: false, disp: Disposition.Horizontal, type: 'lM', name: 'Y12l'},
+    
+    // {begin: 'Y16', end: 'Y13', dir: true, disp: Disposition.Vertical, type: 'Ms', name: 'Y16d'},
+    // {begin: 'Y13', end: 'Pump1', dir: true, disp: Disposition.Vertical, type: 'Ms', name: 'Y13d'},  //Y13down
+    // {begin: 'Pump1', end: 'Y17', dir: true, disp: Disposition.Vertical, type: 'sM'},
+    // {begin: 'Y17', end: 'minePool', dir: true, disp: Disposition.Vertical, type: 'Ms'},
     // /*-----------------------------------------------*/
-
-    // {begin: 'Y26', end: 'Y23', dir: true, disp: Disposition.Vertical, type: 'HV'},
-    // {begin: 'Y23', end: 'Pump2', dir: true, disp: Disposition.Vertical, type: 'HV'},
-    // {begin: 'Pump2', end: 'Y27', dir: true, disp: Disposition.Vertical, type: 'HV'},
-
-    // {begin: 'Y36', end: 'Y33', dir: true, disp: Disposition.Vertical, type: 'HV'},
-    // {begin: 'Y33', end: 'Pump3', dir: true, disp: Disposition.Vertical, type: 'HV'},
-    // {begin: 'Pump3', end: 'Y37', dir: true, disp: Disposition.Vertical, type: 'HV'},
+    // {begin: '20', end: 'Y14', dir: false, disp: Disposition.Vertical, type: 'dM', name: 'Y14u'},
+    // {begin: 'Y16u', end: 'Y14u', dir: false, disp: Disposition.Horizontal, type: 'lB'},
+    // {begin: 'Y14', end: 'minePool', dir: false, disp: Disposition.Vertical, type: 'Ms', name: 'Y14d'},
+    // /*-----------------------------------------------*/
+    // {begin: 'Y13d', end: 'Y15', dir: false, disp: Disposition.Horizontal, type: 'lM', name: 'Y15l'},
+    // {begin: 'Y15', end: 'Y14d', dir: false, disp: Disposition.Horizontal, type: 'Ml', name: 'Y15r'},
 
 
+    {begin: '40', end: 'lY51', dir: true, disp: Disposition.Vertical, type: 'dB', name: 'ulY51'},
+    //{begin: '30', end: 'lY51', dir: true, disp: Disposition.Vertical, type: 'dB', name: ''},
+    {begin: '760', end: 'ulY51', dir: true, disp: Disposition.Horizontal, type: 'dB', name: 'stav1'},
+    {begin: 'stav1', end: 'lY41', dir: true, disp: Disposition.Vertical, type: 'lB', name: 'ulY41'},
+    {begin: 'stav1', end: 'lY31', dir: true, disp: Disposition.Vertical, type: 'lB', name: 'ulY31'},
+    {begin: 'stav1', end: 'lY21', dir: true, disp: Disposition.Vertical, type: 'lB', name: 'ulY21'},
+    {begin: 'stav1', end: 'lY11', dir: true, disp: Disposition.Vertical, type: 'lB', name: 'ulY11'},
 
+    {begin: '60', end: 'rY52', dir: true, disp: Disposition.Vertical, type: 'dE', name: 'urY52'},
+    {begin: '880', end: 'urY52', dir: true, disp: Disposition.Horizontal, type: 'dB', name: 'stav2'},
+    {begin: 'stav2', end: 'rY42', dir: true, disp: Disposition.Vertical, type: 'lE', name: 'stav2'},
+    {begin: 'stav2', end: 'rY32', dir: true, disp: Disposition.Vertical, type: 'lE', name: 'stav2'},
+    {begin: 'stav2', end: 'rY22', dir: true, disp: Disposition.Vertical, type: 'lE', name: 'stav2'},
+    {begin: 'stav2', end: 'rY12', dir: true, disp: Disposition.Vertical, type: 'lE', name: 'stav2'},
+
+    {begin: '60', end: 'stav1', dir: true, disp: Disposition.Vertical, type: 'dB', name: 'ustav1'},
+    {begin: '40', end: 'stav2', dir: true, disp: Disposition.Vertical, type: 'dB', name: 'ustav2'},
+];
+let mineConnectionsTemplates = [
+    /*-------------       LINE @       --------------*/
+    {begin: '10', end: 'Y@1', dir: true, disp: Disposition.Horizontal, type: 'dM', name: 'lY@1'},
+    {begin: 'Y@2', end: '20', dir: false, disp: Disposition.Horizontal, type: 'Md', name: 'rY@2'},
+    /*-----------------------------------------------*/
+    {begin: 'Y@1', end: 'Y@6', dir: true, disp: Disposition.Vertical, type: 'mM', name: 'uY@6'},
+    {begin: 'Y@1', end: 'uY@6', dir: true, disp: Disposition.Horizontal, type: 'Ml', name: 'rY@1'},
+    {begin: 'uY@6', end: 'Y@2', dir: false, disp: Disposition.Horizontal, type: 'lM', name: 'lY@2'},
+    
+    {begin: 'Y@6', end: 'Y@3', dir: true, disp: Disposition.Vertical, type: 'Ms', name: 'dY@6'},
+    {begin: 'Y@3', end: 'Pump@', dir: true, disp: Disposition.Vertical, type: 'Ms', name: 'dY@3'},  //Y13down
+    {begin: 'Pump@', end: 'Y@7', dir: true, disp: Disposition.Vertical, type: 'sM', name: ''},
+    {begin: 'Y@7', end: 'minePool', dir: true, disp: Disposition.Vertical, type: 'Ms', name: ''},
+    /*-----------------------------------------------*/
+    {begin: '20', end: 'Y@4', dir: false, disp: Disposition.Vertical, type: 'dM', name: 'uY@4'},
+    {begin: 'uY@6', end: 'uY@4', dir: false, disp: Disposition.Horizontal, type: 'lB', name: ''},
+    {begin: 'Y@4', end: 'minePool', dir: false, disp: Disposition.Vertical, type: 'Ms', name: 'dY@4'},
+    /*-----------------------------------------------*/
+    {begin: 'dY@3', end: 'Y@5', dir: false, disp: Disposition.Horizontal, type: 'lM', name: 'lY@5'},
+    {begin: 'Y@5', end: 'dY@4', dir: false, disp: Disposition.Horizontal, type: 'Ml', name: 'rY@5'},
+    
 ];
 
 const LINES_COUNT1: number   = 3;
 const LINES_COUNT2: number   = 2;
+const LINES_COUNT: number = 5;
 const DELTA_X: number       = 184;
 
 export class UNDEGROUNDPUMP extends BASEPUMP {
-    constructor(container: string, width: number, height: number, basePoint: Point, number: number) {
+    private connectionsTable: any[];
+    constructor(container: string, width: number, height: number, basePoint: Point) {     //, number: number
         super(container, width, height, basePoint);
-        if(number == 1){
-            this.name = 'drainageA';
-            for(let i = 0; i < LINES_COUNT1; i++) 
-                this.createWidgets(basePoint.newPointMoved(DELTA_X * i, 0), i + 1);
-            // this.createConnections(mineConnections);
+        this.connectionsTable = [];
+        this.name = 'drainageA';
+        this.secondName = 'drainageB';
+        this.addItem(new MinePool( basePoint.newPointMoved(0, 450) , 950), 'minePool');
+        for(let i = 0; i < LINES_COUNT; i++) {
+            this.createWidgets(basePoint.newPointMoved(DELTA_X * i, 0), i + 1);
+            this.prepareConnectionsTable(i + 1);
         }
-        else{
-            this.name = 'drainageB';
-            let pool = new MinePool( basePoint.newPointMoved(0, 450) , 950);   // new Point(400, 550)
-            this.addWidget(pool);
-            this.items.push(pool);
-            for(let i = LINES_COUNT1; i < LINES_COUNT1 + LINES_COUNT2; i++) 
-                this.createWidgets(basePoint.newPointMoved(DELTA_X * i, 0), i + 1);
+        this.createConnections(this.connectionsTable);    
+        this.createConnections(mineConnections);
+    }
+    prepareConnectionsTable(number: number){
+        for(let obj of mineConnectionsTemplates){
+            let properies =  Object.getOwnPropertyNames(obj);
+            let newObj = {};
+            for(let prop of properies){
+                if(typeof obj[prop] == 'string') newObj[prop] = obj[prop].replace('@', (number).toString());
+                else newObj[prop] = obj[prop];
+            }
+            this.connectionsTable.push(newObj);
+            // mineConnections.push(newObj);
+            console.log(`prepareConnectionsTable for line=${number} => ${JSON.stringify(newObj)}`)
         }
     }
     createWidgets(p: Point, number: number) {
@@ -317,7 +369,9 @@ let surfaceConnections = [
     {begin: 'XS5line', end: 'Y111', dir: false, disp: Disposition.Horizontal, type: 'Bm', name: 'XS5Rline'},
     {begin: 'Y111', end: 'XS5Rline', dir: true, disp: Disposition.Vertical, type: 'Ml'},
     {begin: 'Y121', end: 'XS5line', dir: true, disp: Disposition.Horizontal, type: 'mB', name: 'XS5Lline'},
-    {begin: 'Y121', end: 'XS5Lline', dir: true, disp: Disposition.Vertical, type: 'mB'},
+    {begin: 'Y121', end: 'XS5Lline', dir: true, disp: Disposition.Vertical, type: 'Ml'}, //mB
+    
+
 
     {begin: '10', end: 'DP4', dir: true, disp: Disposition.Vertical, type: 'dM', name: 'DP4line'},
     {begin: '10', end: 'DP3', dir: true, disp: Disposition.Vertical, type: 'dM', name: 'DP3line'},
@@ -362,3 +416,22 @@ export class SURFACEPUMP extends BASEPUMP {
 
     // }
 }
+
+
+
+
+
+// return;
+// let number = 1;
+//         if(number == 1){
+//             this.name = 'drainageA';
+//             for(let i = 0; i < LINES_COUNT1; i++) 
+//                 this.createWidgets(basePoint.newPointMoved(DELTA_X * i, 0), i + 1);
+//             this.createConnections(mineConnections);
+//         }
+//         else{
+//             this.name = 'drainageB';
+//             this.addItem(new MinePool( basePoint.newPointMoved(0, 450) , 950), 'minePool');
+//             for(let i = LINES_COUNT1; i < LINES_COUNT1 + LINES_COUNT2; i++) 
+//                 this.createWidgets(basePoint.newPointMoved(DELTA_X * i, 0), i + 1);
+//         }

@@ -225,11 +225,11 @@ var Connection = /** @class */ (function (_super) {
         return this.disposition == mine_drawing_1.Disposition.Vertical ? new mine_drawing_1.Point(this.rect.p0.x + this.width, this.rect.p0.y + half) :
             new mine_drawing_1.Point(this.rect.p0.x + half, this.rect.p0.y);
     };
-    // getEnd(): Point{
-    //     let half = this.getHalf();
-    //     return this.disposition==Disposition.Vertical ? new Point(this.rect.p0.x + this.width, this.rect.p0.y + half) :
-    //                                                     new Point(this.rect.p0.x + half, this.rect.p0.y);
-    // }
+    Connection.prototype.getEnd = function () {
+        var half = this.getHalf();
+        return this.disposition == mine_drawing_1.Disposition.Vertical ? new mine_drawing_1.Point(this.rect.p1.x, this.rect.p1.y - half) :
+            new mine_drawing_1.Point(this.rect.p1.x - half, this.rect.p1.y - this.width);
+    };
     Connection.prototype.moveWhite = function () {
         var dy = 0;
         var dx = 0;
