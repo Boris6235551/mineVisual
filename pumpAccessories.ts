@@ -1,20 +1,20 @@
 import Konva from 'konva';
-import { BaseMineDraw, Point, Disposition, } from './mine_drawing';
+import { BaseMineDraw, FlowDriver, Point, Disposition, } from './mine_drawing';
 import { CreateLabel, createText, createRectangle, createCircle } from './utils'
 
 export enum PumpState {
     stop = 0, starting, run, stopping, alarm, revers
 };
 
-enum PumpError {
+export enum PumpError {
     NoError = 0, StartingTimeOut, StoppingTimeOut, AccidentPressure
 }
 
-enum PumpMode {
+export enum PumpMode {
     Auto = 1, Service
 }
 
-export class Pump extends BaseMineDraw {
+export class Pump extends FlowDriver {
     private step: number;
     // private a: number;
     public status: PumpState;
@@ -226,7 +226,7 @@ export class Pump extends BaseMineDraw {
         else if (this.mode == PumpMode.Service) this.setLabel('S');
         else this.setLabel('E')
         this.error = mes.Error;
-
+        this.setFlow(this.status == PumpState.run);
     }
 
     nextFrame(angel: number = 30): void {
@@ -409,7 +409,7 @@ enum ValvePrimitive {
     triangle0 = 0, triangle1, rectangleCentr, circle, opening
 }
 
-export class Valve extends BaseMineDraw {
+export class Valve extends FlowDriver {
     public state: ValveState;
     public mode: ValveMode;
     public error: ValveError;

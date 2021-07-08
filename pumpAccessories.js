@@ -16,7 +16,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Compressor = exports.UndegraundPump = exports.ValveCheck = exports.Valve = exports.ValveError = exports.ValveState = exports.WaterTower = exports.MinePool = exports.Pool = exports.PureWater = exports.IndustrialWater = exports.UndergroundWater = exports.Pump = exports.PumpState = void 0;
+exports.Compressor = exports.UndegraundPump = exports.ValveCheck = exports.Valve = exports.ValveError = exports.ValveState = exports.WaterTower = exports.MinePool = exports.Pool = exports.PureWater = exports.IndustrialWater = exports.UndergroundWater = exports.Pump = exports.PumpMode = exports.PumpError = exports.PumpState = void 0;
 var konva_1 = __importDefault(require("konva"));
 var mine_drawing_1 = require("./mine_drawing");
 var utils_1 = require("./utils");
@@ -36,12 +36,12 @@ var PumpError;
     PumpError[PumpError["StartingTimeOut"] = 1] = "StartingTimeOut";
     PumpError[PumpError["StoppingTimeOut"] = 2] = "StoppingTimeOut";
     PumpError[PumpError["AccidentPressure"] = 3] = "AccidentPressure";
-})(PumpError || (PumpError = {}));
+})(PumpError = exports.PumpError || (exports.PumpError = {}));
 var PumpMode;
 (function (PumpMode) {
     PumpMode[PumpMode["Auto"] = 1] = "Auto";
     PumpMode[PumpMode["Service"] = 2] = "Service";
-})(PumpMode || (PumpMode = {}));
+})(PumpMode = exports.PumpMode || (exports.PumpMode = {}));
 var Pump = /** @class */ (function (_super) {
     __extends(Pump, _super);
     function Pump(p0, length, disposition) {
@@ -259,6 +259,7 @@ var Pump = /** @class */ (function (_super) {
         else
             this.setLabel('E');
         this.error = mes.Error;
+        this.setFlow(this.status == PumpState.run);
     };
     Pump.prototype.nextFrame = function (angel) {
         if (angel === void 0) { angel = 30; }
@@ -332,7 +333,7 @@ var Pump = /** @class */ (function (_super) {
         }
     };
     return Pump;
-}(mine_drawing_1.BaseMineDraw));
+}(mine_drawing_1.FlowDriver));
 exports.Pump = Pump;
 // элементы массива 0-9 - цвета уровней воды, элементы 10 и 11 - цвета фона бассейна
 var WaveCount = 10;
@@ -649,7 +650,7 @@ var Valve = /** @class */ (function (_super) {
         }
     };
     return Valve;
-}(mine_drawing_1.BaseMineDraw));
+}(mine_drawing_1.FlowDriver));
 exports.Valve = Valve;
 var ValveCheck = /** @class */ (function (_super) {
     __extends(ValveCheck, _super);

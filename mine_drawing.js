@@ -1,9 +1,22 @@
 "use strict";
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.animateScreen = exports.Screen = exports.Scheme = exports.BaseMineDraw = exports.PropParams = exports.Rectangle = exports.Point = exports.Disposition = void 0;
+exports.animateScreen = exports.Screen = exports.Scheme = exports.FlowDriver = exports.BaseMineDraw = exports.PropParams = exports.Rectangle = exports.Point = exports.Disposition = void 0;
 var konva_1 = __importDefault(require("konva"));
 //const Konva = require('konva');
 // https://www.typescriptlang.org/docs/handbook/classes.html
@@ -155,6 +168,39 @@ var BaseMineDraw = /** @class */ (function () {
 }());
 exports.BaseMineDraw = BaseMineDraw;
 ;
+var FlowDriver = /** @class */ (function (_super) {
+    __extends(FlowDriver, _super);
+    function FlowDriver(p0, length, disposition, percentage) {
+        if (disposition === void 0) { disposition = Disposition.Horizontal; }
+        var _this = _super.call(this, p0, length, disposition, percentage) || this;
+        _this.flowElements = [];
+        _this.toSetElements = [];
+        _this.flow = false;
+        return _this;
+    }
+    FlowDriver.prototype.setFlow = function (set) {
+        this.flow = set;
+        for (var _i = 0, _a = this.flowElements; _i < _a.length; _i++) {
+            var fElement = _a[_i];
+            fElement.setFlow(set);
+        }
+        for (var _b = 0, _c = this.toSetElements; _b < _c.length; _b++) {
+            var setElement = _c[_b];
+            if (set)
+                setElement.flow = true;
+        }
+    };
+    FlowDriver.prototype.addToFlowElements = function (element) {
+        this.flowElements.push(element);
+    };
+    FlowDriver.prototype.addToSetElements = function (element) {
+        if (element == null)
+            return;
+        this.toSetElements.push(element);
+    };
+    return FlowDriver;
+}(BaseMineDraw));
+exports.FlowDriver = FlowDriver;
 var Scheme = /** @class */ (function () {
     function Scheme(container, width, height) {
         this.stop = false;
