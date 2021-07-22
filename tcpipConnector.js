@@ -191,10 +191,7 @@ function objectsDif(previous, current) {
 var PORT = 2000;
 var allClients = [
     // {host: '192.168.100.50', name: 'DSF'},   // ok
-    // {host: '192.168.100.51', name: 'Cage'},
-    // {host: '192.168.100.52', name: 'Skip'},
-    // {host: '192.168.100.53', name: 'SubStation'},
-    { host: '192.168.100.54', name: 'UndegroundStation' },
+    { host: '192.168.100.103', name: 'Cage' },
 ];
 var socketState;
 (function (socketState) {
@@ -232,6 +229,14 @@ function stopConnection() {
     //startClient();
 }
 exports.stopConnection = stopConnection;
+function getMesFromUint8Array(u8) {
+    var mes = '';
+    if (u8[0] == 0 && u8[1] == 0) {
+        for (var i = 2; i < u8.length; i++)
+            mes += String.fromCharCode(u8[i]);
+    }
+    return mes;
+}
 var MAX_TIME_OUT = 60;
 var DriveClients = /** @class */ (function () {
     function DriveClients() {
@@ -282,6 +287,12 @@ var DriveClients = /** @class */ (function () {
             //            console.log(`${moment().format("DD MMM YYYY HH:mm:ss")} ${cl.name}(${cl.socket.remoteAddress})`); 
             cl.state = socketState.Connected; //clients[index].state = socketState.Connected;
             cl.timeOut = 0;
+            if (ar[0] == 0 && ar[1] == 0) {
+                var mes = '';
+                mes = getMesFromUint8Array(ar);
+                console.log(mes);
+                return;
+            }
             var obj = parseCPUmessage(ar); //showTest(index);
             //console.log(JSON.stringify(obj, null, 4))
             _this.checkObj(obj, index);

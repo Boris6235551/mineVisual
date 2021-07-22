@@ -16,7 +16,8 @@ class BASEPUMP extends Scheme {
         this.items = [];
         this.lines = [];
     }
-    protected addItem(item: (Valve | Pump | Pool | ValveCheck), name: string, recieveMessage: boolean = true, flowControllNames: string = ''){
+    protected addItem(item: (Valve | Pump | Pool | ValveCheck), name: string, recieveMessage: boolean = true, 
+                        flowControllNames: string = ''){
         item.name = name;
         if(recieveMessage) this.items.push(item);
         this.addWidget(item);

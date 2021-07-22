@@ -157,10 +157,10 @@ var PORT = 2000;
 
 let allClients = [
     // {host: '192.168.100.50', name: 'DSF'},   // ok
-    // {host: '192.168.100.51', name: 'Cage'},
+    {host: '192.168.100.103', name: 'Cage'}, //192.168.100.51
     // {host: '192.168.100.52', name: 'Skip'},
     // {host: '192.168.100.53', name: 'SubStation'},
-     {host: '192.168.100.54', name: 'UndegroundStation'},
+    // {host: '192.168.100.54', name: 'UndegroundStation'},
     // {host: '192.168.100.55', name: 'Batcher'},   // ok
     // {host: '192.168.100.56', name: 'Compressor'},
     // /*   Conveyor scale   */
@@ -170,7 +170,7 @@ let allClients = [
     // {host: '192.168.100.66', name: 'Scale7'},
     // {host: '192.168.100.68', name: 'Scale8_9'},
     // /*   Pumps   */
-    // //{host: '192.168.100.40', name: 'techPumps'},
+    // {host: '192.168.100.40', name: 'techPumps'},
     // // {host: '192.168.100.41', name: 'clearPumps'},
     // {host: '192.168.100.43', name: 'drainageA'},
     // {host: '192.168.100.45', name: 'drainageB'},
@@ -225,6 +225,14 @@ export function stopConnection(){
     //startClient();
 }
 
+function getMesFromUint8Array(u8){
+    let mes = '';
+    if(u8[0] == 0 && u8[1] == 0){
+        for(let i = 2; i < u8.length; i++) mes += String.fromCharCode(u8[i]);
+    }
+    return mes;
+}
+
 const MAX_TIME_OUT = 60;
 
 class DriveClients  {
@@ -275,6 +283,12 @@ class DriveClients  {
 //            console.log(`${moment().format("DD MMM YYYY HH:mm:ss")} ${cl.name}(${cl.socket.remoteAddress})`); 
             cl.state = socketState.Connected; //clients[index].state = socketState.Connected;
             cl.timeOut = 0;
+            if(ar[0] == 0 && ar[1] == 0){
+                let mes = '';
+                mes = getMesFromUint8Array( ar );
+                console.log(mes);
+                return;
+            }
             let obj = parseCPUmessage(ar);  //showTest(index);
             //console.log(JSON.stringify(obj, null, 4))
             this.checkObj(obj, index);
