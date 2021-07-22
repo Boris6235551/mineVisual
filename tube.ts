@@ -1,5 +1,5 @@
 import Konva from 'konva';
-import {BaseMineDraw, Scheme, Disposition, Point} from './mine_drawing';
+import {BaseMineDraw, FlowDriver, Disposition, Point} from './mine_drawing';
 
 const DeltaPoint = 20;
 const StdQuantity = 4;
@@ -107,7 +107,7 @@ export class Tube extends BaseMineDraw{
 }
 
 
-export class Connection extends BaseMineDraw{
+export class Connection extends FlowDriver{
     private width: number;          // width of white square
     private period: number;         // ideal??? length of the one full element with one white rect moving
                                     // real length = step * frameCnt;
@@ -115,7 +115,6 @@ export class Connection extends BaseMineDraw{
     private count: number;          // elements (parts) count 
     private dir: boolean = true;    // direction of flow upWord or leftWord == true decreases coordinate
     private frameCnt: number;       // count of annimation frames
-    private running: boolean;
     constructor(p0: Point, length: number, disposition: Disposition, dir: boolean = true) {
         super(p0,length, disposition);
         this.width = this.getOdd(length);
@@ -125,7 +124,7 @@ export class Connection extends BaseMineDraw{
         }
         this.frameCnt = 4;
         this.dir = dir;
-        this.running = true;
+        this.flow = true;
         this.period = this.width * this.frameCnt;   // length of the one full element with white rect moving
     }
     getHalf(): number{
@@ -237,7 +236,7 @@ export class Connection extends BaseMineDraw{
         for(let i = 1; i < this.primitives.length; i++) this.primitives[i].move({x: dx, y: dy});
     }
     nextFrame(): void {
-// return;
+        if(!this.flow) return;
         this.moveWhite();
         if(this.animationFrame < this.frameCnt - 1) this.animationFrame +=1;
         else this.animationFrame = 0;

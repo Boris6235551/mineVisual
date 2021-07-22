@@ -147,6 +147,32 @@ export class BaseMineDraw {
     }
 };
 
+export class FlowDriver extends BaseMineDraw {
+    protected flowElements: FlowDriver[];
+    protected toSetElements: FlowDriver[];
+    protected flow: boolean;
+    constructor(p0: Point, length: number, disposition: Disposition = Disposition.Horizontal, percentage?: number){
+        super(p0, length, disposition, percentage);
+        this.flowElements = [];
+        this.toSetElements = [];
+        this.flow = false;
+    }
+    setFlow(set: boolean){
+        this.flow = set;
+        for(let fElement of this.flowElements) fElement.setFlow(set);
+        for(let setElement of this.toSetElements) {
+            if(set) setElement.flow = true;
+        }
+    }
+    addToFlowElements(element: FlowDriver){
+        this.flowElements.push(element);
+    }
+    addToSetElements(element: FlowDriver){
+        if(element == null) return;
+        this.toSetElements.push(element);
+    }
+}
+
 export class Scheme {
     name: string;
     secondName: string;

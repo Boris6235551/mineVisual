@@ -121,7 +121,7 @@ var Connection = /** @class */ (function (_super) {
         }
         _this.frameCnt = 4;
         _this.dir = dir;
-        _this.running = true;
+        _this.flow = true;
         _this.period = _this.width * _this.frameCnt; // length of the one full element with white rect moving
         return _this;
     }
@@ -245,7 +245,8 @@ var Connection = /** @class */ (function (_super) {
             this.primitives[i].move({ x: dx, y: dy });
     };
     Connection.prototype.nextFrame = function () {
-        // return;
+        if (!this.flow)
+            return;
         this.moveWhite();
         if (this.animationFrame < this.frameCnt - 1)
             this.animationFrame += 1;
@@ -254,7 +255,7 @@ var Connection = /** @class */ (function (_super) {
     };
     ;
     return Connection;
-}(mine_drawing_1.BaseMineDraw));
+}(mine_drawing_1.FlowDriver));
 exports.Connection = Connection;
 // for(let i = 0; i < this.count; i++){
 //     let nextY = this.step * 4 * i;

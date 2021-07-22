@@ -12,6 +12,7 @@ var _batcher_1 = require("./_batcher");
 var _undergroundsubstation_1 = require("./_undergroundsubstation");
 var _cage_1 = require("./_cage");
 var _undegroundPump_1 = require("./_undegroundPump");
+var pumpAccessories_1 = require("./pumpAccessories");
 var _batcherlable_1 = require("./_batcherlable");
 var _receivinghopper_1 = require("./_receivinghopper");
 var _substation_1 = require("./_substation");
@@ -415,9 +416,9 @@ var mesClear = {
     ClearLLevel: 1,
     TowerHLevel: 1,
     TowerLLevel: 1,
-    M0Status: 1,
+    M0Status: 0,
     DP3Status: 1,
-    DP4Status: 1,
+    DP4Status: 0,
     M0Mode: 1,
     DP3Mode: 1,
     DP4Mode: 1,
@@ -458,12 +459,12 @@ var mesTech = {
     M4Press: 1,
     TechHLevel: 1,
     TechLLevel: 2,
-    M0Status: 1,
+    M0Status: pumpAccessories_1.PumpState.stop,
     DP3Status: 1,
-    DP4Status: 1,
-    M0Mode: 1,
+    DP4Status: pumpAccessories_1.PumpState.stop,
+    M0Mode: pumpAccessories_1.PumpMode.Auto,
     DP3Mode: 1,
-    DP4Mode: 1,
+    DP4Mode: pumpAccessories_1.PumpMode.Service,
     M0Err: 1,
     DP3Err: 1,
     DP4Err: 1,

@@ -29,13 +29,32 @@ var BASEPUMP = /** @class */ (function (_super) {
         _this.lines = [];
         return _this;
     }
-    BASEPUMP.prototype.addItem = function (item, name, recieveMessage) {
+    BASEPUMP.prototype.addItem = function (item, name, recieveMessage, flowControllNames) {
         if (recieveMessage === void 0) { recieveMessage = true; }
+        if (flowControllNames === void 0) { flowControllNames = ''; }
         item.name = name;
         if (recieveMessage)
             this.items.push(item);
         this.addWidget(item);
+        if (flowControllNames == '')
+            return;
+        this.addFlowDriver(item, flowControllNames);
     };
+    BASEPUMP.prototype.addFlowDriver = function (item, flowControllNames) {
+        var driverNames = flowControllNames.split(' ');
+        var driver = this.findByName(driverNames[0]);
+        driver.addToFlowElements(item);
+        if (driverNames.length == 1)
+            return;
+        driver = this.findByName(driverNames[1]);
+        driver.addToSetElements(item);
+    };
+    // itemByName(name: string): (Valve | Pump ){
+    //     for (let item of this.items) {
+    //         if(item.name == name) return item;
+    //     }
+    //     return null;
+    // }
     BASEPUMP.prototype.findByName = function (name) {
         for (var _i = 0, _a = this.widgets; _i < _a.length; _i++) {
             var w = _a[_i];
@@ -287,7 +306,7 @@ var UNDEGROUNDPUMP = /** @class */ (function (_super) {
             }
             this.connectionsTable.push(newObj);
             // mineConnections.push(newObj);
-            console.log("prepareConnectionsTable for line=" + number + " => " + JSON.stringify(newObj));
+            // console.log(`prepareConnectionsTable for line=${number} => ${JSON.stringify(newObj)}`)
         }
     };
     UNDEGROUNDPUMP.prototype.createWidgets = function (p, number) {
@@ -312,32 +331,32 @@ exports.UNDEGROUNDPUMP = UNDEGROUNDPUMP;
  **********************************************************************************/
 var surfaceValvesData = [
     /***************     TECH PUMPS    ***************/
-    { dXY: [182, 261], disp: null, name: 'XS1' },
+    { dXY: [182, 261], disp: null, name: 'XS1', flowControll: '' },
     /*-------------     TECH LINE 2    --------------*/
-    { dXY: [140, 329], disp: mine_drawing_1.Disposition.Vertical, name: 'Y222' },
-    { dXY: [100, 515], disp: mine_drawing_1.Disposition.Vertical, name: 'Y220' },
-    { dXY: [140, 505], disp: mine_drawing_1.Disposition.Vertical, name: 'Y221' },
-    { dXY: [140, 592], disp: null, name: 'XS2' },
+    { dXY: [140, 329], disp: mine_drawing_1.Disposition.Vertical, name: 'Y222', flowControll: 'M4' },
+    { dXY: [100, 515], disp: mine_drawing_1.Disposition.Vertical, name: 'Y220', flowControll: 'M0' },
+    { dXY: [140, 505], disp: mine_drawing_1.Disposition.Vertical, name: 'Y221', flowControll: 'M4' },
+    { dXY: [140, 592], disp: null, name: 'XS2', flowControll: '' },
     /*-------------     TECH LINE 1    --------------*/
-    { dXY: [224, 329], disp: mine_drawing_1.Disposition.Vertical, name: 'Y212' },
-    { dXY: [278, 515], disp: mine_drawing_1.Disposition.Vertical, name: 'Y210' },
-    { dXY: [224, 505], disp: mine_drawing_1.Disposition.Vertical, name: 'Y211' },
-    { dXY: [224, 592], disp: null, name: 'XS3' },
+    { dXY: [224, 329], disp: mine_drawing_1.Disposition.Vertical, name: 'Y212', flowControll: 'M3' },
+    { dXY: [278, 515], disp: mine_drawing_1.Disposition.Vertical, name: 'Y210', flowControll: 'M0' },
+    { dXY: [224, 505], disp: mine_drawing_1.Disposition.Vertical, name: 'Y211', flowControll: 'M3' },
+    { dXY: [224, 592], disp: null, name: 'XS3', flowControll: '' },
     /*-----------------------------------------------*/
-    { dXY: [182, 734], disp: mine_drawing_1.Disposition.Vertical, name: 'Y2_' },
+    { dXY: [182, 734], disp: mine_drawing_1.Disposition.Vertical, name: 'Y2_', flowControll: 'DP4 DP3' },
     /****     CLEAR PUMPS    ****/
-    { dXY: [418, 261], disp: null, name: 'XS4' },
+    { dXY: [418, 261], disp: null, name: 'XS4', flowControll: '' },
     /*-------------     CLEAR LINE 2    --------------*/
-    { dXY: [377, 329], disp: mine_drawing_1.Disposition.Vertical, name: 'Y122' },
-    { dXY: [338, 515], disp: mine_drawing_1.Disposition.Vertical, name: 'Y120' },
-    { dXY: [377, 505], disp: mine_drawing_1.Disposition.Vertical, name: 'Y121' },
+    { dXY: [377, 329], disp: mine_drawing_1.Disposition.Vertical, name: 'Y122', flowControll: 'M2' },
+    { dXY: [338, 515], disp: mine_drawing_1.Disposition.Vertical, name: 'Y120', flowControll: 'M0' },
+    { dXY: [377, 505], disp: mine_drawing_1.Disposition.Vertical, name: 'Y121', flowControll: 'M2' },
     /*-------------     CLEAR LINE 1    --------------*/
-    { dXY: [461, 329], disp: mine_drawing_1.Disposition.Vertical, name: 'Y112' },
-    { dXY: [515, 515], disp: mine_drawing_1.Disposition.Vertical, name: 'Y110' },
-    { dXY: [461, 505], disp: mine_drawing_1.Disposition.Vertical, name: 'Y111' },
+    { dXY: [461, 329], disp: mine_drawing_1.Disposition.Vertical, name: 'Y112', flowControll: 'M1' },
+    { dXY: [515, 515], disp: mine_drawing_1.Disposition.Vertical, name: 'Y110', flowControll: 'M0' },
+    { dXY: [461, 505], disp: mine_drawing_1.Disposition.Vertical, name: 'Y111', flowControll: 'M1' },
     /*-----------------------------------------------*/
-    { dXY: [419, 604], disp: null, name: 'XS5' },
-    { dXY: [419, 734], disp: mine_drawing_1.Disposition.Vertical, name: 'Y1_' },
+    { dXY: [419, 604], disp: null, name: 'XS5', flowControll: '' },
+    { dXY: [419, 734], disp: mine_drawing_1.Disposition.Vertical, name: 'Y1_', flowControll: 'DP4 DP3' },
 ];
 var surfacePumpsData = [
     { dXY: [1, 606], name: 'M0' },
@@ -350,59 +369,70 @@ var surfacePumpsData = [
 ];
 var surfaceConnections = [
     /***************     TECH PUMPS    ***************/
-    { begin: 'Y222', end: 'M4', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'Ms' },
-    { begin: 'M4', end: 'Y221', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'Ms' },
-    { begin: 'Y221', end: 'XS2', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'Ms' },
-    { begin: 'XS2', end: 'Tech', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'Ms' },
-    { begin: 'Y212', end: 'M3', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'Ms' },
-    { begin: 'M3', end: 'Y211', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'Ms' },
-    { begin: 'Y211', end: 'XS3', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'Ms' },
-    { begin: 'XS3', end: 'Tech', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'Ms' },
-    { begin: 'Tech', end: 'Y2_', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'sM' },
-    { begin: '15', end: 'Y222', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'dM', name: 'Y222line' },
-    { begin: 'Y222line', end: 'XS1', dir: false, disp: mine_drawing_1.Disposition.Horizontal, type: 'Bm' },
-    { begin: '15', end: 'Y212', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'dM', name: 'Y212line' },
-    { begin: 'XS1', end: 'Y212line', dir: true, disp: mine_drawing_1.Disposition.Horizontal, type: 'mB' },
-    { begin: 'XS1', end: 'Y212line', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'Ml' },
-    { begin: '30', end: 'XS1', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'dM' },
+    { begin: 'Y222', end: 'M4', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'Ms', name: 'dY222', flowControll: 'M4' },
+    { begin: 'M4', end: 'Y221', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'Ms', name: 'uY221', flowControll: 'M4' },
+    { begin: 'Y221', end: 'XS2', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'Ms', name: '', flowControll: 'Y221' },
+    { begin: 'XS2', end: 'Tech', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'Ms', name: '', flowControll: 'Y221' },
+    { begin: 'Y212', end: 'M3', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'Ms', name: '', flowControll: 'M3' },
+    { begin: 'M3', end: 'Y211', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'Ms', name: '', flowControll: 'M3' },
+    { begin: 'Y211', end: 'XS3', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'Ms', name: '', flowControll: 'Y211' },
+    { begin: 'XS3', end: 'Tech', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'Ms', name: '', flowControll: 'Y211' },
+    { begin: 'Tech', end: 'Y2_', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'sM', name: '', flowControll: 'Y2_' },
+    { begin: '15', end: 'Y222', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'dM', name: 'Y222line', flowControll: 'Y222' },
+    { begin: 'Y222line', end: 'XS1', dir: false, disp: mine_drawing_1.Disposition.Horizontal, type: 'Bm', name: '', flowControll: 'Y222' },
+    { begin: '15', end: 'Y212', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'dM', name: 'Y212line', flowControll: 'Y212' },
+    { begin: 'XS1', end: 'Y212line', dir: true, disp: mine_drawing_1.Disposition.Horizontal, type: 'mB', name: '', flowControll: 'Y212' },
+    { begin: 'XS1', end: 'Y212line', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'Ml', name: '', flowControll: 'Y222 Y212' },
+    { begin: '30', end: 'XS1', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'dM', name: '', flowControll: 'Y222 Y212' },
     /*------------------  M0  -----------------------------*/
-    { begin: '30', end: 'M0', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'dM', name: 'M0line' },
-    { begin: 'M0line', end: 'Y110', dir: false, disp: mine_drawing_1.Disposition.Horizontal, type: 'Bm', name: 'M0Yline' },
-    { begin: 'Y220', end: 'M0Yline', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'Ml' },
-    { begin: 'Y210', end: 'M0Yline', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'Ml' },
-    { begin: 'Y120', end: 'M0Yline', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'Ml' },
-    { begin: 'Y110', end: 'M0Yline', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'Ml' },
-    { begin: '60', end: 'Y220', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'dM', name: 'Y220Pumpline' },
-    { begin: 'Y220Pumpline', end: 'M4', dir: true, disp: mine_drawing_1.Disposition.Horizontal, type: 'Bs' },
-    { begin: '60', end: 'Y210', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'dM', name: 'Y210Pumpline' },
-    { begin: 'M3', end: 'Y210Pumpline', dir: true, disp: mine_drawing_1.Disposition.Horizontal, type: 'sB' },
-    { begin: '60', end: 'Y120', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'dM', name: 'Y120Pumpline' },
-    { begin: 'Y120Pumpline', end: 'M2', dir: true, disp: mine_drawing_1.Disposition.Horizontal, type: 'Bs' },
-    { begin: '60', end: 'Y110', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'dM', name: 'Y110Pumpline' },
-    { begin: 'M1', end: 'Y110Pumpline', dir: true, disp: mine_drawing_1.Disposition.Horizontal, type: 'sB' },
+    { begin: '30', end: 'M0', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'dM', name: 'M0line', flowControll: 'M0' },
+    { begin: 'M0line', end: 'Y110', dir: false, disp: mine_drawing_1.Disposition.Horizontal, type: 'Bm', name: 'M0Yline', flowControll: 'M0' },
+    { begin: 'Y220', end: 'M0Yline', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'Ml', name: 'dY220', flowControll: 'M0' },
+    { begin: 'Y210', end: 'M0Yline', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'Ml', name: 'dY210', flowControll: 'M0' },
+    { begin: 'Y120', end: 'M0Yline', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'Ml', name: 'dY120', flowControll: 'M0' },
+    { begin: 'Y110', end: 'M0Yline', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'Ml', name: 'dY110', flowControll: 'M0' },
+    { begin: '60', end: 'Y220', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'dM', name: 'Y220Pumpline', flowControll: 'Y220' },
+    { begin: 'Y220Pumpline', end: 'M4', dir: true, disp: mine_drawing_1.Disposition.Horizontal, type: 'Bs', name: '', flowControll: 'Y220' },
+    { begin: '60', end: 'Y210', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'dM', name: 'Y210Pumpline', flowControll: 'Y210' },
+    { begin: 'M3', end: 'Y210Pumpline', dir: true, disp: mine_drawing_1.Disposition.Horizontal, type: 'sB', name: '', flowControll: 'Y210' },
+    { begin: '60', end: 'Y120', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'dM', name: 'Y120Pumpline', flowControll: 'Y120' },
+    { begin: 'Y120Pumpline', end: 'M2', dir: true, disp: mine_drawing_1.Disposition.Horizontal, type: 'Bs', name: '', flowControll: 'Y120' },
+    { begin: '60', end: 'Y110', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'dM', name: 'Y110Pumpline', flowControll: 'Y110' },
+    { begin: 'M1', end: 'Y110Pumpline', dir: true, disp: mine_drawing_1.Disposition.Horizontal, type: 'sB', name: '', flowControll: 'Y110' },
     /****************     CLEAR PUMPS    ****************/
-    { begin: 'Y122', end: 'M2', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'Ms' },
-    { begin: 'M2', end: 'Y121', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'Ms' },
-    { begin: 'Y112', end: 'M1', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'Ms' },
-    { begin: 'M1', end: 'Y111', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'Ms' },
-    { begin: 'XS5', end: 'Clear', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'Ms' },
-    { begin: 'Clear', end: 'Y1_', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'sM' },
-    { begin: '15', end: 'Y122', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'dM', name: 'Y122line' },
-    { begin: 'Y122line', end: 'XS4', dir: false, disp: mine_drawing_1.Disposition.Horizontal, type: 'Bm' },
-    { begin: '15', end: 'Y112', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'dM', name: 'Y112line' },
-    { begin: 'XS4', end: 'Y112line', dir: true, disp: mine_drawing_1.Disposition.Horizontal, type: 'mB' },
-    { begin: 'XS4', end: 'Y112line', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'Ml' },
-    { begin: '30', end: 'XS4', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'dM' },
-    { begin: '50', end: 'XS5', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'dM', name: 'XS5line' },
-    { begin: 'XS5line', end: 'Y111', dir: false, disp: mine_drawing_1.Disposition.Horizontal, type: 'Bm', name: 'XS5Rline' },
-    { begin: 'Y111', end: 'XS5Rline', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'Ml' },
-    { begin: 'Y121', end: 'XS5line', dir: true, disp: mine_drawing_1.Disposition.Horizontal, type: 'mB', name: 'XS5Lline' },
-    { begin: 'Y121', end: 'XS5Lline', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'Ml' },
-    { begin: '10', end: 'DP4', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'dM', name: 'DP4line' },
-    { begin: '10', end: 'DP3', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'dM', name: 'DP3line' },
-    { begin: 'DP4line', end: 'DP3line', dir: true, disp: mine_drawing_1.Disposition.Horizontal, type: 'Bl', name: 'DP43line' },
-    { begin: 'Y2_', end: 'DP43line', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'Ml' },
-    { begin: 'Y1_', end: 'DP43line', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'Ml' },
+    { begin: 'Y122', end: 'M2', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'Ms', name: '', flowControll: 'M2' },
+    { begin: 'M2', end: 'Y121', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'Ms', name: '', flowControll: 'M2' },
+    { begin: 'Y112', end: 'M1', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'Ms', name: '', flowControll: 'M1' },
+    { begin: 'M1', end: 'Y111', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'Ms', name: '', flowControll: 'M1' },
+    { begin: 'XS5', end: 'Clear', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'Ms', name: '', flowControll: 'Y121 Y111' },
+    { begin: 'Clear', end: 'Y1_', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'sM', name: '', flowControll: 'Y1_' },
+    { begin: '15', end: 'Y122', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'dM', name: 'Y122line', flowControll: 'Y122' },
+    { begin: 'Y122line', end: 'XS4', dir: false, disp: mine_drawing_1.Disposition.Horizontal, type: 'Bm', name: '', flowControll: 'Y122' },
+    { begin: '15', end: 'Y112', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'dM', name: 'Y112line', flowControll: 'Y112' },
+    { begin: 'XS4', end: 'Y112line', dir: true, disp: mine_drawing_1.Disposition.Horizontal, type: 'mB', name: '', flowControll: 'Y112' },
+    { begin: 'XS4', end: 'Y112line', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'Ml', name: '', flowControll: 'Y122 Y112' },
+    { begin: '30', end: 'XS4', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'dM', name: 'uXS4', flowControll: 'Y122 Y112' },
+    { begin: 'uXS4', end: 'Tower', dir: false, disp: mine_drawing_1.Disposition.Horizontal, type: 'Bs', name: 'ruXS4', flowControll: 'Y122 Y112' },
+    { begin: '50', end: 'XS5', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'dM', name: 'XS5line', flowControll: 'Y121 Y111' },
+    { begin: 'XS5line', end: 'Y111', dir: false, disp: mine_drawing_1.Disposition.Horizontal, type: 'Bm', name: 'XS5Rline', flowControll: 'Y111' },
+    { begin: 'Y111', end: 'XS5Rline', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'Ml', name: '', flowControll: 'Y111' },
+    { begin: 'Y121', end: 'XS5line', dir: true, disp: mine_drawing_1.Disposition.Horizontal, type: 'mB', name: 'XS5Lline', flowControll: 'Y121' },
+    { begin: 'Y121', end: 'XS5Lline', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'Ml', name: '', flowControll: 'Y121' },
+    { begin: '10', end: 'DP4', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'dM', name: 'DP4line', flowControll: 'DP4' },
+    { begin: '10', end: 'DP3', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'dM', name: 'DP3line', flowControll: 'DP3' },
+    { begin: 'DP4line', end: 'DP3line', dir: true, disp: mine_drawing_1.Disposition.Horizontal, type: 'Bl', name: 'DP43line', flowControll: 'DP4 DP3' },
+    { begin: 'Y2_', end: 'DP43line', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'Ml', name: '', flowControll: 'DP4 DP3' },
+    { begin: 'Y1_', end: 'DP43line', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'Ml', name: '', flowControll: 'DP4 DP3' },
+];
+var flowMatrix = [
+    'M0:M0line M0Yline dY220 dY210 dY120 dY110:Y220 Y210 Y120 Y110',
+    'M4:dY222:Y222',
+    'M3:',
+    'M2 ',
+    'M1 ',
+    'DP4 ',
+    'DP3 ',
+    'Y222:'
 ];
 var dYYY = -210;
 var kX = 1;

@@ -7,6 +7,7 @@ import { BATCHER } from './_batcher'
 import { UNDERGROUNDSUBSTATION } from './_undergroundsubstation'
 import { CAGE } from './_cage'
 import { UNDEGROUNDPUMP, SURFACEPUMP } from './_undegroundPump'
+import {PumpState, PumpError, PumpMode} from './pumpAccessories'
 import { BATCHERLABLE } from './_batcherlable'
 import { RECEIVINGHOPPER } from './_receivinghopper'
 import { SUBSTATION } from './_substation'
@@ -552,13 +553,13 @@ let mesClear = {
     ClearLLevel: 1,
     TowerHLevel: 1,
     TowerLLevel: 1,
-    M0Status: 1,
+    M0Status: 0,        // enum PumpStatus Stopped = 0, Starting, Working, Stopping, Error
     DP3Status: 1,
-    DP4Status: 1,
-    M0Mode: 1,
+    DP4Status: 0,
+    M0Mode: 1,          // enum PumpMode Auto = 1, Service
     DP3Mode: 1,
     DP4Mode: 1,
-    M0Err: 2,
+    M0Err: 2,           // enum PumpError NoError = 0, StartingTimeOut, StoppingTimeOut, AccidentPressure
     DP3Err: 1,
     DP4Err: 1
 }
@@ -596,12 +597,12 @@ let mesTech = {
     M4Press: 1,
     TechHLevel: 1,
     TechLLevel: 2,
-    M0Status: 1,
+    M0Status: PumpState.stop,    // enum PumpStatus Stopped = 0, Starting, Working, Stopping, Error
     DP3Status: 1,
-    DP4Status: 1,
-    M0Mode: 1,
+    DP4Status: PumpState.stop,
+    M0Mode: PumpMode.Auto,
     DP3Mode: 1,
-    DP4Mode: 1,
+    DP4Mode: PumpMode.Service,
     M0Err: 1,
     DP3Err: 1,
     DP4Err: 1,
