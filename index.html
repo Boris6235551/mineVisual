@@ -27,7 +27,7 @@
     <div id="receivinghopper" style="position: absolute; left: 1920px; top: 0px; width: 1920px;"></div>
     <div id="substation" style="position: absolute; left: 1920px; top: 0px; width: 1920px;"></div>
     <div id="compressor" style="position: absolute; left: 1920px; top: 0px; width: 1920px;"></div>
-    <div style="position: absolute; left: 0px; top: 0px;">
+    <div id="index_body" style="position: absolute; left: 0px; top: 0px;">
         <input type="checkbox" id="setOrClear">
         <button onclick="testClear()">Clear</button>
         <button onclick="testConnect()">Connect</button>
@@ -35,7 +35,27 @@
         <button onclick="sendReload()">Reload</button>
         <button onclick="sendReCreate()">ReCreate</button>
         <button onclick="step()">Step</button>
-        <button id="index_body" v-on:click="printReport">Print report</button>
+        <button v-on:click="printReport">Print report</button>
+        <select name="" id="" v-model="selectIpConnection">
+            <option value="192.168.100.50">DSF</option>
+            <option value="192.168.100.51">Cage</option>
+            <option value="192.168.100.52">Skip</option>
+            <option value="192.168.100.53">SubStation</option>
+            <option value="192.168.100.54">UndegroundStation</option>
+            <option value="192.168.100.55">Batcher</option>
+            <option value="192.168.100.56">Compressor</option>
+            <option value="192.168.100.60">Scale3AB</option>
+            <option value="192.168.100.62">Scale4</option>
+            <option value="192.168.100.64">Scale6AB</option>
+            <option value="192.168.100.66">Scale7</option>
+            <option value="192.168.100.68">Scale8_9</option>
+            <option value="192.168.100.40">techPumps</option>
+            <option value="192.168.100.41">clearPumps</option>
+            <option value="192.168.100.43">drainageA</option>
+            <option value="192.168.100.45">drainageB</option>
+            <option value="192.168.100.70">RailScale</option>
+        </select>
+        <button v-on:click="proxyConnection">Proxy connection</button>
     </div>
 </body>
 

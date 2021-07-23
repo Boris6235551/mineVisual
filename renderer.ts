@@ -89,6 +89,9 @@ animateScreen(screenMain, 500);
 
 let main = new Vue({
     el: '#index_body',
+    data: {
+        selectIpConnection: ''
+    },
     methods: {
         printReport: function () {
             const reportWin = new BrowserWindow({
@@ -100,9 +103,13 @@ let main = new Vue({
                 }
             });
             reportWin.loadFile('report.html');
+        },
             // reportWin.webContents.openDevTools();
+        proxyConnection: function () {
+            console.log(this.selectIpConnection)
         }
     }
+
 })
 
 
@@ -389,7 +396,7 @@ function step() { _step(); }
 
 
 let mes = {
-    Y11Status: 1,   // enum ValveStatus InitState = 0, Closed, Opening, Opened, Closing , Calibration
+    Y11Status: 2,   // enum ValveStatus InitState = 0, Closed, Opening, Opened, Closing , Calibration
     Y12Status: 1,
     Y13Status: 1,
     Y14Status: 2,
@@ -609,7 +616,22 @@ let mesTech = {
 
 }
 
-sendMes('drainageA', mes);
-sendMes('drainageB', mes2);
-sendMes('clearPump', mesClear);
-sendMes('techPump', mesTech);
+
+// let cageMesage = {
+//     "mainFastUp": true,
+//     "mainFastDown": false,
+//     "dynamicBreak": false,
+//     "smallUp": false,
+//     "smallDown": false,
+//     "level0": false,
+//     "ventLevel": false,
+//     "subLevel": false,
+//     "productionLevel": false,
+//     "platformDown": false
+// }
+
+// sendMes('drainageA', mes);
+// sendMes('drainageB', mes2);
+// sendMes('clearPump', mesClear);
+// sendMes('techPump', mesTech);
+// sendMes('Cage', cageMesage);

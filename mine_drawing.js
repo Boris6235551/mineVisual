@@ -267,7 +267,7 @@ var Screen = /** @class */ (function () {
         // console.log(objName)
         this.schemes.forEach(function (scheme) {
             if (scheme.name == objName || scheme.secondName == objName) {
-                // console.log(scheme.name)
+                console.log(scheme.name, JSON.stringify(mes, null, 4));
                 scheme.send(mes);
                 return;
             }
