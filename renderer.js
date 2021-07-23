@@ -54,7 +54,7 @@ function sendMes(name, mes) {
     screenMain.resendMessage(name, mes);
 }
 tcpipConnector_1.startClients(sendMes);
-// animateScreen(screenMain, 500);
+mine_drawing_1.animateScreen(screenMain, 500);
 // animateScheme(dsf, 500);
 // animateScheme(batcher, 500);
 // animateScheme(skip, 500);
@@ -77,6 +77,9 @@ tcpipConnector_1.startClients(sendMes);
 // }
 var main = new vue_js_1.default({
     el: '#index_body',
+    data: {
+        selectIpConnection: ''
+    },
     methods: {
         printReport: function () {
             var reportWin = new BrowserWindow({
@@ -88,7 +91,10 @@ var main = new vue_js_1.default({
                 }
             });
             reportWin.loadFile('report.html');
-            // reportWin.webContents.openDevTools();
+        },
+        // reportWin.webContents.openDevTools();
+        proxyConnection: function () {
+            console.log(this.selectIpConnection);
         }
     }
 });
@@ -260,7 +266,7 @@ function testClear() {
 }
 function step() { tcpipConnector_1._step(); }
 var mes = {
-    Y11Status: 1,
+    Y11Status: 2,
     Y12Status: 1,
     Y13Status: 1,
     Y14Status: 2,
@@ -469,8 +475,21 @@ var mesTech = {
     DP3Err: 1,
     DP4Err: 1,
 };
-sendMes('drainageA', mes);
-sendMes('drainageB', mes2);
-sendMes('clearPump', mesClear);
-sendMes('techPump', mesTech);
+// let cageMesage = {
+//     "mainFastUp": true,
+//     "mainFastDown": false,
+//     "dynamicBreak": false,
+//     "smallUp": false,
+//     "smallDown": false,
+//     "level0": false,
+//     "ventLevel": false,
+//     "subLevel": false,
+//     "productionLevel": false,
+//     "platformDown": false
+// }
+// sendMes('drainageA', mes);
+// sendMes('drainageB', mes2);
+// sendMes('clearPump', mesClear);
+// sendMes('techPump', mesTech);
+// sendMes('Cage', cageMesage);
 //# sourceMappingURL=renderer.js.map
