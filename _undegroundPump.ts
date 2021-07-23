@@ -25,11 +25,16 @@ class BASEPUMP extends Scheme {
         this.addFlowDriver(<FlowDriver>item, flowControllNames);
     }
     addFlowDriver(item: FlowDriver, flowControllNames: string){
+        if(flowControllNames == undefined) return;
         let driverNames = flowControllNames.split(' ');
+        // if(item.name == 'lY11')
+        //     console.log(`addFlowDriver for item=${item.name} driverNames=${driverNames}`)
         let driver = <FlowDriver>this.findByName(driverNames[0]);
+        if(driver == null) return;
         driver.addToFlowElements(item);
         if(driverNames.length == 1) return;
         driver = <FlowDriver>this.findByName(driverNames[1]);
+        if(driver == null) return;
         driver.addToSetElements(item); 
     }
     // itemByName(name: string): (Valve | Pump ){
@@ -96,10 +101,15 @@ class BASEPUMP extends Scheme {
                                             (first ? new Point(l.rect.p1.x, p.y) : new Point(l.rect.p0.x, p.y));
     }
     createConnections(datas){ 
-        for ( let obj of datas) 
-            this.connect(obj.begin, obj.end, obj.disp, obj.type, obj.dir, obj.hasOwnProperty('name') ? obj.name : '');
+        for ( let obj of datas) {
+            //console.log(obj)
+            this.connect(obj.begin, obj.end, obj.disp, obj.type, obj.dir, 
+                obj.hasOwnProperty('name') ? obj.name : '', obj.flowControll);
+        }
+            
     }
-    connect(firstName: string, secondName: string, disp: Disposition, type: string, dir: boolean, name:string){  
+    connect(firstName: string, secondName: string, disp: Disposition, type: string, dir: boolean, 
+                name:string, flowControllNames:string){  
         let p0: Point;
         let p1: Point;
         if(type[0] == 'M' || type[0] == 'B' || type[0] == 'E') {
@@ -125,6 +135,8 @@ class BASEPUMP extends Scheme {
         line.name = name;
         this.lines.push(line);
         this.addWidget(line);
+        this.addFlowDriver(line, flowControllNames);    // *****  FlowControll
+
     }
     send(mes: any) {
         console.log(`received message UNDEGROUNDPUMP name=${this.name}`);
@@ -143,13 +155,14 @@ class BASEPUMP extends Scheme {
                     delIndexes.push(i);
                 }
             }
-            console.log(`sended to ${widget.name}\n message  =${JSON.stringify(wMes)}`);
+        //    console.log(`sended to ${widget.name}\n message  =${JSON.stringify(wMes)}`);
             if(sendToWidget) widget.setBaseProperty(wMes);
             for (let i = delIndexes.length - 1; i >= 0; i--) mesProps.splice(delIndexes[i], 1);
             // console.log(`del properies of ${widget.name}; mesProps length=${mesProps.length}`);
             if (mesProps.length == 0) return;
         }
         console.log(`message properies=${mesProps}`);
+        
         this.update();
     }
 }
@@ -188,44 +201,44 @@ let mineConnections = [
     // {begin: 'Y15', end: 'Y14d', dir: false, disp: Disposition.Horizontal, type: 'Ml', name: 'Y15r'},
 
 
-    {begin: '40', end: 'lY51', dir: true, disp: Disposition.Vertical, type: 'dB', name: 'ulY51'},
+    {begin: '40', end: 'lY51', dir: true, disp: Disposition.Vertical, type: 'dB', name: 'ulY51', flowControll: 'Y51'},
     //{begin: '30', end: 'lY51', dir: true, disp: Disposition.Vertical, type: 'dB', name: ''},
-    {begin: '760', end: 'ulY51', dir: true, disp: Disposition.Horizontal, type: 'dB', name: 'stav1'},
-    {begin: 'stav1', end: 'lY41', dir: true, disp: Disposition.Vertical, type: 'lB', name: 'ulY41'},
-    {begin: 'stav1', end: 'lY31', dir: true, disp: Disposition.Vertical, type: 'lB', name: 'ulY31'},
-    {begin: 'stav1', end: 'lY21', dir: true, disp: Disposition.Vertical, type: 'lB', name: 'ulY21'},
-    {begin: 'stav1', end: 'lY11', dir: true, disp: Disposition.Vertical, type: 'lB', name: 'ulY11'},
+    {begin: '760', end: 'ulY51', dir: true, disp: Disposition.Horizontal, type: 'dB', name: 'stav1', flowControll: 'Y51'},
+    {begin: 'stav1', end: 'lY41', dir: true, disp: Disposition.Vertical, type: 'lB', name: 'ulY41', flowControll: 'Y41'},
+    {begin: 'stav1', end: 'lY31', dir: true, disp: Disposition.Vertical, type: 'lB', name: 'ulY31', flowControll: 'Y31'},
+    {begin: 'stav1', end: 'lY21', dir: true, disp: Disposition.Vertical, type: 'lB', name: 'ulY21', flowControll: 'Y21'},
+    {begin: 'stav1', end: 'lY11', dir: true, disp: Disposition.Vertical, type: 'lB', name: 'ulY11', flowControll: 'Y11'},
 
-    {begin: '60', end: 'rY52', dir: true, disp: Disposition.Vertical, type: 'dE', name: 'urY52'},
-    {begin: '880', end: 'urY52', dir: true, disp: Disposition.Horizontal, type: 'dB', name: 'stav2'},
-    {begin: 'stav2', end: 'rY42', dir: true, disp: Disposition.Vertical, type: 'lE', name: 'stav2'},
-    {begin: 'stav2', end: 'rY32', dir: true, disp: Disposition.Vertical, type: 'lE', name: 'stav2'},
-    {begin: 'stav2', end: 'rY22', dir: true, disp: Disposition.Vertical, type: 'lE', name: 'stav2'},
-    {begin: 'stav2', end: 'rY12', dir: true, disp: Disposition.Vertical, type: 'lE', name: 'stav2'},
+    {begin: '60', end: 'rY52', dir: true, disp: Disposition.Vertical, type: 'dE', name: 'urY52', flowControll: 'Y52'},
+    {begin: '880', end: 'urY52', dir: true, disp: Disposition.Horizontal, type: 'dB', name: 'stav2', flowControll: 'Y52'},
+    {begin: 'stav2', end: 'rY42', dir: true, disp: Disposition.Vertical, type: 'lE', name: 'stav2', flowControll: 'Y42'},
+    {begin: 'stav2', end: 'rY32', dir: true, disp: Disposition.Vertical, type: 'lE', name: 'stav2', flowControll: 'Y32'},
+    {begin: 'stav2', end: 'rY22', dir: true, disp: Disposition.Vertical, type: 'lE', name: 'stav2', flowControll: 'Y22'},
+    {begin: 'stav2', end: 'rY12', dir: true, disp: Disposition.Vertical, type: 'lE', name: 'stav2', flowControll: 'Y12'},
 
     {begin: '60', end: 'stav1', dir: true, disp: Disposition.Vertical, type: 'dB', name: 'ustav1'},
     {begin: '40', end: 'stav2', dir: true, disp: Disposition.Vertical, type: 'dB', name: 'ustav2'},
 ];
 let mineConnectionsTemplates = [
     /*-------------       LINE @       --------------*/
-    {begin: '10', end: 'Y@1', dir: true, disp: Disposition.Horizontal, type: 'dM', name: 'lY@1'},
-    {begin: 'Y@2', end: '20', dir: false, disp: Disposition.Horizontal, type: 'Md', name: 'rY@2'},
+    {begin: '10', end: 'Y@1', dir: true, disp: Disposition.Horizontal, type: 'dM', name: 'lY@1', flowControll: 'Y@1'},
+    {begin: 'Y@2', end: '20', dir: false, disp: Disposition.Horizontal, type: 'Md', name: 'rY@2', flowControll: 'Y@2'},
     /*-----------------------------------------------*/
-    {begin: 'Y@1', end: 'Y@6', dir: true, disp: Disposition.Vertical, type: 'mM', name: 'uY@6'},
-    {begin: 'Y@1', end: 'uY@6', dir: true, disp: Disposition.Horizontal, type: 'Ml', name: 'rY@1'},
-    {begin: 'uY@6', end: 'Y@2', dir: false, disp: Disposition.Horizontal, type: 'lM', name: 'lY@2'},
+    {begin: 'Y@1', end: 'Y@6', dir: true, disp: Disposition.Vertical, type: 'mM', name: 'uY@6', flowControll: 'Y@3'},
+    {begin: 'Y@1', end: 'uY@6', dir: true, disp: Disposition.Horizontal, type: 'Ml', name: 'rY@1', flowControll: 'Y@3'},
+    {begin: 'uY@6', end: 'Y@2', dir: false, disp: Disposition.Horizontal, type: 'lM', name: 'lY@2', flowControll: 'Y@3'},
     
-    {begin: 'Y@6', end: 'Y@3', dir: true, disp: Disposition.Vertical, type: 'Ms', name: 'dY@6'},
-    {begin: 'Y@3', end: 'Pump@', dir: true, disp: Disposition.Vertical, type: 'Ms', name: 'dY@3'},  //Y13down
-    {begin: 'Pump@', end: 'Y@7', dir: true, disp: Disposition.Vertical, type: 'sM', name: ''},
-    {begin: 'Y@7', end: 'minePool', dir: true, disp: Disposition.Vertical, type: 'Ms', name: ''},
+    {begin: 'Y@6', end: 'Y@3', dir: true, disp: Disposition.Vertical, type: 'Ms', name: 'dY@6', flowControll: 'Y@3'},
+    {begin: 'Y@3', end: 'Pump@', dir: true, disp: Disposition.Vertical, type: 'Ms', name: 'dY@3', flowControll: 'Pump@'},  //Y13down
+    {begin: 'Pump@', end: 'Y@7', dir: true, disp: Disposition.Vertical, type: 'sM', name: '', flowControll: 'Pump@'},
+    {begin: 'Y@7', end: 'minePool', dir: true, disp: Disposition.Vertical, type: 'Ms', name: '', flowControll: 'Pump@'},
     /*-----------------------------------------------*/
-    {begin: '20', end: 'Y@4', dir: false, disp: Disposition.Vertical, type: 'dM', name: 'uY@4'},
-    {begin: 'uY@6', end: 'uY@4', dir: false, disp: Disposition.Horizontal, type: 'lB', name: ''},
-    {begin: 'Y@4', end: 'minePool', dir: false, disp: Disposition.Vertical, type: 'Ms', name: 'dY@4'},
+    {begin: '20', end: 'Y@4', dir: false, disp: Disposition.Vertical, type: 'dM', name: 'uY@4', flowControll: 'Y@4'},
+    {begin: 'uY@6', end: 'uY@4', dir: false, disp: Disposition.Horizontal, type: 'lB', name: '', flowControll: 'Y@4'},
+    {begin: 'Y@4', end: 'minePool', dir: false, disp: Disposition.Vertical, type: 'Ms', name: 'dY@4', flowControll: 'Y@4'},
     /*-----------------------------------------------*/
-    {begin: 'dY@3', end: 'Y@5', dir: false, disp: Disposition.Horizontal, type: 'lM', name: 'lY@5'},
-    {begin: 'Y@5', end: 'dY@4', dir: false, disp: Disposition.Horizontal, type: 'Ml', name: 'rY@5'},
+    {begin: 'dY@3', end: 'Y@5', dir: false, disp: Disposition.Horizontal, type: 'lM', name: 'lY@5', flowControll: 'Y@5'},
+    {begin: 'Y@5', end: 'dY@4', dir: false, disp: Disposition.Horizontal, type: 'Ml', name: 'rY@5', flowControll: 'Y@5'},
     
 ];
 
@@ -428,7 +441,7 @@ export class SURFACEPUMP extends BASEPUMP {
             let obj = surfaceValvesData[i];
             let v: (Valve | ValveCheck);
             if(obj.disp == null) this.addItem( new ValveCheck(this.getPoint(obj.dXY), 30), obj.name, false ); 
-            else this.addItem( new Valve(this.getPoint(obj.dXY), 30, obj.disp), obj.name);
+            else this.addItem( new Valve(this.getPoint(obj.dXY), 30, obj.disp), obj.name, true, obj.flowControll);
         }
     }
     // createConnections(){

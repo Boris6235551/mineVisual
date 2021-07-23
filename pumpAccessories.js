@@ -593,6 +593,9 @@ var Valve = /** @class */ (function (_super) {
         else
             this.setLabel('E');
         this.error = mes.Error;
+        // let flow = this.flow && (this.state == ValveState.opening || this.state == ValveState.opened || 
+        //     this.state == ValveState.closing);
+        // this.setFlow(flow);
     };
     Valve.prototype.nextFrame = function () {
         switch (this.state) {

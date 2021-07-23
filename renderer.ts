@@ -62,7 +62,7 @@ function sendMes(name, mes) {
 
 startClients(sendMes);
 
-// animateScreen(screenMain, 500);
+animateScreen(screenMain, 500);
 
 // animateScheme(dsf, 500);
 // animateScheme(batcher, 500);

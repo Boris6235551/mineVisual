@@ -115,7 +115,7 @@ function parseCPUmessage(data){
 //curObj.names[0]
             curObj.obj['array'] = arr;
         } 
-        else{ console.log("aaaaa"); return; }
+        else{ /*console.log("aaaaa");*/ return; }
         delete curObj.names;
         delete curObj.values;
         //console.log(`next index======>>>${pString.nextIndex}`)
@@ -171,7 +171,7 @@ let allClients = [
     // {host: '192.168.100.68', name: 'Scale8_9'},
     // /*   Pumps   */
     // {host: '192.168.100.40', name: 'techPumps'},
-    // // {host: '192.168.100.41', name: 'clearPumps'},
+    // {host: '192.168.100.41', name: 'clearPumps'},
     // {host: '192.168.100.43', name: 'drainageA'},
     // {host: '192.168.100.45', name: 'drainageB'},
     // //{host: '192.168.100.70', name: 'RailScale'},

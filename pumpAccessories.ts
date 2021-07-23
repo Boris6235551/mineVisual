@@ -521,6 +521,10 @@ export class Valve extends FlowDriver {
         else if (this.mode == ValveMode.HandDrive) this.setLabel('H');
         else this.setLabel('E')
         this.error = mes.Error;
+        // let flow = this.flow && (this.state == ValveState.opening || this.state == ValveState.opened || 
+        //     this.state == ValveState.closing);
+        
+        // this.setFlow(flow);
     }
 
     nextFrame(): void {

@@ -147,8 +147,7 @@ function parseCPUmessage(data) {
             //curObj.names[0]
             curObj.obj['array'] = arr;
         }
-        else {
-            console.log("aaaaa");
+        else { /*console.log("aaaaa");*/
             return;
         }
         delete curObj.names;
