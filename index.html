@@ -35,7 +35,8 @@
         <button onclick="sendReload()">Reload</button>
         <button onclick="sendReCreate()">ReCreate</button>
         <button onclick="step()">Step</button>
-        <button v-on:click="printReport">Print report</button>
+        <button v-on:click="printReport('fractions')">Print fractions report</button>
+        <button v-on:click="printReport('shifts')">Print shifts report</button>
         <select name="" id="" v-model="selectIpConnection">
             <option value="192.168.100.50">DSF</option>
             <option value="192.168.100.51">Cage</option>

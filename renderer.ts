@@ -90,10 +90,12 @@ animateScreen(screenMain, 500);
 let main = new Vue({
     el: '#index_body',
     data: {
-        selectIpConnection: ''
+        selectIpConnection: '',
+        reportValue: ''
     },
     methods: {
-        printReport: function () {
+        printReport: function (value: string) {
+            this.reportValue = value;
             const reportWin = new BrowserWindow({
                 width: 800,
                 height: 600,
@@ -103,8 +105,11 @@ let main = new Vue({
                 }
             });
             reportWin.loadFile('report.html');
+            reportWin.webContents.on('dom-ready', () => {
+                reportWin.webContents.send('reportValue', this.reportValue);
+            })
+
         },
-            // reportWin.webContents.openDevTools();
         proxyConnection: function () {
             console.log(this.selectIpConnection)
         }
@@ -444,13 +449,13 @@ let mes = {
     Y34Err: 0,
     Y35Err: 1,
 
-    Pump1Status: 0, // enum PumpStatus Stopped = 0, Starting, Working, Stopping, Error
-    Pump2Status: 1,
-    Pump3Status: 4,
+    Pump1Status: 2, // enum PumpStatus Stopped = 0, Starting, Working, Stopping, Error
+    Pump2Status: 2,
+    Pump3Status: 2,
 
     Pump1Mode: 1,   // enum PumpMode Auto = 1, Service 
     Pump2Mode: 1,
-    Pump3Mode: 2,
+    Pump3Mode: 1,
 
     Pump1Error: 0,  // enum PumpError NoError = 0, StartingTimeOut, StoppingTimeOut, AccidentPressure
     Pump2Error: 1,
@@ -630,8 +635,8 @@ let mesTech = {
 //     "platformDown": false
 // }
 
-// sendMes('drainageA', mes);
-// sendMes('drainageB', mes2);
-// sendMes('clearPump', mesClear);
-// sendMes('techPump', mesTech);
+sendMes('drainageA', mes);
+sendMes('drainageB', mes2);
+sendMes('clearPump', mesClear);
+sendMes('techPump', mesTech);
 // sendMes('Cage', cageMesage);

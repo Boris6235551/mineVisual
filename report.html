@@ -15,8 +15,15 @@
         <div class="reportBlock">
             <button style="position: absolute; left: 760px; top: 15px;" v-on:click="close">X</button>
             <button style="position: absolute; left: 15px; top: 15px;" v-on:click="print">Print</button>
-            <h3 style="text-align: center;">Protocol issued by measuring the weigth of the rock mass through <br>
-                the weigh scale installed for measurement of total hoisted stones</h3>
+            <template v-if="reportValue === 'shifts'">
+                <h3 style="text-align: center;">Protocol issued by measuring the weigth of the rock mass through <br>
+                    the weigh scale installed for measurement of total hoisted stones</h3>
+            </template>
+            <template v-if="reportValue === 'fractions'">
+                <h3 style="text-align: center;">Protocol issued by measuring the weight of the mass of crushed stone
+                    fractions <br>
+                    through the weigh scales installed in the skip pocket and conveyer belts</h3>
+            </template>
             <div class="date">
                 <input type="date" name="" id="" v-on:change="fromDateChange" v-model="startDate">
                 <div class="shift">
@@ -31,32 +38,75 @@
             <p>Static Date:&emsp;{{objectShift.beginDate}}&emsp;&emsp;&emsp;{{objectShift.endDate}}</p>
             <p>Total skips:&emsp;&emsp;{{objectShift.skips}}&emsp;pcs</p>
             <p>Total weight:&emsp;{{objectShift.weight}}&emsp;t</p>
-            <div class="scroll-table">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>No</th>
-                            <th>Time & Date</th>
-                            <th>Skip</th>
-                            <th>Skip No</th>
-                            <th>Weight</th>
-                        </tr>
-                    </thead>
-                </table>
-                <div class="scroll-table-body">
+            <template v-if="reportValue === 'shifts'">
+                <div class="scroll-table">
                     <table>
-                        <tbody>
-                            <tr v-for="(data, index) in objectShift.datas">
-                                <td>{{index + 1}}</td>
-                                <td>{{ data.time }}</td>
-                                <td>{{ data.batcher }}</td>
-                                <td>{{ data.number }}</td>
-                                <td id="weight">{{ data.gross }} - {{ data.tare }} = {{ data.net }}</td>
+                        <thead>
+                            <tr>
+                                <th class="th_shifts_1">No</th>
+                                <th class="th_shifts_2">Time & Date</th>
+                                <th class="th_shifts_3">Skip</th>
+                                <th class="th_shifts_4">Skip No</th>
+                                <th class="th_shifts_5">Weight</th>
                             </tr>
-                        </tbody>
+                        </thead>
                     </table>
+                    <div class="scroll-table-body">
+                        <table>
+                            <tbody>
+                                <tr v-for="(data, index) in objectShift.datas">
+                                    <td class="td_shifts_1">{{index + 1}}</td>
+                                    <td class="td_shifts_2">{{ data.time }}</td>
+                                    <td class="td_shifts_3">{{ data.batcher }}</td>
+                                    <td class="td_shifts_4">{{ data.number }}</td>
+                                    <td class="td_shifts_5" id="weight">{{ data.gross }} - {{ data.tare }} = {{ data.net }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-            </div>
+            </template>
+            <template v-if="reportValue === 'fractions'">
+                <div class="scroll-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th id="th_fractions">Fraction</th>
+                                <th>Fine Stone (00-05 mm)</th>
+                                <th>05-20 mm</th>
+                                <th>20-40 mm</th>
+                                <th>40-60 mm</th>
+                                <th>60-80 mm</th>
+                                <th>Boulder</th>
+                            </tr>
+                        </thead>
+                    </table>
+                    <div class="scroll-table-body">
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <td>Weight, t</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td>Production <br> Percentage</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </template>
         </div>
         <div class="counter">{{count}}</div>
         <div class="footer">

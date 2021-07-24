@@ -78,10 +78,13 @@ mine_drawing_1.animateScreen(screenMain, 500);
 var main = new vue_js_1.default({
     el: '#index_body',
     data: {
-        selectIpConnection: ''
+        selectIpConnection: '',
+        reportValue: ''
     },
     methods: {
-        printReport: function () {
+        printReport: function (value) {
+            var _this = this;
+            this.reportValue = value;
             var reportWin = new BrowserWindow({
                 width: 800,
                 height: 600,
@@ -91,8 +94,10 @@ var main = new vue_js_1.default({
                 }
             });
             reportWin.loadFile('report.html');
+            reportWin.webContents.on('dom-ready', function () {
+                reportWin.webContents.send('reportValue', _this.reportValue);
+            });
         },
-        // reportWin.webContents.openDevTools();
         proxyConnection: function () {
             console.log(this.selectIpConnection);
         }
@@ -311,12 +316,12 @@ var mes = {
     Y33Err: 1,
     Y34Err: 0,
     Y35Err: 1,
-    Pump1Status: 0,
-    Pump2Status: 1,
-    Pump3Status: 4,
+    Pump1Status: 2,
+    Pump2Status: 2,
+    Pump3Status: 2,
     Pump1Mode: 1,
     Pump2Mode: 1,
-    Pump3Mode: 2,
+    Pump3Mode: 1,
     Pump1Error: 0,
     Pump2Error: 1,
     Pump3Error: 3,
@@ -487,9 +492,9 @@ var mesTech = {
 //     "productionLevel": false,
 //     "platformDown": false
 // }
-// sendMes('drainageA', mes);
-// sendMes('drainageB', mes2);
-// sendMes('clearPump', mesClear);
-// sendMes('techPump', mesTech);
+sendMes('drainageA', mes);
+sendMes('drainageB', mes2);
+sendMes('clearPump', mesClear);
+sendMes('techPump', mesTech);
 // sendMes('Cage', cageMesage);
 //# sourceMappingURL=renderer.js.map

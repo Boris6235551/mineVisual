@@ -265,7 +265,7 @@ var Pump = /** @class */ (function (_super) {
         if (angel === void 0) { angel = 30; }
         var dy = this.step;
         switch (this.status) {
-            case PumpState.run:
+            case PumpState.revers:
             case PumpState.stopping:
             case PumpState.starting:
                 this.primitives[14].rotate(angel);
@@ -292,7 +292,7 @@ var Pump = /** @class */ (function (_super) {
                     this.primitives[10].move({ x: dy, y: 0 });
                 }
                 return;
-            case PumpState.revers:
+            case PumpState.run:
                 this.primitives[14].rotate(angel);
                 this.primitives[15].rotate(angel);
                 this.primitives[16].rotate(angel);

@@ -232,7 +232,7 @@ export class Pump extends FlowDriver {
     nextFrame(angel: number = 30): void {
         let dy: number = this.step;
         switch (this.status) {
-            case PumpState.run: case PumpState.stopping: case PumpState.starting:
+            case PumpState.revers: case PumpState.stopping: case PumpState.starting:
                 this.primitives[14].rotate(angel);
                 this.primitives[15].rotate(angel);
                 this.primitives[16].rotate(angel);
@@ -249,7 +249,7 @@ export class Pump extends FlowDriver {
                     this.primitives[10].move({ x: dy, y: 0 });
                 }
                 return;
-            case PumpState.revers:
+            case PumpState.run:
                 this.primitives[14].rotate(angel);
                 this.primitives[15].rotate(angel);
                 this.primitives[16].rotate(angel);
