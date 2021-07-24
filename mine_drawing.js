@@ -101,6 +101,7 @@ var BaseMineDraw = /** @class */ (function () {
     function BaseMineDraw(p0, length, disposition, percentage) {
         if (disposition === void 0) { disposition = Disposition.Horizontal; }
         this.propBit = true;
+        //public state: any;
         this.animationFrame = 0;
         this.primitives = [];
         this.name = "Base";
@@ -178,14 +179,27 @@ var FlowDriver = /** @class */ (function (_super) {
         _this.flow = false;
         return _this;
     }
-    FlowDriver.prototype.setFlow = function (set) {
+    FlowDriver.prototype.setFlow = function (set, show) {
+        //if(this.name == 'Y21') show = true;
+        if (show === void 0) { show = false; }
         this.flow = set;
-        for (var _i = 0, _a = this.flowElements; _i < _a.length; _i++) {
-            var fElement = _a[_i];
-            fElement.setFlow(set);
+        var mes = 'setFlow function, my flowElement: ';
+        if (show) {
+            for (var _i = 0, _a = this.flowElements; _i < _a.length; _i++) {
+                var fElement = _a[_i];
+                mes += fElement.name + ", ";
+            }
+            console.log("Name=" + this.name + ", flow =" + this.flow + "; " + mes);
         }
-        for (var _b = 0, _c = this.toSetElements; _b < _c.length; _b++) {
-            var setElement = _c[_b];
+        for (var _b = 0, _c = this.flowElements; _b < _c.length; _b++) {
+            var fElement = _c[_b];
+            if (fElement.name == 'ulY21')
+                console.log("<<<<<<<<<<<<<<<<<<<<<< ulY21 set=" + set);
+            fElement.setFlow(set, show);
+            //mes += fElement.name + `->flow=${fElement.flow}; `;
+        }
+        for (var _d = 0, _e = this.toSetElements; _d < _e.length; _d++) {
+            var setElement = _e[_d];
             if (set)
                 setElement.flow = true;
         }
@@ -267,7 +281,7 @@ var Screen = /** @class */ (function () {
         // console.log(objName)
         this.schemes.forEach(function (scheme) {
             if (scheme.name == objName || scheme.secondName == objName) {
-                console.log(scheme.name, JSON.stringify(mes, null, 4));
+                //console.log(scheme.name, JSON.stringify(mes, null, 4))
                 scheme.send(mes);
                 return;
             }

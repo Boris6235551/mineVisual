@@ -2,10 +2,6 @@ import { Scheme, Disposition, Point, Rectangle, BaseMineDraw, FlowDriver } from 
 import { Pump, MinePool, UndegraundPump, Pool, Valve, ValveCheck, UndergroundWater, IndustrialWater, PureWater, WaterTower } from './pumpAccessories'
 import {Connection} from './tube';
 
-const dxIndex = 0;   
-const dyIndex = 1;
-const dispIndex = 2;
-
 class BASEPUMP extends Scheme {
     protected items: (Valve | Pump | Pool | ValveCheck)[];   // | ValveCheck  - no need to send message
     protected lines: Connection[];
@@ -27,15 +23,21 @@ class BASEPUMP extends Scheme {
     addFlowDriver(item: FlowDriver, flowControllNames: string){
         if(flowControllNames == undefined) return;
         let driverNames = flowControllNames.split(' ');
-        // if(item.name == 'lY11')
+        // if(flowControllNames == 'Y13')
         //     console.log(`addFlowDriver for item=${item.name} driverNames=${driverNames}`)
         let driver = <FlowDriver>this.findByName(driverNames[0]);
-        if(driver == null) return;
+        if(driver == null) {
+            //if(flowControllNames == 'Y13') console.log(`addFlowDriver NOT to fined driverNames=${driverNames[0]}`)
+            return;
+        }
+        // if(flowControllNames == 'Y13') console.log(`addFlowDriver driver Name=${driver.name} add element${item.name}`)
         driver.addToFlowElements(item);
         if(driverNames.length == 1) return;
-        driver = <FlowDriver>this.findByName(driverNames[1]);
-        if(driver == null) return;
-        driver.addToSetElements(item); 
+        for(let i = 1; i < driverNames.length; i++){
+            driver = <FlowDriver>this.findByName(driverNames[i]);
+            if(driver == null) continue;
+            driver.addToSetElements(item); 
+        }
     }
     // itemByName(name: string): (Valve | Pump ){
     //     for (let item of this.items) {
@@ -139,7 +141,7 @@ class BASEPUMP extends Scheme {
 
     }
     send(mes: any) {
-        console.log(`received message UNDEGROUNDPUMP name=${this.name}`);
+        //console.log(`received message UNDEGROUNDPUMP name=${this.name}`);
         let mesProps = Object.getOwnPropertyNames(mes);
         for (const widget of this.items) {
             let wMes = {};
@@ -161,16 +163,22 @@ class BASEPUMP extends Scheme {
             // console.log(`del properies of ${widget.name}; mesProps length=${mesProps.length}`);
             if (mesProps.length == 0) return;
         }
-        console.log(`message properies=${mesProps}`);
+        //console.log(`message properies=${mesProps}`);
         
         this.update();
     }
-}
+}       // END BASE PUMP
 
 /**********************************************************************************
  ****************                 UNDEGRAUND PUMPS                 ****************
  **********************************************************************************/
-
+ const dxIndex = 0;   
+ const dyIndex = 1;
+ const dispIndex = 2;
+ const elementIndex = 0;
+ const flowControllIndex = 1;
+ 
+// array to create Valves or 
 let vPoints = [ 
  /*  dxIndex    dyIndex   dispIndex  dispositionIndex*/   
     [0,         0,      Disposition.Horizontal],    // Yx1
@@ -181,6 +189,14 @@ let vPoints = [
     [40,        90,     null],                      // Yx6  back closed valve
     [40,        380,    null]                       // Yx7  back closed valve
 ];
+//  element   controller
+let PumpValveControllTable = [
+    ['Y@3',  'Pump@'],
+    ['Y@1',  'Y@3'],
+    ['Y@2',  'Y@3'],
+];
+
+let InitFlowValves = ['Y14', 'Y15', 'Y24', 'Y25', 'Y34', 'Y35', 'Y44', 'Y45', 'Y54', 'Y55'];
 
 let mineConnections = [
     // /*-------------       LINE 1       --------------*/
@@ -211,12 +227,12 @@ let mineConnections = [
 
     {begin: '60', end: 'rY52', dir: true, disp: Disposition.Vertical, type: 'dE', name: 'urY52', flowControll: 'Y52'},
     {begin: '880', end: 'urY52', dir: true, disp: Disposition.Horizontal, type: 'dB', name: 'stav2', flowControll: 'Y52'},
-    {begin: 'stav2', end: 'rY42', dir: true, disp: Disposition.Vertical, type: 'lE', name: 'stav2', flowControll: 'Y42'},
-    {begin: 'stav2', end: 'rY32', dir: true, disp: Disposition.Vertical, type: 'lE', name: 'stav2', flowControll: 'Y32'},
-    {begin: 'stav2', end: 'rY22', dir: true, disp: Disposition.Vertical, type: 'lE', name: 'stav2', flowControll: 'Y22'},
-    {begin: 'stav2', end: 'rY12', dir: true, disp: Disposition.Vertical, type: 'lE', name: 'stav2', flowControll: 'Y12'},
+    {begin: 'stav2', end: 'rY42', dir: true, disp: Disposition.Vertical, type: 'lE', name: 'urY42', flowControll: 'Y42'},
+    {begin: 'stav2', end: 'rY32', dir: true, disp: Disposition.Vertical, type: 'lE', name: 'urY32', flowControll: 'Y32'},
+    {begin: 'stav2', end: 'rY22', dir: true, disp: Disposition.Vertical, type: 'lE', name: 'urY22', flowControll: 'Y22'},
+    {begin: 'stav2', end: 'rY12', dir: true, disp: Disposition.Vertical, type: 'lE', name: 'urY12', flowControll: 'Y12'},
 
-    {begin: '60', end: 'stav1', dir: true, disp: Disposition.Vertical, type: 'dB', name: 'ustav1'},
+    {begin: '60', end: 'stav1', dir: true, disp: Disposition.Vertical, type: 'dB', name: 'ustav1', flowControll: 'Y11 Y21 Y31 Y41 Y51'},
     {begin: '40', end: 'stav2', dir: true, disp: Disposition.Vertical, type: 'dB', name: 'ustav2'},
 ];
 let mineConnectionsTemplates = [
@@ -230,11 +246,11 @@ let mineConnectionsTemplates = [
     
     {begin: 'Y@6', end: 'Y@3', dir: true, disp: Disposition.Vertical, type: 'Ms', name: 'dY@6', flowControll: 'Y@3'},
     {begin: 'Y@3', end: 'Pump@', dir: true, disp: Disposition.Vertical, type: 'Ms', name: 'dY@3', flowControll: 'Pump@'},  //Y13down
-    {begin: 'Pump@', end: 'Y@7', dir: true, disp: Disposition.Vertical, type: 'sM', name: '', flowControll: 'Pump@'},
-    {begin: 'Y@7', end: 'minePool', dir: true, disp: Disposition.Vertical, type: 'Ms', name: '', flowControll: 'Pump@'},
+    {begin: 'Pump@', end: 'Y@7', dir: true, disp: Disposition.Vertical, type: 'sM', name: 'uY@7', flowControll: 'Pump@'},
+    {begin: 'Y@7', end: 'minePool', dir: true, disp: Disposition.Vertical, type: 'Ms', name: 'dY@7', flowControll: 'Pump@'},
     /*-----------------------------------------------*/
     {begin: '20', end: 'Y@4', dir: false, disp: Disposition.Vertical, type: 'dM', name: 'uY@4', flowControll: 'Y@4'},
-    {begin: 'uY@6', end: 'uY@4', dir: false, disp: Disposition.Horizontal, type: 'lB', name: '', flowControll: 'Y@4'},
+    {begin: 'uY@6', end: 'uY@4', dir: false, disp: Disposition.Horizontal, type: 'lB', name: 'luY@4', flowControll: 'Y@4'},
     {begin: 'Y@4', end: 'minePool', dir: false, disp: Disposition.Vertical, type: 'Ms', name: 'dY@4', flowControll: 'Y@4'},
     /*-----------------------------------------------*/
     {begin: 'dY@3', end: 'Y@5', dir: false, disp: Disposition.Horizontal, type: 'lM', name: 'lY@5', flowControll: 'Y@5'},
@@ -242,25 +258,39 @@ let mineConnectionsTemplates = [
     
 ];
 
-const LINES_COUNT1: number   = 3;
-const LINES_COUNT2: number   = 2;
+// const LINES_COUNT1: number   = 3;
+// const LINES_COUNT2: number   = 2;
 const LINES_COUNT: number = 5;
 const DELTA_X: number       = 184;
 
 export class UNDEGROUNDPUMP extends BASEPUMP {
     private connectionsTable: any[];
+    private flowControllTable: any[];
+    private flowInitValves: FlowDriver[];
     constructor(container: string, width: number, height: number, basePoint: Point) {     //, number: number
         super(container, width, height, basePoint);
         this.connectionsTable = [];
+        this.flowControllTable = [];
+        this.flowInitValves = [];
         this.name = 'drainageA';
         this.secondName = 'drainageB';
         this.addItem(new MinePool( basePoint.newPointMoved(0, 450) , 950), 'minePool');
         for(let i = 0; i < LINES_COUNT; i++) {
+            this.prepareFlowTable(i+1);
             this.createWidgets(basePoint.newPointMoved(DELTA_X * i, 0), i + 1);
             this.prepareConnectionsTable(i + 1);
         }
+        //console.log(JSON.stringify(this.flowControllTable, null, 4));
         this.createConnections(this.connectionsTable);    
         this.createConnections(mineConnections);
+        this.prepareFlowInitValves();
+    }
+    prepareFlowInitValves(){
+        for(let valName of InitFlowValves) {
+            let valObj = this.findByName(valName)
+            //console.log(`prepareFlowInitValves valve name=${valName}; object name = ${valObj==null ? 'null':valObj.name}`)
+            this.flowInitValves.push(<FlowDriver>valObj);
+        }
     }
     prepareConnectionsTable(number: number){
         for(let obj of mineConnectionsTemplates){
@@ -275,18 +305,55 @@ export class UNDEGROUNDPUMP extends BASEPUMP {
             // console.log(`prepareConnectionsTable for line=${number} => ${JSON.stringify(newObj)}`)
         }
     }
+    prepareFlowTable(number: number){
+        //console.log(`prepareFlowTable for number${number}`)
+        for(let i = 0; i < PumpValveControllTable.length; i++){
+            let newFlow = PumpValveControllTable[i][elementIndex].replace('@', (number).toString());
+            let newControlller = PumpValveControllTable[i][flowControllIndex].replace('@', (number).toString());
+            this.flowControllTable.push([newFlow, newControlller]);
+        }
+    }
+    findFlowController(name: string): string{
+        for(let i = 0; i < this.flowControllTable.length; i++){
+            //console.log(`i=${i}; this.flowControllTable[i]=${this.flowControllTable[i]}`)
+            if(this.flowControllTable[i][elementIndex] == name) {
+                // if(this.flowControllTable[i][flowControllIndex] == 'Y13') 
+                //     console.log(`!!!!!!!!!!!!for ${this.flowControllTable[i][flowControllIndex]}; 
+                //     flow=${name}`)
+                return this.flowControllTable[i][flowControllIndex];
+            }
+        }
+        return '';
+    }
     createWidgets(p: Point, number: number) {
         this.addItem(new Pump( p.newPointMoved(30,250), 100, 0), 'Pump' + number.toString());
+        let flowElements = [];
         for(let i = 0; i < vPoints.length; i++){
             let name = 'Y' + number.toString() + (i + 1).toString();
             let v: (Valve | ValveCheck);
             let received: boolean;
             if(vPoints[i][dispIndex] == null) 
                [v, received] = [new ValveCheck(p.newPointMoved(vPoints[i][dxIndex], vPoints[i][dyIndex]), 30), false]; 
-            else [v, received] = [new Valve(p.newPointMoved(vPoints[i][dxIndex], vPoints[i][dyIndex]), 
+            else {
+                [v, received] = [new Valve(p.newPointMoved(vPoints[i][dxIndex], vPoints[i][dyIndex]), 
                                                             30, vPoints[i][dispIndex]), true];  
-            this.addItem( v, name, received);    
-        }        
+                flowElements.push(v);
+            }
+            this.addItem( v, name, received); //    
+        }  
+        for(let i = 0; i < flowElements.length; i++){
+            let elName = flowElements[i].name;
+            let controller = this.findFlowController(elName);
+            if(controller != '') this.addFlowDriver(flowElements[i], controller)
+        }
+        //      
+    }
+    send(mes: any){
+        super.send(mes);
+        for(let v of this.flowInitValves) {
+           // console.log(`<<<<<<<<<<<<<<< v.name=${v.name}`)
+            v.setFlow(true);
+        }
     }
 }
 

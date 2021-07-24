@@ -95,6 +95,8 @@ var main = new vue_js_1.default({
         // reportWin.webContents.openDevTools();
         proxyConnection: function () {
             console.log(this.selectIpConnection);
+            if (this.selectIpConnection == '')
+                return;
         }
     }
 });
@@ -266,17 +268,17 @@ function testClear() {
 }
 function step() { tcpipConnector_1._step(); }
 var mes = {
-    Y11Status: 2,
+    Y11Status: pumpAccessories_1.ValveState.closed,
     Y12Status: 1,
     Y13Status: 1,
-    Y14Status: 2,
+    Y14Status: pumpAccessories_1.ValveState.closed,
     Y15Status: 2,
-    Y21Status: 2,
+    Y21Status: pumpAccessories_1.ValveState.closed,
     Y22Status: 3,
     Y23Status: 3,
     Y24Status: 3,
     Y25Status: 1,
-    Y31Status: 4,
+    Y31Status: pumpAccessories_1.ValveState.closed,
     Y32Status: 4,
     Y33Status: 4,
     Y34Status: 4,
@@ -338,12 +340,12 @@ var mes = {
     reserve: null
 };
 var mes2 = {
-    "Y41Status": 3,
+    "Y41Status": pumpAccessories_1.ValveState.closed,
     "Y42Status": 3,
     "Y43Status": 3,
     "Y44Status": 3,
     "Y45Status": 3,
-    "Y51Status": 3,
+    "Y51Status": pumpAccessories_1.ValveState.closed,
     "Y52Status": 3,
     "Y53Status": 3,
     "Y54Status": 3,
@@ -422,7 +424,7 @@ var mesClear = {
     ClearLLevel: 1,
     TowerHLevel: 1,
     TowerLLevel: 1,
-    M0Status: 0,
+    M0Status: pumpAccessories_1.PumpState.run,
     DP3Status: 1,
     DP4Status: 0,
     M0Mode: 1,
@@ -465,7 +467,7 @@ var mesTech = {
     M4Press: 1,
     TechHLevel: 1,
     TechLLevel: 2,
-    M0Status: pumpAccessories_1.PumpState.stop,
+    M0Status: pumpAccessories_1.PumpState.run,
     DP3Status: 1,
     DP4Status: pumpAccessories_1.PumpState.stop,
     M0Mode: pumpAccessories_1.PumpMode.Auto,
@@ -475,21 +477,21 @@ var mesTech = {
     DP3Err: 1,
     DP4Err: 1,
 };
-// let cageMesage = {
-//     "mainFastUp": true,
-//     "mainFastDown": false,
-//     "dynamicBreak": false,
-//     "smallUp": false,
-//     "smallDown": false,
-//     "level0": false,
-//     "ventLevel": false,
-//     "subLevel": false,
-//     "productionLevel": false,
-//     "platformDown": false
-// }
-// sendMes('drainageA', mes);
-// sendMes('drainageB', mes2);
+var cageMesage = {
+    "mainFastUp": true,
+    "mainFastDown": false,
+    "dynamicBreak": false,
+    "smallUp": false,
+    "smallDown": false,
+    "level0": false,
+    "ventLevel": false,
+    "subLevel": false,
+    "productionLevel": false,
+    "platformDown": false
+};
+sendMes('drainageA', mes);
+//sendMes('drainageB', mes2);
 // sendMes('clearPump', mesClear);
 // sendMes('techPump', mesTech);
-// sendMes('Cage', cageMesage);
+sendMes('Cage', cageMesage);
 //# sourceMappingURL=renderer.js.map

@@ -17,9 +17,6 @@ exports.SURFACEPUMP = exports.UNDEGROUNDPUMP = void 0;
 var mine_drawing_1 = require("./mine_drawing");
 var pumpAccessories_1 = require("./pumpAccessories");
 var tube_1 = require("./tube");
-var dxIndex = 0;
-var dyIndex = 1;
-var dispIndex = 2;
 var BASEPUMP = /** @class */ (function (_super) {
     __extends(BASEPUMP, _super);
     function BASEPUMP(container, width, height, basePoint) {
@@ -44,18 +41,23 @@ var BASEPUMP = /** @class */ (function (_super) {
         if (flowControllNames == undefined)
             return;
         var driverNames = flowControllNames.split(' ');
-        // if(item.name == 'lY11')
+        // if(flowControllNames == 'Y13')
         //     console.log(`addFlowDriver for item=${item.name} driverNames=${driverNames}`)
         var driver = this.findByName(driverNames[0]);
-        if (driver == null)
+        if (driver == null) {
+            //if(flowControllNames == 'Y13') console.log(`addFlowDriver NOT to fined driverNames=${driverNames[0]}`)
             return;
+        }
+        // if(flowControllNames == 'Y13') console.log(`addFlowDriver driver Name=${driver.name} add element${item.name}`)
         driver.addToFlowElements(item);
         if (driverNames.length == 1)
             return;
-        driver = this.findByName(driverNames[1]);
-        if (driver == null)
-            return;
-        driver.addToSetElements(item);
+        for (var i = 1; i < driverNames.length; i++) {
+            driver = this.findByName(driverNames[i]);
+            if (driver == null)
+                continue;
+            driver.addToSetElements(item);
+        }
     };
     // itemByName(name: string): (Valve | Pump ){
     //     for (let item of this.items) {
@@ -186,7 +188,7 @@ var BASEPUMP = /** @class */ (function (_super) {
         this.addFlowDriver(line, flowControllNames); // *****  FlowControll
     };
     BASEPUMP.prototype.send = function (mes) {
-        console.log("received message UNDEGROUNDPUMP name=" + this.name);
+        //console.log(`received message UNDEGROUNDPUMP name=${this.name}`);
         var mesProps = Object.getOwnPropertyNames(mes);
         for (var _i = 0, _a = this.items; _i < _a.length; _i++) {
             var widget = _a[_i];
@@ -212,14 +214,20 @@ var BASEPUMP = /** @class */ (function (_super) {
             if (mesProps.length == 0)
                 return;
         }
-        console.log("message properies=" + mesProps);
+        //console.log(`message properies=${mesProps}`);
         this.update();
     };
     return BASEPUMP;
-}(mine_drawing_1.Scheme));
+}(mine_drawing_1.Scheme)); // END BASE PUMP
 /**********************************************************************************
  ****************                 UNDEGRAUND PUMPS                 ****************
  **********************************************************************************/
+var dxIndex = 0;
+var dyIndex = 1;
+var dispIndex = 2;
+var elementIndex = 0;
+var flowControllIndex = 1;
+// array to create Valves or 
 var vPoints = [
     /*  dxIndex    dyIndex   dispIndex  dispositionIndex*/
     [0, 0, mine_drawing_1.Disposition.Horizontal],
@@ -230,6 +238,13 @@ var vPoints = [
     [40, 90, null],
     [40, 380, null] // Yx7  back closed valve
 ];
+//  element   controller
+var PumpValveControllTable = [
+    ['Y@3', 'Pump@'],
+    ['Y@1', 'Y@3'],
+    ['Y@2', 'Y@3'],
+];
+var InitFlowValves = ['Y14', 'Y15', 'Y24', 'Y25', 'Y34', 'Y35', 'Y44', 'Y45', 'Y54', 'Y55'];
 var mineConnections = [
     // /*-------------       LINE 1       --------------*/
     // {begin: 'Y11', end: 'Y16', dir: true, disp: Disposition.Vertical, type: 'mM', name: 'Y16u'},
@@ -255,11 +270,11 @@ var mineConnections = [
     { begin: 'stav1', end: 'lY11', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'lB', name: 'ulY11', flowControll: 'Y11' },
     { begin: '60', end: 'rY52', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'dE', name: 'urY52', flowControll: 'Y52' },
     { begin: '880', end: 'urY52', dir: true, disp: mine_drawing_1.Disposition.Horizontal, type: 'dB', name: 'stav2', flowControll: 'Y52' },
-    { begin: 'stav2', end: 'rY42', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'lE', name: 'stav2', flowControll: 'Y42' },
-    { begin: 'stav2', end: 'rY32', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'lE', name: 'stav2', flowControll: 'Y32' },
-    { begin: 'stav2', end: 'rY22', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'lE', name: 'stav2', flowControll: 'Y22' },
-    { begin: 'stav2', end: 'rY12', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'lE', name: 'stav2', flowControll: 'Y12' },
-    { begin: '60', end: 'stav1', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'dB', name: 'ustav1' },
+    { begin: 'stav2', end: 'rY42', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'lE', name: 'urY42', flowControll: 'Y42' },
+    { begin: 'stav2', end: 'rY32', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'lE', name: 'urY32', flowControll: 'Y32' },
+    { begin: 'stav2', end: 'rY22', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'lE', name: 'urY22', flowControll: 'Y22' },
+    { begin: 'stav2', end: 'rY12', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'lE', name: 'urY12', flowControll: 'Y12' },
+    { begin: '60', end: 'stav1', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'dB', name: 'ustav1', flowControll: 'Y11 Y21 Y31 Y41 Y51' },
     { begin: '40', end: 'stav2', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'dB', name: 'ustav2' },
 ];
 var mineConnectionsTemplates = [
@@ -272,18 +287,18 @@ var mineConnectionsTemplates = [
     { begin: 'uY@6', end: 'Y@2', dir: false, disp: mine_drawing_1.Disposition.Horizontal, type: 'lM', name: 'lY@2', flowControll: 'Y@3' },
     { begin: 'Y@6', end: 'Y@3', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'Ms', name: 'dY@6', flowControll: 'Y@3' },
     { begin: 'Y@3', end: 'Pump@', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'Ms', name: 'dY@3', flowControll: 'Pump@' },
-    { begin: 'Pump@', end: 'Y@7', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'sM', name: '', flowControll: 'Pump@' },
-    { begin: 'Y@7', end: 'minePool', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'Ms', name: '', flowControll: 'Pump@' },
+    { begin: 'Pump@', end: 'Y@7', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'sM', name: 'uY@7', flowControll: 'Pump@' },
+    { begin: 'Y@7', end: 'minePool', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'Ms', name: 'dY@7', flowControll: 'Pump@' },
     /*-----------------------------------------------*/
     { begin: '20', end: 'Y@4', dir: false, disp: mine_drawing_1.Disposition.Vertical, type: 'dM', name: 'uY@4', flowControll: 'Y@4' },
-    { begin: 'uY@6', end: 'uY@4', dir: false, disp: mine_drawing_1.Disposition.Horizontal, type: 'lB', name: '', flowControll: 'Y@4' },
+    { begin: 'uY@6', end: 'uY@4', dir: false, disp: mine_drawing_1.Disposition.Horizontal, type: 'lB', name: 'luY@4', flowControll: 'Y@4' },
     { begin: 'Y@4', end: 'minePool', dir: false, disp: mine_drawing_1.Disposition.Vertical, type: 'Ms', name: 'dY@4', flowControll: 'Y@4' },
     /*-----------------------------------------------*/
     { begin: 'dY@3', end: 'Y@5', dir: false, disp: mine_drawing_1.Disposition.Horizontal, type: 'lM', name: 'lY@5', flowControll: 'Y@5' },
     { begin: 'Y@5', end: 'dY@4', dir: false, disp: mine_drawing_1.Disposition.Horizontal, type: 'Ml', name: 'rY@5', flowControll: 'Y@5' },
 ];
-var LINES_COUNT1 = 3;
-var LINES_COUNT2 = 2;
+// const LINES_COUNT1: number   = 3;
+// const LINES_COUNT2: number   = 2;
 var LINES_COUNT = 5;
 var DELTA_X = 184;
 var UNDEGROUNDPUMP = /** @class */ (function (_super) {
@@ -291,17 +306,30 @@ var UNDEGROUNDPUMP = /** @class */ (function (_super) {
     function UNDEGROUNDPUMP(container, width, height, basePoint) {
         var _this = _super.call(this, container, width, height, basePoint) || this;
         _this.connectionsTable = [];
+        _this.flowControllTable = [];
+        _this.flowInitValves = [];
         _this.name = 'drainageA';
         _this.secondName = 'drainageB';
         _this.addItem(new pumpAccessories_1.MinePool(basePoint.newPointMoved(0, 450), 950), 'minePool');
         for (var i = 0; i < LINES_COUNT; i++) {
+            _this.prepareFlowTable(i + 1);
             _this.createWidgets(basePoint.newPointMoved(DELTA_X * i, 0), i + 1);
             _this.prepareConnectionsTable(i + 1);
         }
+        //console.log(JSON.stringify(this.flowControllTable, null, 4));
         _this.createConnections(_this.connectionsTable);
         _this.createConnections(mineConnections);
+        _this.prepareFlowInitValves();
         return _this;
     }
+    UNDEGROUNDPUMP.prototype.prepareFlowInitValves = function () {
+        for (var _i = 0, InitFlowValves_1 = InitFlowValves; _i < InitFlowValves_1.length; _i++) {
+            var valName = InitFlowValves_1[_i];
+            var valObj = this.findByName(valName);
+            //console.log(`prepareFlowInitValves valve name=${valName}; object name = ${valObj==null ? 'null':valObj.name}`)
+            this.flowInitValves.push(valObj);
+        }
+    };
     UNDEGROUNDPUMP.prototype.prepareConnectionsTable = function (number) {
         for (var _i = 0, mineConnectionsTemplates_1 = mineConnectionsTemplates; _i < mineConnectionsTemplates_1.length; _i++) {
             var obj = mineConnectionsTemplates_1[_i];
@@ -319,18 +347,56 @@ var UNDEGROUNDPUMP = /** @class */ (function (_super) {
             // console.log(`prepareConnectionsTable for line=${number} => ${JSON.stringify(newObj)}`)
         }
     };
+    UNDEGROUNDPUMP.prototype.prepareFlowTable = function (number) {
+        //console.log(`prepareFlowTable for number${number}`)
+        for (var i = 0; i < PumpValveControllTable.length; i++) {
+            var newFlow = PumpValveControllTable[i][elementIndex].replace('@', (number).toString());
+            var newControlller = PumpValveControllTable[i][flowControllIndex].replace('@', (number).toString());
+            this.flowControllTable.push([newFlow, newControlller]);
+        }
+    };
+    UNDEGROUNDPUMP.prototype.findFlowController = function (name) {
+        for (var i = 0; i < this.flowControllTable.length; i++) {
+            //console.log(`i=${i}; this.flowControllTable[i]=${this.flowControllTable[i]}`)
+            if (this.flowControllTable[i][elementIndex] == name) {
+                // if(this.flowControllTable[i][flowControllIndex] == 'Y13') 
+                //     console.log(`!!!!!!!!!!!!for ${this.flowControllTable[i][flowControllIndex]}; 
+                //     flow=${name}`)
+                return this.flowControllTable[i][flowControllIndex];
+            }
+        }
+        return '';
+    };
     UNDEGROUNDPUMP.prototype.createWidgets = function (p, number) {
         var _a, _b;
         this.addItem(new pumpAccessories_1.Pump(p.newPointMoved(30, 250), 100, 0), 'Pump' + number.toString());
+        var flowElements = [];
         for (var i = 0; i < vPoints.length; i++) {
             var name_1 = 'Y' + number.toString() + (i + 1).toString();
             var v = void 0;
             var received = void 0;
             if (vPoints[i][dispIndex] == null)
                 _a = [new pumpAccessories_1.ValveCheck(p.newPointMoved(vPoints[i][dxIndex], vPoints[i][dyIndex]), 30), false], v = _a[0], received = _a[1];
-            else
+            else {
                 _b = [new pumpAccessories_1.Valve(p.newPointMoved(vPoints[i][dxIndex], vPoints[i][dyIndex]), 30, vPoints[i][dispIndex]), true], v = _b[0], received = _b[1];
-            this.addItem(v, name_1, received);
+                flowElements.push(v);
+            }
+            this.addItem(v, name_1, received); //    
+        }
+        for (var i = 0; i < flowElements.length; i++) {
+            var elName = flowElements[i].name;
+            var controller = this.findFlowController(elName);
+            if (controller != '')
+                this.addFlowDriver(flowElements[i], controller);
+        }
+        //      
+    };
+    UNDEGROUNDPUMP.prototype.send = function (mes) {
+        _super.prototype.send.call(this, mes);
+        for (var _i = 0, _a = this.flowInitValves; _i < _a.length; _i++) {
+            var v = _a[_i];
+            // console.log(`<<<<<<<<<<<<<<< v.name=${v.name}`)
+            v.setFlow(true);
         }
     };
     return UNDEGROUNDPUMP;

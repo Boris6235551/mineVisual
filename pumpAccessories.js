@@ -259,7 +259,8 @@ var Pump = /** @class */ (function (_super) {
         else
             this.setLabel('E');
         this.error = mes.Error;
-        this.setFlow(this.status == PumpState.run);
+        var pumpFlow = this.status == PumpState.run || this.status == PumpState.starting || this.status == PumpState.stopping;
+        this.setFlow(pumpFlow, this.name == 'Pump2'); //, this.name == 'Pump2'
     };
     Pump.prototype.nextFrame = function (angel) {
         if (angel === void 0) { angel = 30; }
@@ -486,7 +487,7 @@ var Valve = /** @class */ (function (_super) {
     function Valve(p0, length, disposition) {
         var _this = _super.call(this, p0, length, disposition) || this;
         _this.name = 'Valve';
-        _this.state = ValveState.opened;
+        _this.state = ValveState.closed;
         var p00 = _this.rect.p0;
         var p01 = (disposition == mine_drawing_1.Disposition.Vertical) ? _this.rect.rightTop() : _this.rect.getMiddlePoint();
         var p02 = (disposition == mine_drawing_1.Disposition.Vertical) ? _this.rect.getMiddlePoint() : _this.rect.leftButtom();
@@ -508,6 +509,14 @@ var Valve = /** @class */ (function (_super) {
         _this.nextFrame();
         return _this;
     }
+    Valve.prototype.setFlow = function (set, show) {
+        if (show === void 0) { show = false; }
+        var valveOpen = (this.state == ValveState.opened || this.state == ValveState.opening ||
+            this.state == ValveState.closing);
+        if (this.name == 'Y21')
+            console.log("Y21 valveOpen=" + valveOpen + " and set=" + set + " status=" + this.state);
+        _super.prototype.setFlow.call(this, (valveOpen && set), show);
+    };
     Valve.prototype.setState = function (newState) {
         this.state = newState;
     };
@@ -576,6 +585,8 @@ var Valve = /** @class */ (function (_super) {
             this.labelsetPercentage.text(text);
     };
     Valve.prototype.setBaseProperty = function (mes) {
+        if (this.name == 'Y21')
+            console.log("before Y21 mes= " + JSON.stringify(mes) + "; state=" + this.state);
         if (mes.pos === undefined) {
             this.setPercentage('');
             this.primitives[3].visible(false);
@@ -593,9 +604,8 @@ var Valve = /** @class */ (function (_super) {
         else
             this.setLabel('E');
         this.error = mes.Error;
-        // let flow = this.flow && (this.state == ValveState.opening || this.state == ValveState.opened || 
-        //     this.state == ValveState.closing);
-        // this.setFlow(flow);
+        if (this.name == 'Y21')
+            console.log("after Y21 mes= " + JSON.stringify(mes) + "; state=" + this.state);
     };
     Valve.prototype.nextFrame = function () {
         switch (this.state) {

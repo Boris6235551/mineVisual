@@ -226,7 +226,8 @@ export class Pump extends FlowDriver {
         else if (this.mode == PumpMode.Service) this.setLabel('S');
         else this.setLabel('E')
         this.error = mes.Error;
-        this.setFlow(this.status == PumpState.run);
+        let pumpFlow = this.status == PumpState.run || this.status == PumpState.starting || this.status == PumpState.stopping; 
+        this.setFlow(pumpFlow, this.name == 'Pump2'); //, this.name == 'Pump2'
     }
 
     nextFrame(angel: number = 30): void {
@@ -410,14 +411,14 @@ enum ValvePrimitive {
 }
 
 export class Valve extends FlowDriver {
-    public state: ValveState;
+    private state: ValveState;
     public mode: ValveMode;
     public error: ValveError;
     protected labelsetPercentage: any;
     constructor(p0: Point, length: number, disposition: Disposition) {
         super(p0, length, disposition);
         this.name = 'Valve';
-        this.state = ValveState.opened;
+        this.state = ValveState.closed;
         let p00: Point = this.rect.p0;
         let p01: Point = (disposition == Disposition.Vertical) ? this.rect.rightTop() : this.rect.getMiddlePoint();
         let p02: Point = (disposition == Disposition.Vertical) ? this.rect.getMiddlePoint() : this.rect.leftButtom();
@@ -438,6 +439,12 @@ export class Valve extends FlowDriver {
         this.label = lt;
 
         this.nextFrame();
+    }
+    setFlow(set: boolean, show: boolean = false){
+        let valveOpen = (this.state == ValveState.opened || this.state == ValveState.opening || 
+                                        this.state == ValveState.closing);
+        if(this.name == 'Y21') console.log(`Y21 valveOpen=${valveOpen} and set=${set} status=${this.state}`)
+        super.setFlow((valveOpen && set), show);
     }
     setState(newState: ValveState): void {
         this.state = newState;
@@ -509,6 +516,8 @@ export class Valve extends FlowDriver {
     }
 
     setBaseProperty(mes: any) {
+if(this.name == 'Y21') console.log(`before Y21 mes= ${JSON.stringify(mes)}; state=${this.state}`)
+
         if (mes.pos === undefined) {
             this.setPercentage('')
             this.primitives[3].visible(false)
@@ -521,10 +530,7 @@ export class Valve extends FlowDriver {
         else if (this.mode == ValveMode.HandDrive) this.setLabel('H');
         else this.setLabel('E')
         this.error = mes.Error;
-        // let flow = this.flow && (this.state == ValveState.opening || this.state == ValveState.opened || 
-        //     this.state == ValveState.closing);
-        
-        // this.setFlow(flow);
+if(this.name == 'Y21') console.log(`after Y21 mes= ${JSON.stringify(mes)}; state=${this.state}`)    
     }
 
     nextFrame(): void {

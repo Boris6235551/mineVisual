@@ -190,7 +190,18 @@ function objectsDif(previous, current) {
 var PORT = 2000;
 var allClients = [
     // {host: '192.168.100.50', name: 'DSF'},   // ok
-    { host: '192.168.100.103', name: 'Cage' },
+    // {host: '192.168.100.103', name: 'Cage'}, //192.168.100.51
+    // {host: '192.168.100.52', name: 'Skip'},
+    // {host: '192.168.100.53', name: 'SubStation'},
+    // {host: '192.168.100.54', name: 'UndegroundStation'},
+    // {host: '192.168.100.55', name: 'Batcher'},   // ok
+    // {host: '192.168.100.56', name: 'Compressor'},
+    // /*   Conveyor scale   */
+    // {host: '192.168.100.60', name: 'Scale3AB'},
+    // {host: '192.168.100.62', name: 'Scale4'},
+    // {host: '192.168.100.64', name: 'Scale6AB'},
+    // {host: '192.168.100.66', name: 'Scale7'},
+    { host: '192.168.100.68', name: 'Scale8_9' },
 ];
 var socketState;
 (function (socketState) {
@@ -339,6 +350,7 @@ var DriveClients = /** @class */ (function () {
     };
     DriveClients.prototype.reloadPlc = function (/*plc index*/ i) {
         // console.log(`reloadPlc ${allClients[i].name}`);
+        driveClients.showDif = false;
         this.clients[i].state = socketState.Sending;
         this.clients[i].socket.write(new Uint8Array([2, 3]));
     };

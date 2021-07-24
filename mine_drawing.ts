@@ -86,7 +86,7 @@ export class BaseMineDraw {
     public propBit: boolean = true;
     public rect: Rectangle;
     readonly disposition: Disposition;
-    public state: any;
+    //public state: any;
     protected animationFrame: number = 0;
     protected primitives: (Konva.Rect | Konva.Text | Konva.Circle | Konva.Line | Konva.Ellipse)[] = [];
     protected layer: Konva.Layer;
@@ -157,9 +157,24 @@ export class FlowDriver extends BaseMineDraw {
         this.toSetElements = [];
         this.flow = false;
     }
-    setFlow(set: boolean){
+    setFlow(set: boolean, show:boolean = false){
+//if(this.name == 'Y21') show = true;
+
         this.flow = set;
-        for(let fElement of this.flowElements) fElement.setFlow(set);
+        let mes = 'setFlow function, my flowElement: ';
+        if(show) {
+            for(let fElement of this.flowElements) mes += `${fElement.name}, `
+            console.log(`Name=${this.name}, flow =${this.flow}; ${mes}`);
+
+        }
+        
+        for(let fElement of this.flowElements) {
+            if(fElement.name == 'ulY21') console.log(`<<<<<<<<<<<<<<<<<<<<<< ulY21 set=${set}`)
+            fElement.setFlow(set, show);
+            //mes += fElement.name + `->flow=${fElement.flow}; `;
+        }
+        
+
         for(let setElement of this.toSetElements) {
             if(set) setElement.flow = true;
         }
@@ -243,7 +258,7 @@ export class Screen {
         // console.log(objName)
         this.schemes.forEach(function(scheme) {
             if(scheme.name == objName || scheme.secondName == objName) {
-                console.log(scheme.name, JSON.stringify(mes, null, 4))
+                //console.log(scheme.name, JSON.stringify(mes, null, 4))
                 scheme.send(mes);
                 return;
             }

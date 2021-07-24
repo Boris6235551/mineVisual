@@ -7,7 +7,7 @@ import { BATCHER } from './_batcher'
 import { UNDERGROUNDSUBSTATION } from './_undergroundsubstation'
 import { CAGE } from './_cage'
 import { UNDEGROUNDPUMP, SURFACEPUMP } from './_undegroundPump'
-import {PumpState, PumpError, PumpMode} from './pumpAccessories'
+import {PumpState, PumpError, PumpMode, ValveState} from './pumpAccessories'
 import { BATCHERLABLE } from './_batcherlable'
 import { RECEIVINGHOPPER } from './_receivinghopper'
 import { SUBSTATION } from './_substation'
@@ -107,26 +107,25 @@ let main = new Vue({
             // reportWin.webContents.openDevTools();
         proxyConnection: function () {
             console.log(this.selectIpConnection)
+            if(this.selectIpConnection == '') return;
+            
         }
     }
 
 })
 
 
-/*
-batcher.BunkerLeft.propBit = true
-batcher.FeederLeft.propBit - on/off
-batcher.FeederLeft.enable
-batcher.FeederRight.propBit - on/off
-batcher.FeederRight.enable
-batcher.ChuteLeft.propBit
-batcher.ChuteRight.propBit
-batcher.GateRight1.opened
-batcher.GateRight1.closed
+// batcher.BunkerLeft.propBit = true
+// batcher.FeederLeft.propBit - on/off
+// batcher.FeederLeft.enable
+// batcher.FeederRight.propBit - on/off
+// batcher.FeederRight.enable
+// batcher.ChuteLeft.propBit
+// batcher.ChuteRight.propBit
+// batcher.GateRight1.opened
+// batcher.GateRight1.closed
 
 
-
-*/
 
 
 // ###############################################################################################
@@ -396,17 +395,17 @@ function step() { _step(); }
 
 
 let mes = {
-    Y11Status: 2,   // enum ValveStatus InitState = 0, Closed, Opening, Opened, Closing , Calibration
+    Y11Status: ValveState.closed,   // enum ValveStatus InitState = 0, Closed, Opening, Opened, Closing , Calibration
     Y12Status: 1,
     Y13Status: 1,
-    Y14Status: 2,
+    Y14Status: ValveState.closed,
     Y15Status: 2,
-    Y21Status: 2,
+    Y21Status: ValveState.closed,
     Y22Status: 3,
     Y23Status: 3,
     Y24Status: 3,
     Y25Status: 1,
-    Y31Status: 4,
+    Y31Status: ValveState.closed,
     Y32Status: 4,
     Y33Status: 4,
     Y34Status: 4,
@@ -475,12 +474,12 @@ let mes = {
 }
 
 let mes2 = {
-    "Y41Status": 3,
+    "Y41Status": ValveState.closed,
     "Y42Status": 3,
     "Y43Status": 3,
     "Y44Status": 3,
     "Y45Status": 3,
-    "Y51Status": 3,
+    "Y51Status": ValveState.closed,
     "Y52Status": 3,
     "Y53Status": 3,
     "Y54Status": 3,
@@ -560,7 +559,7 @@ let mesClear = {
     ClearLLevel: 1,
     TowerHLevel: 1,
     TowerLLevel: 1,
-    M0Status: 0,        // enum PumpStatus Stopped = 0, Starting, Working, Stopping, Error
+    M0Status: PumpState.run,        // enum PumpStatus Stopped = 0, Starting, Working, Stopping, Error
     DP3Status: 1,
     DP4Status: 0,
     M0Mode: 1,          // enum PumpMode Auto = 1, Service
@@ -604,7 +603,7 @@ let mesTech = {
     M4Press: 1,
     TechHLevel: 1,
     TechLLevel: 2,
-    M0Status: PumpState.stop,    // enum PumpStatus Stopped = 0, Starting, Working, Stopping, Error
+    M0Status: PumpState.run,    // enum PumpStatus Stopped = 0, Starting, Working, Stopping, Error
     DP3Status: 1,
     DP4Status: PumpState.stop,
     M0Mode: PumpMode.Auto,
@@ -617,21 +616,21 @@ let mesTech = {
 }
 
 
-// let cageMesage = {
-//     "mainFastUp": true,
-//     "mainFastDown": false,
-//     "dynamicBreak": false,
-//     "smallUp": false,
-//     "smallDown": false,
-//     "level0": false,
-//     "ventLevel": false,
-//     "subLevel": false,
-//     "productionLevel": false,
-//     "platformDown": false
-// }
+let cageMesage = {
+    "mainFastUp": true,
+    "mainFastDown": false,
+    "dynamicBreak": false,
+    "smallUp": false,
+    "smallDown": false,
+    "level0": false,
+    "ventLevel": false,
+    "subLevel": false,
+    "productionLevel": false,
+    "platformDown": false
+}
 
-// sendMes('drainageA', mes);
-// sendMes('drainageB', mes2);
+sendMes('drainageA', mes);
+//sendMes('drainageB', mes2);
 // sendMes('clearPump', mesClear);
 // sendMes('techPump', mesTech);
-// sendMes('Cage', cageMesage);
+sendMes('Cage', cageMesage);

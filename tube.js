@@ -245,6 +245,8 @@ var Connection = /** @class */ (function (_super) {
             this.primitives[i].move({ x: dx, y: dy });
     };
     Connection.prototype.nextFrame = function () {
+        if (this.name == "ulY21")
+            console.log(">>>>>>>>>>>>>>> ulY21 flow= " + this.flow);
         if (!this.flow)
             return;
         this.moveWhite();
