@@ -387,7 +387,7 @@ export function startClients(func: any){
 }
 
 
-export function _testConnect(){
+export function _testConnect(ind: number = -1){             // Connect
     driveClients.connect(testIndex);
     driveClients.showDif = false;
 }
@@ -407,24 +407,29 @@ export function _reCreate(){
 
 export function _sendReload(){
     driveClients.reloadPlc(testIndex);
-
-    // let s = new Uint8Array([2,3]);
-    // for(let i = 0; i < clients.length; i++){
-    //     showTest(i);
-    //     if( clients[i].state == socketState.Connected ){
-    //         // console.log('before SEND')
-    //         // showTest(i);
-    //         clients[i].state = socketState.Sending;
-    //         clients[i].socket.write(s);
-    //         // console.log('after send')
-    //         // showTest(i);
-    //     }
-    //     // else connectSocket(i);
-    // }
 }
 
 
 export function _step(){driveClients.drive();}
+
+let proxySocket: any = null;
+async function recreateProxy(hosIp: string) {
+    if(proxySocket != null){
+        try{
+            await proxySocket.destroy();
+        }catch(_){}
+        proxySocket = null;
+    }
+    proxySocket = new net.Socket();
+    proxySocket.connect(2001, '192.168.100.103', ()=>{
+        
+    });
+}
+export  function connectToProxy(ipToConnect: string): boolean{
+console.log(`ipToConnnect = ${ipToConnect}`)
+    recreateProxy(ipToConnect);
+    return true;
+}
 
 // function connectSocket(index){
 //     let cl = clients[index].socket;

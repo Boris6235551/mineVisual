@@ -24,6 +24,7 @@ var BASEPUMP = /** @class */ (function (_super) {
         _this.basePoint = basePoint;
         _this.items = [];
         _this.lines = [];
+        _this.flowInitDrivers = [];
         return _this;
     }
     BASEPUMP.prototype.addItem = function (item, name, recieveMessage, flowControllNames) {
@@ -187,6 +188,14 @@ var BASEPUMP = /** @class */ (function (_super) {
         this.addWidget(line);
         this.addFlowDriver(line, flowControllNames); // *****  FlowControll
     };
+    BASEPUMP.prototype.prepareFlowInitControllers = function (controllerNames) {
+        for (var _i = 0, controllerNames_1 = controllerNames; _i < controllerNames_1.length; _i++) {
+            var contrName = controllerNames_1[_i];
+            var drvObj = this.findByName(contrName);
+            //console.log(`prepareFlowInitValves valve name=${valName}; object name = ${valObj==null ? 'null':valObj.name}`)
+            this.flowInitDrivers.push(drvObj);
+        }
+    };
     BASEPUMP.prototype.send = function (mes) {
         //console.log(`received message UNDEGROUNDPUMP name=${this.name}`);
         var mesProps = Object.getOwnPropertyNames(mes);
@@ -211,10 +220,14 @@ var BASEPUMP = /** @class */ (function (_super) {
             for (var i = delIndexes.length - 1; i >= 0; i--)
                 mesProps.splice(delIndexes[i], 1);
             // console.log(`del properies of ${widget.name}; mesProps length=${mesProps.length}`);
-            if (mesProps.length == 0)
-                return;
+            //if (mesProps.length == 0) return;
         }
         //console.log(`message properies=${mesProps}`);
+        for (var _b = 0, _c = this.flowInitDrivers; _b < _c.length; _b++) {
+            var v = _c[_b];
+            //  console.log(`<<<<<<<<<<<<<<< v.name=${v.name}`)
+            v.setFlow(true);
+        }
         this.update();
     };
     return BASEPUMP;
@@ -244,7 +257,10 @@ var PumpValveControllTable = [
     ['Y@1', 'Y@3'],
     ['Y@2', 'Y@3'],
 ];
-var InitFlowValves = ['Y14', 'Y15', 'Y24', 'Y25', 'Y34', 'Y35', 'Y44', 'Y45', 'Y54', 'Y55'];
+var InitFlowUndeground = [
+    'Pump1', 'Pump2', 'Pump3', 'Pump4', 'Pump5',
+    'Y14', 'Y15', 'Y24', 'Y25', 'Y34', 'Y35', 'Y44', 'Y45', 'Y54', 'Y55'
+];
 var mineConnections = [
     // /*-------------       LINE 1       --------------*/
     // {begin: 'Y11', end: 'Y16', dir: true, disp: Disposition.Vertical, type: 'mM', name: 'Y16u'},
@@ -275,7 +291,7 @@ var mineConnections = [
     { begin: 'stav2', end: 'rY22', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'lE', name: 'urY22', flowControll: 'Y22' },
     { begin: 'stav2', end: 'rY12', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'lE', name: 'urY12', flowControll: 'Y12' },
     { begin: '60', end: 'stav1', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'dB', name: 'ustav1', flowControll: 'Y11 Y21 Y31 Y41 Y51' },
-    { begin: '40', end: 'stav2', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'dB', name: 'ustav2' },
+    { begin: '40', end: 'stav2', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'dB', name: 'ustav2', flowControll: 'Y12 Y22 Y32 Y42 Y52' },
 ];
 var mineConnectionsTemplates = [
     /*-------------       LINE @       --------------*/
@@ -303,11 +319,12 @@ var LINES_COUNT = 5;
 var DELTA_X = 184;
 var UNDEGROUNDPUMP = /** @class */ (function (_super) {
     __extends(UNDEGROUNDPUMP, _super);
+    //private flowInitValves: FlowDriver[];
     function UNDEGROUNDPUMP(container, width, height, basePoint) {
         var _this = _super.call(this, container, width, height, basePoint) || this;
         _this.connectionsTable = [];
         _this.flowControllTable = [];
-        _this.flowInitValves = [];
+        //this.flowInitValves = [];
         _this.name = 'drainageA';
         _this.secondName = 'drainageB';
         _this.addItem(new pumpAccessories_1.MinePool(basePoint.newPointMoved(0, 450), 950), 'minePool');
@@ -319,17 +336,16 @@ var UNDEGROUNDPUMP = /** @class */ (function (_super) {
         //console.log(JSON.stringify(this.flowControllTable, null, 4));
         _this.createConnections(_this.connectionsTable);
         _this.createConnections(mineConnections);
-        _this.prepareFlowInitValves();
+        _this.prepareFlowInitControllers(InitFlowUndeground);
         return _this;
     }
-    UNDEGROUNDPUMP.prototype.prepareFlowInitValves = function () {
-        for (var _i = 0, InitFlowValves_1 = InitFlowValves; _i < InitFlowValves_1.length; _i++) {
-            var valName = InitFlowValves_1[_i];
-            var valObj = this.findByName(valName);
-            //console.log(`prepareFlowInitValves valve name=${valName}; object name = ${valObj==null ? 'null':valObj.name}`)
-            this.flowInitValves.push(valObj);
-        }
-    };
+    // prepareFlowInitControllers(controllerNames){
+    //     for(let contrName of controllerNames) {
+    //         let valObj = this.findByName(contrName)
+    //         //console.log(`prepareFlowInitValves valve name=${valName}; object name = ${valObj==null ? 'null':valObj.name}`)
+    //         this.flowInitValves.push(<FlowDriver>valObj);
+    //     }
+    // }
     UNDEGROUNDPUMP.prototype.prepareConnectionsTable = function (number) {
         for (var _i = 0, mineConnectionsTemplates_1 = mineConnectionsTemplates; _i < mineConnectionsTemplates_1.length; _i++) {
             var obj = mineConnectionsTemplates_1[_i];
@@ -390,14 +406,6 @@ var UNDEGROUNDPUMP = /** @class */ (function (_super) {
                 this.addFlowDriver(flowElements[i], controller);
         }
         //      
-    };
-    UNDEGROUNDPUMP.prototype.send = function (mes) {
-        _super.prototype.send.call(this, mes);
-        for (var _i = 0, _a = this.flowInitValves; _i < _a.length; _i++) {
-            var v = _a[_i];
-            // console.log(`<<<<<<<<<<<<<<< v.name=${v.name}`)
-            v.setFlow(true);
-        }
     };
     return UNDEGROUNDPUMP;
 }(BASEPUMP));
@@ -510,6 +518,9 @@ var flowMatrix = [
     'DP3 ',
     'Y222:'
 ];
+var InitFlowSurface = [
+    'M0', 'DP4', 'M4', 'M3', 'DP3', 'M2', 'M1'
+];
 var dYYY = -210;
 var kX = 1;
 var SURFACEPUMP = /** @class */ (function (_super) {
@@ -520,6 +531,7 @@ var SURFACEPUMP = /** @class */ (function (_super) {
         _this.secondName = 'techPump';
         _this.createWidgets(basePoint);
         _this.createConnections(surfaceConnections);
+        _this.prepareFlowInitControllers(InitFlowSurface);
         return _this;
     }
     SURFACEPUMP.prototype.getPoint = function (dXY) {

@@ -20,7 +20,7 @@ ipcRenderer.on('resended', (event, arr) => {
     console.log('resended');
 });
 
-
+let useProxy = false;
 
 let screenMain = new Screen();
 // // let techWater = new TechWater('container', window.innerWidth, window.innerHeight);
@@ -54,7 +54,8 @@ screenMain.addScheme(receivingHopper);
 screenMain.addScheme(substation);
 screenMain.addScheme(compressor);
 
-import { startClients, stopConnection, _reCreate, _testConnect, _testSend, _sendReload, _step } from './tcpipConnector'
+import { startClients, stopConnection, _reCreate, _testConnect, _testSend, _sendReload,
+         _step, connectToProxy } from './tcpipConnector'
 
 function sendMes(name, mes) {
     screenMain.resendMessage(name, mes);
@@ -90,10 +91,12 @@ animateScreen(screenMain, 500);
 let main = new Vue({
     el: '#index_body',
     data: {
-        selectIpConnection: ''
+        selectIpConnection: '',
+        reportValue: ''
     },
     methods: {
-        printReport: function () {
+        printReport: function (value: string) {
+            this.reportValue = value;
             const reportWin = new BrowserWindow({
                 width: 800,
                 height: 600,
@@ -103,12 +106,15 @@ let main = new Vue({
                 }
             });
             reportWin.loadFile('report.html');
+            reportWin.webContents.on('dom-ready', () => {
+                reportWin.webContents.send('reportValue', this.reportValue);
+            })
+
         },
-            // reportWin.webContents.openDevTools();
         proxyConnection: function () {
-            console.log(this.selectIpConnection)
+            console.log(this.selectIpConnection, typeof this.selectIpConnection)
             if(this.selectIpConnection == '') return;
-            
+            useProxy = connectToProxy(this.selectIpConnection);
         }
     }
 
@@ -394,7 +400,7 @@ function step() { _step(); }
 
 
 
-let mes = {
+let drainageAmes = {
     Y11Status: ValveState.closed,   // enum ValveStatus InitState = 0, Closed, Opening, Opened, Closing , Calibration
     Y12Status: 1,
     Y13Status: 1,
@@ -443,13 +449,13 @@ let mes = {
     Y34Err: 0,
     Y35Err: 1,
 
-    Pump1Status: 0, // enum PumpStatus Stopped = 0, Starting, Working, Stopping, Error
-    Pump2Status: 1,
-    Pump3Status: 4,
+    Pump1Status: 2, // enum PumpStatus Stopped = 0, Starting, Working, Stopping, Error
+    Pump2Status: 2,
+    Pump3Status: 2,
 
     Pump1Mode: 1,   // enum PumpMode Auto = 1, Service 
     Pump2Mode: 1,
-    Pump3Mode: 2,
+    Pump3Mode: 1,
 
     Pump1Error: 0,  // enum PumpError NoError = 0, StartingTimeOut, StoppingTimeOut, AccidentPressure
     Pump2Error: 1,
@@ -473,7 +479,7 @@ let mes = {
     reserve: null
 }
 
-let mes2 = {
+let drainageBmes = {
     "Y41Status": ValveState.closed,
     "Y42Status": 3,
     "Y43Status": 3,
@@ -559,7 +565,7 @@ let mesClear = {
     ClearLLevel: 1,
     TowerHLevel: 1,
     TowerLLevel: 1,
-    M0Status: PumpState.run,        // enum PumpStatus Stopped = 0, Starting, Working, Stopping, Error
+    M0Status: PumpState.stop,        // enum PumpStatus Stopped = 0, Starting, Working, Stopping, Error
     DP3Status: 1,
     DP4Status: 0,
     M0Mode: 1,          // enum PumpMode Auto = 1, Service
@@ -603,7 +609,7 @@ let mesTech = {
     M4Press: 1,
     TechHLevel: 1,
     TechLLevel: 2,
-    M0Status: PumpState.run,    // enum PumpStatus Stopped = 0, Starting, Working, Stopping, Error
+    M0Status: PumpState.stop,    // enum PumpStatus Stopped = 0, Starting, Working, Stopping, Error
     DP3Status: 1,
     DP4Status: PumpState.stop,
     M0Mode: PumpMode.Auto,
@@ -629,8 +635,8 @@ let cageMesage = {
     "platformDown": false
 }
 
-sendMes('drainageA', mes);
-//sendMes('drainageB', mes2);
+// sendMes('drainageA', drainageAmes);
+// sendMes('drainageB', drainageBmes);
 // sendMes('clearPump', mesClear);
-// sendMes('techPump', mesTech);
-sendMes('Cage', cageMesage);
+sendMes('techPump', mesTech);
+//sendMes('Cage', cageMesage);

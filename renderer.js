@@ -22,6 +22,7 @@ var BrowserWindow = require('electron').remote.BrowserWindow;
 ipcRenderer.on('resended', function (event, arr) {
     console.log('resended');
 });
+var useProxy = false;
 var screenMain = new mine_drawing_1.Screen();
 // // let techWater = new TechWater('container', window.innerWidth, window.innerHeight);
 var cage = new _cage_1.CAGE('containerCage', window.innerWidth, window.innerHeight);
@@ -78,10 +79,13 @@ mine_drawing_1.animateScreen(screenMain, 500);
 var main = new vue_js_1.default({
     el: '#index_body',
     data: {
-        selectIpConnection: ''
+        selectIpConnection: '',
+        reportValue: ''
     },
     methods: {
-        printReport: function () {
+        printReport: function (value) {
+            var _this = this;
+            this.reportValue = value;
             var reportWin = new BrowserWindow({
                 width: 800,
                 height: 600,
@@ -91,12 +95,15 @@ var main = new vue_js_1.default({
                 }
             });
             reportWin.loadFile('report.html');
+            reportWin.webContents.on('dom-ready', function () {
+                reportWin.webContents.send('reportValue', _this.reportValue);
+            });
         },
-        // reportWin.webContents.openDevTools();
         proxyConnection: function () {
-            console.log(this.selectIpConnection);
+            console.log(this.selectIpConnection, typeof this.selectIpConnection);
             if (this.selectIpConnection == '')
                 return;
+            useProxy = tcpipConnector_1.connectToProxy(this.selectIpConnection);
         }
     }
 });
@@ -267,7 +274,7 @@ function testClear() {
     console.clear();
 }
 function step() { tcpipConnector_1._step(); }
-var mes = {
+var drainageAmes = {
     Y11Status: pumpAccessories_1.ValveState.closed,
     Y12Status: 1,
     Y13Status: 1,
@@ -313,12 +320,12 @@ var mes = {
     Y33Err: 1,
     Y34Err: 0,
     Y35Err: 1,
-    Pump1Status: 0,
-    Pump2Status: 1,
-    Pump3Status: 4,
+    Pump1Status: 2,
+    Pump2Status: 2,
+    Pump3Status: 2,
     Pump1Mode: 1,
     Pump2Mode: 1,
-    Pump3Mode: 2,
+    Pump3Mode: 1,
     Pump1Error: 0,
     Pump2Error: 1,
     Pump3Error: 3,
@@ -339,7 +346,7 @@ var mes = {
     Y35pos: 87,
     reserve: null
 };
-var mes2 = {
+var drainageBmes = {
     "Y41Status": pumpAccessories_1.ValveState.closed,
     "Y42Status": 3,
     "Y43Status": 3,
@@ -424,7 +431,7 @@ var mesClear = {
     ClearLLevel: 1,
     TowerHLevel: 1,
     TowerLLevel: 1,
-    M0Status: pumpAccessories_1.PumpState.run,
+    M0Status: pumpAccessories_1.PumpState.stop,
     DP3Status: 1,
     DP4Status: 0,
     M0Mode: 1,
@@ -467,7 +474,7 @@ var mesTech = {
     M4Press: 1,
     TechHLevel: 1,
     TechLLevel: 2,
-    M0Status: pumpAccessories_1.PumpState.run,
+    M0Status: pumpAccessories_1.PumpState.stop,
     DP3Status: 1,
     DP4Status: pumpAccessories_1.PumpState.stop,
     M0Mode: pumpAccessories_1.PumpMode.Auto,
@@ -489,9 +496,9 @@ var cageMesage = {
     "productionLevel": false,
     "platformDown": false
 };
-sendMes('drainageA', mes);
-//sendMes('drainageB', mes2);
+// sendMes('drainageA', drainageAmes);
+// sendMes('drainageB', drainageBmes);
 // sendMes('clearPump', mesClear);
-// sendMes('techPump', mesTech);
-sendMes('Cage', cageMesage);
+sendMes('techPump', mesTech);
+//sendMes('Cage', cageMesage);
 //# sourceMappingURL=renderer.js.map

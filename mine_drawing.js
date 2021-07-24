@@ -180,8 +180,9 @@ var FlowDriver = /** @class */ (function (_super) {
         return _this;
     }
     FlowDriver.prototype.setFlow = function (set, show) {
-        //if(this.name == 'Y21') show = true;
         if (show === void 0) { show = false; }
+        if (this.name == 'M0')
+            show = true;
         this.flow = set;
         var mes = 'setFlow function, my flowElement: ';
         if (show) {
@@ -193,8 +194,7 @@ var FlowDriver = /** @class */ (function (_super) {
         }
         for (var _b = 0, _c = this.flowElements; _b < _c.length; _b++) {
             var fElement = _c[_b];
-            if (fElement.name == 'ulY21')
-                console.log("<<<<<<<<<<<<<<<<<<<<<< ulY21 set=" + set);
+            //     if(fElement.name == 'ulY21') console.log(`<<<<<<<<<<<<<<<<<<<<<< ulY21 set=${set}`)
             fElement.setFlow(set, show);
             //mes += fElement.name + `->flow=${fElement.flow}; `;
         }
@@ -281,7 +281,7 @@ var Screen = /** @class */ (function () {
         // console.log(objName)
         this.schemes.forEach(function (scheme) {
             if (scheme.name == objName || scheme.secondName == objName) {
-                //console.log(scheme.name, JSON.stringify(mes, null, 4))
+                // console.log(scheme.name, JSON.stringify(mes, null, 4))
                 scheme.send(mes);
                 return;
             }

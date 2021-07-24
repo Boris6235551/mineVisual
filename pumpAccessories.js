@@ -259,14 +259,20 @@ var Pump = /** @class */ (function (_super) {
         else
             this.setLabel('E');
         this.error = mes.Error;
-        var pumpFlow = this.status == PumpState.run || this.status == PumpState.starting || this.status == PumpState.stopping;
-        this.setFlow(pumpFlow, this.name == 'Pump2'); //, this.name == 'Pump2'
+        // let pumpFlow = this.status == PumpState.run || this.status == PumpState.starting || this.status == PumpState.stopping; 
+        // this.setFlow(pumpFlow, this.name == 'Pump2'); //, this.name == 'Pump2'
+    };
+    Pump.prototype.setFlow = function (set, show) {
+        if (show === void 0) { show = false; }
+        var pumpFlow = this.status == PumpState.run || this.status == PumpState.starting ||
+            this.status == PumpState.stopping;
+        _super.prototype.setFlow.call(this, pumpFlow);
     };
     Pump.prototype.nextFrame = function (angel) {
         if (angel === void 0) { angel = 30; }
         var dy = this.step;
         switch (this.status) {
-            case PumpState.run:
+            case PumpState.revers:
             case PumpState.stopping:
             case PumpState.starting:
                 this.primitives[14].rotate(angel);
@@ -293,7 +299,7 @@ var Pump = /** @class */ (function (_super) {
                     this.primitives[10].move({ x: dy, y: 0 });
                 }
                 return;
-            case PumpState.revers:
+            case PumpState.run:
                 this.primitives[14].rotate(angel);
                 this.primitives[15].rotate(angel);
                 this.primitives[16].rotate(angel);
@@ -513,8 +519,7 @@ var Valve = /** @class */ (function (_super) {
         if (show === void 0) { show = false; }
         var valveOpen = (this.state == ValveState.opened || this.state == ValveState.opening ||
             this.state == ValveState.closing);
-        if (this.name == 'Y21')
-            console.log("Y21 valveOpen=" + valveOpen + " and set=" + set + " status=" + this.state);
+        //if(this.name == 'Y21') console.log(`Y21 valveOpen=${valveOpen} and set=${set} status=${this.state}`)
         _super.prototype.setFlow.call(this, (valveOpen && set), show);
     };
     Valve.prototype.setState = function (newState) {
@@ -585,8 +590,7 @@ var Valve = /** @class */ (function (_super) {
             this.labelsetPercentage.text(text);
     };
     Valve.prototype.setBaseProperty = function (mes) {
-        if (this.name == 'Y21')
-            console.log("before Y21 mes= " + JSON.stringify(mes) + "; state=" + this.state);
+        //if(this.name == 'Y21') console.log(`before Y21 mes= ${JSON.stringify(mes)}; state=${this.state}`)
         if (mes.pos === undefined) {
             this.setPercentage('');
             this.primitives[3].visible(false);
@@ -604,8 +608,7 @@ var Valve = /** @class */ (function (_super) {
         else
             this.setLabel('E');
         this.error = mes.Error;
-        if (this.name == 'Y21')
-            console.log("after Y21 mes= " + JSON.stringify(mes) + "; state=" + this.state);
+        //if(this.name == 'Y21') console.log(`after Y21 mes= ${JSON.stringify(mes)}; state=${this.state}`)    
     };
     Valve.prototype.nextFrame = function () {
         switch (this.state) {

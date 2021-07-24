@@ -6,11 +6,13 @@ class BASEPUMP extends Scheme {
     protected items: (Valve | Pump | Pool | ValveCheck)[];   // | ValveCheck  - no need to send message
     protected lines: Connection[];
     protected basePoint: Point;
+    protected flowInitDrivers: FlowDriver[];
     constructor(container: string, width: number, height: number, basePoint: Point) {
         super(container, width, height);
         this.basePoint = basePoint;
         this.items = [];
         this.lines = [];
+        this.flowInitDrivers = [];
     }
     protected addItem(item: (Valve | Pump | Pool | ValveCheck), name: string, recieveMessage: boolean = true, 
                         flowControllNames: string = ''){
@@ -140,6 +142,13 @@ class BASEPUMP extends Scheme {
         this.addFlowDriver(line, flowControllNames);    // *****  FlowControll
 
     }
+    prepareFlowInitControllers(controllerNames){
+        for(let contrName of controllerNames) {
+            let drvObj = this.findByName(contrName)
+            //console.log(`prepareFlowInitValves valve name=${valName}; object name = ${valObj==null ? 'null':valObj.name}`)
+            this.flowInitDrivers.push(<FlowDriver>drvObj);
+        }
+    }
     send(mes: any) {
         //console.log(`received message UNDEGROUNDPUMP name=${this.name}`);
         let mesProps = Object.getOwnPropertyNames(mes);
@@ -161,10 +170,14 @@ class BASEPUMP extends Scheme {
             if(sendToWidget) widget.setBaseProperty(wMes);
             for (let i = delIndexes.length - 1; i >= 0; i--) mesProps.splice(delIndexes[i], 1);
             // console.log(`del properies of ${widget.name}; mesProps length=${mesProps.length}`);
-            if (mesProps.length == 0) return;
+            //if (mesProps.length == 0) return;
         }
         //console.log(`message properies=${mesProps}`);
-        
+        for(let v of this.flowInitDrivers) {
+            //  console.log(`<<<<<<<<<<<<<<< v.name=${v.name}`)
+             v.setFlow(true);
+         }
+ 
         this.update();
     }
 }       // END BASE PUMP
@@ -196,7 +209,10 @@ let PumpValveControllTable = [
     ['Y@2',  'Y@3'],
 ];
 
-let InitFlowValves = ['Y14', 'Y15', 'Y24', 'Y25', 'Y34', 'Y35', 'Y44', 'Y45', 'Y54', 'Y55'];
+let InitFlowUndeground = [
+    'Pump1', 'Pump2', 'Pump3', 'Pump4', 'Pump5', 
+    'Y14', 'Y15', 'Y24', 'Y25', 'Y34', 'Y35', 'Y44', 'Y45', 'Y54', 'Y55'
+];
 
 let mineConnections = [
     // /*-------------       LINE 1       --------------*/
@@ -233,7 +249,7 @@ let mineConnections = [
     {begin: 'stav2', end: 'rY12', dir: true, disp: Disposition.Vertical, type: 'lE', name: 'urY12', flowControll: 'Y12'},
 
     {begin: '60', end: 'stav1', dir: true, disp: Disposition.Vertical, type: 'dB', name: 'ustav1', flowControll: 'Y11 Y21 Y31 Y41 Y51'},
-    {begin: '40', end: 'stav2', dir: true, disp: Disposition.Vertical, type: 'dB', name: 'ustav2'},
+    {begin: '40', end: 'stav2', dir: true, disp: Disposition.Vertical, type: 'dB', name: 'ustav2', flowControll: 'Y12 Y22 Y32 Y42 Y52'},
 ];
 let mineConnectionsTemplates = [
     /*-------------       LINE @       --------------*/
@@ -266,12 +282,12 @@ const DELTA_X: number       = 184;
 export class UNDEGROUNDPUMP extends BASEPUMP {
     private connectionsTable: any[];
     private flowControllTable: any[];
-    private flowInitValves: FlowDriver[];
+    //private flowInitValves: FlowDriver[];
     constructor(container: string, width: number, height: number, basePoint: Point) {     //, number: number
         super(container, width, height, basePoint);
         this.connectionsTable = [];
         this.flowControllTable = [];
-        this.flowInitValves = [];
+        //this.flowInitValves = [];
         this.name = 'drainageA';
         this.secondName = 'drainageB';
         this.addItem(new MinePool( basePoint.newPointMoved(0, 450) , 950), 'minePool');
@@ -283,15 +299,15 @@ export class UNDEGROUNDPUMP extends BASEPUMP {
         //console.log(JSON.stringify(this.flowControllTable, null, 4));
         this.createConnections(this.connectionsTable);    
         this.createConnections(mineConnections);
-        this.prepareFlowInitValves();
+        this.prepareFlowInitControllers(InitFlowUndeground);
     }
-    prepareFlowInitValves(){
-        for(let valName of InitFlowValves) {
-            let valObj = this.findByName(valName)
-            //console.log(`prepareFlowInitValves valve name=${valName}; object name = ${valObj==null ? 'null':valObj.name}`)
-            this.flowInitValves.push(<FlowDriver>valObj);
-        }
-    }
+    // prepareFlowInitControllers(controllerNames){
+    //     for(let contrName of controllerNames) {
+    //         let valObj = this.findByName(contrName)
+    //         //console.log(`prepareFlowInitValves valve name=${valName}; object name = ${valObj==null ? 'null':valObj.name}`)
+    //         this.flowInitValves.push(<FlowDriver>valObj);
+    //     }
+    // }
     prepareConnectionsTable(number: number){
         for(let obj of mineConnectionsTemplates){
             let properies =  Object.getOwnPropertyNames(obj);
@@ -348,13 +364,13 @@ export class UNDEGROUNDPUMP extends BASEPUMP {
         }
         //      
     }
-    send(mes: any){
-        super.send(mes);
-        for(let v of this.flowInitValves) {
-           // console.log(`<<<<<<<<<<<<<<< v.name=${v.name}`)
-            v.setFlow(true);
-        }
-    }
+    // send(mes: any){
+    //     super.send(mes);
+    //     for(let v of this.flowInitValves) {
+    //        // console.log(`<<<<<<<<<<<<<<< v.name=${v.name}`)
+    //         v.setFlow(true);
+    //     }
+    // }
 }
 
 /**********************************************************************************
@@ -481,6 +497,10 @@ let flowMatrix =[
     'DP3 ',
     'Y222:'
 ]
+let InitFlowSurface = [
+    'M0', 'DP4', 'M4', 'M3', 'DP3', 'M2', 'M1'
+];
+
 
 const dYYY = -210;
 const kX = 1;
@@ -492,6 +512,7 @@ export class SURFACEPUMP extends BASEPUMP {
         this.secondName = 'techPump';
         this.createWidgets(basePoint);
         this.createConnections(surfaceConnections);
+        this.prepareFlowInitControllers(InitFlowSurface);
     }
     protected getPoint(dXY: number[]){
         return this.basePoint.newPointMoved(dXY[dxIndex] * kX, dXY[dyIndex] + dYYY);

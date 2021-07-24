@@ -236,7 +236,7 @@ export class Connection extends FlowDriver{
         for(let i = 1; i < this.primitives.length; i++) this.primitives[i].move({x: dx, y: dy});
     }
     nextFrame(): void {
-        if(this.name == "ulY21")console.log(`>>>>>>>>>>>>>>> ulY21 flow= ${this.flow}`)
+        //if(this.name == "ulY21")console.log(`>>>>>>>>>>>>>>> ulY21 flow= ${this.flow}`)
         if(!this.flow) return;
         this.moveWhite();
         if(this.animationFrame < this.frameCnt - 1) this.animationFrame +=1;

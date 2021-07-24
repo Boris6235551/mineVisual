@@ -39,7 +39,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports._step = exports._sendReload = exports._reCreate = exports._testSend = exports._testConnect = exports.startClients = exports.stopConnection = void 0;
+exports.connectToProxy = exports._step = exports._sendReload = exports._reCreate = exports._testSend = exports._testConnect = exports.startClients = exports.stopConnection = void 0;
 var net = require('net');
 var moment = require('moment');
 var mesObj = {
@@ -415,7 +415,8 @@ function startClients(func) {
     //driveClients.timer = setInterval(driveClients.drive, 1000);
 }
 exports.startClients = startClients;
-function _testConnect() {
+function _testConnect(ind) {
+    if (ind === void 0) { ind = -1; }
     driveClients.connect(testIndex);
     driveClients.showDif = false;
 }
@@ -433,23 +434,46 @@ function _reCreate() {
 exports._reCreate = _reCreate;
 function _sendReload() {
     driveClients.reloadPlc(testIndex);
-    // let s = new Uint8Array([2,3]);
-    // for(let i = 0; i < clients.length; i++){
-    //     showTest(i);
-    //     if( clients[i].state == socketState.Connected ){
-    //         // console.log('before SEND')
-    //         // showTest(i);
-    //         clients[i].state = socketState.Sending;
-    //         clients[i].socket.write(s);
-    //         // console.log('after send')
-    //         // showTest(i);
-    //     }
-    //     // else connectSocket(i);
-    // }
 }
 exports._sendReload = _sendReload;
 function _step() { driveClients.drive(); }
 exports._step = _step;
+var proxySocket = null;
+function recreateProxy(hosIp) {
+    return __awaiter(this, void 0, void 0, function () {
+        var _1;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    if (!(proxySocket != null)) return [3 /*break*/, 5];
+                    _a.label = 1;
+                case 1:
+                    _a.trys.push([1, 3, , 4]);
+                    return [4 /*yield*/, proxySocket.destroy()];
+                case 2:
+                    _a.sent();
+                    return [3 /*break*/, 4];
+                case 3:
+                    _1 = _a.sent();
+                    return [3 /*break*/, 4];
+                case 4:
+                    proxySocket = null;
+                    _a.label = 5;
+                case 5:
+                    proxySocket = new net.Socket();
+                    proxySocket.connect(2001, '192.168.100.103', function () {
+                    });
+                    return [2 /*return*/];
+            }
+        });
+    });
+}
+function connectToProxy(ipToConnect) {
+    console.log("ipToConnnect = " + ipToConnect);
+    recreateProxy(ipToConnect);
+    return true;
+}
+exports.connectToProxy = connectToProxy;
 // function connectSocket(index){
 //     let cl = clients[index].socket;
 //     let hs = clients[index].host;  

@@ -91,31 +91,58 @@
     tr {
         display: block;
     }
-    td:nth-child(1) {
+    /* td:nth-child(1) {
+        width: 5%;
+    }  */
+    .td_shifts_1 {
         width: 5%;
     } 
-    td:nth-child(2) {
+    /* td:nth-child(2) {
         width: 30%;
-    }   
-    td:nth-child(3) {
+    }    */
+    .td_shifts_2 {
+        width: 30%;
+    }  
+    /* td:nth-child(3) {
+        width: 25%;
+    } */
+    .td_shifts_3 {
         width: 25%;
     }
-    td:nth-child(4) {
+    /* td:nth-child(4) {
+        width: 10%;
+    } */
+    .td_shifts_4 {
         width: 10%;
     }
-    td:nth-child(5) {
+    /* td:nth-child(5) {
+        width: 250px;
+    } */
+    .td_shifts_5 {
         width: 250px;
     }
-    th:nth-child(1) {
+    /* th:nth-child(1) {
+        width: 4%;
+    }  */
+    .th_shifts_1 {
         width: 4%;
     } 
-    th:nth-child(2) {
+    /* th:nth-child(2) {
         width: 29%;
-    }   
-    th:nth-child(3) {
+    }    */
+    .th_shifts_2 {
+        width: 29%;
+    } 
+    /* th:nth-child(3) {
+        width: 25%;
+    } */
+    .th_shifts_3 {
         width: 25%;
     }
-    th:nth-child(4) {
+    /* th:nth-child(4) {
+        width: 12%;
+    } */
+    .th_shifts_4 {
         width: 12%;
     }
     /* th:nth-child(5) {
@@ -196,25 +223,33 @@ html, body {
         font-size: 14px;
         vertical-align: top;
     }
-    td:nth-child(1) {
+    /* td:nth-child(1) {
         width: 5%;
-    }   
-    th:nth-child(1) {
+    }    */
+    .td_shifts_1 {
         width: 5%;
     } 
-    td:nth-child(4) {
+    /* th:nth-child(1) {
+        width: 5%;
+    }  */
+    .th_shifts_1 {
+        width: 5%;
+    } 
+    /* td:nth-child(4) {
         width: 10%;
-    }   
-    th:nth-child(4) {
+    }    */
+    .td_shifts_4 {
+        width: 10%;
+    } 
+    /* th:nth-child(4) {
+        width: 10%;
+    } */
+    .th_shifts_4 {
         width: 10%;
     }
     .counter {
         display: none;
     }
-    /* html, body {
-        height: 100%;
-        overflow: hidden;
-    } */
 }
 
 .scroll-table-body {

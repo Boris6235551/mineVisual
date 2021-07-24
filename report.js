@@ -2,8 +2,17 @@
 // import datepicker from 'vuejs-datepicker/dist/vuejs-datepicker.js';
 const moment = require('moment');
 const ipcAdmin = require('electron').ipcRenderer;
-// const { connectDB, getShift, getShifts, getShiftBatchers } = require('../BatcherWatcher/DB/db')
+const { connectDB, getShift, getShifts, getShiftBatchers } = require('../BatcherWatcher/DB/db')
 const numeral = require('numeral');
+const { ipcRenderer } = require('electron');
+
+ipcRenderer.on('reportValue', (event, arg) => {
+    report.reportValue = arg;
+    if (arg == 'fractions') {
+        report.count = 1;
+        report.report.height = "272mm"; 
+    }
+});
 
 function numberWithSpaces(number) {
     let numberString = numeral(number).format('1 000.12');
@@ -75,6 +84,7 @@ let report = new Vue({
         report: {
             height: '822mm',
         },
+        reportValue: ''
     },
     methods: {
         selectShiftChange: async function () {
@@ -161,3 +171,4 @@ let report = new Vue({
         },
     },
 });
+

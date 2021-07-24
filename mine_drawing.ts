@@ -158,7 +158,7 @@ export class FlowDriver extends BaseMineDraw {
         this.flow = false;
     }
     setFlow(set: boolean, show:boolean = false){
-//if(this.name == 'Y21') show = true;
+if(this.name == 'M0') show = true;
 
         this.flow = set;
         let mes = 'setFlow function, my flowElement: ';
@@ -169,7 +169,7 @@ export class FlowDriver extends BaseMineDraw {
         }
         
         for(let fElement of this.flowElements) {
-            if(fElement.name == 'ulY21') console.log(`<<<<<<<<<<<<<<<<<<<<<< ulY21 set=${set}`)
+       //     if(fElement.name == 'ulY21') console.log(`<<<<<<<<<<<<<<<<<<<<<< ulY21 set=${set}`)
             fElement.setFlow(set, show);
             //mes += fElement.name + `->flow=${fElement.flow}; `;
         }
@@ -258,7 +258,7 @@ export class Screen {
         // console.log(objName)
         this.schemes.forEach(function(scheme) {
             if(scheme.name == objName || scheme.secondName == objName) {
-                //console.log(scheme.name, JSON.stringify(mes, null, 4))
+                // console.log(scheme.name, JSON.stringify(mes, null, 4))
                 scheme.send(mes);
                 return;
             }
