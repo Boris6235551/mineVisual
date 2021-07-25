@@ -158,11 +158,11 @@ export class FlowDriver extends BaseMineDraw {
         this.flow = false;
     }
     setFlow(set: boolean, show:boolean = false){
-if(this.name == 'M0') show = true;
+//if(this.name == 'M0') show = true;
 
         this.flow = set;
         let mes = 'setFlow function, my flowElement: ';
-        if(show) {
+        if(show && this.flowElements.length) {
             for(let fElement of this.flowElements) mes += `${fElement.name}, `
             console.log(`Name=${this.name}, flow =${this.flow}; ${mes}`);
 

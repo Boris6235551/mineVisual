@@ -180,12 +180,11 @@ var FlowDriver = /** @class */ (function (_super) {
         return _this;
     }
     FlowDriver.prototype.setFlow = function (set, show) {
+        //if(this.name == 'M0') show = true;
         if (show === void 0) { show = false; }
-        if (this.name == 'M0')
-            show = true;
         this.flow = set;
         var mes = 'setFlow function, my flowElement: ';
-        if (show) {
+        if (show && this.flowElements.length) {
             for (var _i = 0, _a = this.flowElements; _i < _a.length; _i++) {
                 var fElement = _a[_i];
                 mes += fElement.name + ", ";

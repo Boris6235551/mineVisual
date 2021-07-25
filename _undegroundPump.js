@@ -262,21 +262,6 @@ var InitFlowUndeground = [
     'Y14', 'Y15', 'Y24', 'Y25', 'Y34', 'Y35', 'Y44', 'Y45', 'Y54', 'Y55'
 ];
 var mineConnections = [
-    // /*-------------       LINE 1       --------------*/
-    // {begin: 'Y11', end: 'Y16', dir: true, disp: Disposition.Vertical, type: 'mM', name: 'Y16u'},
-    // {begin: 'Y11', end: 'Y16u', dir: true, disp: Disposition.Horizontal, type: 'Ml', name: 'Y11r'},
-    // {begin: 'Y16u', end: 'Y12', dir: false, disp: Disposition.Horizontal, type: 'lM', name: 'Y12l'},
-    // {begin: 'Y16', end: 'Y13', dir: true, disp: Disposition.Vertical, type: 'Ms', name: 'Y16d'},
-    // {begin: 'Y13', end: 'Pump1', dir: true, disp: Disposition.Vertical, type: 'Ms', name: 'Y13d'},  //Y13down
-    // {begin: 'Pump1', end: 'Y17', dir: true, disp: Disposition.Vertical, type: 'sM'},
-    // {begin: 'Y17', end: 'minePool', dir: true, disp: Disposition.Vertical, type: 'Ms'},
-    // /*-----------------------------------------------*/
-    // {begin: '20', end: 'Y14', dir: false, disp: Disposition.Vertical, type: 'dM', name: 'Y14u'},
-    // {begin: 'Y16u', end: 'Y14u', dir: false, disp: Disposition.Horizontal, type: 'lB'},
-    // {begin: 'Y14', end: 'minePool', dir: false, disp: Disposition.Vertical, type: 'Ms', name: 'Y14d'},
-    // /*-----------------------------------------------*/
-    // {begin: 'Y13d', end: 'Y15', dir: false, disp: Disposition.Horizontal, type: 'lM', name: 'Y15l'},
-    // {begin: 'Y15', end: 'Y14d', dir: false, disp: Disposition.Horizontal, type: 'Ml', name: 'Y15r'},
     { begin: '40', end: 'lY51', dir: true, disp: mine_drawing_1.Disposition.Vertical, type: 'dB', name: 'ulY51', flowControll: 'Y51' },
     //{begin: '30', end: 'lY51', dir: true, disp: Disposition.Vertical, type: 'dB', name: ''},
     { begin: '760', end: 'ulY51', dir: true, disp: mine_drawing_1.Disposition.Horizontal, type: 'dB', name: 'stav1', flowControll: 'Y51' },

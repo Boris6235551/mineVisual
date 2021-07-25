@@ -442,13 +442,13 @@ var mesClear = {
     DP4Err: 1
 };
 var mesTech = {
-    Y2_Status: 1,
+    Y2_Status: pumpAccessories_1.ValveState.opened,
     Y210Status: 2,
     Y211Status: 1,
     Y212Status: 1,
-    Y220Status: 1,
-    Y221Status: 1,
-    Y222Status: 1,
+    Y220Status: pumpAccessories_1.ValveState.opened,
+    Y221Status: pumpAccessories_1.ValveState.opened,
+    Y222Status: pumpAccessories_1.ValveState.opened,
     Y2_Mode: 1,
     Y210Mode: 1,
     Y211Mode: 1,
@@ -464,7 +464,7 @@ var mesTech = {
     Y221Err: 2,
     Y222Err: 2,
     M3Status: 2,
-    M4Status: 1,
+    M4Status: pumpAccessories_1.PumpState.run,
     M3Mode: 2,
     M4Mode: 2,
     M3Err: 2,

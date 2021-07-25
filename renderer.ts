@@ -577,13 +577,13 @@ let mesClear = {
 }
 
 let mesTech = {
-    Y2_Status: 1,
+    Y2_Status: ValveState.opened,
     Y210Status: 2,
     Y211Status: 1,
     Y212Status: 1,
-    Y220Status: 1,
-    Y221Status: 1,
-    Y222Status: 1,
+    Y220Status: ValveState.opened,
+    Y221Status: ValveState.opened,
+    Y222Status: ValveState.opened,
     Y2_Mode: 1,
     Y210Mode: 1,
     Y211Mode: 1,
@@ -599,7 +599,7 @@ let mesTech = {
     Y221Err: 2,
     Y222Err: 2,
     M3Status: 2,
-    M4Status: 1,
+    M4Status: PumpState.run,
     M3Mode: 2,
     M4Mode: 2,
     M3Err: 2,
