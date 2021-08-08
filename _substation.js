@@ -21,7 +21,7 @@ var SUBSTATION = /** @class */ (function (_super) {
     // public SubstationCells: SubstationCell;
     function SUBSTATION(container, width, height) {
         var _this = _super.call(this, container, width, height) || this;
-        _this.name = 'Substation';
+        _this.name = 'SubStation';
         _this.addBatcher();
         return _this;
     }

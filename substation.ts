@@ -255,7 +255,7 @@ export class SubstationCell extends Cell {
         //     "B2": true,
         // }
         for (let n = 0; n < 15; n++) {
-            this.cell[n] = Object.values(mes)[n];
+            this.cell[n] = Object.values(mes)[n+7];
         }
 
     }
@@ -485,17 +485,6 @@ export class Generator extends BaseMineDraw {
     }
     nextFrame(): void {
         if (this.propBit) {
-            this.primitives[1].fill('#42732B');
-            this.primitives[2].fill('#CBDEDE');
-            this.primitives[3].fill('#C6FFAC');
-            this.primitives[4].stroke('#005236');
-            this.primitives[5].stroke('#005236');
-            this.primitives[6].stroke('#005236');
-            this.primitives[8].fill('#005236');
-            this.primitives[9].fill('#005236');
-            this.primitives[10].fill('#005236');
-        }
-        else {
             this.primitives[1].fill('#923434');
             this.primitives[2].fill('#F2A5A5');
             this.primitives[3].fill('#E4C0C0');
@@ -505,6 +494,17 @@ export class Generator extends BaseMineDraw {
             this.primitives[8].fill('#DB1010');
             this.primitives[9].fill('#DB1010');
             this.primitives[10].fill('#DB1010');
+        }
+        else {
+            this.primitives[1].fill('#42732B');
+            this.primitives[2].fill('#CBDEDE');
+            this.primitives[3].fill('#C6FFAC');
+            this.primitives[4].stroke('#005236');
+            this.primitives[5].stroke('#005236');
+            this.primitives[6].stroke('#005236');
+            this.primitives[8].fill('#005236');
+            this.primitives[9].fill('#005236');
+            this.primitives[10].fill('#005236');
         }
     }
 };

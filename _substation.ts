@@ -14,7 +14,7 @@ export class SUBSTATION extends Scheme {
     // public SubstationCells: SubstationCell;
     constructor(container: string, width: number, height: number) {
         super(container, width, height);
-        this.name = 'Substation';
+        this.name = 'SubStation';
         this.addBatcher();
     }
     addBatcher() {

@@ -25,6 +25,7 @@ var Cage = /** @class */ (function (_super) {
         var _this = _super.call(this, p0, length) || this;
         _this.name = 'Cage';
         _this.m = p0.x;
+        _this.length = length;
         _this.mainFastUp = true;
         _this.mainFastDown = false;
         _this.smallUp = false;
@@ -156,6 +157,10 @@ var Cage = /** @class */ (function (_super) {
         this.smallDown = mes.smallDown;
     };
     Cage.prototype.nextFrame = function () {
+        if (this.platformDown != true) {
+            this.primitives[47].x(this.m);
+            this.primitives[48].x(this.m + this.length * 0.05);
+        }
         if (this.mainFastUp) {
             if (this.primitives[56].attrs.points[3] > this.pointLevel0) {
                 this.primitives[56].attrs.points[3] = this.primitives[56].attrs.points[3] - 6;

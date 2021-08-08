@@ -20,13 +20,16 @@
                     the weigh scale installed for measurement of total hoisted stones</h3>
             </template>
             <template v-if="reportValue === 'fractions'">
+                <h2>Germania-Trest Consortium</h2>
+                <h2>Maddhapara Hard Rock Mine</h2>
+                <br>
                 <h3 style="text-align: center;">Protocol issued by measuring the weight of the mass of crushed stone
                     fractions <br>
                     through the weigh scales installed in the skip pocket and conveyer belts</h3>
             </template>
             <div class="date">
                 <input type="date" name="" id="" v-on:change="fromDateChange" v-model="startDate">
-                <div class="shift">
+                <div class="shift" v-if="reportValue === 'shifts'">
                     <select name="" id="" v-model="selectShifts" @change="selectShiftChange">
                         <option v-for="shift in shifts">
                             {{shift}}
@@ -35,9 +38,12 @@
                 </div>
                 <input type="date" name="" id="" v-on:change="tillDateChange" v-model="endDate">
             </div>
-            <p>Static Date:&emsp;{{objectShift.beginDate}}&emsp;&emsp;&emsp;{{objectShift.endDate}}</p>
+            <p v-if="reportValue === 'shifts'">Static
+                Date:&emsp;{{objectShift.beginDate}}&emsp;&emsp;&emsp;{{objectShift.endDate}}</p>
+            <p v-if="reportValue === 'fractions'">Statistic
+                Period:&emsp;{{objFractions.begin}}&emsp;&emsp;&emsp;{{objFractions.end}}</p>
             <p>Total skips:&emsp;&emsp;{{objectShift.skips}}&emsp;pcs</p>
-            <p>Total weight:&emsp;{{objectShift.weight}}&emsp;t</p>
+            <p>Total weight:&emsp;&ensp;{{objectShift.weight}}&emsp;t</p>
             <template v-if="reportValue === 'shifts'">
                 <div class="scroll-table">
                     <table>
@@ -59,7 +65,8 @@
                                     <td class="td_shifts_2">{{ data.time }}</td>
                                     <td class="td_shifts_3">{{ data.batcher }}</td>
                                     <td class="td_shifts_4">{{ data.number }}</td>
-                                    <td class="td_shifts_5" id="weight">{{ data.gross }} - {{ data.tare }} = {{ data.net }}</td>
+                                    <td class="td_shifts_5" id="weight">{{ data.gross }} - {{ data.tare }} = {{
+                                        data.net}}</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -67,17 +74,18 @@
                 </div>
             </template>
             <template v-if="reportValue === 'fractions'">
+                <br>
                 <div class="scroll-table">
                     <table>
                         <thead>
                             <tr>
-                                <th id="th_fractions">Fraction</th>
-                                <th>Fine Stone (00-05 mm)</th>
-                                <th>05-20 mm</th>
-                                <th>20-40 mm</th>
-                                <th>40-60 mm</th>
-                                <th>60-80 mm</th>
-                                <th>Boulder</th>
+                                <th class="th_fractions_1">Fraction</th>
+                                <th class="th_fractions_2">Fine Stone (00-05 mm)</th>
+                                <th class="th_fractions_3">05-20 mm</th>
+                                <th class="th_fractions_4">20-40 mm</th>
+                                <th class="th_fractions_5">40-60 mm</th>
+                                <th class="th_fractions_6">60-80 mm</th>
+                                <th class="th_fractions_7">Boulder</th>
                             </tr>
                         </thead>
                     </table>
@@ -85,22 +93,22 @@
                         <table>
                             <tbody>
                                 <tr>
-                                    <td>Weight, t</td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
+                                    <td class="td_fractions_1">Weight, t</td>
+                                    <td class="td_fractions_2">{{objFractions.dust}}</td>
+                                    <td class="td_fractions_3">{{objFractions.fract5_20}}</td>
+                                    <td class="td_fractions_4">{{objFractions.fract20_40}}</td>
+                                    <td class="td_fractions_5">{{objFractions.fract40_60}}</td>
+                                    <td class="td_fractions_6">{{objFractions.fract60_80}}</td>
+                                    <td class="td_fractions_7">{{objFractions.boulder}}</td>
                                 </tr>
                                 <tr>
-                                    <td>Production <br> Percentage</td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
+                                    <td class="td_fractions_8">Production Percentage</td>
+                                    <td class="td_fractions_9">{{objFractionsPercentage.dust}}</td>
+                                    <td class="td_fractions_10">{{objFractionsPercentage.fract5_20}}</td>
+                                    <td class="td_fractions_11">{{objFractionsPercentage.fract20_40}}</td>
+                                    <td class="td_fractions_12">{{objFractionsPercentage.fract40_60}}</td>
+                                    <td class="td_fractions_13">{{objFractionsPercentage.fract60_80}}</td>
+                                    <td class="td_fractions_14">{{objFractionsPercentage.boulder}}</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -108,12 +116,14 @@
                 </div>
             </template>
         </div>
-        <div class="counter">{{count}}</div>
-        <div class="footer">
-            <div>Date:&emsp;{{ datePrintingReport.month }}/{{ datePrintingReport.day }}/{{ datePrintingReport.year
-                }}
+        <div v-if="reportValue === 'shifts'">
+            <div class="counter">{{count}}</div>
+            <div class="footer">
+                <div>
+                    Date:&emsp;{{ datePrintingReport.month }}/{{ datePrintingReport.day }}/{{ datePrintingReport.year}}
+                </div>
+                <div class="operator">Operator______________________</div>
             </div>
-            <div class="operator">Operator______________________</div>
         </div>
     </div>
 </body>

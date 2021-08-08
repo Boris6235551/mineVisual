@@ -638,5 +638,5 @@ let cageMesage = {
 // sendMes('drainageA', drainageAmes);
 // sendMes('drainageB', drainageBmes);
 // sendMes('clearPump', mesClear);
-sendMes('techPump', mesTech);
+// sendMes('techPump', mesTech);
 //sendMes('Cage', cageMesage);

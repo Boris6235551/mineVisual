@@ -11,6 +11,7 @@ export class Cage extends BaseMineDraw {
     public ventLevel: boolean;
     public subLevel: boolean;
     public m: number;
+    public length;
     public productionLevel: boolean;
     public platformDown: boolean;
     private pointLevel0: number;
@@ -21,6 +22,7 @@ export class Cage extends BaseMineDraw {
         super(p0, length);
         this.name = 'Cage';
         this.m = p0.x;
+        this.length = length;
         this.mainFastUp = true;
         this.mainFastDown = false;
         this.smallUp = false;
@@ -188,6 +190,10 @@ export class Cage extends BaseMineDraw {
         this.smallDown = mes.smallDown;
     }
     nextFrame(): void {
+        if (this.platformDown != true) {
+            this.primitives[47].x(this.m);
+            this.primitives[48].x(this.m + this.length * 0.05);
+        }
         if (this.mainFastUp) {
             if (this.primitives[56].attrs.points[3] > this.pointLevel0) {
                 this.primitives[56].attrs.points[3] = this.primitives[56].attrs.points[3] - 6;
